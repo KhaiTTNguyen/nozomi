@@ -1,0 +1,7 @@
+*.pyc
+sim_venv/
+*.pyc
+*.pkl
+*.png
+sim_venv
+*/__pycache__/
