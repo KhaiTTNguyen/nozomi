@@ -8,7 +8,7 @@ __version__ = "0.1.0"
 __author__ = "Your Name"
 
 # Import main classes for easy access
-from .geometry_generator import initialization_2d
+# from .substrate_generator import initialization_2d
 from .simulation_engine import diffsim3d
 from .config import Config
 

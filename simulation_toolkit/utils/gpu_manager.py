@@ -19,7 +19,7 @@ class GPUManager:
             result = subprocess.run(['nvidia-smi', '--query-gpu=index', '--format=csv,noheader,nounits'], 
                                   capture_output=True, text=True, check=True)
             gpu_ids = [int(gpu_id.strip()) for gpu_id in result.stdout.strip().split('\n') if gpu_id.strip()]
-            logger.info(f"Detected GPUs: {gpu_ids}")
+            # logger.info(f"Detected GPUs: {gpu_ids}")
             return gpu_ids
         except (subprocess.CalledProcessError, FileNotFoundError):
             logger.warning("Could not detect GPUs, defaulting to GPU 0")

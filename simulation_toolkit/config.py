@@ -56,6 +56,7 @@ class Config:
         
     #     return value
     
+    # IN USE: load config from file instead of defaults
     def load_config_file(self, config_path: str) -> Dict:
         """Load configuration from JSON file"""
         config_path = Path(config_path)

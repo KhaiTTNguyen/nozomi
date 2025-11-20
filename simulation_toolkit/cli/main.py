@@ -7,10 +7,10 @@ from typing import List, Optional
 import torch
 # Add package to path for development
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
+import shutil
+import os
+import simulation_toolkit.defaults.params as config_params
 from simulation_toolkit.cli.substrate_main import substrate_main
-# from simulation_toolkit.geometry_generator import meshing
-# from simulation_toolkit.geometry_generator import optimization
 
 from simulation_toolkit.simulation_engine import diffsim3d
 from simulation_toolkit.utils.gpu_manager import GPUManager
@@ -34,11 +34,10 @@ class GeometryToolkitCLI:
 
         # generator = initialization_2d(gpu_id=gpu_id)
         # result = generator.generate(params)
-        logger.info(f"Substrate generation completed: {result}")
-        # return result
+        logger.info(f"Substrate generation completed for {experiment_name}")
     
     def run_batch_processing_for_folder(self, folder_path: str, max_gpus: int = 5, 
-                           user_gpu_list: Optional[List[int]] = None):
+                           user_gpu: Optional[List[int]] = None):
         """Run batch processing for multiple configurations"""
         folder_path = Path(folder_path)
         
@@ -54,7 +53,7 @@ class GeometryToolkitCLI:
         logger.info(f"Found {len(json_files)} configuration files")
         
         # Allocate GPUs
-        gpu_list = self.gpu_manager.allocate_gpus(len(json_files), max_gpus, user_gpu_list)
+        gpu_list = self.gpu_manager.allocate_gpus(len(json_files), max_gpus, user_gpu)
         
         # Process each configuration
         for i, json_file in enumerate(json_files):
@@ -101,16 +100,16 @@ def main():
     
     # Substrate generation command
     substrate_parser = subparsers.add_parser('substrate', help='Generate substrates')
-    # substrate_parser.add_argument('--config', type=str, help='Path to JSON configuration file')
     substrate_parser.add_argument('--config', type=str, 
-                            default='./simulation_toolkit/defaults/default-susbtrate.json',  # Add default here
-                            help='Path to JSON configuration file (default: config/default_config.json)')
+                            default='./simulation_toolkit/defaults/default-substrate.json',  # Add default here
+                            help='Path to JSON configuration file (default: ./simulation_toolkit/defaults/default-substrate.json)')
     substrate_parser.add_argument('--folder', type=str, help='Path to folder containing multiple JSON configs')
-    substrate_parser.add_argument('--max-gpus', type=int, default=5, help='Maximum number of GPUs to use')
-    substrate_parser.add_argument('--gpu-list', type=int, nargs='+', help='Specific GPU IDs to use')
+    substrate_parser.add_argument('--max_gpus', type=int, default=5, help='Maximum number of GPUs to use')
+    substrate_parser.add_argument('--gpu', type=int, nargs='+', help='Specific GPU IDs to use')
+    substrate_parser.add_argument('--gpus', type=list, nargs='+', help='Specific GPU IDs to use')
     substrate_parser.add_argument('params', nargs='*', help='Parameters in key=value format')
     
-    # Simulation command (placeholder)
+    # Simulation command
     sim_parser = subparsers.add_parser('simulation', help='Run simulations')
     sim_parser.add_argument('--config', type=str, help='Path to simulation configuration')
     
@@ -125,8 +124,12 @@ def main():
     if args.command == 'substrate':
         if args.folder:
             # TODO:
-            cli.run_batch_processing_for_folder(args.folder, args.max_gpus, args.gpu_list)
+            cli.run_batch_processing_for_folder(args.folder, args.max_gpus, args.gpu)
         elif args.config:
+                # Set GPU before importing CUDA libraries
+            # print('str(args.gpu', str(args.gpu[0]))
+            # os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu[0])
+            # exit()
             config_data = config.load_config_file(args.config)
 
             print('config_data', config_data)
@@ -139,12 +142,11 @@ def main():
             
             gpu_id = cmd_params.get('gpu', 0)
             # ===== START substrate generation =====
+            cli.gpu_manager.set_gpu(str(args.gpu))
             cli.run_substrate_generation(params, gpu_id, experiment_name)
-            exit()
             # ===== END substrate generation & save experiment config file =====
             shutil.copy(args.config, 
-                os.path.join(config.OUTPUT_FOLDER_PATH, experiment_name, os.path.basename(args.config)))
-
+                os.path.join(config_params.OUTPUT_FOLDER_PATH, experiment_name, str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(args.config)))
         else:
             # TODO:Direct parameters
             params = parse_command_line_params(args.params)

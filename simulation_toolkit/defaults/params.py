@@ -1,4 +1,4 @@
-OUTPUT_FOLDER_PATH="../HIPASimExperiment/hipa_sim/data/"
+OUTPUT_FOLDER_PATH="./experiment_results/nozomi/"
 EXPERIMENT_FOLDER=""
 SUBSTRATE_OUTPUT_FOLDER_PATH=""
 
