@@ -1,7 +1,7 @@
 {
-  "experiment_name": "VF0.3_experiment_d2.58_sig0.69_50axons_reproducibility_OD20",  
+  "experiment_name": "VF0.3_experiment_d2.58_sig0.69_50axons_reproducibility_OD7",  
   "parameters": {
-      "orientation_shape_parameter": 20,
+      "orientation_shape_parameter": 7,
       "box_length_init": 0,
       "target_volume_fraction": 0.5,
       "num_fibers": 50,
@@ -16,6 +16,6 @@
       "w_length": 3,
       "bead_spacing_mean": 5.70,
       "bead_spacing_stdv": 2.88,
-      "repeats": 1
+      "repeats": 2
   }
 }

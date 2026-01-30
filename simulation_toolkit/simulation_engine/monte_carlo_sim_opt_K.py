@@ -77,7 +77,6 @@ def montecarlo_sim_kurtosis(substrate_file, total_sim_time, time_step, num_spins
     
     # Pre-allocate CPU result arrays
     diff_time = np.zeros(num_steps)
-    print('diff_time.shape', diff_time.shape)
     
     print(f'Got to sim {compartment}-axonal simloops')
     # Start timing

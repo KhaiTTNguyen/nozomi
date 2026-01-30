@@ -1,10 +1,10 @@
 {
-  "experiment_name": "VF0.3_experiment_d2.58_sig0.69_50axons_reproducibility_OD20",  
+  "experiment_name": "VF0.3_experiment_d2.58_sig0.69_2axons_reproducibility_OD20",  
   "parameters": {
       "orientation_shape_parameter": 20,
       "box_length_init": 0,
-      "target_volume_fraction": 0.5,
-      "num_fibers": 50,
+      "target_volume_fraction": 0.03,
+      "num_fibers": 2,
       "mean_diameter":  2.58,
       "sigma_diameter":  0.69,
       "dist_shape": 0.1,

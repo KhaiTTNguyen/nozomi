@@ -1,4 +1,4 @@
-OUTPUT_FOLDER_PATH="./experiment_results/nozomi/"
+OUTPUT_FOLDER_PATH="./experiment/experiment_result/"
 EXPERIMENT_FOLDER=""
 SUBSTRATE_OUTPUT_FOLDER_PATH=""
 
@@ -27,3 +27,5 @@ CV_OUTER_STDV = 0
 CV_RADII = 0
 GEV_DIAMETER_MEAN = 0
 GEV_DIAMETER_STDV = 0
+
+SIM_CONFIG_FILE = './simulation_toolkit/defaults/default-sim.json'

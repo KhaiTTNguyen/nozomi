@@ -3,8 +3,7 @@ import pycuda.gpuarray as gpuarray
 import numpy as np
 from scipy import integrate
 from pycuda.compiler import SourceModule
-# kernel_file = './hipa/diffsim/sim3d_kernel.cu'
-kernel_file = './hipa/diffsim/sim3d_kernel_addition.cu'
+kernel_file = './simulation_toolkit/simulation_engine/sim3d_kernel_addition.cu'
 
 class DiffSim3d:
     '''
@@ -56,9 +55,9 @@ class DiffSim3d:
         self.randomWalk3d_phase = self.mod.get_function("randomWalk3d_phase")
         self.randomWalk3d_phase_multi_dirr = self.mod.get_function("randomWalk3d_phase_multidirr")
         self.initstates = self.mod.get_function("initstates")
-        self.compute_displacements = self.mod.get_function("computeDisplacements")
-        self.compute_kurtosis_kernel = self.mod.get_function("computeKurtosis")
-        self.finalize_kurtosis_kernel = self.mod.get_function("finalizeKurtosis")
+        self.compute_diffusion_coefficients_and_kurtosis = self.mod.get_function("computeDiffusionCoefficientsAndKurtosis")
+        # self.compute_kurtosis_kernel = self.mod.get_function("computeKurtosis")
+        # self.finalize_kurtosis_kernel = self.mod.get_function("finalizeKurtosis")
             
         # self.compute_displacements_and_count_central = self.mod.get_function("computeDisplacementsAndCountsCentral")
         # pass the list of spheres in the geom to the gpu
@@ -99,22 +98,22 @@ class DiffSim3d:
             grid=(grid_size, 1)
         )
 
-    def calculate_displacements(self, step_idx, current_time, dx_array, dy_array, dz_array):
+    def calculate_diffusion_coefficients_and_kurtoses(self, step_idx, current_time, 
+                                dx_array, dy_array, dz_array,
+                                Kx2_array, Ky2_array, Kz2_array,
+                                Kx4_array, Ky4_array, Kz4_array):
         """Calculate displacements using GPU kernel"""
         block_size = 256
         grid_size = int(np.ceil(self.nspins / block_size))
         
-        self.compute_displacements(
-            self.spins_d, 
-            self.spins0_d,
-            dx_array,
-            dy_array,
-            dz_array,
-            np.int32(step_idx),
-            np.int32(self.nspins),
+        self.compute_diffusion_coefficients_and_kurtosis(
+            self.spins_d, self.spins0_d,
+            dx_array, dy_array, dz_array,
+            Kx2_array, Ky2_array, Kz2_array,  # Second moment arrays
+            Kx4_array, Ky4_array, Kz4_array,  # Fourth moment arrays
+            np.int32(step_idx),  np.int32(self.nspins),
             np.float32(current_time),
-            block=(block_size, 1, 1),
-            grid=(grid_size, 1)
+            block=(block_size, 1, 1), grid=(grid_size, 1)
         )
 
     # def compute_displacements_in_directions(self, displacements, directions):
@@ -440,8 +439,7 @@ class DiffSim3dKurtosis(DiffSim3d):
     
     def calculate_kurtosis(self, step_idx,
                         Kx2_array, Ky2_array, Kz2_array, 
-                        Kx4_array, Ky4_array, Kz4_array,
-                        Kx_final_d, Ky_final_d, Kz_final_d):
+                        Kx4_array, Ky4_array, Kz4_array):
         """Calculate kurtosis values using GPU kernels."""
         block_size = 256
         grid_size = int(np.ceil(self.nspins / block_size))
@@ -454,14 +452,4 @@ class DiffSim3dKurtosis(DiffSim3d):
             np.int32(step_idx), np.int32(self.nspins),
             block=(block_size, 1, 1), grid=(grid_size, 1)
         )
-        
-        # Step 2: Immediately finalize kurtosis for this time step
-        # self.finalize_kurtosis_kernel(
-        #     Kx2_array, Ky2_array, Kz2_array,      # Second moments (input)
-        #     Kx4_array, Ky4_array, Kz4_array,  # Fourth moments (input)
-        #     Kx_final_d, Ky_final_d, Kz_final_d,  # Final kurtosis (output)
-        #     np.int32(step_idx),  # Process only current step
-        #     np.int32(self.nspins),
-        #     block=(block_size, 1, 1), grid=(grid_size, 1)
-        # )
         

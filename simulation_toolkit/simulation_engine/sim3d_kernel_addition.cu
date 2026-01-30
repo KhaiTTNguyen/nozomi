@@ -200,7 +200,7 @@ extern "C"
         float dz_fourth = 0.0f;
         
         if (idx < n_spins) {
-            // Compute displacements
+            // Compute squared displacements for this spin
             float dx = spins[idx] - spins0[idx];
             float dy = spins[n_spins + idx] - spins0[n_spins + idx];
             float dz = spins[2*n_spins + idx] - spins0[2*n_spins + idx];
@@ -249,40 +249,49 @@ extern "C"
         }
     }
 
-    __global__ void finalizeKurtosis(float *dx2_result, float *dy2_result, float *dz2_result,
-                                    float *dx4_result, float *dy4_result, float *dz4_result,
-                                    float *Kx_result, float *Ky_result, float *Kz_result,
-                                    int step_idx, int n_spins) {
-        int idx = step_idx;
+    // __global__ void finalizeKurtosis(float *dx2_result, float *dy2_result, float *dz2_result,
+    //                                 float *dx4_result, float *dy4_result, float *dz4_result,
+    //                                 float *Kx_result, float *Ky_result, float *Kz_result,
+    //                                 int step_idx, int n_spins) {
+    //     int idx = step_idx;
     
-        // Normalize moments by number of spins
-        float dx2_mean = dx2_result[idx];
-        float dy2_mean = dy2_result[idx];
-        float dz2_mean = dz2_result[idx];
+    //     // Normalize moments by number of spins
+    //     float dx2_mean = dx2_result[idx];
+    //     float dy2_mean = dy2_result[idx];
+    //     float dz2_mean = dz2_result[idx];
         
-        float dx4_mean = dx4_result[idx];
-        float dy4_mean = dy4_result[idx];
-        float dz4_mean = dz4_result[idx];
+    //     float dx4_mean = dx4_result[idx];
+    //     float dy4_mean = dy4_result[idx];
+    //     float dz4_mean = dz4_result[idx];
         
-        // Calculate kurtosis: K = <x^4> / <x^2>^2 - 3
-        // Add small epsilon to avoid division by zero
-        float eps = 1e-12f;
+    //     // Calculate kurtosis: K = <x^4> / <x^2>^2 - 3
+    //     // Add small epsilon to avoid division by zero
+    //     float eps = 1e-12f;
         
-        Kx_result[idx] = (dx2_mean > eps) ? (dx4_mean / (dx2_mean * dx2_mean) - 3.0f) : 0.0f;
-        Ky_result[idx] = (dy2_mean > eps) ? (dy4_mean / (dy2_mean * dy2_mean) - 3.0f) : 0.0f;
-        Kz_result[idx] = (dz2_mean > eps) ? (dz4_mean / (dz2_mean * dz2_mean) - 3.0f) : 0.0f;
-    }
+    //     Kx_result[idx] = (dx2_mean > eps) ? (dx4_mean / (dx2_mean * dx2_mean) - 3.0f) : 0.0f;
+    //     Ky_result[idx] = (dy2_mean > eps) ? (dy4_mean / (dy2_mean * dy2_mean) - 3.0f) : 0.0f;
+    //     Kz_result[idx] = (dz2_mean > eps) ? (dz4_mean / (dz2_mean * dz2_mean) - 3.0f) : 0.0f;
+    // }
 
     /**
     * Kernel to compute second and fourth moments for kurtosis calculation
     */
     
-    __global__ void computeDisplacements(float *spins, float *spins0, float *dx_result, float *dy_result, float *dz_result, 
-                                    int step_idx, int n_spins, float current_time) {
+    __global__ void computeDiffusionCoefficientsAndKurtosis(float *spins, float *spins0, 
+        float *dx_result, float *dy_result, float *dz_result, 
+        float *kx2_result, float *ky2_result, float *kz2_result, 
+        float *kx4_result, float *ky4_result, float *kz4_result, 
+        int step_idx, int n_spins, float current_time) {
         // Calculate block-level sums using shared memory
         __shared__ float dx_sum_block[256]; // Assuming block size of 256
         __shared__ float dy_sum_block[256];
         __shared__ float dz_sum_block[256];
+        __shared__ float dx2_sum_block[256]; // Second moments
+        __shared__ float dy2_sum_block[256];
+        __shared__ float dz2_sum_block[256];
+        __shared__ float dx4_sum_block[256]; // Fourth moments
+        __shared__ float dy4_sum_block[256];
+        __shared__ float dz4_sum_block[256];
         
         int tid = threadIdx.x;
         int idx = blockIdx.x * blockDim.x + tid;
@@ -290,36 +299,56 @@ extern "C"
         float dx_squared = 0.0f;
         float dy_squared = 0.0f;
         float dz_squared = 0.0f;
+        float dx_fourth = 0.0f;
+        float dy_fourth = 0.0f;
+        float dz_fourth = 0.0f;
         
         if (idx < n_spins) {
             // Compute squared displacements for this spin
             dx_squared = (spins[idx] - spins0[idx]) * (spins[idx] - spins0[idx]);
             dy_squared = (spins[n_spins + idx] - spins0[n_spins + idx]) * (spins[n_spins + idx] - spins0[n_spins + idx]);
             dz_squared = (spins[2*n_spins + idx] - spins0[2*n_spins + idx]) * (spins[2*n_spins + idx] - spins0[2*n_spins + idx]);
+        
+            dx_fourth = dx_squared * dx_squared;
+            dy_fourth = dy_squared * dy_squared;
+            dz_fourth = dz_squared * dz_squared;
         }
         
         // Store in shared memory
-        dx_sum_block[tid] = dx_squared;
-        dy_sum_block[tid] = dy_squared;
-        dz_sum_block[tid] = dz_squared;
-        
+        dx2_sum_block[tid] = dx_squared;
+        dy2_sum_block[tid] = dy_squared;
+        dz2_sum_block[tid] = dz_squared;
+        dx4_sum_block[tid] = dx_fourth;
+        dy4_sum_block[tid] = dy_fourth;
+        dz4_sum_block[tid] = dz_fourth;
+
         __syncthreads();
         
         // Perform parallel reduction to sum values
         for (int s = blockDim.x / 2; s > 0; s >>= 1) {
             if (tid < s) {
-                dx_sum_block[tid] += dx_sum_block[tid + s];
-                dy_sum_block[tid] += dy_sum_block[tid + s];
-                dz_sum_block[tid] += dz_sum_block[tid + s];
+                dx2_sum_block[tid] += dx2_sum_block[tid + s];
+                dy2_sum_block[tid] += dy2_sum_block[tid + s];
+                dz2_sum_block[tid] += dz2_sum_block[tid + s];
+                dx4_sum_block[tid] += dx4_sum_block[tid + s];
+                dy4_sum_block[tid] += dy4_sum_block[tid + s];
+                dz4_sum_block[tid] += dz4_sum_block[tid + s];
             }
             __syncthreads();
         }
         
         // Write block results to global memory
         if (tid == 0) {
-            atomicAdd(&dx_result[step_idx], dx_sum_block[0] / (2.0f * current_time * n_spins));
-            atomicAdd(&dy_result[step_idx], dy_sum_block[0] / (2.0f * current_time * n_spins));
-            atomicAdd(&dz_result[step_idx], dz_sum_block[0] / (2.0f * current_time * n_spins));
+            atomicAdd(&dx_result[step_idx], dx2_sum_block[0] / (2.0f * current_time * n_spins));
+            atomicAdd(&dy_result[step_idx], dy2_sum_block[0] / (2.0f * current_time * n_spins));
+            atomicAdd(&dz_result[step_idx], dz2_sum_block[0] / (2.0f * current_time * n_spins));
+
+            atomicAdd(&kx2_result[step_idx], dx2_sum_block[0]/n_spins);
+            atomicAdd(&ky2_result[step_idx], dy2_sum_block[0]/n_spins);
+            atomicAdd(&kz2_result[step_idx], dz2_sum_block[0]/n_spins);
+            atomicAdd(&kx4_result[step_idx], dx4_sum_block[0]/n_spins);
+            atomicAdd(&ky4_result[step_idx], dy4_sum_block[0]/n_spins);
+            atomicAdd(&kz4_result[step_idx], dz4_sum_block[0]/n_spins);
         }
     }
 

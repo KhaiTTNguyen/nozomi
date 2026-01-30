@@ -25,21 +25,22 @@ class GPUManager:
             logger.warning("Could not detect GPUs, defaulting to GPU 0")
             return [0]
     
-    def set_gpu(self, gpu_id: int):
-        """Set CUDA_VISIBLE_DEVICES for a specific GPU"""
-        os.environ['CUDA_VISIBLE_DEVICES'] = str(gpu_id)
-        logger.info(f"Set CUDA_VISIBLE_DEVICES to {gpu_id}")
+    # def set_gpu(self, gpu_id: int):
+    #     """Set CUDA_VISIBLE_DEVICES for a specific GPU"""
+    #     os.environ['CUDA_VISIBLE_DEVICES'] = str(gpu_id)
+    #     logger.info(f"Set CUDA_VISIBLE_DEVICES to {gpu_id}")
     
-    def allocate_gpus(self, num_jobs: int, max_gpus: int = 5, 
-                     user_gpu_list: Optional[List[int]] = None) -> List[int]:
-        """Allocate GPUs for batch processing"""
-        if user_gpu_list:
-            invalid_gpus = [gpu for gpu in user_gpu_list if gpu not in self.available_gpus]
-            if invalid_gpus:
-                logger.warning(f"GPUs {invalid_gpus} are not available")
-            gpu_list = [gpu for gpu in user_gpu_list if gpu in self.available_gpus]
-        else:
-            gpu_list = self.available_gpus[:min(num_jobs, max_gpus, len(self.available_gpus))]
+    # def allocate_gpus(self, num_jobs: int, max_gpus: int = 5) -> List[int]:
+    #     """Allocate GPUs for batch processing"""
+    #     user_gpu_list=os.environ['CUDA_VISIBLE_DEVICES']
+    #     print("USER GPU LIST:", user_gpu_list)
+    #     if user_gpu_list:
+    #         # invalid_gpus = [gpu for gpu in user_gpu_list if gpu not in self.available_gpus]
+    #         # if invalid_gpus:
+    #         #     logger.warning(f"GPUs {invalid_gpus} are not available")
+    #         gpu_list = [gpu for gpu in user_gpu_list if gpu in self.available_gpus]
+    #     else:
+    #         gpu_list = self.available_gpus[:min(num_jobs, max_gpus, len(self.available_gpus))]
         
-        logger.info(f"Allocated GPUs: {gpu_list} for {num_jobs} jobs")
-        return gpu_list
+    #     logger.info(f"Allocated GPUs: {gpu_list} for {num_jobs} jobs")
+    #     return gpu_list

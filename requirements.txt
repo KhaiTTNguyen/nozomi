@@ -69,3 +69,6 @@ trx-python==0.3
 typing-extensions==4.12.2
 tzdata==2024.1
 zipp==3.20.0
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
