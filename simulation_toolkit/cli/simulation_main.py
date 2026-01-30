@@ -92,6 +92,11 @@ def simulation_main(params, substrate_file):
         diff_time[step_idx-1]=current_time
         step_idx += 1
 
+        # Progress reporting  
+        if step_idx % 1000 == 0:
+            progress = (step_idx + 1) / num_steps * 100
+            print(f"Progress: {progress:.1f}% | Time: {current_time:.3f}s")
+
     # After the loop, copy results back to CPU once
     Dx_step = np.array(Dx_array.get())[1:]
     Dy_step = np.array(Dy_array.get())[1:]

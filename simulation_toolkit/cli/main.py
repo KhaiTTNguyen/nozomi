@@ -9,22 +9,17 @@ import torch
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import shutil
 import os
-from simulation_toolkit.utils.gpu_manager import GPUManager
 import simulation_toolkit.defaults.params as config_params
 from simulation_toolkit.cli.substrate_main import substrate_main
 from simulation_toolkit.cli.simulation_main import simulation_main
 
 from simulation_toolkit.simulation_engine import diffsim3d
-from simulation_toolkit.utils.logging_utils import get_logger
 from simulation_toolkit.config import config
-
-logger = get_logger(__name__)
 
 class GeometryToolkitCLI:
     """Main CLI class combining previous functionality"""
     
     def __init__(self):
-        self.gpu_manager = GPUManager()
     
     def run_substrate_generation(self, params: dict, gpu_id: int = 0, experiment_name: str = "default_experiment"):
         """Run substrate generation"""
@@ -34,32 +29,32 @@ class GeometryToolkitCLI:
 
         # generator = initialization_2d(gpu_id=gpu_id)
         # result = generator.generate(params)
-        logger.info(f"Substrate generation completed for {experiment_name}")
+        print(f"Substrate generation completed for {experiment_name}")
     
     def run_batch_processing_for_folder(self, folder_path: str):
         """Run batch processing for multiple configurations"""
         folder_path = Path(folder_path)
         
         if not folder_path.exists():
-            logger.error(f"Folder {folder_path} does not exist")
+            print(f"Folder {folder_path} does not exist")
             sys.exit(1)
         
         json_files = list(folder_path.glob("*.json"))
         if not json_files:
-            logger.error(f"No JSON files found in {folder_path}")
+            print(f"No JSON files found in {folder_path}")
             sys.exit(1)
         
-        logger.info(f"Found {len(json_files)} configuration files")
+        print(f"Found {len(json_files)} configuration files")
 
         gpu_list = os.environ['CUDA_VISIBLE_DEVICES']
-        logger.info(f"Using GPUs: {gpu_list}")
+        print(f"Using GPUs: {gpu_list}")
         
         # Process each configuration
         for i, json_file in enumerate(json_files):
             gpu_id = gpu_list[i % len(gpu_list)]
             config_data = config.load_config_file(json_file)
             
-            logger.info(f"Processing {json_file.name} on GPU {gpu_id}")
+            print(f"Processing {json_file.name} on GPU {gpu_id}")
             
             if "substrates" in config_data:
                 for substrate in config_data["substrates"]:
@@ -67,12 +62,11 @@ class GeometryToolkitCLI:
                     repeats = config_data.get("repeats", 1)
                     
                     for repeat in range(repeats):
-                        logger.info(f"  Repeat {repeat + 1}/{repeats}")
+                        print(f"  Repeat {repeat + 1}/{repeats}")
                         self.run_substrate_generation(config_data, gpu_id)
 
     def run_simulation(self, full_sim_params):
         """Run substrate generation"""    
-        print('full_sim_params', full_sim_params)
         main_folder = full_sim_params['substrates']
         if not os.path.isdir(main_folder):
             print(f"Error: {main_folder} is not a valid directory")
@@ -97,7 +91,7 @@ class GeometryToolkitCLI:
             else:
                 print(f"Warning: Data folder not found in {subfolder_path}")
 
-        logger.info(f"Substrate generation completed for {os.path.basename(full_sim_params['substrates'])}")
+        print(f"Substrate generation completed for {os.path.basename(full_sim_params['substrates'])}")
     
 def parse_command_line_params(args: List[str]) -> dict:
     """Parse command line parameters in key=value format"""
@@ -182,10 +176,6 @@ def main():
         # Merge config with command line overrides
         full_sim_params = sim_config.copy()
         full_sim_params.update(cmd_params)
-
-        print('sim_config', sim_config)
-        print('cmd_params', cmd_params)
-        print('full_sim_params', full_sim_params)
         # ===== START simulation =====
         cli.run_simulation(full_sim_params)
         # ===== END simulation =====
