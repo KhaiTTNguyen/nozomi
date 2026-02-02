@@ -20,6 +20,7 @@ class GeometryToolkitCLI:
     """Main CLI class combining previous functionality"""
     
     def __init__(self):
+        return 
     
     def run_substrate_generation(self, params: dict, gpu_id: int = 0, experiment_name: str = "default_experiment"):
         """Run substrate generation"""

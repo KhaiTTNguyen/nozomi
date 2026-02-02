@@ -72,31 +72,32 @@ class DiffSim3d:
         self.sig_d = gpuarray.ones([1,self.nspins],dtype=np.float32)
         self.issetup = True
 
-    def calculate_displacements_central(self, step_idx, current_time, dx_array, dy_array, dz_array, count_array):
-        """Calculate displacements using GPU kernel for central 75% region only"""
-        block_size = 256
-        grid_size = int(np.ceil(self.nspins / block_size))
+    '''deprecated'''
+    # def calculate_displacements_central(self, step_idx, current_time, dx_array, dy_array, dz_array, count_array):
+    #     """Calculate displacements using GPU kernel for central 75% region only"""
+    #     block_size = 256
+    #     grid_size = int(np.ceil(self.nspins / block_size))
         
-        # Clear the arrays for this time step
-        dx_array[step_idx] = 0.0
-        dy_array[step_idx] = 0.0  
-        dz_array[step_idx] = 0.0
-        count_array[step_idx] = 0
+    #     # Clear the arrays for this time step
+    #     dx_array[step_idx] = 0.0
+    #     dy_array[step_idx] = 0.0  
+    #     dz_array[step_idx] = 0.0
+    #     count_array[step_idx] = 0
         
-        # Launch the combined kernel
-        self.compute_displacements_and_count_central(
-            self.spins_d,
-            self.spins0_d,
-            dx_array,
-            dy_array,
-            dz_array,
-            count_array,
-            np.int32(step_idx),
-            np.int32(self.nspins),
-            np.float32(current_time),
-            block=(block_size, 1, 1),
-            grid=(grid_size, 1)
-        )
+    #     # Launch the combined kernel
+    #     self.compute_displacements_and_count_central(
+    #         self.spins_d,
+    #         self.spins0_d,
+    #         dx_array,
+    #         dy_array,
+    #         dz_array,
+    #         count_array,
+    #         np.int32(step_idx),
+    #         np.int32(self.nspins),
+    #         np.float32(current_time),
+    #         block=(block_size, 1, 1),
+    #         grid=(grid_size, 1)
+    #     )
 
     def calculate_diffusion_coefficients_and_kurtoses(self, step_idx, current_time, 
                                 dx_array, dy_array, dz_array,

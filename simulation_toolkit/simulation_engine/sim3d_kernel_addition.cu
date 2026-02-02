@@ -283,9 +283,9 @@ extern "C"
         float *kx4_result, float *ky4_result, float *kz4_result, 
         int step_idx, int n_spins, float current_time) {
         // Calculate block-level sums using shared memory
-        __shared__ float dx_sum_block[256]; // Assuming block size of 256
-        __shared__ float dy_sum_block[256];
-        __shared__ float dz_sum_block[256];
+        // __shared__ float dx_sum_block[256]; // Assuming block size of 256
+        // __shared__ float dy_sum_block[256];
+        // __shared__ float dz_sum_block[256];
         __shared__ float dx2_sum_block[256]; // Second moments
         __shared__ float dy2_sum_block[256];
         __shared__ float dz2_sum_block[256];
@@ -352,71 +352,71 @@ extern "C"
         }
     }
 
-    __global__ void computeDisplacementsAndCountsCentral(float *spins, float *spins0, float *dx_result, float *dy_result, 
-                                           float *dz_result, int *count_result, int step_idx, int n_spins, float current_time) {
-        __shared__ float dx_sum_block[256];
-        __shared__ float dy_sum_block[256];
-        __shared__ float dz_sum_block[256];
-        __shared__ int count_block[256];
+    // __global__ void computeDisplacementsAndCountsCentral(float *spins, float *spins0, float *dx_result, float *dy_result, 
+    //                                        float *dz_result, int *count_result, int step_idx, int n_spins, float current_time) {
+    //     __shared__ float dx_sum_block[256];
+    //     __shared__ float dy_sum_block[256];
+    //     __shared__ float dz_sum_block[256];
+    //     __shared__ int count_block[256];
         
-        int tid = threadIdx.x;
-        int idx = blockIdx.x * blockDim.x + tid;
+    //     int tid = threadIdx.x;
+    //     int idx = blockIdx.x * blockDim.x + tid;
         
-        float dx_squared = 0.0f;
-        float dy_squared = 0.0f;
-        float dz_squared = 0.0f;
-        int in_central_region = 0;
+    //     float dx_squared = 0.0f;
+    //     float dy_squared = 0.0f;
+    //     float dz_squared = 0.0f;
+    //     int in_central_region = 0;
         
-        if (idx < n_spins) {
-            // Get current position
-            float x = spins[idx];
-            float y = spins[n_spins + idx];
-            float z = spins[2*n_spins + idx];
+    //     if (idx < n_spins) {
+    //         // Get current position
+    //         float x = spins[idx];
+    //         float y = spins[n_spins + idx];
+    //         float z = spins[2*n_spins + idx];
             
-            float central_Lx = 0.75f * Lx;
-            float central_Ly = 0.75f * Ly;
-            float central_Lz = 0.75f * Lz;
+    //         float central_Lx = 0.75f * Lx;
+    //         float central_Ly = 0.75f * Ly;
+    //         float central_Lz = 0.75f * Lz;
             
             
-            if (x >= -central_Lx/2.0f && x <= central_Lx/2.0f &&
-                y >= -central_Ly/2.0f && y <= central_Ly/2.0f &&
-                z >= -central_Lz/2.0f && z <= central_Lz/2.0f) {
+    //         if (x >= -central_Lx/2.0f && x <= central_Lx/2.0f &&
+    //             y >= -central_Ly/2.0f && y <= central_Ly/2.0f &&
+    //             z >= -central_Lz/2.0f && z <= central_Lz/2.0f) {
                 
-                // Compute squared displacements for this spin
-                dx_squared = (spins[idx] - spins0[idx]) * (spins[idx] - spins0[idx]);
-                dy_squared = (spins[n_spins + idx] - spins0[n_spins + idx]) * (spins[n_spins + idx] - spins0[n_spins + idx]);
-                dz_squared = (spins[2*n_spins + idx] - spins0[2*n_spins + idx]) * (spins[2*n_spins + idx] - spins0[2*n_spins + idx]);
-                in_central_region = 1;
-            }
-        }
+    //             // Compute squared displacements for this spin
+    //             dx_squared = (spins[idx] - spins0[idx]) * (spins[idx] - spins0[idx]);
+    //             dy_squared = (spins[n_spins + idx] - spins0[n_spins + idx]) * (spins[n_spins + idx] - spins0[n_spins + idx]);
+    //             dz_squared = (spins[2*n_spins + idx] - spins0[2*n_spins + idx]) * (spins[2*n_spins + idx] - spins0[2*n_spins + idx]);
+    //             in_central_region = 1;
+    //         }
+    //     }
         
-        // Store in shared memory
-        dx_sum_block[tid] = dx_squared;
-        dy_sum_block[tid] = dy_squared;
-        dz_sum_block[tid] = dz_squared;
-        count_block[tid] = in_central_region;
+    //     // Store in shared memory
+    //     dx_sum_block[tid] = dx_squared;
+    //     dy_sum_block[tid] = dy_squared;
+    //     dz_sum_block[tid] = dz_squared;
+    //     count_block[tid] = in_central_region;
         
-        __syncthreads();
+    //     __syncthreads();
         
-        // Parallel reduction
-        for (int s = blockDim.x / 2; s > 0; s >>= 1) {
-            if (tid < s) {
-                dx_sum_block[tid] += dx_sum_block[tid + s];
-                dy_sum_block[tid] += dy_sum_block[tid + s];
-                dz_sum_block[tid] += dz_sum_block[tid + s];
-                count_block[tid] += count_block[tid + s];
-            }
-            __syncthreads();
-        }
+    //     // Parallel reduction
+    //     for (int s = blockDim.x / 2; s > 0; s >>= 1) {
+    //         if (tid < s) {
+    //             dx_sum_block[tid] += dx_sum_block[tid + s];
+    //             dy_sum_block[tid] += dy_sum_block[tid + s];
+    //             dz_sum_block[tid] += dz_sum_block[tid + s];
+    //             count_block[tid] += count_block[tid + s];
+    //         }
+    //         __syncthreads();
+    //     }
         
-        // Write results to global memory
-        if (tid == 0) {
-            atomicAdd(&dx_result[step_idx], dx_sum_block[0]);
-            atomicAdd(&dy_result[step_idx], dy_sum_block[0]);
-            atomicAdd(&dz_result[step_idx], dz_sum_block[0]);
-            atomicAdd(&count_result[step_idx], count_block[0]);
-        }
-    }
+    //     // Write results to global memory
+    //     if (tid == 0) {
+    //         atomicAdd(&dx_result[step_idx], dx_sum_block[0]);
+    //         atomicAdd(&dy_result[step_idx], dy_sum_block[0]);
+    //         atomicAdd(&dz_result[step_idx], dz_sum_block[0]);
+    //         atomicAdd(&count_result[step_idx], count_block[0]);
+    //     }
+    // }
 
     __global__ void seedSpinsKernel(
         int nspin,                // Number of spins to generate

@@ -157,3 +157,23 @@ The `sim` folder include:
 * A `.pkl` file storing the time-dependent diffusion coefficient.
 
 * A figure visualizing the time-dependent diffusion coefficient.
+
+
+
+## Nozomi Testing Framework Guide
+
+### Basic Test Execution
+
+```bash
+# Run all tests
+pytest
+
+# Run specific test file
+pytest tests/validation/test_physics.py
+
+# Run specific test class
+pytest tests/validation/test_physics.py::TestPhysicsEngine
+
+# Run specific test method
+pytest tests/validation/test_physics.py::TestPhysicsEngine::test_diffusion_coefficient_calculation
+```
