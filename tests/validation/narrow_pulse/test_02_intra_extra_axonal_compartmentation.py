@@ -44,9 +44,9 @@ def test_inside_single_sphere():
     # first, check that all the spins are in fact in spstruc
     assert (spstruc.isinside(sim.spins).all())
 
-    config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH = "./tests/validation/narrow_pulse/test_figures/" 
-    if not os.path.exists(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH):
-        os.makedirs(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH)
+    config_params.VALIDATION_TEST_FOLDER_PATH = "./tests/validation/narrow_pulse/test_figures/" 
+    if not os.path.exists(config_params.VALIDATION_TEST_FOLDER_PATH):
+        os.makedirs(config_params.VALIDATION_TEST_FOLDER_PATH)
     fig, ax = pl.subplots(subplot_kw={"projection": "3d"})
     spins_np = sim.spins_d.get()
     ax.scatter(spins_np[0,:].T,spins_np[1,:].T,spins_np[2,:].T)
@@ -56,7 +56,7 @@ def test_inside_single_sphere():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_inside_single_sphere_pre_sim_spins.png")
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_inside_single_sphere_pre_sim_spins.png")
 
     # ======= Simulate diffusion =======
     for n in range(nt):
@@ -71,7 +71,7 @@ def test_inside_single_sphere():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_inside_single_sphere_post_sim_spins.png")
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_inside_single_sphere_post_sim_spins.png")
 
     # after simulating diffusion, are all spins still inside spstruc?
     assert (spstruc.isinside(sim.spins_d.get()).all())
@@ -112,9 +112,9 @@ def test_outside_single_sphere():
     isOutside = np.invert(isOutside)
     assert isOutside.all()
 
-    config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH = "./tests/validation/narrow_pulse/test_figures/" 
-    if not os.path.exists(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH):
-        os.makedirs(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH)
+    config_params.VALIDATION_TEST_FOLDER_PATH = "./tests/validation/narrow_pulse/test_figures/" 
+    if not os.path.exists(config_params.VALIDATION_TEST_FOLDER_PATH):
+        os.makedirs(config_params.VALIDATION_TEST_FOLDER_PATH)
     fig, ax = pl.subplots(subplot_kw={"projection": "3d"})
     spins_np = sim.spins_d.get()
     ax.scatter(spins_np[0,:].T,spins_np[1,:].T,spins_np[2,:].T)
@@ -124,7 +124,7 @@ def test_outside_single_sphere():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_outside_single_sphere_pre_sim_spins.png")
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_outside_single_sphere_pre_sim_spins.png")
 
     # ======= Simulate diffusion =======
     for n in range(nt):
@@ -146,7 +146,7 @@ def test_outside_single_sphere():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_outside_single_sphere_post_sim_spins.png")
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_outside_single_sphere_post_sim_spins.png")
 
     # signal from T2 decay
     assert abs(np.mean(sim.sig_d.get()) - np.exp(-nt*dt/T2)) < 1e-2
@@ -194,7 +194,7 @@ def test_inside_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_inside_multiple_spheres_pre_sim_spins.png")
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_inside_multiple_spheres_pre_sim_spins.png")
 
     for n in range(nt):
         sim.step(dt)
@@ -215,7 +215,7 @@ def test_inside_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_inside_multiple_spheres_post_sim_spins.png")
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_inside_multiple_spheres_post_sim_spins.png")
 
     msdx = np.sum(((sim.spins_d[0,:]-sim.spins0_d[0,:])**2).get())/spins
     msdy = np.sum(((sim.spins_d[1,:]-sim.spins0_d[1,:])**2).get())/spins
@@ -277,9 +277,9 @@ def test_outside_multiple_spheres():
     isOutside = np.invert(isOutside)
     assert isOutside.all()
     
-    config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH = "./tests/validation/narrow_pulse/test_figures/" 
-    if not os.path.exists(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH):
-        os.makedirs(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH)
+    config_params.VALIDATION_TEST_FOLDER_PATH = "./tests/validation/narrow_pulse/test_figures/" 
+    if not os.path.exists(config_params.VALIDATION_TEST_FOLDER_PATH):
+        os.makedirs(config_params.VALIDATION_TEST_FOLDER_PATH)
     fig, ax = pl.subplots(subplot_kw={"projection": "3d"})
     spins_np = sim.spins_d.get()
     ax.scatter(spins_np[0,:].T,spins_np[1,:].T,spins_np[2,:].T)
@@ -289,7 +289,7 @@ def test_outside_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_outside_multiple_spheres_pre_sim_spins.png")
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_outside_multiple_spheres_pre_sim_spins.png")
 
     # ======= Simulate diffusion =======
     for n in range(nt):
@@ -311,7 +311,7 @@ def test_outside_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_outside_multiple_spheres_post_sim_spins.png")
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_outside_multiple_spheres_post_sim_spins.png")
 
     msdx = np.sum(((sim.spins_d[0,:]-sim.spins0_d[0,:])**2).get())/spins
     msdy = np.sum(((sim.spins_d[1,:]-sim.spins0_d[1,:])**2).get())/spins

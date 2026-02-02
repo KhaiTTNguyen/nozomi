@@ -98,10 +98,7 @@ def simulation_main(params, substrate_file):
             print(f"Progress: {progress:.1f}% | Time: {current_time:.3f}s")
 
     # After the loop, copy results back to CPU once
-    Dx_step = np.array(Dx_array.get())[1:]
-    Dy_step = np.array(Dy_array.get())[1:]
-    Dz_step = np.array(Dz_array.get())[1:]
-    diff_time = np.array(diff_time)[1:]
+    Dx_step, Dy_step, Dz_step, diff_time = np.array(Dx_array.get())[1:], np.array(Dy_array.get())[1:], np.array(Dz_array.get())[1:], np.array(diff_time)[1:]
 
     # Calculate kurtosis using GPU
     Kx_final_array = Kx4_array / Kx2_array**2 - 3.0
@@ -122,7 +119,7 @@ def simulation_main(params, substrate_file):
     base_name, extension = os.path.splitext(file_name)
     date_time = str(common_util.get_date_time())
 
-    file_name_new = f'OPT_{compartment}_{date_time}_{str(len(fiber_xyzr_fid_list))}_fibers_' \
+    file_name_new = f'DiffCoeff_{compartment}_{date_time}_{str(len(fiber_xyzr_fid_list))}_fibers_' \
         f'{str(num_spins)}_spins_{base_name}_TABLEtime{str(table_elapsed_time)}sec_SIMtime{str(round(elapsed_time,2))}_sec_dt{str(dt)}_seg{str(int(nsegx))}'
     # Combine new filename with folder path to get the full path
     data_folder_name = os.path.join(target_folder_path, 'sim', 'ADCdata')

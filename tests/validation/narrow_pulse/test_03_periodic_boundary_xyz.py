@@ -55,9 +55,9 @@ def test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres():
         isInside = np.logical_or(isInside, struct.isinside(sim.spins_d.get())) # str.isinside(sim.spins_d.get()) return vector length num_spins & OR with isInside
     assert isInside.all()
     
-    config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH = "./tests/validation/narrow_pulse/test_figures/" 
-    if not os.path.exists(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH):
-        os.makedirs(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH)
+    config_params.VALIDATION_TEST_FOLDER_PATH = "./tests/validation/narrow_pulse/test_figures/" 
+    if not os.path.exists(config_params.VALIDATION_TEST_FOLDER_PATH):
+        os.makedirs(config_params.VALIDATION_TEST_FOLDER_PATH)
     fig, ax = pl.subplots(subplot_kw={"projection": "3d"})
     spins_np = sim.spins_d.get()
     ax.scatter(spins_np[0,:].T,spins_np[1,:].T,spins_np[2,:].T)
@@ -67,7 +67,7 @@ def test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres_pre_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres_pre_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
 
     for n in range(nt):
         sim.step(dt)
@@ -88,7 +88,7 @@ def test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres_post_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres_post_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
 
     msdx = np.sum(((sim.spins_d[0,:]-sim.spins0_d[0,:])**2).get())/spins
     msdy = np.sum(((sim.spins_d[1,:]-sim.spins0_d[1,:])**2).get())/spins
@@ -149,9 +149,9 @@ def test_periodic_boundary_conditions_outside_2_sets_of_multiple_spheres():
     isOutside = np.invert(isOutside)
     assert isOutside.all()
     
-    config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH = "./tests/validation/narrow_pulse/test_figures/" 
-    if not os.path.exists(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH):
-        os.makedirs(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH)
+    config_params.VALIDATION_TEST_FOLDER_PATH = "./tests/validation/narrow_pulse/test_figures/" 
+    if not os.path.exists(config_params.VALIDATION_TEST_FOLDER_PATH):
+        os.makedirs(config_params.VALIDATION_TEST_FOLDER_PATH)
     fig, ax = pl.subplots(subplot_kw={"projection": "3d"})
     spins_np = sim.spins_d.get()
     ax.scatter(spins_np[0,:].T,spins_np[1,:].T,spins_np[2,:].T)
@@ -161,7 +161,7 @@ def test_periodic_boundary_conditions_outside_2_sets_of_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_outside_multiple_spheres_pre_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_outside_multiple_spheres_pre_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
 
     # ======= Simulate diffusion =======
     for n in range(nt):
@@ -183,7 +183,7 @@ def test_periodic_boundary_conditions_outside_2_sets_of_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_outside_multiple_spheres_post_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_outside_multiple_spheres_post_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
 
     msdx = np.sum(((sim.spins_d[0,:]-sim.spins0_d[0,:])**2).get())/spins
     msdy = np.sum(((sim.spins_d[1,:]-sim.spins0_d[1,:])**2).get())/spins

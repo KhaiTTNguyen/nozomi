@@ -159,21 +159,35 @@ The `sim` folder include:
 * A figure visualizing the time-dependent diffusion coefficient.
 
 
+## Experiment Visualization
+What each script does
+Where it outputs results
+Example usage
 
-## Nozomi Testing Framework Guide
-
-### Basic Test Execution
+## Nozomi Validation Experiments Guide
 
 ```bash
 # Run all tests
 pytest
 
 # Run specific test file
-pytest tests/validation/test_physics.py
-
-# Run specific test class
-pytest tests/validation/test_physics.py::TestPhysicsEngine
-
-# Run specific test method
-pytest tests/validation/test_physics.py::TestPhysicsEngine::test_diffusion_coefficient_calculation
+pytest tests/validation/narrow_pulse/test_03_periodic_boundary_xyz.py
 ```
+## Nozomi Calibration Experiments Guide
+### Number of Molecule and Time step Calibration
+```bash
+# Format
+CUDA_VISIBLE_DEVICES=<gpu_number> python3 ./tests/calibration/num_molecules_and_time_step_calibration/validation_for_num_molecules_and_time_step_search.py
+
+# Example
+CUDA_VISIBLE_DEVICES=0 python3 ./tests/calibration/num_molecules_and_time_step_calibration/validation_for_num_molecules_and_time_step_search.py
+ ```
+
+### Simulation Domain Segmentation Calibration
+```bash
+# Format
+CUDA_VISIBLE_DEVICES=<gpu_number> python3 ./tests/calibration/num_molecules_and_time_step_calibration/validation_for_num_molecules_and_time_step_search.py
+
+# Example
+CUDA_VISIBLE_DEVICES=0 python3 ./tests/calibration/num_molecules_and_time_step_calibration/validation_for_num_molecules_and_time_step_search.py
+ ```

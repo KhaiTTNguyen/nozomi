@@ -1,4 +1,9 @@
-import numpy as np
+import sys
+from pathlib import Path
+# Add project root to path
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
 import pandas as pd
 from datetime import datetime
 import pickle
@@ -7,28 +12,37 @@ from scipy.special import jnp_zeros
 import os
 import pycuda.gpuarray as gpuarray
 import numpy as np
-# import diffsim3d as ds3
-import hipa.diffsim.geometry as geom
-import hipa.diffsim.diffsim3d_additional as ds3
-import hipa.diffsim.helper.simulation_report as simrep
-import hipa.diffsim.helper.sim_util as sim_util
-import matplotlib.pyplot as pl
-import hipa.util.util as util
-import hipa.util.adjust_geometry as ag
+import logging
+
+# Suppress matplotlib font substitution messages
+logging.getLogger('matplotlib.mathtext').setLevel(logging.WARNING)
+logging.getLogger('matplotlib.font_manager').setLevel(logging.WARNING)
+import simulation_toolkit.simulation_engine.diffsim3d as ds3
+import simulation_toolkit.simulation_engine.geometry as geom
+
+import simulation_toolkit.simulation_engine.helper.simulation_report as simrep
+import simulation_toolkit.simulation_engine.helper.sim_util as sim_util
+import simulation_toolkit.utils.common_utils as common_util
+
+import simulation_toolkit.defaults.params as config_params
+
+import simulation_toolkit.utils.adjust_geometry as ag
 from scipy.interpolate import interp1d
 from matplotlib.pyplot import cm
 import time
 import os
 
 def calculateDanalytical_longtime(a, D0):
-    '''Analytical intra-axonal radial D(t) at long diffusion time in Burcaw 2015
+    '''Analytical intra-axonal radial D(t) at from 
+    Burcaw 2015 https://doi.org/10.1016/j.neuroimage.2015.03.061
     derived from Stepišnik (1993) and Callaghan (1995)'''
     
     # Time range (normalized units)
-    t_values = np.logspace(-4, 2, 100)  # From 0.0001 to 100
-    
+    t_values = np.logspace(-4, 2, 100)  # From 0.0001 to 100 ms
+    # total_sim_time = 100 # ms
+
     # Get the first few roots of the derivative of J1(x)
-    beta_1k = jnp_zeros(1, 100)  # Get first 10 roots
+    beta_1k = jnp_zeros(1, 100)  # Get first 100 roots
     
     def D_t(t):
         # First term
@@ -51,7 +65,7 @@ def calculateDanalytical_shorttime(a, D0, d=2):
     '''Analytical diffusion coefficient for short-time limit
     D(t) ≈ D0 * (1 - 4/(3d√π) * (S/V) * √(D0*t))
     For cylinder: S/V = 2/a (surface to volume ratio)
-    d = 2 for 2D radial diffusion
+    d = 2 for radial diffusion in 2D plane
     Only valid while D(t) > 0'''
     
     # Surface to volume ratio for cylinder (2D radial)
@@ -66,18 +80,12 @@ def calculateDanalytical_shorttime(a, D0, d=2):
     coefficient = (4 / (3 * d * np.sqrt(np.pi))) * S_over_V
     t_cutoff = (1 / coefficient)**2 / D0
     
-    print(f"Short-time analytical model valid up to t = {t_cutoff:.6f} ms (where D(t) = 0)")
-    
     # Time range for short-time behavior - only up to where D(t) > 0
     max_valid_time = 0.95 * t_cutoff  # Use 95% of cutoff for safety
     t_values = np.logspace(-4, np.log10(max_valid_time), 100)
     
     # Calculate D(t) for all time values
     D_values = [D_t_shorttime(t) for t in t_values]
-    
-    # Verify all values are positive
-    min_D = min(D_values)
-    print(f"Short-time model: min D(t) = {min_D:.6f} μm²/ms at t = {max(t_values):.6f} ms")
     
     return t_values, D_values
 
@@ -94,15 +102,13 @@ def calculateDanalytical_single_cylinder(a, D0):
 
 def calculateDnumerical(base_dir, a, D0, molecules, time_step, compartment, total_sim_time, run_id=0):
     '''Calculate numerical D(t) for 1 cylinder'''
-    
-    
     # Simulation box dimensions
     Lx = 20.0  # um
     Ly = 20.0  # um  
     Lz = 20.0  # um
     
     D = D0  # um^2/ms
-    T2 = 200  # ms
+    T2 = 100  # ms
     rho = 1  # fractional water density
     
     sg3 = geom.SimGeometry3D(Lx, Ly, Lz, D, T2, rho)
@@ -125,8 +131,9 @@ def calculateDnumerical(base_dir, a, D0, molecules, time_step, compartment, tota
     spstruc = geom.Structure3D(sx1, sy1, sz1, sr1, D, T2, rho)
     sg3.add_structure(spstruc)
 
+    total_sim_time = 100 # ms
     dt = time_step  # time step in ms
-    nt = int(total_sim_time/dt)  # total number of steps thru time
+    nt = int(total_sim_time / dt)  # total number of steps thru time
     
     sim = ds3.DiffSim3d(sg3, int(molecules))
     nsegx, nsegy, nsegz = 5, 5, 5
@@ -143,16 +150,14 @@ def calculateDnumerical(base_dir, a, D0, molecules, time_step, compartment, tota
         if not isInside.all():
             print(f"Run {run_id}: Warning: Not all molecules are inside structures")
 
-    numsteps = int(total_sim_time / dt) + 1
-    Dxarray = gpuarray.zeros(numsteps, dtype=np.float32)
-    Dyarray = gpuarray.zeros(numsteps, dtype=np.float32)
-    Dzarray = gpuarray.zeros(numsteps, dtype=np.float32)
+    numsteps = nt + 1  # +1 for initial condition
+    Dxarray, Dyarray, Dzarray = gpuarray.zeros(numsteps, dtype=np.float32), gpuarray.zeros(numsteps, dtype=np.float32), gpuarray.zeros(numsteps, dtype=np.float32)
+    # Arrays for storing second (variance) and fourth moments (NOT used but allocated due to simulation function signature)
+    Kx2array, Ky2array, Kz2array = gpuarray.zeros(numsteps, dtype=np.float32), gpuarray.zeros(numsteps, dtype=np.float32), gpuarray.zeros(numsteps, dtype=np.float32)
+    Kx4array, Ky4array, Kz4array = gpuarray.zeros(numsteps, dtype=np.float32), gpuarray.zeros(numsteps, dtype=np.float32), gpuarray.zeros(numsteps, dtype=np.float32)
     
     # Pre-allocate CPU result arrays
-    Dxstep = np.zeros(numsteps)
-    Dystep = np.zeros(numsteps)
-    Dzstep = np.zeros(numsteps)
-    difftime = np.zeros(numsteps)
+    Dxstep, Dystep, Dzstep, difftime = np.zeros(numsteps), np.zeros(numsteps), np.zeros(numsteps), np.zeros(numsteps)
     
     # Initial values
     Dxstep[0], Dystep[0], Dzstep[0], difftime[0] = D, D, D, 0
@@ -167,15 +172,15 @@ def calculateDnumerical(base_dir, a, D0, molecules, time_step, compartment, tota
         current_time += time_step
         
         # Use the GPU kernel to compute displacements
-        sim.calculate_displacements(step_idx, current_time, Dxarray, Dyarray, Dzarray)
-        difftime[step_idx-1] = current_time
+        sim.calculate_diffusion_coefficients_and_kurtoses(step_idx, current_time, 
+                                    Dxarray, Dyarray, Dzarray,
+                                    Kx2array, Ky2array, Kz2array, 
+                                    Kx4array, Ky4array, Kz4array)
+        difftime[step_idx-1]=current_time
         step_idx += 1
-    
+
     # After the loop, copy results back to CPU once
-    Dxstep = np.array(Dxarray.get())[1:]
-    Dystep = np.array(Dyarray.get())[1:]
-    Dzstep = np.array(Dzarray.get())[1:]
-    difftime = np.array(difftime)[1:]
+    Dxstep, Dystep, Dzstep, difftime = np.array(Dxarray.get())[1:], np.array(Dyarray.get())[1:], np.array(Dzarray.get())[1:], np.array(difftime)[1:]
     
     # Return radial diffusion coefficient (average of x and y)
     D_numerical = (Dxstep + Dystep) / 2
@@ -203,12 +208,6 @@ def calculate_mae(D_numerical, D_long_interp, difftime, time_threshold=0.01):
     absolute_error = np.abs(D_numerical_filtered - D_analytical_filtered)
     
     mae = np.mean(absolute_error)  # as percentage
-    
-    # # Calculate relative error
-    # rrelative_error = np.abs(D_numerical_filtered - D_analytical_filtered) / D_analytical_filtered
-    
-    # rpercentage_mae = np.mean(relative_error) * 100  # as percentage
-    print(f"Combined MAE using {len(difftime_filtered)} points (t >= {time_threshold} ms): {mae:.4f}")
     
     return mae
 
@@ -252,27 +251,26 @@ def plot_numerical_vs_analytical_comparison(difftime, D_numerical, analytical_da
     ax.grid(True, which="both", ls="--", alpha=0.5)
     ax.set_xlabel('Time (ms)', fontsize=20)
     ax.set_ylabel(r'$D_{\perp}(t)$ (μm²/ms)', fontsize=20)
-    # ax.set_title(f'Single Cylinder: D(t) vs Time\n'
+    # ax.set_title(f'Analytical: D(t) vs Time\n'
     #             f'molecules: {molecules}, Time Step: {time_step}, Run: {run_id}, Radius: {a} μm', fontsize=17)
     ax.tick_params(axis='both', which='major', labelsize=17)
     # ax.tick_params(axis='both', which='minor', labelsize=25)
     # Set reasonable y-limits
-    D0 = D_numerical[0]
-    ax.set_ylim(0, D0 * 1.2)
+    ax.set_ylim(0, D_short[0] * 1.1)
     
     # Create legend with error metrics
     legend_elements = ax.get_legend_handles_labels()[0]
     legend_labels = ax.get_legend_handles_labels()[1]
     
 
-    ax.legend(legend_elements, legend_labels, fontsize=17, framealpha=0.9)
+    ax.legend(legend_elements, legend_labels, fontsize=18, framealpha=0.9)
     # plt.tick_params(axis='both', which='major', labelsize=17)
     plt.tight_layout()
     
     # Save the figure
     plot_filename = f"single_cylinder_analysis_run_{run_id}.png"
     plot_filepath = os.path.join(experiment_dir, plot_filename)
-    plt.savefig(plot_filepath, dpi=300, bbox_inches='tight')
+    plt.savefig(plot_filepath, dpi=500, bbox_inches='tight')
     plt.close()
     
     print(f"Analysis plot saved: {plot_filepath}")
@@ -317,16 +315,16 @@ def save_experiment_data(difftime, D_numerical, analytical_data, molecules, time
     with open(filepath, 'wb') as f:
         pickle.dump(experiment_data, f)
     
-    print(f"Analysis data saved: {filepath}")
+    # print(f"Analysis data saved: {filepath}")
     return filepath
 
 def run_validation_study():
-    '''Run validation study for single cylinder'''
+    '''Run validation study for MCDS against analytical solution for cylinder'''
     
     # Parameters
     a = 0.5  # Cylinder radius um
     D0 = 2.0  # Initial diffusion coefficient um^2/ms
-    time_threshold = 0.02  # Only calculate from 10^-2 ms onwards (10^-2 ms = 0.01 ms)
+    time_threshold = 0.02  # Only calculate from 0.02 ms onwards
     compartment = 'intra'
     total_sim_time = 100
 
@@ -334,6 +332,7 @@ def run_validation_study():
     molecules_values = [int(1e6), int(5e5), int(2e5), int(1e5), int(5e4), int(2e4), int(1e4)]
     time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01]
     n_repeats = 10
+
     # molecules_values = [int(5e5), int(5e4), int(1e4)]
     # time_step_values = [0.002, 0.005, 0.01]
     # molecules_values = [int(1e3)]
@@ -344,19 +343,19 @@ def run_validation_study():
     # n_repeats = 2
     
     # Create results directory
-    base_dir = "./hipa/tests/figs/single_cylinder_validation_" + str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
-    os.makedirs(base_dir, exist_ok=True)
+    config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH = "./tests/calibration/num_molecules_and_time_step_calibration/figs/single_cylinder_validation_" + str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) 
+    if not os.path.exists(config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH):
+        os.makedirs(config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH)
     
     # Calculate analytical solutions once
-    print("Calculating analytical solutions for single cylinder...")
+    print("Calculating analytical solutions for cylinder...")
     analytical_data = calculateDanalytical_single_cylinder(a, D0)
     
     # Create interpolation functions
     t_long, D_long = analytical_data['longtime']
     t_short, D_short = analytical_data['shorttime']
     
-    print(f"Comparisons will be done using D(t) analytical for t >= {time_threshold} ms")
-    
+
     D_long_interp = interp1d(np.log10(t_long), D_long, bounds_error=False, 
                             fill_value=(D_long[0], D_long[-1]))
     # Results storage
@@ -369,7 +368,6 @@ def run_validation_study():
     
     print(f"\nValidation study:")
     print(f"Simulation values calculated from t >= {time_threshold} ms onwards")
-    print(f"All comparisons use long-time analytical expression")
     
     # Run experiments
     for molecules in molecules_values:
@@ -391,7 +389,7 @@ def run_validation_study():
                 
                 try:
                     # Run simulation
-                    difftime, D_numerical = calculateDnumerical(base_dir, a, D0, molecules, time_step, compartment, total_sim_time, run_id)
+                    difftime, D_numerical = calculateDnumerical(config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, a, D0, molecules, time_step, compartment, total_sim_time, run_id)
                     elapsed_time = time.time() - start_time
                     
                     # Calculate MAE using only long-time analytical for t >= threshold
@@ -403,7 +401,7 @@ def run_validation_study():
                     
                     # Save experiment data with plot
                     save_experiment_data(difftime, D_numerical, analytical_data, molecules, time_step, 
-                                       elapsed_time, run_id, base_dir, mae, 
+                                       elapsed_time, run_id, config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, mae, 
                                        time_threshold, a)
                     
                     # Store individual result
@@ -447,10 +445,10 @@ def run_validation_study():
                     print(f"Mean Time: {summary['mean_computation_time']:.2f}s ± {summary['std_computation_time']:.2f}s")
     
     # Save summary results
-    save_summary_results(summary_results, base_dir, a, D0, time_threshold)
+    save_summary_results(summary_results, config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, a, D0, time_threshold)
     
     # Create analysis plots
-    create_analysis_plots(summary_results, base_dir, a, D0, time_threshold)
+    create_analysis_plots(summary_results, config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, a, D0, time_threshold)
     
     # Find optimal parameters
     find_optimal_parameters(summary_results)
@@ -465,7 +463,6 @@ def save_summary_results(summary_results, base_dir, a, D0, time_threshold):
     # Save detailed summary
     csv_path = os.path.join(base_dir, f"single_cylinder_validation_summary_a{a}_D0{D0}_threshold{time_threshold}.csv")
     df.to_csv(csv_path, index=False)
-    
     print(f"\nSummary results saved to: {csv_path}")
     print(f"\nTop 10 combinations by MAE:")
     if not df.empty:
@@ -603,7 +600,7 @@ def create_analysis_plots(summary_results, base_dir, a, D0, time_threshold):
     plt.tight_layout()
     
     # Save plot
-    plot_path = os.path.join(base_dir, f"single_cylinder_validation_analysis_a{a}_D0{D0}_threshold{time_threshold}.png")    
+    plot_path = os.path.join(base_dir, f"analytical_validation_analysis_a{a}_D0{D0}_threshold{time_threshold}.png")    
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     
     print(f"Analysis plots saved to: {plot_path}")
@@ -612,23 +609,23 @@ def find_optimal_parameters(summary_results):
     '''Find optimal parameters based on MAE'''
     
     df = pd.DataFrame(summary_results)
-    
     # Find best combination overall
     if not df.empty:
         best_idx = df['mae'].idxmin()
         best_result = df.loc[best_idx]
         
         print(f"\n{'='*60}")
-        print("OPTIMAL PARAMETERS for Single Cylinder")
+        print("OPTIMAL PARAMETERS for Analytical")
         print(f"{'='*60}")
         print(f"Best molecules: {best_result['molecules']}")
         print(f"Best Time Step: {best_result['time_step']}")
         print(f"MAE: {best_result['mae']:.4f} ± {best_result['std_mae']:.4f}")
         print(f"Mean Computation Time: {best_result['mean_computation_time']:.2f}s ± {best_result['std_computation_time']:.2f}s")
+
 if __name__ == "__main__":
-    print("=======Starting Single Cylinder Validation Study=======")
+    print("=======Starting Analytical Validation Study=======")
     
     # Run the validation study
     all_results, summary_results = run_validation_study()
     
-    print("\nSingle cylinder validation study completed!")
+    print("\nAnalytical validation study completed!")

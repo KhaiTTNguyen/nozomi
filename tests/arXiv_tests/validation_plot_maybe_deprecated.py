@@ -181,7 +181,7 @@ def create_analysis_plots_from_df(df, base_dir, a, D0, time_threshold, csv_filep
 # Usage example:
 if __name__ == "__main__":
     # Replace with your actual CSV file path
-    csv_file_path = "/home/nguyt16@ds.vanderbilt.edu/HIPASim/hipa/tests/figs/single_cylinder_validation_2025-09-04_10-17-57/single_cylinder_validation_summary_a0.5_D02.0_threshold0.05.csv"
+    csv_file_path = "/home/nguyt16@ds.vanderbilt.edu/nozomi/tests/calibration/num_molecules_and_time_step_calibration/figs/single_cylinder_validation_2026-02-02_15-01-09/single_cylinder_validation_summary_a0.5_D02.0_threshold0.02.csv"
     
     # Load and plot
     df = load_and_plot_from_csv(csv_file_path)
