@@ -13,7 +13,7 @@ import simulation_toolkit.defaults.params as config_params
 import os
 import matplotlib.pyplot as pl
 
-def testInsideSingleSphere():
+def test_inside_single_sphere():
     '''
     diffusion inside of a single sphere
     '''
@@ -29,7 +29,7 @@ def testInsideSingleSphere():
     sx = np.array([0,])
     sy = np.array([0,])
     sz = np.array([0,])
-    sr = np.array([3,])
+    sr = np.array([1,])
     spstruc = Structure3D(sx,sy,sz,sr,D,T2,rho)
     sg3.add_structure(spstruc) # add it to sg3
 
@@ -56,7 +56,7 @@ def testInsideSingleSphere():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "testInsideSingleSphere_pre_sim_spins.png")
+    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_inside_single_sphere_pre_sim_spins.png")
 
     # ======= Simulate diffusion =======
     for n in range(nt):
@@ -71,15 +71,15 @@ def testInsideSingleSphere():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "testInsideSingleSphere_post_sim_spins.png")
+    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_inside_single_sphere_post_sim_spins.png")
 
     # after simulating diffusion, are all spins still inside spstruc?
     assert (spstruc.isinside(sim.spins_d.get()).all())
 
 
-def testOutsideSingleSphere():
+def test_outside_single_sphere():
     '''
-    diffusion inside of a single sphere
+    diffusion outside of a single sphere
     '''
     Lx = 10 # um
     Ly = 10 # um
@@ -93,7 +93,7 @@ def testOutsideSingleSphere():
     sx = np.array([0,])
     sy = np.array([0,])
     sz = np.array([0,])
-    sr = np.array([3,])
+    sr = np.array([1,])
     spstruc = Structure3D(sx,sy,sz,sr,D,T2,rho)
     sg3.add_structure(spstruc) # add it to sg3
 
@@ -124,7 +124,7 @@ def testOutsideSingleSphere():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "testOutsideSingleSphere_pre_sim_spins.png")
+    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_outside_single_sphere_pre_sim_spins.png")
 
     # ======= Simulate diffusion =======
     for n in range(nt):
@@ -133,7 +133,7 @@ def testOutsideSingleSphere():
     # after simulating diffusion, are all spins still not inside spstruc?
     isOutside = False
     for struct in sg3.structures[:-1]:
-        isOutside = np.logical_or(isOutside, struct.isinside(sim.spins_d)) # str.isInside(sim.spins) return vector length num_spins & OR with isOutside
+        isOutside = np.logical_or(isOutside, struct.isinside(sim.spins_d.get())) # str.isInside(sim.spins_d.get()) return vector length num_spins & OR with isOutside
     isOutside = np.invert(isOutside)
     assert isOutside.all()
 
@@ -146,12 +146,12 @@ def testOutsideSingleSphere():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "testOutsideSingleSphere_post_sim_spins.png")
+    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_outside_single_sphere_post_sim_spins.png")
 
     # signal from T2 decay
     assert abs(np.mean(sim.sig_d.get()) - np.exp(-nt*dt/T2)) < 1e-2
 
-def testInsideMultipleSpheres():
+def test_inside_multiple_spheres():
     '''
     diffusion inside of multiple spheres
     '''
@@ -167,8 +167,7 @@ def testInsideMultipleSpheres():
     sz = np.arange(-nsphere/2-2,nsphere/2+3)*Lx/nsphere
     sy = np.sin(2*np.pi*np.arange(-2,nsphere+3)/nsphere)*0.25
     sx = np.full(sz.shape, 0)
-    sr = np.full(sz.shape, 2)
-
+    sr = np.full(sz.shape, 1)
     spstruc = Structure3D(sx,sy,sz,sr,D,T2,rho)
     sg3.add_structure(spstruc) # add it to sg3
 
@@ -195,7 +194,7 @@ def testInsideMultipleSpheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "testInsideMultipleSpheres_pre_sim_spins.png")
+    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_inside_multiple_spheres_pre_sim_spins.png")
 
     for n in range(nt):
         sim.step(dt)
@@ -216,7 +215,7 @@ def testInsideMultipleSpheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "testInsideMultipleSpheres_post_sim_spins.png")
+    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_inside_multiple_spheres_post_sim_spins.png")
 
     msdx = np.sum(((sim.spins_d[0,:]-sim.spins0_d[0,:])**2).get())/spins
     msdy = np.sum(((sim.spins_d[1,:]-sim.spins0_d[1,:])**2).get())/spins
@@ -241,7 +240,7 @@ def testInsideMultipleSpheres():
     assert isInside.all()
 
 
-def testOutsideMultipleSpheres():
+def test_outside_multiple_spheres():
     '''
     diffusion outside of a multiple spheres
     '''
@@ -258,7 +257,7 @@ def testOutsideMultipleSpheres():
     sz = np.arange(-nsphere/2-2,nsphere/2+3)*Lx/nsphere
     sy = np.sin(2*np.pi*np.arange(-2,nsphere+3)/nsphere)*0.25
     sx = np.full(sz.shape, 0)
-    sr = np.full(sz.shape, 2)
+    sr = np.full(sz.shape, 1)
 
     spstruc = Structure3D(sx,sy,sz,sr,D,T2,rho)
     sg3.add_structure(spstruc) # add it to sg3
@@ -274,7 +273,7 @@ def testOutsideMultipleSpheres():
     # first, check thath all the spins are in fact in spstruc
     isOutside = False
     for struct in sg3.structures[:-1]:
-        isOutside = np.logical_or(isOutside, struct.isinside(sim.spins_d)) # str.isInside(sim.spins) return vector length num_spins & OR with isOutside
+        isOutside = np.logical_or(isOutside, struct.isinside(sim.spins_d.get())) # str.isInside(sim.spins_d.get()) return vector length num_spins & OR with isOutside
     isOutside = np.invert(isOutside)
     assert isOutside.all()
     
@@ -290,7 +289,7 @@ def testOutsideMultipleSpheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "testOutsideMultipleSpheres_pre_sim_spins.png")
+    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_outside_multiple_spheres_pre_sim_spins.png")
 
     # ======= Simulate diffusion =======
     for n in range(nt):
@@ -299,7 +298,7 @@ def testOutsideMultipleSpheres():
     # all spins are still inside the arena
     isOutside = False
     for struct in sg3.structures[:-1]:
-        isOutside = np.logical_or(isOutside, struct.isinside(sim.spins_d)) # str.isInside(sim.spins) return vector length num_spins & OR with isOutside
+        isOutside = np.logical_or(isOutside, struct.isinside(sim.spins_d.get())) # str.isInside(sim.spins_d.get()) return vector length num_spins & OR with isOutside
     isOutside = np.invert(isOutside)
     assert isOutside.all()
 
@@ -312,7 +311,7 @@ def testOutsideMultipleSpheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "testOutsideMultipleSpheres_post_sim_spins.png")
+    pl.savefig(config_params.SINGLE_SPHERE_VALIDATION_TEST_FOLDER_PATH + "test_outside_multiple_spheres_post_sim_spins.png")
 
     msdx = np.sum(((sim.spins_d[0,:]-sim.spins0_d[0,:])**2).get())/spins
     msdy = np.sum(((sim.spins_d[1,:]-sim.spins0_d[1,:])**2).get())/spins
