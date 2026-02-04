@@ -8,9 +8,12 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-import simulation_toolkit.defaults.params as config_params
+import simulation_toolkit.toolkit_params as config_params
+
 
 # Data arrays
+
+# TODO: add comment where these came from
 segments = [5, 10, 15, 20, 25, 30, 35]
 table_times = np.array([17.96, 64.36, 194.52, 490.72, 865.61, 1476.41, 2383.17])
 simulation_times = np.array([13020.08, 4296.36, 2711.07, 2159.4, 2091.94, 1797.39, 1773.98])

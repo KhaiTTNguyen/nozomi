@@ -9,7 +9,8 @@ sys.path.insert(0, str(project_root))
 import numpy as np
 from simulation_toolkit.simulation_engine.diffsim3d import DiffSim3d
 from simulation_toolkit.simulation_engine.geometry import SimGeometry3D, Structure3D
-import simulation_toolkit.defaults.params as config_params
+import simulation_toolkit.toolkit_params as config_params
+
 import os
 import matplotlib.pyplot as pl
 

@@ -4,7 +4,7 @@ import numpy as np
 from scipy.interpolate import interp1d, CubicSpline
 from scipy.stats import genextreme
 import torch
-import simulation_toolkit.defaults.params as config_params
+import simulation_toolkit.toolkit_params as config_params
 import os
 
 #---------------------------Plot slices--------------------------------

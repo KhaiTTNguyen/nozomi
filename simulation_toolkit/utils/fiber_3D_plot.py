@@ -7,7 +7,7 @@ import os.path
 import torch
 from mpl_toolkits.mplot3d import Axes3D
 import simulation_toolkit.utils.common_utils as util
-import simulation_toolkit.defaults.params as config_params
+import simulation_toolkit.toolkit_params as config_params
 
 def plot_box(ax):
     box_vertices, box_x, box_y, box_z = prepare_edges_for_box()

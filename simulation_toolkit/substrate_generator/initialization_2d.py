@@ -6,8 +6,7 @@ import numpy as np
 from scipy.stats import genextreme
 from scipy.optimize import minimize
 import simulation_toolkit.substrate_generator.helper.CollisionDetection2D as CD
-import simulation_toolkit.defaults.params as config_params
-
+import simulation_toolkit.toolkit_params as config_params
 
 class Init2D(object):
     """

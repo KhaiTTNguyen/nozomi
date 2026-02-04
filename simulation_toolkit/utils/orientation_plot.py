@@ -6,7 +6,7 @@ from matplotlib.colors import LightSource
 from scipy.stats import iqr
 from scipy.special import sph_harm
 from scipy import linalg
-import simulation_toolkit.defaults.params as config_params
+import simulation_toolkit.toolkit_params as config_params
 import numpy as np
 import matplotlib.ticker as ticker
 

@@ -11,8 +11,8 @@ class Config:
     def __init__(self):
         self.package_root = Path(__file__).parent
         self.project_root = self.package_root.parent
-        self.config_dir = self.package_root / "configs"
-        self.examples_dir = self.project_root / "simulation_toolkit/defaults/"
+        # self.config_dir = self.package_root / "configs"
+        # self.examples_dir = self.project_root / "simulation_toolkit/defaults/"
         # Default settings
         # self.defaults = {
         #     "substrate_generator": {
@@ -60,12 +60,6 @@ class Config:
     def load_config_file(self, config_path: str) -> Dict:
         """Load configuration from JSON file"""
         config_path = Path(config_path)
-        
-        # If relative path, try "simulation_toolkit/defaults/" first
-        if not config_path.is_absolute():
-            default_config = self.examples_dir / config_path
-            if default_config.exists():
-                config_path = default_config
         
         with open(config_path, 'r') as f:
             return json.load(f)

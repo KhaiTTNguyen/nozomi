@@ -1,7 +1,7 @@
 from simulation_toolkit.substrate_generator.initialization_2d import Init2D
 from simulation_toolkit.substrate_generator.meshing import Meshing
 from simulation_toolkit.substrate_generator.geometric_optimization import GeometricOptimization
-import simulation_toolkit.defaults.params as config_params
+import simulation_toolkit.toolkit_params as config_params
 import numpy as np
 import time
 import torch
@@ -44,6 +44,7 @@ def substrate_main(params, experiment_folder):
                                                         '_K'+str(int(config_params.ORIENTATION_SHAPE_PARAM))+\
                                                     '_ODI_'+str(config_params.ODI_INDEX)+'_'+\
                                                         str(config_params.NUM_FIBERS) +'fibers')
+    print("Substrate output folder:", config_params.SUBSTRATE_OUTPUT_FOLDER_PATH)
     not_converged=True
     while not_converged:
         st = time.time()

@@ -9,7 +9,7 @@ import torch
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import shutil
 import os
-import simulation_toolkit.defaults.params as config_params
+import simulation_toolkit.toolkit_params as config_params
 from simulation_toolkit.cli.substrate_main import substrate_main
 from simulation_toolkit.cli.simulation_main import simulation_main
 
@@ -22,7 +22,7 @@ class GeometryToolkitCLI:
     def __init__(self):
         return 
     
-    def run_substrate_generation(self, params: dict, gpu_id: int = 0, experiment_name: str = "default_experiment"):
+    def run_substrate_generation(self, params: dict, experiment_name: str = "default_experiment"):
         """Run substrate generation"""
         for experiment in range(0, params['repeats']):
             torch.autograd.set_detect_anomaly(True)
@@ -92,7 +92,7 @@ class GeometryToolkitCLI:
             else:
                 print(f"Warning: Data folder not found in {subfolder_path}")
 
-        print(f"Substrate generation completed for {os.path.basename(full_sim_params['substrates'])}")
+        print(f"Simulation completed for {os.path.basename(full_sim_params['substrates'])}")
     
 def parse_command_line_params(args: List[str]) -> dict:
     """Parse command line parameters in key=value format"""
@@ -154,6 +154,8 @@ def main():
     
             # Merge config with command line overrides
             experiment_name = config_data['experiment_name']
+            print('experiment_name', experiment_name)
+        
             params = config_data["parameters"].copy()
             params.update(cmd_params)
             
@@ -163,11 +165,11 @@ def main():
             # ===== END substrate generation & save experiment config file =====
             shutil.copy(args.config, 
                 os.path.join(config_params.OUTPUT_FOLDER_PATH, experiment_name, str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(args.config)))
-        else:
-            # TODO:Direct parameters
-            params = parse_command_line_params(args.params)
-            # gpu_id = params.get('gpu', 0)
-            cli.run_substrate_generation(params)
+        # else:
+        #     # TODO:Direct parameters
+        #     params = parse_command_line_params(args.params)
+        #     # gpu_id = params.get('gpu', 0)
+        #     cli.run_substrate_generation(params)
     
     elif args.command == 'simulation':
         # Set GPU before importing CUDA libraries

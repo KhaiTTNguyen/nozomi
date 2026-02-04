@@ -7,7 +7,7 @@ import torch
 from torch.optim import LBFGS
 from functools import partial
 import numpy as np
-import simulation_toolkit.defaults.params as config_params
+import simulation_toolkit.toolkit_params as config_params
 
 class GeometricOptimization(object):
     """

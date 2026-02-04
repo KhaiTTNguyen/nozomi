@@ -2,7 +2,7 @@ from datetime import datetime
 import pickle
 import torch
 import numpy as np
-import simulation_toolkit.defaults.params as params
+import simulation_toolkit.toolkit_params as params
 
 def get_date_time():        
     return str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
