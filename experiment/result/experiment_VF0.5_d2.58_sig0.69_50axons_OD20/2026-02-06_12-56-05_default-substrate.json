@@ -1,0 +1,21 @@
+{
+  "experiment_name": "experiment_VF0.5_d2.58_sig0.69_50axons_OD20",  
+  "parameters": {
+      "orientation_shape_parameter": 20,
+      "box_length_init": 0,
+      "target_volume_fraction": 0.5,
+      "num_fibers": 50,
+      "mean_diameter":  2.58,
+      "sigma_diameter":  0.69,
+      "dist_shape": 0.1,
+      "space_buffer_starts_ends": 0.23,
+      "spheres_spacing": 0.5,
+      "space_buffer_repulse": 0.001,
+      "w_overlap":10,
+      "w_curve": 3, 
+      "w_length": 3,
+      "bead_spacing_mean": 5.70,
+      "bead_spacing_stdv": 2.88,
+      "repeats": 1
+  }
+}

@@ -91,7 +91,7 @@ def main():
     # ============= Simulation command =============
     sim_parser = subparsers.add_parser('simulation', help='Run simulations')
     sim_parser.add_argument('--substrates', type=str, help='Path to substrates folder')
-    sim_parser.add_argument('--gpu', type=int, nargs='+', help='Specific GPU IDs to use')
+    sim_parser.add_argument('--sim_time', type=float, help='Total diffusion time')
     sim_parser.add_argument('--compartment', type=str, help='Compartment to simulate (e.g., intra, extra)')
     
     args = parser.parse_args()
@@ -104,38 +104,34 @@ def main():
     
     if args.command == 'substrate':
         if args.config:
-                # Set GPU before importing CUDA libraries
-            # print('str(args.gpu', str(args.gpu[0]))
-            # os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu[0])
-            # exit()
             config_data = config.load_config_file(args.config)
-            
-            # Merge config with command line overrides
             experiment_name = config_data['experiment_name']
-            print('experiment_name', experiment_name)
-        
             params = config_data["parameters"].copy()
-            
-            # gpu_id = cmd_params.get('gpu', 0)
+            print('params', params)
+            exit()
             # ===== START substrate generation =====
             cli.run_substrate_generation(params, experiment_name)
             # ===== END substrate generation & save experiment config file =====
             shutil.copy(args.config, 
                 os.path.join(config_params.OUTPUT_FOLDER_PATH, experiment_name, str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(args.config)))
-    
+            
     elif args.command == 'simulation':
-        # Set GPU before importing CUDA libraries
         sim_config = config.load_config_file(config_params.SIM_CONFIG_FILE)
+        print('sim_config', sim_config)
         cmd_params = vars(args)
 
         # Merge config with command line overrides
-        full_sim_params = sim_config.copy()
-        full_sim_params.update(cmd_params)
+        # full_sim_params = sim_config.copy()
+        sim_config.update(cmd_params)
+        
+        print('full_sim_params', sim_config)
+        exit()
         # ===== START simulation =====
-        cli.run_simulation(full_sim_params)
+        cli.run_simulation(sim_config)
         # ===== END simulation =====
+        
         shutil.copy(config_params.SIM_CONFIG_FILE, 
-            os.path.join(full_sim_params['substrates'], str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(config_params.SIM_CONFIG_FILE)))
+            os.path.join(sim_config['substrates'], str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(config_params.SIM_CONFIG_FILE)))
     
 if __name__ == "__main__":
     main()

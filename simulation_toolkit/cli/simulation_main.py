@@ -16,9 +16,9 @@ import time
 import os 
 
 def simulation_main(params, substrate_file):
-    total_sim_time = params['sim_time (ms)']
-    time_step = params['time_step (ms)']
-    num_spins = params['num_spin']
+    total_sim_time = params['sim_time']
+    time_step = params['time_step']
+    num_spins = params['num_spins']
     compartment= params['compartment']     
     file_path = substrate_file
     target_folder_path = os.path.dirname( os.path.dirname(file_path) )

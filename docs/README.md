@@ -72,11 +72,13 @@ MCDS can be setup in the `/nozomi/experiment/setup/simulation/default-sim.json`.
     * Simulation time (ms)
     * Time step (ms)
 ```bash
-./bin/run-simulation.sh --substrates=<substrates-folder> --gpu=<gpu-number> --compartment=<axonal-compartment>
+./bin/run-simulation.sh --substrates=<substrates-folder> --gpu=<gpu-number> --sim_time=<total-diffusion-time> --compartment=<axonal-compartment>
 
-./bin/run-simulation.sh --substrates=./experiment/result/default_experiment --gpu=0 --compartment=intra
+./bin/run-simulation.sh --substrates=./experiment/result/experiment_VF0.5_d2.58_sig0.69_20axons_OD20 --gpu=1 --sim_time=100  --compartment=intra
 
-./bin/run-simulation.sh --substrates=./experiment/result/default_experiment --gpu=1 --compartment=extra
+./bin/run-simulation.sh --substrates=./experiment/result/experiment_VF0.5_d2.58_sig0.69_20axons_OD20 --gpu=1 --sim_time=100  --compartment=extra
+
+
 ```
 
 ### Output: 

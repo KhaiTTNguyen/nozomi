@@ -1,5 +1,4 @@
 {  
-  "sim_time (ms)" : 100, 
-  "time_step (ms)" : 0.002,
-  "num_spin" : 500000
+  "time_step" : 0.002,
+  "num_spins" : 500000
 }
