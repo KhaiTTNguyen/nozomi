@@ -7,6 +7,7 @@ import simulation_toolkit.simulation_engine.diffsim3d as ds3
 import simulation_toolkit.simulation_engine.helper.simulation_report as simrep
 import simulation_toolkit.simulation_engine.helper.sim_util as sim_util
 import simulation_toolkit.utils.common_utils as common_util
+import simulation_toolkit.toolkit_params as config_params
 
 import matplotlib.pyplot as pl
 import simulation_toolkit.utils.adjust_geometry as ag
@@ -18,9 +19,12 @@ import os
 def simulation_main(params, substrate_file):
     total_sim_time = params['sim_time']
     time_step = params['time_step']
-    num_spins = params['num_spins']
-    compartment= params['compartment']     
+    num_spins = int(params['num_spins'])
+    compartment= params['compartment']
+    D0_intra = params['D0_intra']
+    D0_extra = params['D0_extra']
     file_path = substrate_file
+    config_params.EXP_DATE_TIME = str(common_util.get_date_time())
     target_folder_path = os.path.dirname( os.path.dirname(file_path) )
     folder_name = os.path.join(target_folder_path, 'sim')
     if not os.path.exists(folder_name):
@@ -29,11 +33,11 @@ def simulation_main(params, substrate_file):
     optimized_fibers, L = common_util.import_array_geometry_full_path(file_path) # optimized_fibers = xyz_r_fid
     fiberlist_xyz_r_fid = common_util.split_matrix_to_list_with_box_length(optimized_fibers, L)
     print('box length',L)
-    D = 2.25 # um^2/ms
+    D = D0_intra # um^2/ms
     if compartment=='intra':
-        D = 2.25 # um^2/ms
+        D = D0_intra # um^2/ms
     elif compartment=='extra':
-        D = 2.0 # um^2/ms
+        D = D0_extra # um^2/ms
     T2 = 100 # ms
     rho = 1 # fractional water density
     sg3 = geom.SimGeometry3D(L,L,L,D,T2,rho)
@@ -43,9 +47,8 @@ def simulation_main(params, substrate_file):
         sx, sy, sz, sr = fiber[:,0], fiber[:,1], fiber[:,2], fiber[:,3]
         spstruc = geom.Structure3D(sx,sy,sz,sr,D,T2,rho)
         sg3.add_structure(spstruc) # add it to sg3
-    dt = time_step # time step in ms
-    nt = int(total_sim_time/dt) # total number of steps thru time
-    num_spins = int(num_spins)
+    
+    nt = int(total_sim_time/time_step) # total number of steps thru time
     print('Start setting up structures')
     sim = ds3.DiffSim3d(sg3,num_spins) 
     nsegx,nsegy,nsegz=20,20,20  # set number of segments
@@ -62,7 +65,7 @@ def simulation_main(params, substrate_file):
 
     #==========================
     # Pre-allocate GPU result arrays
-    num_steps = int(total_sim_time / dt) + 1
+    num_steps = int(total_sim_time / time_step) + 1
     Dx_array, Dy_array, Dz_array = gpuarray.zeros(num_steps, dtype=np.float32), gpuarray.zeros(num_steps, dtype=np.float32), gpuarray.zeros(num_steps, dtype=np.float32)
 
     # Arrays for storing second moments (variance)
@@ -79,7 +82,7 @@ def simulation_main(params, substrate_file):
     print(f'Got to sim {compartment}-axonal simloops')
     current_time = 0.0
     step_idx = 1
-    while current_time < nt*dt:
+    while current_time < nt*time_step:
         # Take time step
         sim.step(time_step)
         current_time += time_step
@@ -113,14 +116,12 @@ def simulation_main(params, substrate_file):
     # # get the execution time
     elapsed_time = np.round(time.time() - start_time,2)
 
-    #===============PUT THESE IN HELPER FILE===================
     #=============== Save coefficient results ===================
     file_name = os.path.basename(file_path)
     base_name, extension = os.path.splitext(file_name)
-    date_time = str(common_util.get_date_time())
-
-    file_name_new = f'DiffCoeff_{compartment}_{date_time}_{str(len(fiber_xyzr_fid_list))}_fibers_' \
-        f'{str(num_spins)}_spins_{base_name}_TABLEtime{str(table_elapsed_time)}sec_SIMtime{str(round(elapsed_time,2))}_sec_dt{str(dt)}_seg{str(int(nsegx))}'
+    
+    file_name_new = f'DiffCoeff_{compartment}_{str(len(fiber_xyzr_fid_list))}_fibers_' \
+        f'{str(num_spins)}_spins_{base_name}_TABLEtime{str(table_elapsed_time)}sec_SIMtime{str(round(elapsed_time,2))}_sec_timestep{str(time_step)}_seg{str(int(nsegx))}'
     # Combine new filename with folder path to get the full path
     data_folder_name = os.path.join(target_folder_path, 'sim', 'ADCdata')
     if not os.path.exists(data_folder_name):
@@ -128,17 +129,6 @@ def simulation_main(params, substrate_file):
     data_file_path = os.path.join(data_folder_name, str(int(nsegx))+'SEGMENT_'+file_name_new+'data.pkl')
     simrep.save_data_pickle(data_file_path, np.column_stack((Dx_step, Dy_step, Dz_step, diff_time)))
     simrep.plot_ADC_vs_time(diff_time, Dx_step, Dy_step, Dz_step, folder_name, file_name_new )
-
-    # ================== Save kurtosis results ==================
-    file_name_new = f'FINAL_kurtosis_{compartment}_{date_time}_{str(len(fiber_xyzr_fid_list))}_fibers_' \
-        f'{str(num_spins)}_spins_{base_name}_TABLEtime{str(table_elapsed_time)}sec_SIMtime{str(round(elapsed_time,2))}sec_dt{str(dt)}_SEGMENT{str(int(nsegx))}'
-    # Combine new filename with folder path to get the full path
-    data_folder_name = os.path.join(target_folder_path, 'sim', 'kurtosis_data')
-    if not os.path.exists(data_folder_name):
-        os.makedirs(data_folder_name)
-    data_file_path = os.path.join(data_folder_name, file_name_new+'data.pkl')    
-    simrep.save_data_pickle(data_file_path, np.column_stack((Kx_final, Ky_final, Kz_final, diff_time)))
-    simrep.plot_K_vs_time(diff_time, Kx_final, Ky_final, Kz_final, folder_name, file_name_new )    
 
     print(f"\nSimulation completed!")
     # Clean up GPU memory

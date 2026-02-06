@@ -9,6 +9,7 @@ import torch
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import shutil
 import os
+import json
 import simulation_toolkit.toolkit_params as config_params
 from simulation_toolkit.cli.substrate_main import substrate_main
 from simulation_toolkit.cli.simulation_main import simulation_main
@@ -42,6 +43,16 @@ class GeometryToolkitCLI:
         # Get all subfolders in the main folder
         subfolders = [f for f in os.listdir(main_folder) if os.path.isdir(os.path.join(main_folder, f))]
 
+        # Count total substrate files for progress tracking
+        total_substrates = 0
+        for subfolder in subfolders:
+            subfolder_path = os.path.join(main_folder, subfolder)
+            data_folder = os.path.join(subfolder_path, "data")
+            if os.path.isdir(data_folder):
+                substrate_files = [f for f in os.listdir(data_folder) if os.path.isfile(os.path.join(data_folder, f))]
+                total_substrates += len(substrate_files)
+
+        current_sim = 0
         for subfolder in subfolders:
             subfolder_path = os.path.join(main_folder, subfolder)
             data_folder = os.path.join(subfolder_path, "data")
@@ -52,6 +63,8 @@ class GeometryToolkitCLI:
                 substrate_files = [f for f in os.listdir(data_folder) if os.path.isfile(os.path.join(data_folder, f))]
                 
                 for substrate_file in substrate_files:
+                    current_sim += 1
+                    print(f"=====Starting simulation {current_sim}/{total_substrates}=====")
                     substrate_path = os.path.join(data_folder, substrate_file)
                     torch.autograd.set_detect_anomaly(True)
                     simulation_main(full_sim_params, substrate_path)
@@ -108,7 +121,6 @@ def main():
             experiment_name = config_data['experiment_name']
             params = config_data["parameters"].copy()
             print('params', params)
-            exit()
             # ===== START substrate generation =====
             cli.run_substrate_generation(params, experiment_name)
             # ===== END substrate generation & save experiment config file =====
@@ -117,21 +129,18 @@ def main():
             
     elif args.command == 'simulation':
         sim_config = config.load_config_file(config_params.SIM_CONFIG_FILE)
-        print('sim_config', sim_config)
         cmd_params = vars(args)
-
         # Merge config with command line overrides
-        # full_sim_params = sim_config.copy()
         sim_config.update(cmd_params)
-        
-        print('full_sim_params', sim_config)
-        exit()
         # ===== START simulation =====
         cli.run_simulation(sim_config)
         # ===== END simulation =====
         
-        shutil.copy(config_params.SIM_CONFIG_FILE, 
-            os.path.join(sim_config['substrates'], str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(config_params.SIM_CONFIG_FILE)))
+        # Save the complete simulation configuration as JSON
+        config_filename = str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(config_params.SIM_CONFIG_FILE)
+        config_save_path = os.path.join(sim_config['substrates'], config_filename)
+        with open(config_save_path, 'w') as f:
+            json.dump(sim_config, f, indent=4)
     
 if __name__ == "__main__":
     main()

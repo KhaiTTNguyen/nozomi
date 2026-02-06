@@ -1,4 +1,6 @@
 {  
   "time_step" : 0.002,
-  "num_spins" : 500000
+  "num_spins" : 500000,
+  "D0_intra": 2.25,
+  "D0_extra": 2.0
 }
