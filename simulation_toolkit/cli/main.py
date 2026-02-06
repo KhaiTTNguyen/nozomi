@@ -3,7 +3,7 @@
 import argparse
 import sys
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 import torch
 # Add package to path for development
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -32,40 +32,6 @@ class GeometryToolkitCLI:
         # result = generator.generate(params)
         print(f"Substrate generation completed for {experiment_name}")
     
-    def run_batch_processing_for_folder(self, folder_path: str):
-        """Run batch processing for multiple configurations"""
-        folder_path = Path(folder_path)
-        
-        if not folder_path.exists():
-            print(f"Folder {folder_path} does not exist")
-            sys.exit(1)
-        
-        json_files = list(folder_path.glob("*.json"))
-        if not json_files:
-            print(f"No JSON files found in {folder_path}")
-            sys.exit(1)
-        
-        print(f"Found {len(json_files)} configuration files")
-
-        gpu_list = os.environ['CUDA_VISIBLE_DEVICES']
-        print(f"Using GPUs: {gpu_list}")
-        
-        # Process each configuration
-        for i, json_file in enumerate(json_files):
-            gpu_id = gpu_list[i % len(gpu_list)]
-            config_data = config.load_config_file(json_file)
-            
-            print(f"Processing {json_file.name} on GPU {gpu_id}")
-            
-            if "substrates" in config_data:
-                for substrate in config_data["substrates"]:
-                    # params = substrate["parameters"]
-                    repeats = config_data.get("repeats", 1)
-                    
-                    for repeat in range(repeats):
-                        print(f"  Repeat {repeat + 1}/{repeats}")
-                        self.run_substrate_generation(config_data, gpu_id)
-
     def run_simulation(self, full_sim_params):
         """Run substrate generation"""    
         main_folder = full_sim_params['substrates']
@@ -118,13 +84,9 @@ def main():
     # ============= Substrate generation command =============
     substrate_parser = subparsers.add_parser('substrate', help='Generate substrates')
     substrate_parser.add_argument('--config', type=str, 
-                            default='./simulation_toolkit/defaults/default-substrate.json',  # Add default here
-                            help='Path to JSON configuration file (default: ./simulation_toolkit/defaults/default-substrate.json)')
-    substrate_parser.add_argument('--config_folder', type=str, help='Path to folder containing multiple JSON configs')
-    substrate_parser.add_argument('--max_gpus', type=int, default=5, help='Maximum number of GPUs to use')
+                            default='./experiment/setup/substrate/default/default-substrate.json',  # Add default here
+                            help='Path to JSON configuration file (default: ./experiment/setup/substrate/default/default-substrate.json)')
     substrate_parser.add_argument('--gpu', type=int, nargs='+', help='Specific GPU IDs to use')
-    substrate_parser.add_argument('--gpus', type=list, nargs='+', help='Specific GPU IDs to use')
-    substrate_parser.add_argument('params', nargs='*', help='Parameters in key=value format')
     
     # ============= Simulation command =============
     sim_parser = subparsers.add_parser('simulation', help='Run simulations')
@@ -141,23 +103,18 @@ def main():
     cli = GeometryToolkitCLI()
     
     if args.command == 'substrate':
-        if args.config_folder:
-            # TODO: Parse gpu_list properly with respect to number of files and available GPUs
-            cli.run_batch_processing_for_folder(args.config_folder)
-        elif args.config:
+        if args.config:
                 # Set GPU before importing CUDA libraries
             # print('str(args.gpu', str(args.gpu[0]))
             # os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu[0])
             # exit()
             config_data = config.load_config_file(args.config)
-            cmd_params = parse_command_line_params(args.params)
-    
+            
             # Merge config with command line overrides
             experiment_name = config_data['experiment_name']
             print('experiment_name', experiment_name)
         
             params = config_data["parameters"].copy()
-            params.update(cmd_params)
             
             # gpu_id = cmd_params.get('gpu', 0)
             # ===== START substrate generation =====
@@ -165,11 +122,6 @@ def main():
             # ===== END substrate generation & save experiment config file =====
             shutil.copy(args.config, 
                 os.path.join(config_params.OUTPUT_FOLDER_PATH, experiment_name, str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(args.config)))
-        # else:
-        #     # TODO:Direct parameters
-        #     params = parse_command_line_params(args.params)
-        #     # gpu_id = params.get('gpu', 0)
-        #     cli.run_substrate_generation(params)
     
     elif args.command == 'simulation':
         # Set GPU before importing CUDA libraries
