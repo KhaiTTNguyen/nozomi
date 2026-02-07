@@ -54,20 +54,3 @@ def split_matrix_to_list(A):
     # Convert each submatrix to numpy array
     listA = [np.array(submatrix) for submatrix in listA]
     return listA
-
-def split_matrix_to_list_with_box_length(A, box_length):
-    ''''''
-    # Initialize the list to hold the submatrices
-    listA = []     
-    # Initialize the start index
-    start_idx = 0
-    # Loop through the rows and identify the split points
-    for i in range(0, len(A)):
-        if A[i, 2] == box_length/2 :
-            # Add the submatrix to the list
-            listA.append(A[start_idx:i+1])
-            # Update the start index
-            start_idx = i+1   
-    # Convert each submatrix to numpy array
-    listA = [np.array(submatrix) for submatrix in listA]
-    return listA

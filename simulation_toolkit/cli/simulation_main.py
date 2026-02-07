@@ -31,8 +31,9 @@ def simulation_main(params, substrate_file):
         os.makedirs(folder_name)
     
     optimized_fibers, L = common_util.import_array_geometry_full_path(file_path) # optimized_fibers = xyz_r_fid
-    fiberlist_xyz_r_fid = common_util.split_matrix_to_list_with_box_length(optimized_fibers, L)
-    print('box length',L)
+    config_params.BOX_LENGTH = L
+    fiberlist_xyz_r_fid = common_util.split_matrix_to_list(optimized_fibers)
+    print('box length',config_params.BOX_LENGTH)
     D = D0_intra # um^2/ms
     if compartment=='intra':
         D = D0_intra # um^2/ms
@@ -55,13 +56,13 @@ def simulation_main(params, substrate_file):
     table_st = time.time()
     sim.set_segments(nsegx=nsegx,nsegy=nsegy,nsegz=nsegz)
     if compartment=='intra':
-        sim.setup(structures=list(np.arange(0, len(fiber_xyzr_fid_list))))  # seed inside structures 0:len(fiberlist)
+        sim.setup(structures=list(np.arange(0, len(fiber_xyzr_fid_list))))  # seed INSIDE structures
     elif compartment=='extra':
-        sim.setup(structures=[int(len(fiber_xyzr_fid_list))])  # seed OUTSIDE structures len(fiberlist)=index of box
+        sim.setup(structures=[int(len(fiber_xyzr_fid_list))])  # seed OUTSIDE structures
     print('Done setting up structures')
     table_et = time.time()
     table_elapsed_time =  np.round(table_et-table_st,2)
-    start_time = time.time()
+    sim_start_time = time.time()
 
     #==========================
     # Pre-allocate GPU result arrays
@@ -114,19 +115,19 @@ def simulation_main(params, substrate_file):
     Kz_final = np.array(Kz_final_array.get())[1:]
 
     # # get the execution time
-    elapsed_time = np.round(time.time() - start_time,2)
+    elapsed_time = np.round(time.time() - sim_start_time,2)
 
     #=============== Save coefficient results ===================
     file_name = os.path.basename(file_path)
     base_name, extension = os.path.splitext(file_name)
     
-    file_name_new = f'DiffCoeff_{compartment}_{str(len(fiber_xyzr_fid_list))}_fibers_' \
-        f'{str(num_spins)}_spins_{base_name}_TABLEtime{str(table_elapsed_time)}sec_SIMtime{str(round(elapsed_time,2))}_sec_timestep{str(time_step)}_seg{str(int(nsegx))}'
+    file_name_new = f'diffcoeff_{compartment}_{str(int(nsegx))}segments_' \
+        f'{str(num_spins)}spins_{base_name}_TABLEtime{str(table_elapsed_time)}sec_SIMtime{str(round(elapsed_time,2))}sec_timestep{str(time_step)}ms'
     # Combine new filename with folder path to get the full path
     data_folder_name = os.path.join(target_folder_path, 'sim', 'ADCdata')
     if not os.path.exists(data_folder_name):
         os.makedirs(data_folder_name)
-    data_file_path = os.path.join(data_folder_name, str(int(nsegx))+'SEGMENT_'+file_name_new+'data.pkl')
+    data_file_path = os.path.join(data_folder_name, file_name_new+'.pkl')
     simrep.save_data_pickle(data_file_path, np.column_stack((Dx_step, Dy_step, Dz_step, diff_time)))
     simrep.plot_ADC_vs_time(diff_time, Dx_step, Dy_step, Dz_step, folder_name, file_name_new )
 
