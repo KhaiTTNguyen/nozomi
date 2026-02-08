@@ -13,7 +13,7 @@ import json
 import simulation_toolkit.toolkit_params as config_params
 from simulation_toolkit.cli.substrate_main import substrate_main
 from simulation_toolkit.cli.simulation_main import simulation_main
-
+import simulation_toolkit.utils.common_utils as common_util
 from simulation_toolkit.simulation_engine import diffsim3d
 from simulation_toolkit.config import config
 
@@ -133,6 +133,7 @@ def main():
         # Merge config with command line overrides
         sim_config.update(cmd_params)
         # ===== START simulation =====
+        config_params.EXP_DATE_TIME = str(common_util.get_date_time())
         cli.run_simulation(sim_config)
         # ===== END simulation =====
         

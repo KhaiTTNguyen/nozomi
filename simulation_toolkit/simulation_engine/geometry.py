@@ -75,10 +75,9 @@ class SimGeometry3D:
         Seed 'nspin' spins into this arena using complete GPU acceleration.
         
         Parameters:
-        nspin : int
-            Number of spins to seed
-        structIdxs : list or array or None
-            Indices of structures to seed spins into
+        gpu_seed_kernel : The compiled CUDA kernel function for seeding spins.
+        nspin : Number of spins to seed
+        structIdxs : Indices of structures to seed spins into
             
         Returns:
         numpy.ndarray
@@ -167,159 +166,9 @@ class SimGeometry3D:
             )
             
             iterations += 1
-            # print(f"Iteration {iterations}: {int(gpuarray.sum(seeding_status_d).get())} spins still need seeding")
-        
-        # Check if all spins were seeded
-        # if gpuarray.sum(seeding_status_d).get() > 0:
-        #     print(f"Warning: Not all spins were successfully seeded after {max_iterations} iterations.")
-        
+           
         # Get the result back from GPU
         positions = positions_d.get()
         
         # Reshape to match expected format (3, nspin)
         return positions.reshape(3, nspin)
-
-    def seed(self,nspin,structIdxs=None):
-        '''
-        seed 'nspin' spins into this arena. If structIdx is provided, 
-        only seed spins into structures listed in the structIdx list
-        '''
-        notseeded = np.full((nspin, ), True)
-        rnd = np.zeros([3,nspin]).astype(dtype=np.float32)
-
-        # if no structure index is given, seed into all structures
-        if structIdxs is None:
-            structIdxs = np.arange(self.nstructures+1) # all axon structures + box
-
-        while notseeded.any():
-            rnd[:,notseeded] = np.random.rand(3,np.sum(notseeded)).astype(dtype=np.float32) - 0.5
-            rnd[0,notseeded] *= self.Lx
-            rnd[1,notseeded] *= self.Ly
-            rnd[2,notseeded] *= self.Lz
-            '''
-            while not seeded
-                draw positions
-                if excluded by 1 struct, wont be seeded
-            '''
-            excluded_by_earlier_struct = np.full((nspin, ), False)
-            for idx in np.arange(self.nstructures+1):
-                in_this_struc = self.structures[idx].isinside(rnd[:,notseeded])
-                if idx in structIdxs:
-                    notseeded[notseeded] = excluded_by_earlier_struct[notseeded] |  (~in_this_struc)
-                else:
-                    excluded_by_earlier_struct[notseeded] = excluded_by_earlier_struct[notseeded] | in_this_struc
-        return rnd
-
-'''isInside for box different from isInside for spheres'''
-#--------------
-# import numpy as np
-
-# class Structure3D:
-#     '''
-#     Defines a 3D structure as a list of spheres, and provides methods to check 
-#     if a list of spins is inside the structure
-#     '''
-#     def __init__(self,x,y,z,r,D,T2,rho):
-#         # here, x,y&z should be row vectors. ensure that is the scase
-#         self.nspheres = x.size
-#         self.x = np.reshape(x,[self.nspheres,1])
-#         self.y = np.reshape(y,[self.nspheres,1])
-#         self.z = np.reshape(z,[self.nspheres,1])
-#         self.r = np.reshape(r,[self.nspheres,1])
-
-#         self.D = D
-#         self.T2 = T2
-#         self.rho = rho
-#         self.tol = 1e-4
-
-#     def isinside(self,rnd):
-#         '''
-#         check to see is rnd is inside any sphere in this structure
-#         '''
-#         inside_any = ((rnd[0,:]-self.x)**2 + 
-#                     (rnd[1,:]-self.y)**2 + 
-#                     (rnd[2,:]-self.z)**2 +
-#                     self.tol**2 -
-#                     self.r**2 < 0)
-        
-#         return inside_any.any(axis=0)
-
-# class SimGeometry3D:
-#     def __init__(self,Lx,Ly,Lz,D,T2,rho):
-#         self.Lx = Lx
-#         self.Ly = Ly
-#         self.Lz = Lz
-#         self.nsphere = 0
-#         self.spheres = np.zeros([5,self.nsphere]) 
-
-#         # number of structures inside this geometry
-#         self.nstructures = 0
-#         # the last item in this list is always this simulation geometry
-#         self.structures = [self]
-
-#         self.D = D
-#         self.T2 = T2
-#         self.rho = rho
-
-#     def add_structure(self,struct):
-#         # print('radius_original'+str(struct.r[0]))
-
-#         self.structures[-1] = struct
-#         self.structures.append(self)
-#         # for n in range(len(self.structures)-1):
-#         #     print('radius'+str(self.structures[n].r[0]))
-#         # print('radius_last'+str(type(self.structures[-1])))
-        
-#         newsphere = np.zeros([5,struct.nspheres])
-#         newsphere[0,:] = struct.x.T
-#         newsphere[1,:] = struct.y.T
-#         newsphere[2,:] = struct.z.T
-#         newsphere[3,:] = struct.r.T
-#         newsphere[4,:] = self.nstructures
-#         self.spheres = np.concatenate([self.spheres,newsphere],axis=1)
-
-#         self.nstructures += 1
-#         self.nsphere += struct.nspheres
-
-#     def isinside(self,rnd):
-#         return ( (rnd[0,:] > 0) & (rnd[1,:] > 0) & (rnd[2,:] > 0) & 
-#             (rnd[0,:] < self.Lx) & (rnd[1,:] < self.Ly) & (rnd[2,:] < self.Lz) )
-
-#     def seed(self,nspin,structIdxs=None):
-#         '''
-#         seed 'nspin' spins into this arena. If structIdx is provide, 
-#         only seed spins into structures listed in the structIdx list
-#         '''
-#         notseeded = np.full((nspin, ), True)
-#         rnd = np.zeros([3,nspin]).astype(dtype=np.float32)
-
-#         # if no structure index is given, seed into all structures
-#         if structIdxs is None:
-#             structIdxs = np.arange(self.nstructures+1) # all axon structures + box
-
-#         while notseeded.any():
-#             rnd[:,notseeded] = np.random.rand(3,np.sum(notseeded)).astype(dtype=np.float32) - 0.5
-#             rnd[0,notseeded] *= self.Lx
-#             rnd[1,notseeded] *= self.Ly
-#             rnd[2,notseeded] *= self.Lz
-
-#             # check all structures we're seeding into
-#             # for idx in structIdxs:
-#             #     in_this_struc = self.structures[idx].isinside(rnd[:,notseeded])
-
-#             #     # we'll add support for rho later.
-#             #     # for now, just go ahead and seed it
-#             #     notseeded[notseeded] = ~in_this_struc
-
-#             excluded_by_earlier_struct = np.full((nspin, ), False)
-#             for idx in np.arange(self.nstructures+1):
-#                 in_this_struc = self.structures[idx].isinside(rnd[:,notseeded])
-#                 # print('len(in_this_struc)', len(in_this_struc))
-#                 if idx in structIdxs:
-#                     # we'll add support for rho later.
-#                     # for now, just go ahead and seed it
-#                     notseeded[notseeded] = (~in_this_struc) | excluded_by_earlier_struct[notseeded]
-#                 else:
-#                     excluded_by_earlier_struct[notseeded] = in_this_struc
-
-#         return rnd

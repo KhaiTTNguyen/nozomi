@@ -17,6 +17,7 @@ import time
 import os 
 
 def simulation_main(params, substrate_file):
+    # =========== Gather simulation parameters ===========
     total_sim_time = params['sim_time']
     time_step = params['time_step']
     num_spins = int(params['num_spins'])
@@ -24,12 +25,14 @@ def simulation_main(params, substrate_file):
     D0_intra = params['D0_intra']
     D0_extra = params['D0_extra']
     file_path = substrate_file
-    config_params.EXP_DATE_TIME = str(common_util.get_date_time())
+    
+    # =========== Prepare output folder ===========
     target_folder_path = os.path.dirname( os.path.dirname(file_path) )
     folder_name = os.path.join(target_folder_path, 'sim')
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
     
+    # =========== Setup simulation ===========
     optimized_fibers, L = common_util.import_array_geometry_full_path(file_path) # optimized_fibers = xyz_r_fid
     config_params.BOX_LENGTH = L
     fiberlist_xyz_r_fid = common_util.split_matrix_to_list(optimized_fibers)
@@ -53,6 +56,7 @@ def simulation_main(params, substrate_file):
     print('Start setting up structures')
     sim = ds3.DiffSim3d(sg3,num_spins) 
     nsegx,nsegy,nsegz=20,20,20  # set number of segments
+    # ========= Pre-compute table that store structures in segments ==========
     table_st = time.time()
     sim.set_segments(nsegx=nsegx,nsegy=nsegy,nsegz=nsegz)
     if compartment=='intra':
@@ -64,15 +68,14 @@ def simulation_main(params, substrate_file):
     table_elapsed_time =  np.round(table_et-table_st,2)
     sim_start_time = time.time()
 
-    #==========================
-    # Pre-allocate GPU result arrays
+    # =========== Pre-allocate GPU result arrays ===========
     num_steps = int(total_sim_time / time_step) + 1
     Dx_array, Dy_array, Dz_array = gpuarray.zeros(num_steps, dtype=np.float32), gpuarray.zeros(num_steps, dtype=np.float32), gpuarray.zeros(num_steps, dtype=np.float32)
 
-    # Arrays for storing second moments (variance)
+    # =========== Arrays for storing second moments (variance) ===========
     Kx2_array, Ky2_array, Kz2_array = gpuarray.zeros(num_steps, dtype=np.float32), gpuarray.zeros(num_steps, dtype=np.float32), gpuarray.zeros(num_steps, dtype=np.float32)
     
-    # # Arrays for storing fourth moments
+    # =========== Arrays for storing fourth moments ===========
     Kx4_array, Ky4_array, Kz4_array = gpuarray.zeros(num_steps, dtype=np.float32), gpuarray.zeros(num_steps, dtype=np.float32), gpuarray.zeros(num_steps, dtype=np.float32)
     
     # Pre-allocate CPU result arrays
@@ -81,6 +84,7 @@ def simulation_main(params, substrate_file):
     Dx_step[0], Dy_step[0], Dz_step[0], diff_time[0] = D, D, D, 0
 
     print(f'Got to sim {compartment}-axonal simloops')
+    # =========== Simulation loop ===========
     current_time = 0.0
     step_idx = 1
     while current_time < nt*time_step:

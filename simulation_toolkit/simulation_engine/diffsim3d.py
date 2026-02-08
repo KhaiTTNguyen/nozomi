@@ -3,7 +3,7 @@ import pycuda.gpuarray as gpuarray
 import numpy as np
 from scipy import integrate
 from pycuda.compiler import SourceModule
-kernel_file = './simulation_toolkit/simulation_engine/sim3d_kernel_addition.cu'
+kernel_file = './simulation_toolkit/simulation_engine/sim3d_kernel.cu'
 
 class DiffSim3d:
     '''
@@ -36,17 +36,10 @@ class DiffSim3d:
 
         # use the provided seeder class to find the inital seed of spins, 
         # then pass them to the GPU
-
         self.mod = SourceModule(self.code % self.pars,no_extern_c=True)
-        '''move here'''
-        # self.spins = self.geom.seed(self.nspins,structIdxs=structures).astype(np.float32)
-        # print('positions', self.spins)
-        # print('positions.shape', self.spins.shape)
-        
+
         self.gpu_seed_kernel = self.mod.get_function("seedSpinsKernel")
-        self.spins = self.geom.gpu_seed(self.gpu_seed_kernel, self.nspins, structIdxs=structures).astype(np.float32)
-        
-        # self.spins = self.geom.gpu_seed(self.nspins, structIdxs=structures).astype(np.float32)
+        self.spins = self.geom.gpu_seed(self.gpu_seed_kernel, self.nspins, structIdxs=structures).astype(np.float32)        
         self.spins_d = gpuarray.to_gpu(self.spins)
         self.spins0_d = self.spins_d.copy()
         self.phase_d = gpuarray.zeros(self.ndiffdir * self.nspins, dtype=np.float32)
@@ -56,10 +49,7 @@ class DiffSim3d:
         self.randomWalk3d_phase_multi_dirr = self.mod.get_function("randomWalk3d_phase_multidirr")
         self.initstates = self.mod.get_function("initstates")
         self.compute_diffusion_coefficients_and_kurtosis = self.mod.get_function("computeDiffusionCoefficientsAndKurtosis")
-        # self.compute_kurtosis_kernel = self.mod.get_function("computeKurtosis")
-        # self.finalize_kurtosis_kernel = self.mod.get_function("finalizeKurtosis")
-            
-        # self.compute_displacements_and_count_central = self.mod.get_function("computeDisplacementsAndCountsCentral")
+
         # pass the list of spheres in the geom to the gpu
         self.spheres_d = gpuarray.to_gpu(self.geom.spheres.astype(np.float32))
 
@@ -71,78 +61,6 @@ class DiffSim3d:
         # initialize signal level to M0=1
         self.sig_d = gpuarray.ones([1,self.nspins],dtype=np.float32)
         self.issetup = True
-
-    '''deprecated'''
-    # def calculate_displacements_central(self, step_idx, current_time, dx_array, dy_array, dz_array, count_array):
-    #     """Calculate displacements using GPU kernel for central 75% region only"""
-    #     block_size = 256
-    #     grid_size = int(np.ceil(self.nspins / block_size))
-        
-    #     # Clear the arrays for this time step
-    #     dx_array[step_idx] = 0.0
-    #     dy_array[step_idx] = 0.0  
-    #     dz_array[step_idx] = 0.0
-    #     count_array[step_idx] = 0
-        
-    #     # Launch the combined kernel
-    #     self.compute_displacements_and_count_central(
-    #         self.spins_d,
-    #         self.spins0_d,
-    #         dx_array,
-    #         dy_array,
-    #         dz_array,
-    #         count_array,
-    #         np.int32(step_idx),
-    #         np.int32(self.nspins),
-    #         np.float32(current_time),
-    #         block=(block_size, 1, 1),
-    #         grid=(grid_size, 1)
-    #     )
-
-    def calculate_diffusion_coefficients_and_kurtoses(self, step_idx, current_time, 
-                                dx_array, dy_array, dz_array,
-                                Kx2_array, Ky2_array, Kz2_array,
-                                Kx4_array, Ky4_array, Kz4_array):
-        """Calculate displacements using GPU kernel"""
-        block_size = 256
-        grid_size = int(np.ceil(self.nspins / block_size))
-        
-        self.compute_diffusion_coefficients_and_kurtosis(
-            self.spins_d, self.spins0_d,
-            dx_array, dy_array, dz_array,
-            Kx2_array, Ky2_array, Kz2_array,  # Second moment arrays
-            Kx4_array, Ky4_array, Kz4_array,  # Fourth moment arrays
-            np.int32(step_idx),  np.int32(self.nspins),
-            np.float32(current_time),
-            block=(block_size, 1, 1), grid=(grid_size, 1)
-        )
-
-    # def compute_displacements_in_directions(self, displacements, directions):
-    #     Nspins = displacements.shape[1] #3 x Nspins
-    #     Ndirr = directions.shape[1] # 3 x Ndirr
-    #     # print('Nspins', Nspins, 'Ndirr', Ndirr)
-
-    #     result = gpuarray.zeros((Nspins, Ndirr), dtype=np.float32)
-        
-    #     block_dim = (16, 16, 1)
-    #     grid_dim = (
-    #         (Nspins + block_dim[0] - 1) // block_dim[0],
-    #         (Ndirr + block_dim[1] - 1) // block_dim[1],
-    #         1
-    #     )
-        
-    #     # Execute the kernel
-    #     self.project_kernel(
-    #         displacements, 
-    #         directions, 
-    #         result,
-    #         np.int32(Nspins), 
-    #         np.int32(Ndirr),
-    #         block=block_dim,
-    #         grid=grid_dim
-    #     )
-        
-    #     return result
 
     def set_diffusion_directions(self,diffdir=None):
         if diffdir is None:
@@ -187,9 +105,6 @@ class DiffSim3d:
 
     # @profile
     def set_segments(self,nsegx=1,nsegy=1,nsegz=1):
-        # how many segements are we using? 
-        # for now, just use a single segment, so all spheres will be in this segment
-        # todo: make this smarter
         '''return segments = Mx1 vector storing sph ids for each segment. 
         M = k*max_sphere_per_seg, where 'k' is the number of segments. '''
         jump_tol = 1 # um, tolerance to include a sphere inside a boundary...?
@@ -259,12 +174,28 @@ class DiffSim3d:
         self.issetup = False
 
     def set_block_grid(self,nspins):
-        # todo: make automatic selection of block and grid size smarter
         self.nblock = int(1000)
         self.ngrid = int(round(nspins/self.nblock))
-        # block_size = 256
-        # grid_size = (spins + block_size - 1) // block_size
-    # @profile
+    
+    def calculate_diffusion_coefficients_and_kurtoses(self, step_idx, current_time, 
+                                dx_array, dy_array, dz_array,
+                                Kx2_array, Ky2_array, Kz2_array,
+                                Kx4_array, Ky4_array, Kz4_array):
+        """Calculate diffusion coefficients 
+        and kurtoses using GPU kernel"""
+        block_size = 256
+        grid_size = int(np.ceil(self.nspins / block_size))
+        
+        self.compute_diffusion_coefficients_and_kurtosis(
+            self.spins_d, self.spins0_d,
+            dx_array, dy_array, dz_array,
+            Kx2_array, Ky2_array, Kz2_array,  # Second moment arrays
+            Kx4_array, Ky4_array, Kz4_array,  # Fourth moment arrays
+            np.int32(step_idx),  np.int32(self.nspins),
+            np.float32(current_time),
+            block=(block_size, 1, 1), grid=(grid_size, 1)
+        )
+
     def step(self,dt):
         if not self.issetup:
             self.setup()
@@ -295,72 +226,17 @@ class DiffSim3d:
                           block=(self.nblock,1,1), grid=(self.ngrid,1))
     
 class DwiSim3d(DiffSim3d):
-    # def simulate_old(self,gwave,structures=None,initstates=None):
-    #     '''
-    #     Simulates DWI signal in a simulation gometry
-    #     '''
-
-    #     # (re?)setup of the simulations
-    #     # self.setup(structures,initstates)
-
-    #     # initialize the phase of all spins
-    #     self.phase_d = gpuarray.zeros([self.ndiffdir,self.nspins],
-    #                                 dtype=np.float32)
-        
-    #     # since spin_d and spin0_d can jump around with the periodic boundary 
-    #     # conditions, save out the inital set of spin0_d, so that the phase 
-    #     # can be calculated relative to the difference betwen spin_d spin0_d
-    #     init_spins0_d = self.spins0_d
-
-    #     for g in gwave:
-    #         self.dwi_step(gwave.dt)
-
-    #         # increment the phase 
-    #         self.phase_d += gwave.dt*g*(self.diffdir.T@(
-    #             self.spins_d-self.spins0_d + init_spins0_d))
-            
-    #     # calculate the dwi signal
-    #     signal = np.zeros([self.ndiffdir,len(gwave.gmax)])
-    #     for n,gmax in enumerate(gwave.gmax):
-    #         signal[:,n] = np.sum(np.exp(1j*gmax*self.phase_d[:,:].get()),axis=-1)
-
-    #     return signal
 
     def simulate(self,gwave,structures=None,initstates=None):
         '''
         Simulates DWI signal in a simulation gometry
         '''
-        # (re?)setup of the simulations
-        # self.setup(structures,initstates)
-
-        # initialize the phase of all spins
-        # self.phase_d = gpuarray.zeros([self.ndiffdir,self.nspins],
-        #                             dtype=np.float32)
         G_area_at_each_time_step = integrate.cumulative_trapezoid(gwave.wave, dx=1.0, initial=0)*gwave.dt
 
-        # since spin_d and spin0_d can jump around with the periodic boundary 
-        # conditions, save out the inital set of spin0_d, so that the phase 
-        # can be calculated relative to the difference betwen spin_d spin0_d
-        # g is the gradient magnitude at the timestep, here loop through each step
-        # gwave.wave (mT/m)
         for n,_ in enumerate(gwave.wave):
             self.dwi_step(gwave.dt, 
                           gwave.wave[n]*gwave.dt*267.5/10000, 
                           G_area_at_each_time_step[n]*267.7/10000)
-
-            # increment the phase 
-            # displacements = self.spins_d-self.spins0_d + init_spins0_d
-            # print('displacements', displacements.shape) #3xNspsins
-            # print('diffdir', self.diffdir.shape) # 3xN
-            # displacements_projected_on_diff_directions = self.compute_displacements_in_directions(displacements, self.diffdir).T
-            # print('displacements_projected_on_diff_directions', displacements_projected_on_diff_directions.shape)
-            # expect ndiffdir x nspins
-            # print('displacements_projected_on_diff_directions', displacements_projected_on_diff_directions.shape)
-            
-            # np_displacements,np_diffdir = displacements.get(), self.diffdir.get()
-            # displacements_projected_on_diff_directions = np.dot(np_displacements.T, np_diffdir).T
-            # self.phase_d += gwave.dt*g*(displacements_projected_on_diff_directions)
-            # print('g_step', n)
         # Get the result back from GPU
         phase_accumulated = self.phase_d.get()
         
@@ -371,86 +247,15 @@ class DwiSim3d(DiffSim3d):
         '''
         Simulates DWI signal in a simulation gometry
         '''
-        # (re?)setup of the simulations
-        # self.setup(structures,initstates)
-
-        # initialize the phase of all spins
-        # self.phase_d = gpuarray.zeros([self.ndiffdir,self.nspins],
-        #                             dtype=np.float32)
         G_area_at_each_time_step = integrate.cumulative_trapezoid(gwave.wave, dx=1.0, initial=0)*gwave.dt
 
-        # since spin_d and spin0_d can jump around with the periodic boundary 
-        # conditions, save out the inital set of spin0_d, so that the phase 
-        # can be calculated relative to the difference betwen spin_d spin0_d
-        # g is the gradient magnitude at the timestep, here loop through each step
-        # gwave.wave (mT/m)
         for n,_ in enumerate(gwave.wave):
             self.dwi_multidirections_step(gwave.dt, 
                           gwave.wave[n]*gwave.dt*267.5/10000, 
                           G_area_at_each_time_step[n]*267.7/10000)
 
-            # increment the phase 
-            # displacements = self.spins_d-self.spins0_d + init_spins0_d
-            # print('displacements', displacements.shape) #3xNspsins
-            # print('diffdir', self.diffdir.shape) # 3xN
-            # displacements_projected_on_diff_directions = self.compute_displacements_in_directions(displacements, self.diffdir).T
-            # print('displacements_projected_on_diff_directions', displacements_projected_on_diff_directions.shape)
-            # expect ndiffdir x nspins
-            # print('displacements_projected_on_diff_directions', displacements_projected_on_diff_directions.shape)
-            
-            # np_displacements,np_diffdir = displacements.get(), self.diffdir.get()
-            # displacements_projected_on_diff_directions = np.dot(np_displacements.T, np_diffdir).T
-            # self.phase_d += gwave.dt*g*(displacements_projected_on_diff_directions)
-            # print('g_step', n)
         # Get the result back from GPU
         phase_accumulated = self.phase_d.get()
         
         # Reshape to match expected format (3, nspin)
         return phase_accumulated.reshape(self.ndiffdir, self.nspins)
-
-class DiffSim3dKurtosis(DiffSim3d):
-    """Extended DiffSim3d class with kurtosis calculation capabilities."""
-    
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self._compile_kurtosis_kernels()
-    
-    # def _compile_kurtosis_kernels(self):
-    #     """Compile CUDA kernels for kurtosis calculations."""
-        
-    #     try:
-    #         # Load and compile kurtosis kernels
-    #         from pycuda.compiler import SourceModule
-            
-    #         # Read kernel source (assuming it's in sim3d_kernel_addition.cu)
-    #         with open('sim3d_kernel_addition.cu', 'r') as f:
-    #             kernel_source = f.read()
-            
-    #         mod = SourceModule(kernel_source)
-            
-    #         # Get kernel functions
-    #         self.compute_kurtosis_kernel = mod.get_function("computeKurtosisAndCounts")
-    #         self.finalize_kurtosis_kernel = mod.get_function("finalizeKurtosis")
-            
-    #         print("Kurtosis kernels compiled successfully")
-            
-    #     except Exception as e:
-    #         print(f"Error compiling kurtosis kernels: {e}")
-    #         raise
-    
-    def calculate_kurtosis(self, step_idx,
-                        Kx2_array, Ky2_array, Kz2_array, 
-                        Kx4_array, Ky4_array, Kz4_array):
-        """Calculate kurtosis values using GPU kernels."""
-        block_size = 256
-        grid_size = int(np.ceil(self.nspins / block_size))
-        
-        # Step 1: Compute raw moments (second and fourth)
-        self.compute_kurtosis_kernel(
-            self.spins_d, self.spins0_d,
-            Kx2_array, Ky2_array, Kz2_array,      # Second moment arrays
-            Kx4_array, Ky4_array, Kz4_array,  # Fourth moment arrays
-            np.int32(step_idx), np.int32(self.nspins),
-            block=(block_size, 1, 1), grid=(grid_size, 1)
-        )
-        
