@@ -8,6 +8,7 @@ import os.path
 # import hipa.config as config
 import torch
 import torch.nn.functional as F
+import simulation_toolkit.toolkit_params as config_params
 class Meshing(object):
     """
     A class for Node Network
@@ -87,8 +88,8 @@ class Meshing(object):
         r0 = lognormal_dist.sample((1,))
         '''
         r0=original_radius
-        mean_r1 = 1. #1.5  # Adjust this to get the desired mean of the gaussian distribution
-        std_r1 = 0.8 #0.85 HongHsi  # Adjust this to control the spread of the distribution
+        mean_r1 = config_params.BEAD_AMPLITUDE_MEAN #1.5  # Adjust this to get the desired mean of the gaussian distribution
+        std_r1 = config_params.BEAD_AMPLITUDE_STDV #0.85  # Adjust this to control the spread of the distribution
         gaussian_dist = torch.distributions.normal.Normal(loc=mean_r1, scale=std_r1)   
         result = torch.full(positions_along_axon.shape,r0.item()).to(self.device)
         for i in range(len(beading_positions_along_axon)):

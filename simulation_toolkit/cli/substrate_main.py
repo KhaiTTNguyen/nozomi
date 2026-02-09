@@ -28,13 +28,14 @@ def substrate_main(params, experiment_folder):
     config_params.W_LENGTH = params['w_length']
     config_params.BEAD_SPACING_MEAN = params['bead_spacing_mean']   
     config_params.BEAD_SPACING_STDV = params['bead_spacing_stdv']
+    config_params.BEAD_AMPLITUDE_MEAN = params['bead_amplitude_mean']
+    config_params.BEAD_AMPLITUDE_STDV = params['bead_amplitude_stdv']
     print(f"Building substrate with: \
-          orientation_shape_parameter={config_params.ORIENTATION_SHAPE_PARAM}, \
-          num_fibers={config_params.NUM_FIBERS}, \
         diameter_mean={config_params.MEAN_DIAMETER},\
-        diameter_stdv={config_params.SIGMA_DIAMETER}") 
+        orientation_shape_parameter={config_params.ORIENTATION_SHAPE_PARAM}, \
+        bead_amplitude_mean={config_params.BEAD_AMPLITUDE_MEAN},\
+        num_fibers={config_params.NUM_FIBERS}") 
 
-    # device = torch.device(f'cuda' if torch.cuda.is_available() else 'cpu')
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     config_params.EXP_DATE_TIME = util.get_date_time()        
     config_params.ODI_INDEX = np.round(2/np.pi * np.arctan(1/config_params.ORIENTATION_SHAPE_PARAM), 4)
@@ -42,9 +43,10 @@ def substrate_main(params, experiment_folder):
                                                        str(config_params.EXP_DATE_TIME)+\
                                                         '_d'+str(config_params.MEAN_DIAMETER)+\
                                                         '_K'+str(int(config_params.ORIENTATION_SHAPE_PARAM))+\
-                                                    '_ODI_'+str(config_params.ODI_INDEX)+'_'+\
+                                                    '_ODI_'+str(config_params.ODI_INDEX)+\
+                                                    '_bead_'+str(config_params.BEAD_AMPLITUDE_MEAN)+'_'+\
                                                         str(config_params.NUM_FIBERS) +'fibers')
-    print("Substrate output folder:", config_params.SUBSTRATE_OUTPUT_FOLDER_PATH)
+    # print("Substrate output folder:", config_params.SUBSTRATE_OUTPUT_FOLDER_PATH)
     not_converged=True
     while not_converged:
         st = time.time()
@@ -67,13 +69,14 @@ def substrate_main(params, experiment_folder):
         if not os.path.exists(init2d_data_folder):
                     os.makedirs(init2d_data_folder)
 
-        # # save data with Pickle format
+        # save data with Pickle format
         init2d_data_file_name = os.path.join(init2d_data_folder ,'init2d.pkl')
         util.save_data_array_to_pickle(init2d_data_file_name, initialization2D.initial_positions, 
                                 initialization2D.box_length.cpu().item()) 
         
 
         initialization2D.plot_PBC()
+        exit()
         meshing = Meshing(initialization2D, config_params.SPHERE_SPACING, config_params.BEAD_SPACING_MEAN, config_params.BEAD_SPACING_STDV, device)
 
         substrate = GeometricOptimization(device, meshing, config_params.SPHERE_SPACING, 

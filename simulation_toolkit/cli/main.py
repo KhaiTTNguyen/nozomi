@@ -28,9 +28,7 @@ class GeometryToolkitCLI:
         for experiment in range(0, params['repeats']):
             torch.autograd.set_detect_anomaly(True)
             substrate_main(params, experiment_name)
-
-        # generator = initialization_2d(gpu_id=gpu_id)
-        # result = generator.generate(params)
+            
         print(f"Substrate generation completed for {experiment_name}")
     
     def run_simulation(self, full_sim_params):
@@ -116,17 +114,15 @@ def main():
     cli = GeometryToolkitCLI()
     
     if args.command == 'substrate':
-        if args.config:
-            config_data = config.load_config_file(args.config)
-            experiment_name = config_data['experiment_name']
-            params = config_data["parameters"].copy()
-            print('params', params)
-            # ===== START substrate generation =====
-            cli.run_substrate_generation(params, experiment_name)
-            # ===== END substrate generation & save experiment config file =====
-            shutil.copy(args.config, 
-                os.path.join(config_params.OUTPUT_FOLDER_PATH, experiment_name, str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(args.config)))
-            
+        config_data = config.load_config_file(args.config)
+        experiment_name = config_data['experiment_name']
+        params = config_data["parameters"].copy()
+        # ===== START substrate generation =====
+        cli.run_substrate_generation(params, experiment_name)
+        # ===== END substrate generation & save experiment config file =====
+        shutil.copy(args.config, 
+            os.path.join(config_params.OUTPUT_FOLDER_PATH, experiment_name, str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(args.config)))
+        
     elif args.command == 'simulation':
         sim_config = config.load_config_file(config_params.SIM_CONFIG_FILE)
         cmd_params = vars(args)

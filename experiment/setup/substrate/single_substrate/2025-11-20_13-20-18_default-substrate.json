@@ -1,10 +1,10 @@
 {
-  "experiment_name": "experiment_VF0.5_d2.58_sig0.69_20axons_OD20",  
+  "experiment_name": "experiment_VF0.5_d2.58_sig0.69_10axons_OD10",  
   "parameters": {
-      "orientation_shape_parameter": 20,
+      "orientation_shape_parameter": 10,
       "box_length_init": 0,
       "target_volume_fraction": 0.5,
-      "num_fibers": 20,
+      "num_fibers": 10,
       "mean_diameter":  2.58,
       "sigma_diameter":  0.69,
       "dist_shape": 0.1,
@@ -16,6 +16,8 @@
       "w_length": 3,
       "bead_spacing_mean": 5.70,
       "bead_spacing_stdv": 2.88,
+      "bead_amplitude_mean": 1.0,
+      "bead_amplitude_stdv": 0.8,
       "repeats": 2
   }
 }

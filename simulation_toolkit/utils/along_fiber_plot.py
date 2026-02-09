@@ -116,7 +116,7 @@ def plot_diameter_GEV_distribution(optimized_fibers):
     plt.plot(x, genextreme.pdf(x, shape_gev_fitted, loc_gev_fitted, scale_gev_fitted), 'r-', lw=2, label='Fitted GEV')
     
     # Adding titles and labels   
-    plt.title('Distribution of diameter - Optimized', fontsize=17, pad=20)
+    plt.title('Distribution of diameter', fontsize=17, pad=20)
     plt.tick_params(axis='both', which='major', labelsize=13)
     plt.xlabel('Outer Diameter (µm)', fontsize=15, labelpad=5)
     plt.ylabel('Density', fontsize=15, labelpad=5)

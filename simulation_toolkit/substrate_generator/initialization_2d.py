@@ -5,21 +5,18 @@ import os.path
 import numpy as np
 from scipy.stats import genextreme
 from scipy.optimize import minimize
+import simulation_toolkit.substrate_generator.helper.watson_distribution as wd
 import simulation_toolkit.substrate_generator.helper.CollisionDetection2D as CD
 import simulation_toolkit.toolkit_params as config_params
 
 class Init2D(object):
     """
     A class for 2D initliaization of 2 ends of cube
-    Optimization for IVF by remove overlaps between disks
-    init: radii + buff/2
-    check_overlap: buff/5
-    cost_fucntion: buff
+    Optimization for volume fraction by remove overlaps between disks in 2D.
     """
     def __init__(self, device, date_time, orientation_shape_parameter=200, target_volume_fraction=0.6, 
-                 num_fibers=500, dist_shape=0, mean_diameter=1,sigma_radii=0.5,space_buffer=0.0, box_length_init=0, output_folder=None):
+                 num_fibers=500, dist_shape=0, mean_diameter=1,sigma_radii=0.5,space_buffer=0.0, box_length_init=0):
         self.device=device
-        self.output_folder=output_folder
         self.volume_fraction = 0
         self.space_buffer = space_buffer
         self.date_time=date_time
@@ -53,49 +50,42 @@ class Init2D(object):
     
 
     def initialize_circle_radius_GEV_and_positions_halfLx(self):
-            # loc, scale = self.mean_diameter/2, self.sigma_radii/2
-            # mean_r_underlying, sigma_r_underlying, skew, kurt = genextreme.stats(c=self.dist_shape, loc=loc, scale=scale, moments='mvsk')
-            # mean_underlying_normal_distribution = np.log(u**2/np.sqrt(u**2+v**2)) #  mean of underlying normal distribution
-            # sigma_underlying_normal_distribution = np.sqrt(np.log(v**2/u**2 + 1)) #  standard deviation of underlying normal distribution
-            # lognormal_params = torch.tensor([mean_underlying_normal_distribution,sigma_underlying_normal_distribution])
-                    
-            # fix num axons & AVF --> LxLy
+            # Calculate box length from target volume fraction, number of fibers, and diameter distribution parameters
             vf = self.target_volume_fraction  # Expected volume fraction
-            # log_mean, log_std = lognormal_params[0], lognormal_params[1]  # Parameters of the lognormal distribution
-
-            # diameter_dist = torch.distributions.log_normal.LogNormal(loc=log_mean, scale=log_std)
-            # radii_0 = diameter_dist.sample((int(self.num_fibers),))/2.
             gev_fitted_diameter = minimize(self.objective, [self.dist_shape, self.mean_diameter, self.sigma_radii], args=(self.mean_diameter, self.sigma_radii), method='Nelder-Mead')
             c_opt, loc_opt, scale_opt = gev_fitted_diameter.x
             diameter_np = genextreme.rvs(c=c_opt, loc=loc_opt, scale=scale_opt, size=self.num_fibers)
             diameter_np = np.clip(diameter_np, a_min=0.15, a_max=None)
-            # print(f"GEV parameters: c={c_opt}, loc={loc_opt}, scale={scale_opt}")
-            print(f"Generated diameters - Min: {diameter_np.min()}, Max: {diameter_np.max()}")
             
             radii_0 = torch.from_numpy(diameter_np/2)
             fid_0 = torch.arange(radii_0.shape[0])
             radii = torch.stack([radii_0, radii_0], dim=1).flatten() # INTERLEAVE radi0 values to form pairs
             fiber_id = torch.stack([fid_0, fid_0], dim=1).flatten()
 
-            # self.plot_histogram_GEV(radii*2)
-            # space_buffer = torch.tensor(self.space_buffer, device=self.device)
             if self.box_length_init==0:
                 total_area = torch.sum(torch.pi * (radii+self.space_buffer/2)**2)
                 box_length = torch.round(torch.sqrt(total_area / vf))
             else:
                 box_length=self.box_length_init
-            print('box_length', box_length.item())
+            print('Box_length', box_length.item())
 
-            init_range = box_length  #'''DO I NEED THIS?'''
             '''init startpoints from radius'''
-            start_points = torch.rand(radii_0.shape[0], 2)*init_range - init_range/2 # start points only, close to center, and shift FOV to halfLx
-            watson_dist = torch.distributions.von_mises.VonMises(0, self.orientation_shape_parameter)
-            target_angles = watson_dist.sample((int(start_points.shape[0]),)) # draw target point from dist
-            d_start_target = box_length*torch.tan(target_angles)
-            azithmuth = torch.distributions.von_mises.VonMises(0, 0.1).sample((int(start_points.shape[0]),))
+            start_points = torch.rand(radii_0.shape[0], 2)*box_length - box_length/2 # start points only, close to center, and shift FOV to halfLx
             
-            target_points = torch.stack([d_start_target*torch.cos(azithmuth)+start_points[:,0], 
-                                        d_start_target*torch.sin(azithmuth)+start_points[:,1]]).T
+            # ---- Get end points from Watson Distribution ------
+            # Create a Watson distribution
+            mu = np.array([0, 0, 1])  # Mean direction (z-axis)
+            watson_distribution = wd.WatsonDistribution(mu, self.orientation_shape_parameter)
+            # Generate samples
+            direction_vectors  = torch.from_numpy(watson_distribution.sample(int(start_points.shape[0])))
+            # Visualize results
+            watson_distribution.visualize_watson_samples(direction_vectors, mu, self.orientation_shape_parameter)
+            
+            dir_x, dir_y, dir_z = direction_vectors[:,0], direction_vectors[:,1], direction_vectors[:,2]
+            d_start_target = box_length*torch.sqrt(dir_x**2+dir_y**2)/dir_z
+            
+            target_points = torch.stack([d_start_target*dir_x/torch.sqrt(dir_x**2+dir_y**2)+start_points[:,0], 
+                                        d_start_target*dir_y/torch.sqrt(dir_x**2+dir_y**2)+start_points[:,1]]).T
 
             circle_centers_x = torch.stack([start_points[:,0], target_points[:,0]], dim=1).flatten() # INTERLEAVE start-targets values to form pairs
             circle_centers_y = torch.stack([start_points[:,1], target_points[:,1]], dim=1).flatten() # INTERLEAVE start-targets values to form pairs
@@ -195,10 +185,10 @@ class Init2D(object):
                 overlap_loss = self.overlap_cost_function(c_pos, c_ra, f_id, self.box_length)
                 overlap_loss.backward()
                 return overlap_loss
-
+            print('------ Start packing 2D initializtion ------')
             while num_overlap>0:
                 num_overlap, xa_, ya_, ra_, fid_, sphere_id = self.check_num_overlaps(initial_positions, self.box_length)
-                print('num_iter', num_iter, 'overlap ', num_overlap)
+                print(' Iteration ', num_iter, ' . Overlaps ', num_overlap)
                 if num_overlap == 0:
                     xa_, ya_, ra_, fid_ = self.torch_optimizer_wrapPBC_disk(initial_positions, self.box_length, tol=0)
                     print('Final num_overlap:', num_overlap)
@@ -214,18 +204,7 @@ class Init2D(object):
                     num_overlap, num_iter = 1000, 0
                     continue
                 c_pos = torch.stack([xa_, ya_]).T.contiguous()
-                ### TEMPORARILY turned off
-                # if num_iter==0:
-                    # print('recorded new init_p at 0th iter')
-                    # initp_0 = c_pos.detach().clone()
-                    # self.plot_circles(c_pos.cpu().detach().numpy(), ra_.cpu().detach().numpy(), fid_, self.box_length, sphere_id, num_iter, converged=False)
-        
-                # if num_iter%20==0:
-                #     print('------------- num iteration', num_iter, '---------------')
-                #     print('number of sphere overlaps: ', str(int(num_overlap)))
-                #     self.get_2D_volume_fraction(c_pos.cpu().detach().numpy(), ra_.cpu().detach().numpy(), self.box_length)
-                #     self.plot_circles(c_pos.cpu().detach().numpy(), ra_.cpu().detach().numpy(), fid_, self.box_length, sphere_id, num_iter)
-
+                
                 self.optimizer.step(closure)
                 num_iter+=1
             opt_pos = torch.stack([xa_, ya_]).T.contiguous()
@@ -254,9 +233,6 @@ class Init2D(object):
         circle_centers_0 = torch.cat((circle_centers_0, circle_centers_0_L), dim=0)
         circle_centers_L = torch.cat((circle_centers_L, circle_centers_L_0), dim=0)
         
-        # print('circle_centers_0 \n', circle_centers_0)
-        # print('circle_centers_L \n', circle_centers_L)
-        # exit()
         return circle_centers_0, circle_centers_L
     
     def get_original_starts_ends_with_no_wrapping(self):
@@ -356,9 +332,8 @@ class Init2D(object):
         box_length = torch.round(torch.sqrt(total_area / vf))
         print('box_length', box_length)
 
-        init_range = box_length  #'''DO I NEED THIS?'''
         '''init startpoints from radius'''
-        start_points = torch.rand(radii_0.shape[0], 2)*init_range - init_range/2 # start points only, close to center, and shift FOV to halfLx
+        start_points = torch.rand(radii_0.shape[0], 2)*box_length - box_length/2 # start points only, close to center, and shift FOV to halfLx
         watson_dist = torch.distributions.von_mises.VonMises(0, self.orientation_shape_parameter)
         target_angles = watson_dist.sample((int(start_points.shape[0]),)) # draw target point from dist
         d_start_target = box_length*torch.tan(target_angles)
@@ -446,6 +421,7 @@ class Init2D(object):
         plt.title("3D plot of start/end spheres", fontsize=17, pad=20) 
         ax.tick_params(axis='both', which='major', labelsize=13)
         folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+"/figs/init2D"
+        plt.tight_layout()
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
         plt.savefig(folder_path+"/PBC_start_end_"+str(self.num_fibers)+"_"+self.date_time+".png", dpi=500)
@@ -460,3 +436,5 @@ class Init2D(object):
             sphere_z = node[3] * np.outer(np.ones(np.size(u)), np.cos(v)) + node[2]
             color_sphere = color
             ax.plot_surface(sphere_x, sphere_y, sphere_z, color=color_sphere, alpha=.2)
+
+

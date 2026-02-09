@@ -57,6 +57,37 @@ An example result is...
 
 In code: rational for what 
 
+## Substrate Generation Guide:
+### Input: 
+Substrate generation can be setup in the `/nozomi/experiment/experiment_setup/single_substrate/<your-susbtrate-name>.json`
+
+TODO: what parameters goes into a JSON
+they're scalars arrays
+
+Run default
+```bash
+./bin/run-geometry-gen.sh --gpu=0
+```
+
+Run with substrate config (JSON) file
+```bash
+./bin/run-geometry-gen.sh --gpu=1 --config=./experiment/setup/substrate/single_substrate/2025-11-20_13-20-18_default-substrate.json
+```
+
+### Output: 
+Generated substrates will be outputted to `/nozomi/experiment/result/`
+
+Expected output:
+Folder with experiment name
+`/nozomi/experiment/result/VF0.3_experiment_d2.58_sig0.69_10axons_reproducibility_OD7/2026-01-28_19-36-58_d2.58_K7_ODI_0.0903_10fibers` which contain 2 folders 
+```bash
+2026-01-28_19-36-58_d2.58_K7_ODI_0.0903_10fibers
+├── data # (.pkl file containing the coordinates of spheres making up the axons in the substrate)
+└── figs
+    ├── init2D (# 2D initialization of substrate)
+    ├── substrate_stats (# figures for orientation dispersion glyphs, radius variation along axon, CV of diameter, diameter distribution)
+    ├── visual (# 3D visual of the substrate)
+```
 
 ## Monte Carlo Diffusion Simulation guide:
 

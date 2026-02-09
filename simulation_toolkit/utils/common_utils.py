@@ -5,7 +5,7 @@ import numpy as np
 import simulation_toolkit.toolkit_params as params
 
 def get_date_time():        
-    return str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
+    return str(datetime.now().strftime("%Y-%m-%d_%H-%M"))
 
 def load_data_pickle(file_name):
 # Open the Pickle file for reading in binary mode ('rb')
