@@ -42,7 +42,7 @@ class GeometricOptimization(object):
         # segment space, assign spheres to segment, assign nodes to segment, calc intersect.
         num_nodes_in_spheres = CDN.detect_in_sphere(pbc_spheres_xyz, r, avf_nodes, L, fid)
         avf = num_nodes_in_spheres / N
-        print('-----avf-----', np.round(avf.item(),3))
+        print('---Final volume fraction---', np.round(avf.item(),3))
         return round(avf.item(),2)
 
     def torch_create_starts_ends_mask(self, starts_ends, positions_length):
@@ -99,7 +99,7 @@ class GeometricOptimization(object):
             loss.backward(retain_graph=True)
             return loss  
         
-        print('''-----------------------Starting overlap removal-----------------------''' )       
+        print('''----- Starting geometric optimization -----''' )       
         init_xyz_r_fid = self.interpolated_fiber_list[:,0:6]
         t_xa, t_ya, t_za, t_ra_original, f_id = init_xyz_r_fid[:, 0], init_xyz_r_fid[:, 1], init_xyz_r_fid[:, 2], init_xyz_r_fid[:,3], init_xyz_r_fid[:,4]  
         positions_with_grad = torch.stack([t_xa, t_ya, t_za]).T.contiguous()
@@ -114,7 +114,7 @@ class GeometricOptimization(object):
         for num_iter in range(0,num_iteration):         
             num_overlap, xa_, ya_, za_, ra_, fid_ = \
                 self.check_num_overlaps(positions_with_grad, t_ra_original, mask_starts_ends, f_id)
-            print('------------- Iteration:',num_iter,'. Overlaps: ', str(int(num_overlap)), '---------------')
+            print('Iteration:',num_iter,'. Overlaps: ', str(int(num_overlap)))
             m_overlaps.append(num_overlap)
             if num_overlap == 0:
                 self.optimized = True       

@@ -181,10 +181,10 @@ class Init2D(object):
             overlap_loss = self.overlap_cost_function(c_pos, c_ra, f_id, self.box_length)
             overlap_loss.backward()
             return overlap_loss
-        print('------ Start packing 2D initializtion ------')
+        print('------ Start packing 2D initialization ------')
         while num_overlap>0:
             num_overlap, xa_, ya_, ra_, fid_, sphere_id = self.check_num_overlaps(initial_positions, self.box_length)
-            print(' Iteration ', num_iter, ' . Overlaps ', num_overlap)
+            print('Iteration ', num_iter, ' . Overlaps ', num_overlap)
             if num_overlap == 0:
                 xa_, ya_, ra_, fid_ = self.torch_optimizer_wrapPBC_disk(initial_positions, self.box_length, tol=0)
                 print('Final num_overlap:', num_overlap)
@@ -206,7 +206,7 @@ class Init2D(object):
         opt_pos = torch.stack([xa_, ya_]).T.contiguous()
         self.get_2D_volume_fraction(opt_pos.cpu().detach().numpy(), ra_.cpu().detach().numpy(), self.box_length)
         self.plot_circles(opt_pos.cpu().detach().numpy(), ra_.cpu().detach().numpy(), fid_, self.box_length, sphere_id, num_iter, converged=True)
-        print("-----------------Done packing 2D-----------------")
+        print("------ Done packing 2D initialization ------")
         return initial_positions.detach() 
 
     def get_original_starts_ends_with_no_wrapping(self):
@@ -243,7 +243,7 @@ class Init2D(object):
         num_nodes_in_spheres = np.count_nonzero(node_mask)
         avf = num_nodes_in_spheres / number_of_avf_nodes
         self.volume_fraction = avf
-        print('--- 2D volume fraction ---: ', avf)
+        # print('--- 2D volume fraction ---: ', avf)
 
     def plot_circles(self, centers, radii, ids, box_length, sphere_id, num_iter, converged=False):
         centers = np.squeeze(centers)

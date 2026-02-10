@@ -206,7 +206,7 @@ def spherical_harmonics_fit( density_map, XX, YY, ZZ, lmax):
     numpy.ndarray: Fitted spherical harmonics coefficients
     """
     total_SH_coeffs, degrees = calculate_an(lmax)
-    print(f"For lmax = {lmax}, total_SH_coeffs = {total_SH_coeffs}")
+    # print(f"For lmax = {lmax}, total_SH_coeffs = {total_SH_coeffs}")
     SH_basis_m = np.zeros((density_map.flatten().shape[0], total_SH_coeffs), dtype=complex)
     index = 0
     for l in degrees:
@@ -225,7 +225,6 @@ def spherical_harmonics_fit( density_map, XX, YY, ZZ, lmax):
     density_map_pred = SH_basis_m @ coeffs
     fit_error = np.linalg.norm(density_map_pred - density_map.flatten())/np.linalg.norm(density_map.flatten())
     fit_error = np.round(fit_error, 3)
-    print('Error',fit_error)
     return coeffs, fit_error
 
 def calculate_an( n):

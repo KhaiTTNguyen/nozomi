@@ -119,6 +119,7 @@ def substrate_main(params, experiment_folder):
         along_fiber_plot.plot_diameter_GEV_distribution(substrate.optimized_fibers)
         orientation_plot.plot_along_axon_OD(substrate.optimized_fibers, optimized=True)
         
-        print("----------- Substrate saved in folder:"+ config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+ " -----------")
+        print("====== Substrate generated in folder:"+ config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+ " ======")
+        print("\n")
     else:
         print("Exited unoptimized")
