@@ -138,10 +138,15 @@ CUDA_VISIBLE_DEVICES=0 python3 ./tests/calibration/num_molecules_and_time_step_c
 This is what...
 
 An example is on figure
-```bash
-# Format
-CUDA_VISIBLE_DEVICES=<gpu_number> python3 ./tests/calibration/num_molecules_and_time_step_calibration/validation_for_num_molecules_and_time_step_search.py
 
-# Example
-CUDA_VISIBLE_DEVICES=0 python3 ./tests/calibration/num_molecules_and_time_step_calibration/validation_for_num_molecules_and_time_step_search.py
- ```
+For showing run time with respect to number of segments
+```bash
+python3 ./tests/calibration/sim_domain_segment_calibration/plot_segment_calibration.py
+```
+
+For shpwing reproducibility of radial and axial diffusivity metrics regardless of number of segments
+```bash
+python3 ./tests/calibration/sim_domain_segment_calibration/plot_RD_AD_across_segment_choices.py
+```
+
+

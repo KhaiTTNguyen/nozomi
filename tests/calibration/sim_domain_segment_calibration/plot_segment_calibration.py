@@ -15,12 +15,12 @@ This script generates a plot of run time vs number of segments for the segment c
 The number of segments were varied between [5, 10, 15, 20, 25, 30, 35]
 
 Tabulation times and Simulation times for were taken from Monte Carlo simulations 
-of diffusion in a substrate with 2236 fibers, 
+of intra-axonal diffusion in a substrate with 2236 fibers, 
 GEV-distributed \bar{d} of 1.75 μm, \kappa = 200, and V_{in} = 66%.
 '''
 segments = [5, 10, 15, 20, 25, 30, 35]
-table_times = np.array([17.96, 64.36, 194.52, 490.72, 865.61, 1476.41, 2383.17])
-simulation_times = np.array([13020.08, 4296.36, 2711.07, 2159.4, 2091.94, 1797.39, 1773.98])
+table_times = np.array([16.28, 63.68, 211.63, 460.68, 903.58, 1476.83, 2359.56]) # intra
+simulation_times = np.array([12989.1, 4276.61, 2716.23, 2257.72, 2054.23, 1808.89,1918.21]) # intra
 computation_times = simulation_times + table_times
 
 # Styling constants
