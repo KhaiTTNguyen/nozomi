@@ -134,9 +134,20 @@ class WatsonDistribution:
         # fig, ax = plt.subplots(figsize=(12, 6), projection='3d')
         fig = plt.figure(figsize=(12, 6))
         ax = plt.axes(projection='3d')
+        
+        # Create half unit sphere surface (upper hemisphere, z >= 0)
+        u = np.linspace(0, 2 * np.pi, 50)  # azimuthal angle
+        v = np.linspace(0, np.pi/2, 25)    # polar angle (0 to pi/2 for upper hemisphere)
+        x_sphere = np.outer(np.cos(u), np.sin(v))
+        y_sphere = np.outer(np.sin(u), np.sin(v))
+        z_sphere = np.outer(np.ones(np.size(u)), np.cos(v))
+        
+        # Plot the hemisphere surface
+        ax.plot_surface(x_sphere, y_sphere, z_sphere, alpha=0.3, color='lightgray')
+        
         # 3D scatter plot
         ax.scatter(samples[:, 0], samples[:, 1], samples[:, 2], 
-                alpha=0.6, s=20, c='blue')
+                alpha=0.8, s=20, c='blue')
         
         # Plot mean direction as red arrow
         ax.quiver(0, 0, 0, mu[0], mu[1], mu[2], 
@@ -145,7 +156,7 @@ class WatsonDistribution:
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
-        ax.set_title(f'Watson Distribution Samples\nκ={kappa}', fontsize=17)
+        ax.set_title(f'Watson Distribution Samples on Upper Half of a Unit Sphere\nκ={kappa}', fontsize=17)
        
         # Set equal aspect ratio
         ax.set_xlim([-1, 1])

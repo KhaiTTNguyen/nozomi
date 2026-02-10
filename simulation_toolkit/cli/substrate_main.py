@@ -13,9 +13,9 @@ from simulation_toolkit.utils import along_fiber_plot
 from simulation_toolkit.utils import orientation_plot
 
 def substrate_main(params, experiment_folder):
-    config_params.ORIENTATION_SHAPE_PARAM = params['orientation_shape_parameter'] # #7.5 ODI 0.08 # and 4.5 ODI 0.13
-    box_length_init = params['box_length_init']
-    target_volume_fraction = params['target_volume_fraction']
+    config_params.ORIENTATION_SHAPE_PARAM = params['orientation_shape_parameter']
+    config_params.BOX_LENGTH = params['box_length_init']
+    config_params.VOLUME_FRACTION = params['target_volume_fraction']
     config_params.NUM_FIBERS = params['num_fibers']
     config_params.MEAN_DIAMETER = params['mean_diameter']   
     config_params.SIGMA_DIAMETER = params['sigma_diameter']   
@@ -46,20 +46,20 @@ def substrate_main(params, experiment_folder):
                                                     '_ODI_'+str(config_params.ODI_INDEX)+\
                                                     '_bead_'+str(config_params.BEAD_AMPLITUDE_MEAN)+'_'+\
                                                         str(config_params.NUM_FIBERS) +'fibers')
-    # print("Substrate output folder:", config_params.SUBSTRATE_OUTPUT_FOLDER_PATH)
     not_converged=True
     while not_converged:
         st = time.time()
+        # -------- 2D initialization of axon start/end points --------
         initialization2D = Init2D(  device=device,
                                     date_time=config_params.EXP_DATE_TIME,
                                     orientation_shape_parameter=config_params.ORIENTATION_SHAPE_PARAM, 
-                                    target_volume_fraction=target_volume_fraction, 
+                                    target_volume_fraction=config_params.VOLUME_FRACTION, 
                                     num_fibers=config_params.NUM_FIBERS,
                                     dist_shape=config_params.DISTRIBUTION_SHAPE,
                                     mean_diameter=config_params.MEAN_DIAMETER, 
                                     sigma_radii=config_params.SIGMA_DIAMETER,
                                     space_buffer=config_params.SPACE_BUFFER_STARTS_ENDS,
-                                    box_length_init=box_length_init)
+                                    box_length_init=config_params.BOX_LENGTH)
 
         data_folder = os.path.join(config_params.SUBSTRATE_OUTPUT_FOLDER_PATH,'data')
         if not os.path.exists(data_folder):
@@ -73,12 +73,11 @@ def substrate_main(params, experiment_folder):
         init2d_data_file_name = os.path.join(init2d_data_folder ,'init2d.pkl')
         util.save_data_array_to_pickle(init2d_data_file_name, initialization2D.initial_positions, 
                                 initialization2D.box_length.cpu().item()) 
-        
 
         initialization2D.plot_PBC()
-        exit()
+        # -------- Sphere-Based Meshing of Axons --------
         meshing = Meshing(initialization2D, config_params.SPHERE_SPACING, config_params.BEAD_SPACING_MEAN, config_params.BEAD_SPACING_STDV, device)
-
+        # -------- Geometric Optimization --------
         substrate = GeometricOptimization(device, meshing, config_params.SPHERE_SPACING, 
                                               config_params.W_OVERLAP, config_params.W_CURVE, config_params.W_LENGTH, \
                                                 config_params.SPACE_BUFFER_REPULSE, initialization2D.mean_d_underlying, initialization2D.sigma_d_underlying,\
