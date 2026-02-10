@@ -14,7 +14,7 @@ def validate_parameters(params):
         },
         'mean_diameter': {
             'value': params.get('mean_diameter'),
-            'min': 1.0,
+            'min': 1.6,
             'max': 9.0,
             'description': 'Mean diameter (µm)'
         },

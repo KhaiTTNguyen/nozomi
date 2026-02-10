@@ -6,18 +6,6 @@ import numpy as np
 import pandas as pd
 from collections import defaultdict
 from matplotlib.ticker import FormatStrFormatter
-    
-def import_array_ADC_full_path(file_name):
-    print('file_name', file_name)
-    Dx_Dy_Dz_difftime = load_ADC_data_pickle(file_name)
-    return Dx_Dy_Dz_difftime
-
-def load_ADC_data_pickle(file_name):
-    # Open the Pickle file for reading in binary mode ('rb')
-    with open(file_name, 'rb') as file:
-        # Unpickle the data
-        loaded_data = pickle.load(file)
-    return loaded_data
 
 def count_num_files_in_folder(folder_path):
     """Counts the number of files in a given directory (excluding subdirectories)."""
@@ -26,17 +14,6 @@ def count_num_files_in_folder(folder_path):
         if os.path.isfile(os.path.join(folder_path, filename)):
             count += 1
     return count
-
-def sort_lists_together(list_a, list_b):
-    """Sorts list A and reorders list B based on the reordered positions of list A."""
-    # Sort list A
-    list_a_floats = [float(x) for x in list_a]
-    # Create a dictionary mapping elements in list A to their original indices
-    index_map = {element: index for index, element in enumerate(list_a_floats)}
-    sorted_a_floats = sorted(list_a_floats, reverse=True)
-    # Reorder list B based on the sorted order of list A
-    reordered_b = [list_b[index_map[element]] for element in sorted_a_floats]
-    return sorted_a_floats, reordered_b
 
 def extract_compartment_name_from_file_path(file_path):
     # Split the path based on underscores (_)
@@ -50,26 +27,6 @@ def extract_compartment_name_from_file_path(file_path):
     # If neither 'intra' nor 'extra' was found
     print("'intra' or 'extra' not found in filepath")
     return None
-
-def get_path_to_first_file(folder_path):
-    """Returns the full path to the first file found in a given folder."""
-    if not os.path.exists(folder_path) or not os.path.isdir(folder_path):
-        return None
-
-    for filename in os.listdir(folder_path):
-        file_path = os.path.join(folder_path, filename)
-        if os.path.isfile(file_path):
-            return file_path
-    return None
-
-def get_dispersion_value_kappa(file_path):
-    import re
-    match = re.findall(r'K(\d+)', file_path)
-
-    if match:
-        return match[0] # return the first occurence of a number after K
-    else:
-        print("No value found after 'K'")
 
 def average_datasets_by_diameter(grouped_data):
     """
@@ -117,21 +74,11 @@ def average_datasets_by_diameter(grouped_data):
     
     return averaged_results
 
-def normalize_dz(dz_values, reference_value=None):
-    """
-    Normalize Dz values. If reference_value is None, use the first value.
-    """
-    if reference_value is None:
-        reference_value = dz_values[0] if len(dz_values) > 0 else 1.0
-    
-    return dz_values / reference_value
-
 def plot_Dxy_across_diameter(folder_path, diff_time_limit):
     '''
     Plot Dxy across diameters with mean and shaded standard deviation regions
     '''
-    # compartment = str(os.path.basename(folder_path))
-    folder_name = os.path.join(folder_path, 'ADC_wrt_diameter')
+    folder_name = os.path.join(folder_path, 'figs')
     fig, ax = plt.subplots(figsize=(6,5))
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
@@ -142,9 +89,6 @@ def plot_Dxy_across_diameter(folder_path, diff_time_limit):
     num_files = count_num_files_in_folder(folder_path)
     print("Number of files:", num_files)
 
-    path_to_first_file = get_path_to_first_file(folder_path)
-    # kappa = get_dispersion_value_kappa(path_to_first_file)
-    
     # Group data by diameter
     grouped_data = defaultdict(list)
     
@@ -218,22 +162,13 @@ def plot_Dxy_across_diameter(folder_path, diff_time_limit):
     
     print('Unique labels count:', len(list(unique_labels.keys())))
     
-    # Sort legend by diameter
-    # sorted_diameter_list, reordered_labels = sort_lists_together(unique_diameter_list, list(unique_labels.keys()))
-    # sorted_diameter_list, reordered_handles = sort_lists_together(unique_diameter_list, list(unique_labels.values()))
-    # ax.legend(handles=reordered_handles, labels=reordered_labels, fontsize=17)
     ax.legend(handles=list(unique_labels.values()), labels=list(unique_labels.keys()), fontsize=18)
 
     # Save plot
     plot_file_name = os.path.join(folder_name, 'RD_wrt_diameter_with_errorbars'+'_difftime_limit'+str(diff_time_limit)+'.png')
     ax.tick_params(axis='both', which='major', labelsize=15)
     ax.set_xlabel(r'$t\;(\mathrm{ms})$', fontsize=25)
-    # if compartment =='intra':
     ax.set_ylabel(r'$D_{\perp}\;(\mathrm{\mu m}^2/\mathrm{ms})$', fontsize=25) 
-    # elif compartment =='extra':
-    #     ax.set_ylabel(r'$D_{\mathrm{e},\!\!\perp}$', fontsize=15) 
-    
-    # ax.set_title(" $\kappa$="+str(kappa), fontsize=17)
     ax.grid(True, alpha=0.3)
     ax.set_xlim([0.002, diff_time_limit])
     ax.set_ylim([0.0, 2.7])
@@ -245,7 +180,7 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
     '''
     Plot Dz across diameters with mean and shaded standard deviation regions
     '''
-    folder_name = os.path.join(folder_path, 'ADC_wrt_diameter')
+    folder_name = os.path.join(folder_path, 'figs')
     fig, ax = plt.subplots(figsize=(6,5))
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
@@ -255,10 +190,7 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
     
     num_files = count_num_files_in_folder(folder_path)
     print("Number of files:", num_files)
-
-    path_to_first_file = get_path_to_first_file(folder_path)
-    kappa = get_dispersion_value_kappa(path_to_first_file)
-    
+ 
     # Group data by diameter
     grouped_data = defaultdict(list)
     
@@ -313,8 +245,6 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
             'num_runs': len(multi_runs_data)
         }
     
-    # Colors for different diameters
-    # colors = {'1.68': 'red', '2.58': 'blue', '3.5': 'green', '4.5': 'purple'}
     colors = {
     'intra': '#FF8C00',  # Dark orange
     'extra': '#008B8B'   # Dark cyan/teal
@@ -326,13 +256,8 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
         diff_time = data['diff_time_mean']
         time_mask = diff_time <= diff_time_limit
         diff_time_filtered = diff_time[time_mask]
-        
-        # print('diff_time_max', min(diff_time_max))
         inv_sqrt_time = 1.0 / np.sqrt(diff_time_filtered)
-        # normalized_dz_mean = normalize_dz(data['Dz_mean'])
         dz_mean_filtered = data['Dz_mean'][time_mask]
-        # reference_dz = data['Dz_mean'][0]
-        # normalized_dz_std = data['Dz_std'] / reference_dz
         dz_std_filtered = data['Dz_std'][time_mask]
         
         diameter_list.append(diameter)
@@ -353,8 +278,6 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
             unique_labels[label] = handle
             unique_diameter_list.append(diameter) 
     
-    # ax.legend(handles=list(unique_labels.values()), labels=list(unique_labels.keys()), fontsize=18)
-
     # Save plot
     plot_file_name = os.path.join(folder_name, 'AD_wrt_diameter_with_errorbars'+'_difftime_limit'+str(diff_time_limit)+'.png')
     ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
@@ -372,8 +295,7 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
 if __name__ == '__main__':
     RD_diff_time_limit = 120 #ms
     AD_diff_time_limit = 120
-    
-    # Plot Dxy (RD) with error bars
+    # Plot with error bars
     folder_path = './tests/calibration/sim_domain_segment_calibration/validate_same_results_with_same_substrate_different_segments_choices'
     plot_Dxy_across_diameter(folder_path, RD_diff_time_limit)          
     folder_path = './tests/calibration/sim_domain_segment_calibration/validate_same_results_with_same_substrate_different_segments_choices'
