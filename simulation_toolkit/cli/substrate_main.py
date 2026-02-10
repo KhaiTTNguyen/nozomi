@@ -79,9 +79,9 @@ def substrate_main(params, experiment_folder):
         meshing = Meshing(initialization2D, config_params.SPHERE_SPACING, config_params.BEAD_SPACING_MEAN, config_params.BEAD_SPACING_STDV, device)
         # -------- Geometric Optimization --------
         substrate = GeometricOptimization(device, meshing, config_params.SPHERE_SPACING, 
-                                              config_params.W_OVERLAP, config_params.W_CURVE, config_params.W_LENGTH, \
-                                                config_params.SPACE_BUFFER_REPULSE, initialization2D.mean_d_underlying, initialization2D.sigma_d_underlying,\
-                                                config_params.BEAD_SPACING_MEAN, config_params.BEAD_SPACING_STDV)
+                                            config_params.W_OVERLAP, config_params.W_CURVE, config_params.W_LENGTH, \
+                                            config_params.SPACE_BUFFER_REPULSE, initialization2D.mean_d_underlying, initialization2D.sigma_d_underlying,\
+                                            config_params.BEAD_SPACING_MEAN, config_params.BEAD_SPACING_STDV)
         not_converged = not substrate.optimized
     if (substrate.optimized == True):
 
