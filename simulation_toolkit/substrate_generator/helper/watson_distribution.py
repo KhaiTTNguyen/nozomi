@@ -170,13 +170,13 @@ class WatsonDistribution:
         plt.savefig(f'{ODI_folder}/watson_samples_kappa_{kappa}.png')
 
     def demonstrate_watson_distribution(self, kappa_values= [4, 8, 16, 32, 64, 128]):
-        """Demonstrate Watson distribution with different concentration parameters."""
-        
+        """Demonstrate Watson distribution 
+        with different concentration parameters.
+        Input kappa taken from Table 1 of Zhang (2011): 10.1016/j.neuroimage.2011.01.084
+        """
         # Define mean direction (z-axis)
         mu = np.array([0, 0, 1])
         
-        # Test different kappa values from the Zahgn  2011 paper
-
         for kappa in kappa_values:
             print(f"Generating samples for κ = {kappa}...")
             

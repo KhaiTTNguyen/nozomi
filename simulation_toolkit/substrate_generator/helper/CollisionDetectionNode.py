@@ -1,18 +1,14 @@
-import torch, math, time
-from itertools import cycle
+import torch
 import torch.multiprocessing as mp
 
 @torch.no_grad()
 def detect_in_sphere(pbc_spheres_xyz, r, avf_nodes, L, fid):
-    # if pbc_spheres_xyz_r.shape[0] < 4e6: # for now running just single GPU multisegments
     return detect_in_sphere_gpu(pbc_spheres_xyz, r, avf_nodes, L, fiber_id=fid)
 
 def detect_in_sphere_gpu(pbc_spheres_xyz, r, avf_nodes, L, fiber_id):
-    # segment space, assign spheres to segment, assign nodes to segment, calc intersect.
     '''in_sphere_mask NxM matrix'''
     device = pbc_spheres_xyz.device
     # Partition the 3D cube into smaller blocks
-    # block_size = L
     block_size = torch.tensor([10.0], device=device)  # Adjust this value to control the block size (relative to box length so, 5/10)
     grid_size = torch.ceil(torch.tensor([1.0, 1.0, 1.0], device=device) * torch.tensor([L, L, L], device=device) / block_size).long()
     # -------------- Assign spheres to blocks --------------
@@ -29,7 +25,6 @@ def detect_in_sphere_gpu(pbc_spheres_xyz, r, avf_nodes, L, fiber_id):
                 sphere_indices_in_positions =   block_assignments[seg_idx  :seg_idx+max_sph_per_seg]
                 nodes_indices_in_positions  =   block_assignments_n[seg_idx_n.item()]
                 if nodes_indices_in_positions.shape[0]>0:
-                    # print('nodes_indices_in_positions', nodes_indices_in_positions)
                     block_positions = pbc_spheres_xyz[sphere_indices_in_positions]
                     block_radii     = r[sphere_indices_in_positions]
                     
@@ -43,60 +38,26 @@ def detect_in_sphere_gpu(pbc_spheres_xyz, r, avf_nodes, L, fiber_id):
 def intersect_block(x, x_n, rx):
     ''' distance betwen any 2 spheres of different fiber & sum of 2 axon radii '''
     dm = torch.linalg.norm(x.unsqueeze(1) - x_n.unsqueeze(0), dim=-1)
-    # print('x.shape', x.shape)
-    # print('x_n.shape', x_n.shape)
-    # print('dm.shape',dm.shape)
     # Broadcast the expanded tensor to the shape of dm
     rm = rx.unsqueeze(1).expand(dm.shape)
-    # print('rx', rx.shape)
-    # print('rm', rm.shape)
     in_sphere_mask = dm - rm < 0
     del rm, dm
-    # print('in_sphere_mask', in_sphere_mask)
     return in_sphere_mask
 
 def set_segments_nodes(pos, L, nsegx, nsegy, nsegz):
     Lx, Ly, Lz = L,L,L
     '''return segments = Mx1 vector storing sph ids for each segment. 
     M = k*max_sphere_per_seg, where 'k' is the number of segments. '''
-    jump_tol = 0. # um, tolerance to include a sphere inside a boundary...?
-    # dLx, dLy, dLz = block_size, block_size, block_size
+    jump_tol = 0. # um
     dLx = Lx/nsegx
     dLy = Ly/nsegy
     dLz = Lz/nsegz
-    # print('dLx', dLx, 'dLx', dLy, 'dLx',dLz)
-    
-    # what is the maximum number of spheres in each segment?
-    # max_nodes_per_seg = torch.tensor([0], device=pos.device)
-    # for n in torch.arange(nsegx):
-    #     for m in torch.arange(nsegy):
-    #         for p in torch.arange(nsegz):
-    #             # how far is each sphere from the 6 boundaries of this segment?
-    #             inx_min = n*dLx- pos[:,0] -Lx/2  # A& intersect if Aleft < Bright && Aright > Bleft
-    #             inx_max = pos[:,0] - ((n+1)*dLx- Lx/2)
-    #             iny_min = m*dLy- pos[:,1] -Ly/2
-    #             iny_max = pos[:,1] - ((m+1)*dLy- Ly/2)
-    #             inz_min = p*dLz- pos[:,2] -Lz/2
-    #             inz_max = pos[:,2] - ((p+1)*dLz- Lz/2)
-
-    #             in_segment = torch.maximum(inx_min,inx_max)  # if still negative, sphere intesects segment in x-axis
-    #             in_segment = torch.maximum(in_segment,iny_min)
-    #             in_segment = torch.maximum(in_segment,iny_max)
-    #             in_segment = torch.maximum(in_segment,inz_min)
-    #             in_segment = torch.maximum(in_segment,inz_max)
-    #             # negative value of in_segment = inside/overlapping the segment from this boundary
-    #             sph_this_seg = torch.count_nonzero(in_segment < jump_tol) # include into the segment spheres whose in_min/in_max has a 'jump_tol' distance from the segment boundary
-    #             max_nodes_per_seg = max(max_nodes_per_seg,sph_this_seg)
-    
-    # nodes_per_segment = max_nodes_per_seg
-    # make a list of spheres in each segment
-    # segments_dict = torch.empty([nsegx*nsegy*nsegz*nodes_per_segment,],dtype=torch.long, device=pos.device)
     segments_dict = {}
     count_nodes=0
     for p in torch.arange(nsegz):
         for m in torch.arange(nsegy):
             for n in torch.arange(nsegx):
-                # how far is each sphere from the 6 boundaries of this segment?
+                # how far is each sphere from the 6 boundaries of this segment
                 inx_min = n*dLx- pos[:,0] -Lx/2
                 inx_max = pos[:,0] - ((n+1)*dLx- Lx/2)
                 iny_min = m*dLy- pos[:,1] - Ly/2
@@ -109,24 +70,17 @@ def set_segments_nodes(pos, L, nsegx, nsegy, nsegz):
                 in_segment = torch.maximum(in_segment,iny_max)
                 in_segment = torch.maximum(in_segment,inz_min)
                 in_segment = torch.maximum(in_segment,inz_max)
-                # negative value of in_segment = inside/overlapping the segment from this boundary
-
-                # seg_idx = nodes_per_segment*(p*nsegx*nsegy + m*nsegx + n)
-                # segments[seg_idx:seg_idx+nodes_per_segment] = torch.argsort(in_segment)[:nodes_per_segment]  # sort the most negative in front, the grab the first [0:nodes_per_segment] spheres
                 seg_idx = p*nsegx*nsegy + m*nsegx + n
-                # error here!!!
                 '''get indices of items < 0'''
                 count_nodes += torch.nonzero(in_segment < 0).flatten().shape[0]
                 segments_dict[seg_idx.item()] = torch.nonzero(in_segment < 0).flatten()
-                # print('count_nodes', count_nodes)
     return segments_dict
 #---------------------------------------------------
 def set_segments(pos, r, L, nsegx, nsegy, nsegz):
     Lx, Ly, Lz = L,L,L
     '''return segments = Mx1 vector storing sph ids for each segment. 
     M = k*max_sphere_per_seg, where 'k' is the number of segments. '''
-    jump_tol = 0 # um, tolerance to include a sphere inside a boundary...?
-    # dLx, dLy, dLz = block_size, block_size, block_size
+    jump_tol = 0
     dLx = Lx/nsegx
     dLy = Ly/nsegy
     dLz = Lz/nsegz
@@ -157,7 +111,6 @@ def set_segments(pos, r, L, nsegx, nsegy, nsegz):
 
     # make a list of spheres in each segment
     segments = torch.empty([nsegx*nsegy*nsegz*spheres_per_segment,],dtype=torch.long, device=pos.device)
-    # segments = torch.empty([nsegx*nsegy*nsegz*spheres_per_segment,])
     for p in torch.arange(nsegz):
         for m in torch.arange(nsegy):
             for n in torch.arange(nsegx):
@@ -176,7 +129,6 @@ def set_segments(pos, r, L, nsegx, nsegy, nsegz):
                 in_segment = torch.maximum(in_segment,inz_max)
                 # negative value of in_segment = inside/overlapping the segment from this boundary
                 seg_idx = p*nsegx*nsegy + m*nsegx + n
-                # print('seg_idx', seg_idx.item())
                 seg_idx = spheres_per_segment*(p*nsegx*nsegy + m*nsegx + n)
                 segments[seg_idx:seg_idx+spheres_per_segment] = torch.argsort(in_segment)[:spheres_per_segment]  # sort the most negative in front, the grab the first [0:spheres_per_segment] spheres
 
