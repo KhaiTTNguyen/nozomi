@@ -8,7 +8,7 @@ def get_date_time():
     return str(datetime.now().strftime("%Y-%m-%d_%H-%M"))
 
 def load_data_pickle(file_name):
-# Open the Pickle file for reading in binary mode ('rb')
+    # Open the Pickle file for reading in binary mode ('rb')
     with open(file_name, 'rb') as file:
         # Unpickle the data
         loaded_data = pickle.load(file)
@@ -23,7 +23,6 @@ def save_data_array_to_pickle(file_name, optimized_fibers, L):
         pickle.dump([optimized_fibers, L], f, protocol=pickle.HIGHEST_PROTOCOL)
     print('Done saving data file')
     return
-
 
 def map_matrix_to_list_numpy(spheres_xyz_r_fid):
     unique_values = torch.unique(spheres_xyz_r_fid[:, -1])

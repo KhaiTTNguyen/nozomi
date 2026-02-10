@@ -32,8 +32,6 @@ def plot_slices(spheres_xyz_r_fid,  N, color):
         plot_slice_at_z(z, spheres_xyz_r_fid, color=color)  
         
 def plot_slice_at_z(z_coord, spheres_xyz_r_fid, color, num_iter=None, overlap_indices=None):
-    # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
-    # ax1.set_aspect( 1 ), ax2.set_aspect( 1 )
     fig, ax1 = plt.subplots(figsize=(12, 6))
     ax1.set_aspect( 1 )#, ax2.set_aspect( 1 )
     
@@ -45,30 +43,22 @@ def plot_slice_at_z(z_coord, spheres_xyz_r_fid, color, num_iter=None, overlap_in
     for fiber_count, fiber in enumerate(current_fiber_list):
         # get indcies of nodes where (z_coord-0.01) <fiber.z and fiber.z < (z_coord+0.01)
         fiber_count+=1
-        # za, z_delta = fiber[:,2], 1.*fiber[:,3][0]
         za, z_delta = fiber[:,2], 2.*fiber[:,3][0]
         z_low, z_high = z_coord-z_delta , z_coord+z_delta #5
         m = np.logical_and((z_low<za),(za<z_high), (fiber_count==fiber[:,-1]))
         # slice_linear, slice_cubic = interpolate_fiber_slice(z_coord, fiber, m)
         slice_linear = interpolate_fiber_slice(z_coord, fiber, m)
-        # print('fiber_slice', slice_linear.shape) #, slice_cubic.shape)
         
         color_idx = np.argwhere(np.isin(unique_ids , fiber[:,-1][0])).ravel()[0]
         fiber_color = color[color_idx]
         plot_slice(ax=ax1, fiber_slice=slice_linear, fiber_idx=fiber_idx, 
                             color=fiber_color, overlap_indices=overlap_indices)
-        # plot_slice(ax=ax2, fiber_slice=slice_cubic, fiber_idx=fiber_idx, 
-        #                   color=fiber_color, overlap_indices=overlap_indices)
         fiber_idx=fiber_idx+len(fiber)
     ax1.set_xlim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
     ax1.set_ylim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
     ax1.set_xlabel("x (µm)", fontsize=15, labelpad=5)
     ax1.set_ylabel("y (µm)", fontsize=15, labelpad=5)
     ax1.tick_params(axis='both', which='major', labelsize=13)
-    # ax2.set_xlim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
-    # ax2.set_ylim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
-    # ax2.set_xlabel("x (µm)")
-    # ax2.set_ylabel("y (µm)")
     plt.title("slice plot of fibers at "+str(z_coord), fontsize=17, pad=20)
     folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+"/figs/substrate_stats"
     if not os.path.exists(folder_path):

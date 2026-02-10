@@ -1,10 +1,8 @@
 import matplotlib.animation as animation
-import matplotlib.ticker as ticker
 from matplotlib import pyplot as plt
 from matplotlib.pyplot import cm
 import numpy as np
 import os.path
-import torch
 from mpl_toolkits.mplot3d import Axes3D
 import simulation_toolkit.utils.common_utils as util
 import simulation_toolkit.toolkit_params as config_params
@@ -71,8 +69,6 @@ def plot_fibers( spheres_xyz_r_fid, overlap_indices=None,color=None, animation_i
         fiber_idx=fiber_idx+fiber.shape[0]
 
     # ------------------- plot box edges ----------------------
-    # if POV=='default':
-    #     ax.set_axis_off()   
     plot_box(ax) 
     ax.set_xlim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
     ax.set_ylim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
@@ -123,7 +119,6 @@ def plot_spheres( ax, fiber_matrix, fiber_idx, color, overlap_indices=None):
         if np.any(overlap_indices == current_idx): 
             color_sphere = 'red' 
             ax.plot_surface(sphere_x, sphere_y, sphere_z, color=color_sphere, alpha=1.)
-            # print('red sphere plotted')
         else: 
             color_sphere = color
             ax.plot_surface(sphere_x, sphere_y, sphere_z, color=color_sphere, alpha=1.)

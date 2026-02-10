@@ -16,7 +16,7 @@ def plot_along_axon_OD(spheres_xyz_r_fid ,  optimized=True):
     for each fiber, 
         compute vectors for each segments 
         interpolate - euqal distances,
-        (SKIPPED) compute angle of each vector & fiber bundle vector,
+        compute angle of each vector & fiber bundle vector,
         accumulate
     pass into histogram
 
@@ -35,13 +35,7 @@ def plot_along_axon_OD(spheres_xyz_r_fid ,  optimized=True):
     for fiber in fiberlist_xyz_r_fid:
         fiber = filter_spheres_outside_voxel(fiber, L)
         segs_v = (fiber[1:,:3] - fiber[:-1,:3])
-        # print('segs_v pre',segs_v.shape)
-        # segs_v = segs_v.squeeze(1)
         segs_v = segs_v/np.linalg.norm(segs_v, axis=1)[:,None] # normalize so seg_v is a unit vector
-        # print(np.linalg.norm(segs_v, axis=1)[:,None])
-        # angles = np.arccos(segs_v.dot(bundle_v)
-        #           / (np.linalg.norm(bundle_v)*np.linalg.norm(segs_v, axis=1)))*180/np.pi
-        # print('segs_v',segs_v.shape)
         points.append(segs_v)
 
     all_points = np.concatenate(points, axis=0)
@@ -82,20 +76,10 @@ def plot_3D_glyph( coeffs, fit_error, lmax, folder_name, optimized):
                     theta_i, phi_i = np.arctan2(y, x), np.arctan2(np.sqrt(x**2 + y**2), z)
                     Yvals[i,j, index] = np.real(coeffs[index] * sph_harm(m, l, theta_i, phi_i))
                     index += 1
-    # print('Yvals.shape',Yvals.shape)
     Yvals = np.sum(Yvals,axis=2)
-    # print('Yvals.shape',Yvals.shape)
-    # print('Yvals',Yvals.max())
-    # print('Yvals',Yvals.min())
     Ymax, Ymin = Yvals.max(), Yvals.min()
     if (Ymax != Ymin):
-    # normalize the values to [1, -1]
-        # Yvals = 2 * (Yvals - Ymin)/(Ymax - Ymin) - 1
-        # Yvals = 0.5 * (Yvals + 1)
-    # Use the absolute value of Y(l,m) as the radius
         radii = np.clip(Yvals, 0, None)
-        # radii = (radii - radii.min()) / (radii.max() - radii.min())
-        # print('radii.shape',radii.shape)
     # Convert Yvals to spherical coordinates
     x = radii * xx
     y = radii * yy
@@ -122,9 +106,7 @@ def plot_3D_glyph( coeffs, fit_error, lmax, folder_name, optimized):
     colors[:, :, 1]=y_abs
     colors[:, :, 2]=z_abs
     ls = LightSource(azdeg=0, altdeg=65)
-    # print(colors.shape)
-    # print(z_abs.shape)
-
+    
     ls = LightSource(60, 45)
     # To use a custom hillshading mode, override the built-in shading and pass
     # in the rgb colors of the shaded surface calculated from "shade".

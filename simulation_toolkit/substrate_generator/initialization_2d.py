@@ -310,7 +310,7 @@ class Init2D(object):
         plt.tight_layout()
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
-        plt.savefig(folder_path+"/PBC_start_end_"+str(self.num_fibers)+"_"+self.date_time+".png", dpi=500)
+        plt.savefig(folder_path+"/PBC_start_end_"+str(self.num_fibers)+"_"+self.date_time+".png", dpi=300)
     
     def plot_spheres(self, ax, fiber_matrix, color):
         ''' plot 3D spheres representing start and end points'''
