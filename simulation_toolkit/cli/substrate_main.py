@@ -108,18 +108,15 @@ def substrate_main(params, experiment_folder):
         fiber_list = util.map_matrix_to_list_numpy(substrate.optimized_fibers)
         color = cm.rainbow(np.linspace(0.0, 1.0, len(fiber_list)))
         np.random.shuffle(color)
-        # fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, animation_input=False, optimized=True)
+        '''Choose FOV to plot, can include 3D animation GIF'''
         fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, optimized=True, POV='horizontal_90') 
+        # fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, animation_input=False, optimized=True)
         # fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, optimized=True, POV='horizontal_0')                    
-        
         # fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, optimized=True, POV='horizontal_90', animation_input=True)       
         
-        '''UNCOMMENT THIS PART AFTER TESTING'''
         along_fiber_plot.plot_along_axon_radius_variation(substrate.optimized_fibers, colors=color)
         along_fiber_plot.plot_diameter_CV_distribution()
-        # along_fiber_plot.plot_bead_spacing_distribution()
         along_fiber_plot.plot_diameter_GEV_distribution(substrate.optimized_fibers)
-        # along_fiber_plot.plot_slices(, substrate.optimized_fibers, N=5, color=color)
         orientation_plot.plot_along_axon_OD(substrate.optimized_fibers, optimized=True)
         
         print("----------- Substrate saved in folder:"+ config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+ " -----------")
