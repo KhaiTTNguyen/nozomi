@@ -1,6 +1,7 @@
 from simulation_toolkit.substrate_generator.initialization_2d import Init2D
 from simulation_toolkit.substrate_generator.meshing import Meshing
 from simulation_toolkit.substrate_generator.geometric_optimization import GeometricOptimization
+from simulation_toolkit.substrate_generator.helper.validate_input import validate_parameters
 import simulation_toolkit.toolkit_params as config_params
 import numpy as np
 import time
@@ -13,6 +14,8 @@ from simulation_toolkit.utils import along_fiber_plot
 from simulation_toolkit.utils import orientation_plot
 
 def substrate_main(params, experiment_folder):
+    # Validate parameters before proceeding
+    validate_parameters(params)
     config_params.ORIENTATION_SHAPE_PARAM = params['orientation_shape_parameter']
     config_params.BOX_LENGTH = params['box_length_init']
     config_params.VOLUME_FRACTION = params['target_volume_fraction']
@@ -30,6 +33,7 @@ def substrate_main(params, experiment_folder):
     config_params.BEAD_SPACING_STDV = params['bead_spacing_stdv']
     config_params.BEAD_AMPLITUDE_MEAN = params['bead_amplitude_mean']
     config_params.BEAD_AMPLITUDE_STDV = params['bead_amplitude_stdv']
+
     print(f"Building substrate with: \
         diameter_mean={config_params.MEAN_DIAMETER},\
         orientation_shape_parameter={config_params.ORIENTATION_SHAPE_PARAM}, \

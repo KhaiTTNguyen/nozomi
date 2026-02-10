@@ -1,0 +1,71 @@
+import sys
+
+def validate_parameters(params):
+    """
+    Validate input parameters to ensure they are within acceptable ranges.
+    Exits the program with error messages if any parameter is out of range.
+    """
+    validation_rules = {
+        'num_fibers': {
+            'value': params.get('num_fibers'),
+            'min': 50,
+            'max': 1000,
+            'description': 'Number of fibers'
+        },
+        'mean_diameter': {
+            'value': params.get('mean_diameter'),
+            'min': 1.0,
+            'max': 9.0,
+            'description': 'Mean diameter (µm)'
+        },
+        'orientation_shape_parameter': {
+            'value': params.get('orientation_shape_parameter'),
+            'min': 10,
+            'max': 200,
+            'description': 'Orientation shape parameter'
+        },
+        'bead_amplitude_mean': {
+            'value': params.get('bead_amplitude_mean'),
+            'min': 0.2,
+            'max': 1.3,
+            'description': 'Bead amplitude mean'
+        }
+    }
+    
+    errors = []
+    
+    for param_name, rules in validation_rules.items():
+        value = rules['value']
+        min_val = rules['min']
+        max_val = rules['max']
+        description = rules['description']
+        
+        # Check if parameter exists
+        if value is None:
+            errors.append(f"ERROR: Parameter '{param_name}' is missing from configuration")
+            continue
+            
+        # Check if parameter is within valid range
+        if not (min_val <= value <= max_val):
+            errors.append(
+                f"ERROR: {description} ({param_name}) = {value} is out of range.\n"
+                f"       Acceptable range: {min_val} - {max_val}"
+            )
+    
+    if errors:
+        print("\n" + "="*60)
+        print("INVALID PARAMETERS")
+        print("="*60)
+        for error in errors:
+            print(error)
+        
+        print("\nValid parameter ranges:")
+        print("-" * 40)
+        for param_name, rules in validation_rules.items():
+            print(f"  {rules['description']:25}: {rules['min']} - {rules['max']}")
+        
+        print("\nUpdate your substrate JSON config file with valid parameter choices.")
+        print("="*60)
+        sys.exit(1)
+        
+    print("All parameters validated for substrate generation!")

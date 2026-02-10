@@ -1,10 +1,10 @@
 {
-  "experiment_name": "experiment_VF0.5_d1.58_sig0.69_5axons_OD200",  
+  "experiment_name": "experiment_VF0.5_d1.58_sig0.69_50axons_OD200",  
   "parameters": {
       "orientation_shape_parameter": 200,
       "box_length_init": 0,
       "target_volume_fraction": 0.5,
-      "num_fibers": 5,
+      "num_fibers": 50,
       "mean_diameter":  1.58,
       "sigma_diameter":  0.69,
       "dist_shape": 0.1,

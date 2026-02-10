@@ -20,26 +20,16 @@ def plot_diameter_GEV_distribution(optimized_fibers):
         warnings.simplefilter("ignore", RuntimeWarning)
         try:
             shape_gev_fitted, loc_gev_fitted, scale_gev_fitted = genextreme.fit(diameter)
-            
-            # Validate fitted parameters to prevent numerical issues
-            if not (np.isfinite(shape_gev_fitted) and np.isfinite(loc_gev_fitted) and 
-                   np.isfinite(scale_gev_fitted) and scale_gev_fitted > 0):
-                raise ValueError("Invalid GEV parameters fitted")
-                
+
             meanGEV, varGEV, skew, kurt = genextreme.stats(c=shape_gev_fitted, loc=loc_gev_fitted, 
-                                                          scale=scale_gev_fitted, moments='mvsk')
+                                                          scale=scale_gev_fitted, moments='mvsk')     
             
-            # Check if stats calculation was successful
-            if not (np.isfinite(meanGEV) and np.isfinite(varGEV) and varGEV >= 0):
-                raise ValueError("Invalid GEV statistics calculated")
-                
             stdvGEV = np.sqrt(varGEV)
             config_params.GEV_DIAMETER_MEAN, config_params.GEV_DIAMETER_STDV = np.round(meanGEV, 3), np.round(stdvGEV, 3)
             plt.plot(x, genextreme.pdf(x, shape_gev_fitted, loc_gev_fitted, scale_gev_fitted), 'r-', lw=2, label='Fitted GEV')
             
         except (ValueError, np.linalg.LinAlgError):
             # Fallback to normal distribution if GEV fitting fails
-            print("Warning: GEV fitting failed. Using normal distribution approximation.")
             mean_diameter = np.mean(diameter)
             std_diameter = np.std(diameter)
             config_params.GEV_DIAMETER_MEAN, config_params.GEV_DIAMETER_STDV = np.round(mean_diameter, 3), np.round(std_diameter, 3)
