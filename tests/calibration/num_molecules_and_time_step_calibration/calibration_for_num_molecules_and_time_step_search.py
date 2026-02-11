@@ -138,11 +138,9 @@ def calculateDnumerical(base_dir, a, D0, molecules, time_step, compartment, tota
     sim = ds3.DiffSim3d(sg3, int(molecules))
     nsegx, nsegy, nsegz = 5, 5, 5
     sim.set_segments(nsegx=nsegx, nsegy=nsegy, nsegz=nsegz)
-    
-    print(f'Run {run_id}: Start setting up structures')
+
     if compartment == 'intra':
         sim.setup(structures=list(np.arange(0, sg3.nstructures)))  # seed inside structures
-    print(f'Run {run_id}: Done setting up structures')
     
     # Validate compartment
     if compartment == 'intra':
@@ -333,12 +331,7 @@ def run_validation_study():
     # time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01]
     # n_repeats = 10
 
-    # molecules_values = [int(5e5), int(5e4), int(1e4)]
-    # time_step_values = [0.002, 0.005, 0.01]
-    # molecules_values = [int(1e3)]
-    # time_step_values = [0.1]
-
-    molecules_values = [int(5e4), int(1e4)]
+    molecules_values = [ int(2e4), int(1e4)]
     time_step_values = [0.005, 0.01]
     n_repeats = 2
     
@@ -347,15 +340,13 @@ def run_validation_study():
     if not os.path.exists(config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH):
         os.makedirs(config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH)
     
-    # Calculate analytical solutions once
+    # Calculate analytical solution
     print("Calculating analytical solutions for cylinder...")
     analytical_data = calculateDanalytical_single_cylinder(a, D0)
     
     # Create interpolation functions
     t_long, D_long = analytical_data['longtime']
     t_short, D_short = analytical_data['shorttime']
-    
-
     D_long_interp = interp1d(np.log10(t_long), D_long, bounds_error=False, 
                             fill_value=(D_long[0], D_long[-1]))
     # Results storage
@@ -367,23 +358,22 @@ def run_validation_study():
     current_combination = 0
     
     print(f"\nValidation study:")
-    print(f"Simulation values calculated from t >= {time_threshold} ms onwards")
+    print(f"MAE calculated from t >= {time_threshold} ms onwards")
     
     # Run experiments
     for molecules in molecules_values:
         for time_step in time_step_values:
             current_combination += 1
-            print(f"\n{'='*60}")
+            print(f"\n{'='*35}")
             print(f"Combination {current_combination}/{total_combinations}")
-            print(f"molecules: {molecules}, Time Step: {time_step}")
-            print(f"{'='*60}")
+            print(f"Molecules: {molecules}, Time step: {time_step}")
             
             mae_values = []
             computation_times = []
 
             # Run multiple repetitions
             for run_id in range(n_repeats):
-                print(f"\nRun {run_id + 1}/{n_repeats}")
+                print(f"Run {run_id + 1}/{n_repeats}")
                 
                 start_time = time.time()
                 
@@ -414,8 +404,6 @@ def run_validation_study():
                     }
                     all_results.append(result)
                     
-                    print(f"Run {run_id}: MAE = {mae:.4f}, Time = {elapsed_time:.2f}s")
-                    
                 except Exception as e:
                     print(f"Error in run {run_id}: {str(e)}")
                     continue
@@ -440,10 +428,6 @@ def run_validation_study():
                     }
                     summary_results.append(summary)
                     
-                    print(f"\nSummary for molecules={molecules}, time_step={time_step}:")
-                    print(f"MAE: {summary['mae']:.4f} ± {summary['std_mae']:.4f}")
-                    print(f"Mean Time: {summary['mean_computation_time']:.2f}s ± {summary['std_computation_time']:.2f}s")
-    
     # Save summary results
     save_summary_results(summary_results, config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, a, D0, time_threshold)
     
@@ -464,9 +448,9 @@ def save_summary_results(summary_results, base_dir, a, D0, time_threshold):
     csv_path = os.path.join(base_dir, f"cylinder_validation_summary_a{a}_D0{D0}_threshold{time_threshold}.csv")
     df.to_csv(csv_path, index=False)
     print(f"\nSummary results saved to: {csv_path}")
-    print(f"\nTop 10 combinations by MAE:")
-    if not df.empty:
-        print(df.nsmallest(10, 'mae')[['molecules', 'time_step', 'mae', 'mean_computation_time']].to_string(index=False))
+    # print(f"\nTop 10 combinations by MAE:")
+    # if not df.empty:
+    #     print(df.nsmallest(10, 'mae')[['molecules', 'time_step', 'mae', 'mean_computation_time']].to_string(index=False))
 
 def create_analysis_plots(summary_results, base_dir, a, D0, time_threshold):
     '''Create comprehensive analysis plots'''
@@ -614,9 +598,9 @@ def find_optimal_parameters(summary_results):
         best_idx = df['mae'].idxmin()
         best_result = df.loc[best_idx]
         
-        print(f"\n{'='*60}")
+        print(f"\n{'='*35}")
         print("OPTIMAL PARAMETERS for Analytical")
-        print(f"{'='*60}")
+        print(f"{'='*35}")
         print(f"Best molecules: {best_result['molecules']}")
         print(f"Best Time Step: {best_result['time_step']}")
         print(f"MAE: {best_result['mae']:.4f} ± {best_result['std_mae']:.4f}")
