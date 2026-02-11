@@ -1,7 +1,11 @@
+# NOZOMI Documentation
+
 This repo hosts the NOZOMI toolbox for generating 3D white matter numerical susbtrates with periodic boundaries and running Monte Carlo simulation of water diffusion in such substrates.
 
 # Installation
-* An NVIDIA GPU is needed for fast computation of the framework.
+* An NVIDIA GPU is needed for fast computation of the framework. 
+
+The framework was developed and tested on NVIDIA RTX A5000 GPU with an AMD EPYC 7513 32-core CPU.
 
 Check GPU availability:
 ```bash
@@ -12,12 +16,9 @@ Clone NOZOMI repo:
 git clone git@github.com:KhaiTTNguyen/nozomi.git
 ```
 
-```bash
-cd nozomi
-```
-
 Create virtual env
 ```bash
+cd nozomi
 python3 -m venv sim_venv
 ```
 
@@ -25,7 +26,7 @@ Activate virtual environment
 ```bash
 source sim_venv/bin/activate
 ```
-Install all required packages
+All software dependencies are included in `requirements.txt` file and can be installed by running:
 ```bash
 pip install -r requirements.txt
 ```
@@ -212,27 +213,33 @@ Generated substrates are saved to `/nozomi/experiment/result/` with the followin
 ## Monte Carlo Diffusion Simulation (MCDS) guide:
 
 ### Input: 
-MCDS can be setup in the `/nozomi/experiment/setup/simulation/default-sim.json`. Setup requires:
-* time_step : 0.002,
-* num_spins : 500000,
-* D0_intra: 2.25,
-* D0_extra: 2.0
-
+MCDS can be setup in the `/nozomi/experiment/setup/simulation/default-sim.json`. The default settings are:
+```json
+{  
+  "time_step" : 0.002,
+  "num_spins" : 500000,
+  "D0_intra": 2.25,
+  "D0_extra": 2.0
+}
+```
+To run simulation experiments:
 ```bash
 ./bin/run-simulation.sh --substrates=<substrates-folder> --gpu=<gpu-number> --sim_time=<total-diffusion-time> --compartment=<axonal-compartment>
 
+# Examples
 ./bin/run-simulation.sh --substrates=./experiment/result/experiment_VF0.5_d2.58_sig0.69_50axons_OD20 --gpu=1 --sim_time=100  --compartment=intra
 
+# Examples
 ./bin/run-simulation.sh --substrates=./experiment/result/experiment_VF0.5_d2.58_sig0.69_50axons_OD20 --gpu=1 --sim_time=100  --compartment=extra
 ```
 
 ### Output: 
-MCDS results will be outputted to 
+MCDS results are expected to be outputted to 
 ```bash
-`/nozomi/experiment/experiment_result/<substrates-folder>/<single-susbtrate-folder>/sim`. 
+/nozomi/experiment/experiment_result/<substrates-folder>/<single-susbtrate-folder>/sim. 
 ```
 
 The `sim` folder include:
 * A `ADCdata` folder that stores the `.pkl` file storing the time-dependent diffusion coefficient.
 
-* A figure visualizing the time-dependent diffusion coefficient.
+* A figure visualizing the diffusion coefficient ($\mu\text{m}^2/\text{ms}$) with respect to diffusion time ($\text{ms}$)
