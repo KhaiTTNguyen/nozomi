@@ -20,10 +20,6 @@ validate_gpus() {
         exit 1
     fi
     
-    # echo "Available GPUs on this system:"
-    # nvidia-smi -L
-    # echo ""
-    
     # Convert comma-separated list to array
     IFS=',' read -ra GPU_ARRAY <<< "$gpu_list"
     

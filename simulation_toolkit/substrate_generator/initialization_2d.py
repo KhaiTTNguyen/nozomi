@@ -277,10 +277,10 @@ class Init2D(object):
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
         if converged==True:
-            plt.savefig(folder_path+"/2D_converged_packing_PBC_start_end_buff"+"_"+self.date_time+"_avf"+str(self.volume_fraction)+".png", dpi=500)
+            plt.savefig(folder_path+"/2D_converged_packing_PBC"+"_"+self.date_time+".png", dpi=500)
             plt.close(fig)
         else:    
-            plt.savefig(folder_path+"/2D_packing_PBC_start_end_buff"+"_"+self.date_time+"_"+str(num_iter)+".png", dpi=500)
+            plt.savefig(folder_path+"/2D_packing_PBC"+"_"+self.date_time+"_"+str(num_iter)+".png", dpi=500)
             plt.close(fig)
 
     def plot_PBC(self):
@@ -310,7 +310,7 @@ class Init2D(object):
         plt.tight_layout()
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
-        plt.savefig(folder_path+"/PBC_start_end_"+str(self.num_fibers)+"_"+self.date_time+".png", dpi=300)
+        plt.savefig(folder_path+"/PBC_3D_start_end_"+"_"+self.date_time+".png", dpi=300)
     
     def plot_spheres(self, ax, fiber_matrix, color):
         ''' plot 3D spheres representing start and end points'''

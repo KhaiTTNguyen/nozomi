@@ -3,7 +3,7 @@
 import argparse
 import sys
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List
 import torch
 # Add package to path for development
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -14,7 +14,6 @@ import simulation_toolkit.toolkit_params as config_params
 from simulation_toolkit.cli.substrate_main import substrate_main
 from simulation_toolkit.cli.simulation_main import simulation_main
 import simulation_toolkit.utils.common_utils as common_util
-from simulation_toolkit.simulation_engine import diffsim3d
 from simulation_toolkit.config import config
 
 class GeometryToolkitCLI:
@@ -128,7 +127,7 @@ def main():
     elif args.command == 'simulation':
         sim_config = config.load_config_file(config_params.SIM_CONFIG_FILE)
         cmd_params = vars(args)
-        # Merge config with command line overrides
+        # Merge config with command line params
         sim_config.update(cmd_params)
         # ===== START simulation =====
         config_params.EXP_DATE_TIME = str(common_util.get_date_time())

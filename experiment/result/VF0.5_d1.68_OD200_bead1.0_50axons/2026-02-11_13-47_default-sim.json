@@ -1,0 +1,10 @@
+{
+    "time_step": 0.002,
+    "num_spins": 500000,
+    "D0_intra": 2.25,
+    "D0_extra": 2.0,
+    "command": "simulation",
+    "substrates": "./experiment/result/VF0.5_d1.68_OD200_bead1.0_50axons",
+    "sim_time": 1.0,
+    "compartment": "extra"
+}

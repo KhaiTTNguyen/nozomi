@@ -53,7 +53,7 @@ def simulation_main(params, substrate_file):
         sg3.add_structure(spstruc) # add it to sg3
     
     nt = int(total_sim_time/time_step) # total number of steps thru time
-    print('Start setting up structures')
+    # print('Start setting up structures')
     sim = ds3.DiffSim3d(sg3,num_spins) 
     nsegx,nsegy,nsegz=20,20,20  # set number of segments
     # ========= Pre-compute table that store structures in segments ==========
@@ -63,7 +63,7 @@ def simulation_main(params, substrate_file):
         sim.setup(structures=list(np.arange(0, len(fiber_xyzr_fid_list))))  # seed INSIDE structures
     elif compartment=='extra':
         sim.setup(structures=[int(len(fiber_xyzr_fid_list))])  # seed OUTSIDE structures
-    print('Done setting up structures')
+    # print('Done setting up structures')
     table_et = time.time()
     table_elapsed_time =  np.round(table_et-table_st,2)
     sim_start_time = time.time()

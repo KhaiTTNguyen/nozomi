@@ -20,7 +20,7 @@ def createBoundaryZ(fiberlist_xyz_r_fid, Lz):
     return fiber_list_z_bounded
 
 def create_pad(end_fiber, start_fiber, Lz):
-    pad=60
+    pad=50
     # pad = 20
     start_fiber_swp = end_fiber
     # start_fiber_swp[:,-1] = start_fiber[:,-1]

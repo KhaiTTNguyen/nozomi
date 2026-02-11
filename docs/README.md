@@ -1,5 +1,15 @@
-# Project Structure
-## Directory Descriptions
+# NOZOMI Documentation
+
+## Quick Start Guides
+- **[Getting Started with Substrates](getting_started_substrates.md)** - 5-minute setup guide for new users
+- **[Reproducibility Guide](reproducibility.md)** - Complete workflow with validation and examples
+
+## Detailed References  
+- **[Substrate Generation](substrate_generation.md)** - Complete parameter guide and advanced usage
+- **[References](references.md)** - Scientific background and citations
+
+## Configuration Templates
+- **[Template Config File](../experiment/setup/substrate/template-substrate.json)** - Copy and modify for your use case
 
 ## Installation Guide
 ```bash
@@ -21,10 +31,6 @@ pip install -r requirements.txt
 ```bash
 # To activate
 `source sim_venv/bin/activate`
-
-# geometry-gen mean_diameter=2.0 sigma_diameter=0.5 gpu=1
-# geometry-gen --config examples/configs/basic_substrate.json
-# geometry-gen --folder examples/configs/batch_configs
 ```
 
 ## Example
@@ -81,7 +87,6 @@ MCDS can be setup in the `/nozomi/experiment/setup/simulation/default-sim.json`.
 ./bin/run-simulation.sh --substrates=./experiment/result/experiment_VF0.5_d2.58_sig0.69_50axons_OD20 --gpu=1 --sim_time=100  --compartment=intra
 
 ./bin/run-simulation.sh --substrates=./experiment/result/experiment_VF0.5_d2.58_sig0.69_50axons_OD20 --gpu=1 --sim_time=100  --compartment=extra
-
 
 ```
 
