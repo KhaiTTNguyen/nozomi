@@ -22,13 +22,19 @@ def validate_parameters(params):
             'value': params.get('orientation_shape_parameter'),
             'min': 10,
             'max': 200,
-            'description': 'Orientation shape parameter'
+            'description': 'Orientation parameter'
         },
         'bead_amplitude_mean': {
             'value': params.get('bead_amplitude_mean'),
             'min': 0.2,
             'max': 1.3,
-            'description': 'Bead amplitude mean'
+            'description': 'Bead amplitude mean (µm)'
+        },
+        'target_volume_fraction': {
+            'value': params.get('target_volume_fraction'),
+            'min': 0.01,
+            'max': 0.7,
+            'description': 'Volume fraction'
         }
     }
     

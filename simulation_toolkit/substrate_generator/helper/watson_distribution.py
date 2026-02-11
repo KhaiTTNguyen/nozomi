@@ -131,9 +131,8 @@ class WatsonDistribution:
         kappa : float
             Concentration parameter
         """
-        # fig, ax = plt.subplots(figsize=(12, 6), projection='3d')
-        fig = plt.figure(figsize=(12, 6))
-        ax = plt.axes(projection='3d')
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1, projection='3d')
         
         # Create half unit sphere surface (upper hemisphere, z >= 0)
         u = np.linspace(0, 2 * np.pi, 50)  # azimuthal angle

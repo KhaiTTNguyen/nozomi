@@ -67,7 +67,7 @@ def test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres_pre_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres_pre_sim_spins.png", dpi=300, facecolor='white')
 
     for n in range(nt):
         sim.step(dt)
@@ -88,7 +88,7 @@ def test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres_post_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres_post_sim_spins.png", dpi=300, facecolor='white')
 
     msdx = np.sum(((sim.spins_d[0,:]-sim.spins0_d[0,:])**2).get())/spins
     msdy = np.sum(((sim.spins_d[1,:]-sim.spins0_d[1,:])**2).get())/spins
@@ -161,7 +161,7 @@ def test_periodic_boundary_conditions_outside_2_sets_of_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_outside_multiple_spheres_pre_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_outside_multiple_spheres_pre_sim_spins.png", dpi=300, facecolor='white')
 
     # ======= Simulate diffusion =======
     for n in range(nt):
@@ -183,7 +183,7 @@ def test_periodic_boundary_conditions_outside_2_sets_of_multiple_spheres():
     ax.set_xlabel('x (μm)')
     ax.set_ylabel('y (μm)')
     ax.set_zlabel('z (μm)')
-    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_outside_multiple_spheres_post_sim_spins.png", dpi=300, bbox_inches='tight', facecolor='white')
+    pl.savefig(config_params.VALIDATION_TEST_FOLDER_PATH + "test_periodic_boundary_conditions_outside_multiple_spheres_post_sim_spins.png", dpi=300, facecolor='white')
 
     msdx = np.sum(((sim.spins_d[0,:]-sim.spins0_d[0,:])**2).get())/spins
     msdy = np.sum(((sim.spins_d[1,:]-sim.spins0_d[1,:])**2).get())/spins

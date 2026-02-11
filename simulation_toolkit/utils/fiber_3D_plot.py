@@ -39,6 +39,8 @@ def prepare_edges_for_plot( points, edges):
     return line_x, line_y, line_z
     
 def plot_fibers( spheres_xyz_r_fid, overlap_indices=None,color=None, animation_input=False, optimized=False, POV='default', num_iter=0):
+    print("Plotting fibers in 3D..." \
+    "Can take a while for a large number of fibers....")
     fiber_list_xyz_r_fid = util.split_matrix_to_list(spheres_xyz_r_fid.detach().cpu().numpy())
     folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+"/figs/visual/" 
     if not os.path.exists(folder_path):
