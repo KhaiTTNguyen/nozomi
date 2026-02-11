@@ -3,7 +3,7 @@
 import argparse
 import sys
 from pathlib import Path
-from typing import List
+from typing import List, Dict, Any
 import torch
 # Add package to path for development
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -115,8 +115,10 @@ def main():
     
     if args.command == 'substrate':
         config_data = config.load_config_file(args.config)
-        experiment_name = config_data['experiment_name']
         params = config_data["parameters"].copy()
+        experiment_name = common_util.build_experiment_name_from_params(params)  # Validate required parameters for naming
+        print(f"Generated experiment name: {experiment_name}")
+        config_data['experiment_name'] = experiment_name
         # ===== START substrate generation =====
         cli.run_substrate_generation(params, experiment_name)
         # ===== END substrate generation & save experiment config file =====

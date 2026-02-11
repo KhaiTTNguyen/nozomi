@@ -35,6 +35,7 @@ def substrate_main(params, experiment_folder):
     config_params.BEAD_AMPLITUDE_STDV = params['bead_amplitude_stdv']
 
     print(f"Building substrate with: \
+        volume_fraction={config_params.VOLUME_FRACTION},\
         diameter_mean={config_params.MEAN_DIAMETER},\
         orientation_shape_parameter={config_params.ORIENTATION_SHAPE_PARAM}, \
         bead_amplitude_mean={config_params.BEAD_AMPLITUDE_MEAN},\

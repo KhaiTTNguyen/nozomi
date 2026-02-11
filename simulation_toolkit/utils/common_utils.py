@@ -53,3 +53,25 @@ def split_matrix_to_list(A):
     # Convert each submatrix to numpy array
     listA = [np.array(submatrix) for submatrix in listA]
     return listA
+
+def build_experiment_name_from_params(params):
+    """Generate experiment name using required substrate parameters."""
+    required_keys = [
+        'target_volume_fraction',
+        'mean_diameter',
+        'orientation_shape_parameter',
+        'bead_amplitude_mean',
+        'num_fibers'
+    ]
+    missing = [key for key in required_keys if key not in params]
+    if missing:
+        missing_str = ', '.join(missing)
+        raise KeyError(f"Missing parameters for experiment naming: {missing_str}")
+    vf = str(params['target_volume_fraction'])
+    mean_d = str(params['mean_diameter'])
+    bead_amp = str(params['bead_amplitude_mean'])
+    orientation = str(params['orientation_shape_parameter'])
+    num_fibers = str(params['num_fibers'])
+
+    return f"VF{vf}_d{mean_d}_OD{orientation}_bead{bead_amp}_{num_fibers}axons"
+
