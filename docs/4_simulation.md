@@ -14,10 +14,15 @@ To run simulation experiments:
 ```bash
 ./bin/run-simulation.sh --substrates=<substrates-folder> --gpu=<gpu-number> --sim_time=<total-diffusion-time> --compartment=<axonal-compartment>
 
-# Examples
-./bin/run-simulation.sh --substrates=./experiment/result/experiment_VF0.5_d2.58_sig0.69_50axons_OD20 --gpu=1 --sim_time=100  --compartment=intra
+# Example:
+# NOTE: Substrates must be generated before simulation. 
+# If no substrates, generate them via:
+./bin/run-geometry-gen.sh --gpu=0
 
-./bin/run-simulation.sh --substrates=./experiment/result/experiment_VF0.5_d2.58_sig0.69_50axons_OD20 --gpu=1 --sim_time=100  --compartment=extra
+# Then run
+./bin/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=1 --sim_time=100  --compartment=intra
+
+./bin/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=1 --sim_time=100  --compartment=extra
 ```
 
 ### Output: 
