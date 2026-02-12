@@ -29,5 +29,5 @@ MCDS results are expected to be outputted to
 The `sim` folder include:
 * A `ADCdata` folder that stores the `.pkl` file storing the time-dependent diffusion coefficient.
 
-* A figure visualizing the diffusion coefficient ($\mu\text{m}^2/\text{ms}$) with respect to diffusion time ($\text{ms}$)
+* A figure visualizing the diffusion coefficient ( $\mu\text{m}^2/\text{ms}$ ) with respect to diffusion time ($\text{ms}$)
 

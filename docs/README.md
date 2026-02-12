@@ -38,13 +38,13 @@ source sim_venv/bin/activate
 ```
 
 ## Validation Experiments
-- **[Validation Experiments Guide](/nozomi/docs/1_validation.md)** - Validation experiments for Monte Carlo simulations
+- **[Validation Experiments Guide](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/1_validation.md)** - Validation experiments for Monte Carlo simulations
 
 ## Calibration Experiments
-- **[Calibration Experiments Guide](/nozomi/docs/2_calibration.m)** - Calibration experiments for 
+- **[Calibration Experiments Guide](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/2_calibration.md)** - Calibration experiments for 
 
 ## Substrate Generation Guide:
-- **[Substrate Generation Guide](/nozomi/docs/3_substrate_generation.md)** - Detailed substrate generation guide
+- **[Substrate Generation Guide](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/3_substrate_generation.md)** - Detailed substrate generation guide
 
 ## Monte Carlo Diffusion Simulation (MCDS) guide:
-- **[Monte Carlo Diffusion Simulation (MCDS) guide](/nozomi/docs/4_simulation.md)** -  Details for running Monte Carlo simulations
+- **[Monte Carlo Diffusion Simulation (MCDS) guide](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/4_simulation.md)** -  Details for running Monte Carlo simulations
