@@ -5,4 +5,7 @@ sim_venv/
 *.png
 sim_venv
 */__pycache__/
-/experiment/result/*
+/experiment/result/
+**/result/
+**/figs/
+tests/calibration/num_molecules_and_time_step_calibration/figs/
