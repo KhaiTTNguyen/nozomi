@@ -5,3 +5,4 @@ sim_venv/
 *.png
 sim_venv
 */__pycache__/
+/experiment/result/*
