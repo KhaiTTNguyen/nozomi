@@ -9,7 +9,7 @@ The framework was developed and tested on NVIDIA RTX A5000 GPU with an AMD EPYC 
 
 Check GPU availability:
 ```bash
-nvidia-smi  # Shows available GPUs
+nvidia-smi
 ```
 Clone NOZOMI repo:
 ```bash 
@@ -38,18 +38,13 @@ source sim_venv/bin/activate
 ```
 
 ## Validation Experiments
-- **[Validation Experiments Guide](/nozomi/docs/1_validation.md)** - Complete substrate generation guide
+- **[Validation Experiments Guide](/nozomi/docs/1_validation.md)** - Validation experiments for Monte Carlo simulations
 
 ## Calibration Experiments
-- **[Calibration Experiments Guide](/nozomi/docs/2_calibration.m)** - Complete substrate generation guide
+- **[Calibration Experiments Guide](/nozomi/docs/2_calibration.m)** - Calibration experiments for 
 
 ## Substrate Generation Guide:
-- **[Substrate Generation Guide](/nozomi/docs/3_substrate_generation.md)** - Complete substrate generation guide
+- **[Substrate Generation Guide](/nozomi/docs/3_substrate_generation.md)** - Detailed substrate generation guide
 
 ## Monte Carlo Diffusion Simulation (MCDS) guide:
-- **[Monte Carlo Diffusion Simulation (MCDS) guide](/nozomi/docs/4_simulation.md)** -  Complete Monte Carlo simulations generation guide
-
-
-<!-- ## Reproducibility Guide
-- **[Reproducibility Guide for NOZOMI paper](reproducibility.md)** - Complete workflow with config files and example results
- -->
+- **[Monte Carlo Diffusion Simulation (MCDS) guide](/nozomi/docs/4_simulation.md)** -  Details for running Monte Carlo simulations
