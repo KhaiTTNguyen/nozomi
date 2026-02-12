@@ -14,7 +14,7 @@ time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01]  # in ms
 2. Calculates time-dependent radial diffusion coefficient $D_{\perp}(t)$ 
 3. Compares simulation results against analytical solutions from Burcaw et al. (2015)
 4. Calculates Mean Absolute Error (MAE) and computation time
-5. Repeats 10 times per configuration for reproducibility assessement.
+5. Repeats 5 times per configuration for reproducibility assessement.
 
 #### How to run:
 ```bash
