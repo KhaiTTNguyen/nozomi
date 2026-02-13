@@ -97,12 +97,14 @@ def main():
                             default='./experiment/setup/substrate/default/default-substrate.json',  # Add default here
                             help='Path to JSON configuration file (default: ./experiment/setup/substrate/default/default-substrate.json)')
     substrate_parser.add_argument('--gpu', type=int, nargs='+', help='Specific GPU IDs to use')
+    substrate_parser.add_argument('--output_folder_path', type=str, help='Output folder path for generated substrates')
     
     # ============= Simulation command =============
     sim_parser = subparsers.add_parser('simulation', help='Run simulations')
     sim_parser.add_argument('--substrates', type=str, help='Path to substrates folder')
     sim_parser.add_argument('--sim_time', type=float, help='Total diffusion time')
     sim_parser.add_argument('--compartment', type=str, help='Compartment to simulate (e.g., intra, extra)')
+    sim_parser.add_argument('--nseg', type=int, help='Number of segments for simulation')
     
     args = parser.parse_args()
     
@@ -113,11 +115,15 @@ def main():
     cli = GeometryToolkitCLI()
     
     if args.command == 'substrate':
+        config_params.OUTPUT_FOLDER_PATH = args.output_folder_path if args.output_folder_path else config_params.OUTPUT_FOLDER_PATH
+        print(f"Using output folder: {config_params.OUTPUT_FOLDER_PATH}")
         config_data = config.load_config_file(args.config)
         params = config_data["parameters"].copy()
-        experiment_name = common_util.build_experiment_name_from_params(params)  # Validate required parameters for naming
+        experiment_name = config_data['experiment_name']
+        if experiment_name == "auto_generated":
+            experiment_name = common_util.build_experiment_name_from_params(params)
+            config_data['experiment_name'] = experiment_name # update experiment name
         print(f"Generated experiment name: {experiment_name}")
-        config_data['experiment_name'] = experiment_name
         # ===== START substrate generation =====
         cli.run_substrate_generation(params, experiment_name)
         # ===== END substrate generation & save experiment config file =====

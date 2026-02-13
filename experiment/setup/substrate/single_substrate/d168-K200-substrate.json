@@ -1,7 +1,7 @@
 {
-  "experiment_name": "experiment_VF0.65_d1.68_sig0.45_500axons_OD200",  
+  "experiment_name": "auto_generated",  
   "parameters": {
-      "orientation_shape_parameter": 10,
+      "orientation_shape_parameter": 200,
       "box_length_init": 0,
       "target_volume_fraction": 0.65,
       "num_fibers": 500,

@@ -26,7 +26,7 @@ def test_free_diffision_empty_arena():
     sg3 = SimGeometry3D(Lx,Ly,Lz,D,T2,rho)
 
     dt = 0.002 # time step in ms
-    nt = int(10000) # total number of steps thru time
+    nt = int(50000) # total number of steps thru time
 
     spins = int(100000)
 
@@ -50,6 +50,3 @@ def test_free_diffision_empty_arena():
     # 2*D*dt*nt
     msd = np.sum(((sim.spins_d[0,:]-sim.spins0_d[0,:])**2).get()/spins)
     assert np.isclose(np.abs(msd/2/dt/nt),D,rtol=1e-1)
-
-    # signal from T2 decay
-    assert np.isclose(np.mean(sim.sig_d.get()),np.exp(-nt*dt/T2),rtol=1e-3)

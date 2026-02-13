@@ -35,7 +35,7 @@ def test_inside_single_sphere():
     sg3.add_structure(spstruc) # add it to sg3
 
     dt = 0.002 # time step in ms
-    nt = int(10000) # total number of steps thru time
+    nt = int(50000) # total number of steps thru time
     spins = int(100000)
  
     sim = DiffSim3d(sg3,spins)
@@ -99,7 +99,7 @@ def test_outside_single_sphere():
     sg3.add_structure(spstruc) # add it to sg3
 
     dt = 0.002 # time step in ms
-    nt = int(10000) # total number of steps thru time
+    nt = int(50000) # total number of steps thru time
     spins = int(100000)
 
     sim = DiffSim3d(sg3,spins)
@@ -109,7 +109,7 @@ def test_outside_single_sphere():
     # first, check thath all the spins are not in spstruc
     isOutside = False
     for struct in sg3.structures[:-1]:
-        isOutside = np.logical_or(isOutside, struct.isinside(sim.spins_d)) # str.isInside(sim.spins) return vector length num_spins & OR with isOutside
+        isOutside = np.logical_or(isOutside, struct.isinside(sim.spins_d.get())) # str.isInside(sim.spins) return vector length num_spins & OR with isOutside
     isOutside = np.invert(isOutside)
     assert isOutside.all()
 
@@ -173,7 +173,7 @@ def test_inside_multiple_spheres():
     sg3.add_structure(spstruc) # add it to sg3
 
     dt = 0.002 # time step in ms
-    nt = int(10000) # total number of steps thru time
+    nt = int(50000) # total number of steps thru time
     spins = int(100000)
 
     sim = DiffSim3d(sg3,spins)
@@ -264,7 +264,7 @@ def test_outside_multiple_spheres():
     sg3.add_structure(spstruc) # add it to sg3
 
     dt = 0.002 # time step in ms
-    nt = int(10000) # total number of steps thru time
+    nt = int(50000) # total number of steps thru time
     spins = int(100000)
 
     sim = DiffSim3d(sg3,spins)

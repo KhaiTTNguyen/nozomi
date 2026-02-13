@@ -24,6 +24,7 @@ def simulation_main(params, substrate_file):
     compartment= params['compartment']
     D0_intra = params['D0_intra']
     D0_extra = params['D0_extra']
+    nsegx, nsegy, nsegz = params['nseg'], params['nseg'], params['nseg']
     file_path = substrate_file
     
     # =========== Prepare output folder ===========
@@ -55,9 +56,9 @@ def simulation_main(params, substrate_file):
     nt = int(total_sim_time/time_step) # total number of steps thru time
     # print('Start setting up structures')
     sim = ds3.DiffSim3d(sg3,num_spins) 
-    nsegx,nsegy,nsegz=20,20,20  # set number of segments
     # ========= Pre-compute table that store structures in segments ==========
     table_st = time.time()
+    print('Num segments', nsegx)
     sim.set_segments(nsegx=nsegx,nsegy=nsegy,nsegz=nsegz)
     if compartment=='intra':
         sim.setup(structures=list(np.arange(0, len(fiber_xyzr_fid_list))))  # seed INSIDE structures

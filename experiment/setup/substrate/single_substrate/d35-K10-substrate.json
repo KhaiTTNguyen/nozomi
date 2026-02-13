@@ -1,5 +1,5 @@
 {
-  "experiment_name": "experiment_VF0.65_d3.5_sig0.9375_500axons_OD10",  
+  "experiment_name": "auto_generated",  
   "parameters": {
       "orientation_shape_parameter": 10,
       "box_length_init": 0,

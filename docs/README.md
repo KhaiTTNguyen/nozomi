@@ -15,6 +15,23 @@ Clone NOZOMI repo:
 ```bash 
 git clone git@github.com:KhaiTTNguyen/nozomi.git
 ```
+Since of of the simulations can take a long time to run, it is recommended to use `tmux` to keep the processes running when you turn off your terminal
+```bash
+# To start a session
+tmux new -s <session-name>          
+
+# To exit a session
+Press and hold Ctrl, then press 'b', then release both keys. This is the tmux prefix.
+Immediately after, press the d key. 
+
+# To attach to a session
+tmux a -t  <session-name> 
+
+# To delete a session
+Press and hold Ctrl, then press 'b', then release both keys.
+Immediately after, press the 'x' key. 
+
+```
 
 Create virtual env
 ```bash

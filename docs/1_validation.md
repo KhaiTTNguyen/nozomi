@@ -14,7 +14,7 @@ pytest tests/validation/narrow_pulse/test_03_periodic_boundary_xyz.py
 ```
 
 #### Expected output: 
-All 7 tests passed. 
+All 7 tests passed. All tests should take ~11 minutes to run.
 
 Figures of spin positions pre- and post-simulations will be saved in 
 ```bash

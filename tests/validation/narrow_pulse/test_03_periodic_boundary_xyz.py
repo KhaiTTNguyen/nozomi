@@ -42,7 +42,7 @@ def test_periodic_boundary_conditions_inside_2_sets_of_multiple_spheres():
     sg3.add_structure(spstruc) # add it to sg3
 
     dt = 0.002 # time step in ms
-    nt = int(10000) # total number of steps thru time
+    nt = int(50000) # total number of steps thru time
     spins = int(100000)
 
     sim = DiffSim3d(sg3,spins)
@@ -135,7 +135,7 @@ def test_periodic_boundary_conditions_outside_2_sets_of_multiple_spheres():
     sg3.add_structure(spstruc) # add it to sg3
 
     dt = 0.002 # time step in ms
-    nt = int(10000) # total number of steps thru time
+    nt = int(50000) # total number of steps thru time
     spins = int(100000)
 
     sim = DiffSim3d(sg3,spins)

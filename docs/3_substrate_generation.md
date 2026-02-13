@@ -10,10 +10,9 @@ Substrate generation is configured via JSON files located in:
 ```
 
 #### Configuration File Structure
-
 ```json
 {
-  "experiment_name": "experiment_VF0.65_d2.58_sig0.69_500axons_OD20",  
+  "experiment_name": "auto_generated",  
   "parameters": {
       "orientation_shape_parameter": 20,
       "box_length_init": 0,
@@ -36,6 +35,9 @@ Substrate generation is configured via JSON files located in:
   }
 }
 ```
+NOTE: `experiment_name` can be 
+* specified by in `<your-substrate-name>.json` config file above
+* `auto_generated` and will be named in the format: `VF{target_volume_fraction}_d{mean_diameter}_OD{orientation_shape_parameter}_bead{bead_amplitude_mean}_{num_fibers}axons`
 
 #### Parameter Descriptions
 **User-controlled parameters includes:**
@@ -44,12 +46,12 @@ Substrate generation is configured via JSON files located in:
 - `mean_diameter`: Mean axon diameter in μm (typical: 1.0-9.0)
 - `sigma_diameter`: Standard deviation of diameter distribution in μm
 - `bead_amplitude_mean`: Mean amplitude of diameter variation due to beading
+- `num_fibers`: Number of axons to generate in the substrate (typical: 500 for good reproducibility of simulation results)
 - `repeats`: Number of substrate realizations to generate with same parameters
 
 **Default parameters include:**
 - `box_length_init`: Initial simulation box size in μm. Set to 0 for automatic calculation based on volume fraction
 - `dist_shape`: Shape parameter for Generalized Extreme Value diameter distribution (typical: 0.1)
-- `num_fibers`: Number of axons to generate in the substrate (typical: 500 for good reproducibility of simulation results)
 
 - `bead_spacing_mean`: Average distance between beads along axon in μm
 - `bead_spacing_stdv`: Standard deviation of bead spacing
@@ -82,12 +84,17 @@ Substrate generation is configured via JSON files located in:
 
 **Default example generation:**
 ```bash
-./bin/run-geometry-gen.sh --gpu=0
+./run-scripts/run-geometry-gen.sh --gpu=0
 ```
 
 **With custom configuration file:**
 ```bash
-./bin/run-geometry-gen.sh --gpu=1 --config=./experiment/setup/substrate/single_substrate/d258-K20-substrate.json
+./run-scripts/run-geometry-gen.sh --gpu=1 --config=./experiment/setup/substrate/single_substrate/d258-K20-substrate.json
+```
+
+**With custom configuration file and output folder:**
+```bash
+./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d258-K200-substrate.json --output_folder_path=./tests/calibration/sim_domain_segment_calibration/data
 ```
 
 ### Output Structure

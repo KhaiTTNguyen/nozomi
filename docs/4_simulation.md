@@ -7,22 +7,23 @@ MCDS can be setup in the `/nozomi/experiment/setup/simulation/default-sim.json`.
   "time_step" : 0.002,
   "num_spins" : 500000,
   "D0_intra": 2.25,
-  "D0_extra": 2.0
+  "D0_extra": 2.0,
+  "nseg": 20
 }
 ```
 To run simulation experiments:
 ```bash
-./bin/run-simulation.sh --substrates=<substrates-folder> --gpu=<gpu-number> --sim_time=<total-diffusion-time> --compartment=<axonal-compartment>
+./run-scripts/run-simulation.sh --substrates=<substrates-folder> --gpu=<gpu-number> --sim_time=<total-diffusion-time> --nseg=<number-of-segments-in-each-3Daxis> --compartment=<axonal-compartment>
 
 # Example:
 # NOTE: Substrates must be generated before simulation. 
 # If no substrates, generate them via:
-./bin/run-geometry-gen.sh --gpu=0
+./run-scripts/run-geometry-gen.sh --gpu=0
 
 # Then run
-./bin/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=1 --sim_time=100  --compartment=intra
+./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=1 --sim_time=100  --nseg=20 --compartment=intra
 
-./bin/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=1 --sim_time=100  --compartment=extra
+./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=1 --sim_time=100  --nseg=20 --compartment=extra 
 ```
 
 ### Output: 

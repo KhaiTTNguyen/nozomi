@@ -7,6 +7,7 @@ The calibration systematically tests different parameter combinations:
 ```python
 molecules_values = [int(1e6), int(5e5), int(2e5), int(1e5), int(5e4), int(2e4), int(1e4)]
 time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01]  # in ms
+n_repeats = 5                                                           # number of repetitions for each combination
 ```
 
 **For each combination, the experiment:**
@@ -17,6 +18,8 @@ time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01]  # in ms
 5. Repeats 5 times per configuration for reproducibility assessement.
 
 #### How to run:
+This will take ~11hr to run all the simulations for all number of molecule/time step combinations and their repetitions.
+
 ```bash
 # Format
 CUDA_VISIBLE_DEVICES=<gpu_number> python3  ./tests/calibration/num_molecules_and_time_step_calibration/calibration_for_num_molecules_and_time_step_search.py
@@ -24,7 +27,6 @@ CUDA_VISIBLE_DEVICES=<gpu_number> python3  ./tests/calibration/num_molecules_and
 # Example
 CUDA_VISIBLE_DEVICES=0 python3 ./tests/calibration/num_molecules_and_time_step_calibration/calibration_for_num_molecules_and_time_step_search.py
  ```
-This will take a while to run all the simulations for number of molecule/time step combinations and their repetitions.
 
 #### Expected output:
 Output will be saved to:
@@ -55,6 +57,10 @@ The experiment analyzes segment numbers: `[5, 10, 15, 20, 25, 30, 35]` across 3D
 2. **Reproducibility**: Radial Diffusivity (RD) and Axial Diffusivity (AD) variability across different segmentation choices
 
 ### For runtime vs number of segments:
+```bash
+./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d258-K200-substrate.json --output_folder_path=./tests/calibration/sim_domain_segment_calibration/data
+```
+
 ```bash
 python3 ./tests/calibration/sim_domain_segment_calibration/plot_segment_calibration.py
 ```

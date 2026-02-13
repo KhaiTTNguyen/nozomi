@@ -278,11 +278,11 @@ def save_experiment_data(difftime, D_numerical, analytical_data, molecules, time
   
 def run_validation_study():
     '''Run validation study for MCDS against analytical solution for cylinder'''
-    
+    st = time.time()
     # Parameters
     a = 0.5  # Cylinder radius um
     D0 = 2.0  # Initial diffusion coefficient um^2/ms
-    time_threshold = 0.03  # For calculating MAE
+    time_threshold = 0.05  # For calculating MAE
     compartment = 'intra'
     total_sim_time = 100
 
@@ -290,18 +290,13 @@ def run_validation_study():
     molecules_values = [int(1e6), int(5e5), int(2e5), int(1e5), int(5e4), int(2e4), int(1e4)]
     time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01]
     n_repeats = 5
-
-    # molecules_values = [int(5e4), int(2e4), int(1e4)]
-    # time_step_values = [0.005, 0.01]
-    # n_repeats = 1
     
     # Create results directory
-    config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH = "./tests/calibration/num_molecules_and_time_step_calibration/figs/cylinder_validation_" + str(datetime.now().strftime("%Y-%m-%d_%H-%M")) 
+    config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH = "./tests/calibration/num_molecules_and_time_step_calibration/figs/cylinder_validation_" + str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) 
     if not os.path.exists(config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH):
         os.makedirs(config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH)
     
     # Calculate analytical solution
-    print("Calculating analytical solutions for cylinder...")
     analytical_data = calculateDanalytical_single_cylinder(a, D0)
     
     # Create interpolation function
@@ -321,7 +316,7 @@ def run_validation_study():
             current_combination += 1
             print(f"{'='*35}")
             print(f"Combination {current_combination}/{total_combinations}")
-            print(f"Molecules: {molecules}, Time step: {time_step}")
+            print(f"Molecules: {molecules}. Time step: {time_step}")
             
             mae_values = []
             computation_times = []
@@ -371,12 +366,13 @@ def run_validation_study():
                         'n_successful_runs': len(valid_mae)
                     }
                     summary_results.append(summary)
-                    
+    total_time = time.time() - st
+    total_time_hours = total_time / 3600
     # Save summary results
     save_summary_results(summary_results, config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, a, D0, time_threshold)
     
     # Create analysis plots
-    create_analysis_plots(summary_results, config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, a, D0, time_threshold)
+    create_analysis_plots(summary_results, config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, a, D0, time_threshold, total_time_hours)
     return
 
 def save_summary_results(summary_results, base_dir, a, D0, time_threshold):
@@ -386,7 +382,7 @@ def save_summary_results(summary_results, base_dir, a, D0, time_threshold):
     df.to_csv(csv_path, index=False)
     print(f"\nSummary results saved to: {csv_path}")
     
-def create_analysis_plots(summary_results, base_dir, a, D0, time_threshold):
+def create_analysis_plots(summary_results, base_dir, a, D0, time_threshold, total_time_hours):
     '''Create analysis plots'''
     df = pd.DataFrame(summary_results)
     
@@ -436,7 +432,7 @@ def create_analysis_plots(summary_results, base_dir, a, D0, time_threshold):
     plt.tight_layout()
     
     # Save plot
-    plot_path = os.path.join(base_dir, f"analytical_validation_analysis_a{a}_D0{D0}_threshold{time_threshold}.png")    
+    plot_path = os.path.join(base_dir, f"analytical_validation_analysis_a{a}_D0{D0}_threshold{time_threshold}_comptime{total_time_hours:.2f}hrs.png")    
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     
     print(f"\nAnalysis plots saved to: {plot_path}")
@@ -444,4 +440,4 @@ def create_analysis_plots(summary_results, base_dir, a, D0, time_threshold):
 if __name__ == "__main__":
     print("=======Starting Analytical Validation Study=======")
     run_validation_study()
-    print("\nAnalytical validation study completed!")
+    print(f"\nAnalytical validation study completed!")
