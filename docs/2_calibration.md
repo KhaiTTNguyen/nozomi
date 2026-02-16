@@ -50,20 +50,70 @@ Output will be saved to:
 This calibration tests how the spatial segmentation of the simulation domain affects both computational time and result reproducibility. The simulation domain is divided into segments for efficient collision detection.
 
 ### What it tests:
-The experiment analyzes segment numbers: `[5, 10, 15, 20, 25, 30, 35]` across 3D spatial dimensions (nsegx, nsegy, nsegz).
+The experiment analyzes segment numbers: `[5, 10, 15, 20, 25, 30, 35]` across 3D spatial dimensions (x, y, z axes).
 
-**Two key analyses:**
+**Two key evaluations:**
 1. **Performance**: Runtime vs. number of segments
-2. **Reproducibility**: Radial Diffusivity (RD) and Axial Diffusivity (AD) variability across different segmentation choices
+2. **Reproducibility**: Radial Diffusivity and Axial Diffusivity variability across different segmentation choices
 
 ### For runtime vs number of segments:
+Create a substrate config file for substrate generation, in `nozomi/experiment/setup/substrate/single_substrate/`
+
+An example config file can be `d168-K200-single-substrate-for-segment-calibration.json`:
+```json
+{
+  "experiment_name": "auto_generated",  
+  "parameters": {
+      "orientation_shape_parameter": 200,
+      "box_length_init": 0,
+      "target_volume_fraction": 0.65,
+      "num_fibers": 500,
+      "mean_diameter":  1.68,
+      "sigma_diameter":  0.45,
+      "dist_shape": 0.1,
+      "space_buffer_starts_ends": 0.23,
+      "spheres_spacing": 0.5,
+      "space_buffer_repulse": 0.001,
+      "w_overlap":10,
+      "w_curve": 3, 
+      "w_length": 3,
+      "bead_spacing_mean": 5.70,
+      "bead_spacing_stdv": 2.88,
+      "bead_amplitude_mean": 1.0,
+      "bead_amplitude_stdv": 0.8,
+      "repeats": 1
+  }
+}
+```
+Then generate the substrate. `--gpu` number can be changed if multiple GPUs are avialble. 
+To make the output specific for this calibration experiment, specify the `--output_folder_path` to `./tests/calibration/sim_domain_segment_calibration/data`
 ```bash
-./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d258-K200-substrate.json --output_folder_path=./tests/calibration/sim_domain_segment_calibration/data
+./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d168-K200-single-substrate-for-segment-calibration.json --output_folder_path=./tests/calibration/sim_domain_segment_calibration/data
+```
+Then run Monte-Carlo diffusion simulation in the generated substrate: 
+```bash
+./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=5 --compartment=intra
+
+./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=10 --compartment=intra
+
+./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=15 --compartment=intra
+
+./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=20 --compartment=intra
+
+./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=25 --compartment=intra
+
+./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=30 --compartment=intra
+
+
+TODO: Execute this
+./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=35 --compartment=intra
+```
+The simulation data is stored in `VF0.65_d1.68_OD200_bead1.0_500axons/2026-02-13_17-37_d1.68_K200_ODI_0.0032_bead_1.0_500fibers/sim/ADCdata`.
+To plot computation time vs. number of segments:
+```bash
+python3 tests/calibration/sim_domain_segment_calibration/plot_segment_calibration_from_files.py "tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons/2026-02-13_17-37_d1.68_K200_ODI_0.0032_bead_1.0_500fibers/sim/ADCdata"
 ```
 
-```bash
-python3 ./tests/calibration/sim_domain_segment_calibration/plot_segment_calibration.py
-```
 #### Expected output:
 Output will be saved to:
 ```bash

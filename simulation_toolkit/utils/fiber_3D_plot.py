@@ -40,22 +40,24 @@ def prepare_edges_for_plot( points, edges):
     
 def plot_fibers( spheres_xyz_r_fid, overlap_indices=None,color=None, animation_input=False, optimized=False, POV='default', num_iter=0):
     print("Plotting fibers in 3D..." \
-    "Can take a while for a large number of fibers....")
+    "Can take a few hours for a large number of fibers....")
     fiber_list_xyz_r_fid = util.split_matrix_to_list(spheres_xyz_r_fid.detach().cpu().numpy())
     folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+"/figs/visual/" 
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
     fig = plt.figure()
     ax = plt.axes(projection='3d')
-    if POV=='top_down':
-        ax.view_init(azim=-90, elev=90)
-    elif POV=='bottom_up':
-        ax.view_init(azim=-90, elev=-90)
-    elif POV=='horizontal_90':
+    if POV=='horizontal_90':
         ax.view_init(azim=-90, elev=0)
+        ax.set_xlabel("x (µm)", fontsize=15, labelpad=13)
     elif POV=='horizontal_0':
         ax.view_init(azim=0, elev=0)
-    
+        ax.set_ylabel("y (µm)", fontsize=15, labelpad=13)
+    else:
+        ax.set_xlabel("x (µm)", fontsize=15, labelpad=13)
+        ax.set_ylabel("y (µm)", fontsize=15, labelpad=13)
+        ax.set_zlabel("z (µm)", fontsize=15, labelpad=13)
+        
     #-------------------- plot fibers ----------------------
     if color is None:
         from matplotlib.pyplot import cm    
@@ -75,9 +77,6 @@ def plot_fibers( spheres_xyz_r_fid, overlap_indices=None,color=None, animation_i
     ax.set_xlim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
     ax.set_ylim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
     ax.set_zlim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
-    ax.set_xlabel("x (µm)", fontsize=15, labelpad=13)
-    ax.set_ylabel("y (µm)", fontsize=15, labelpad=13)
-    ax.set_zlabel("z (µm)", fontsize=15, labelpad=13)
     ax.tick_params(axis='both', which='major', labelsize=13)
     if optimized==True:
         plt.title("3D plot of optimized fibers", fontsize=17, pad=20)
@@ -96,11 +95,7 @@ def plot_fibers( spheres_xyz_r_fid, overlap_indices=None,color=None, animation_i
     plt.close(fig)
 
 def plot_spheres_POV( ax, fiber, fiber_idx, fiber_color, overlap_indices, POV):
-    if POV=='top_down':
-        plot_spheres(ax, fiber, fiber_idx, fiber_color, overlap_indices=None)
-    elif POV=='bottom_up':
-        plot_spheres(ax, fiber, fiber_idx, fiber_color, overlap_indices=None)
-    elif POV=='horizontal_90':
+    if POV=='horizontal_90':
         plot_spheres(ax, fiber, fiber_idx, fiber_color, overlap_indices=None)
     elif POV=='horizontal_0':
         plot_spheres(ax, fiber, fiber_idx, fiber_color, overlap_indices=None)
