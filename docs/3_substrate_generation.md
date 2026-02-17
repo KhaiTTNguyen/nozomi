@@ -127,6 +127,9 @@ Generated substrates are saved to `/nozomi/experiment/result/` with the followin
 **Data Files:**
 - `spheres_coordinates.pkl`: Contains numpy array with columns [x, y, z, radius, fiber_id, sphere_id]. Use this for Monte Carlo simulations.
 
+**Substrate visualization**
+- `optimized_<view>.png` show the 3D substrate view. The figure can take a few hours to be generated for a large number of fibers.
+
 **Note for metrics in filenames:**
 - `K`: Watson distribution orientation shape parameter (higher = more aligned)
 - `ODI_<odi-value>` (Orientation Dispersion Index): 2/π × arctan(1/K), range 0-1

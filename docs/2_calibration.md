@@ -94,33 +94,39 @@ Then run Monte-Carlo diffusion simulation in the generated substrate:
 ```bash
 # 5 segments
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=5 --compartment=intra
+
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=5 --compartment=extra
 
 # 10 segments
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=10 --compartment=intra
+
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=10 --compartment=extra
 
 # 15 segments
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=15 --compartment=intra
+
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=15 --compartment=extra
 
 # 20 segments
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=20 --compartment=intra
+
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=20 --compartment=extra
 
 # 25 segments
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=25 --compartment=intra
+
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=25 --compartment=extra
 
 # 30 segments
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=30 --compartment=intra
-# TODO 
+
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=30 --compartment=extra
 
 # 35 segments
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=35 --compartment=intra
-# TODO 
+
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=35 --compartment=extra
+
 ```
 The simulation data is stored in `VF0.65_d1.68_OD200_bead1.0_500axons/2026-02-13_17-37_d1.68_K200_ODI_0.0032_bead_1.0_500fibers/sim/ADCdata`.
 To plot computation time vs. number of segments:
@@ -137,13 +143,10 @@ Output will be saved to:
 ```bash
 cd nozomi
 # Basic usage with specified input folder:
-python tests/calibration/sim_domain_segment_calibration/plot_compartment_analysis_from_ADCdata.py "tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons/2026-02-13_17-37_d1.68_K200_ODI_0.0032_bead_1.0_500fibers/sim/ADCdata"
+python tests/calibration/sim_domain_segment_calibration/plot_RD_AD_across_segment_choices.py "tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons/2026-02-13_17-37_d1.68_K200_ODI_0.0032_bead_1.0_500fibers/sim/ADCdata"
 
 # Usage with specified input folder & output folder:
-python tests/calibration/sim_domain_segment_calibration/plot_compartment_analysis_from_ADCdata.py "path/to/ADCdata" -o "custom/output/folder"
-
-# deprecated
-python3 ./tests/calibration/sim_domain_segment_calibration/plot_RD_AD_across_segment_choices.py
+python tests/calibration/sim_domain_segment_calibration/plot_RD_AD_across_segment_choices.py "path/to/ADCdata" -o "custom/output/folder"
 ```
 #### Expected output:
 Validation plots showing that diffusion metrics remain consistent regardless of segmentation choice:
