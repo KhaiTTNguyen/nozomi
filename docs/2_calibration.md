@@ -99,6 +99,8 @@ source sim_venv/bin/activate
 ./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d168-K200-single-substrate-for-segment-calibration.json --output_folder_path=./tests/calibration/sim_domain_segment_calibration/data
 ```
 Then run Monte-Carlo diffusion simulation in the generated substrate. These can be run in separate `tmux` windows, each on a different `--gpu` for faster computation.
+
+Each simulation for a diffusion time of `100 ms` using only `5 segments` can take up to 5.5 hrs. Similar simulations using larger number of segments such as `20 segments` will take ~1hr.
 ```bash
 # 5 segments - intra axonal simulation
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=5 --compartment=intra
@@ -133,7 +135,7 @@ Then run Monte-Carlo diffusion simulation in the generated substrate. These can 
 # 30 segments - intra axonal simulation
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=30 --compartment=intra
 
-# 35 segments - extra axonal simulation
+# 30 segments - extra axonal simulation
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=30 --compartment=extra
 
 # 35 segments - intra axonal simulation
@@ -163,7 +165,7 @@ python3 tests/calibration/sim_domain_segment_calibration/plot_RD_AD_across_segme
 python3 tests/calibration/sim_domain_segment_calibration/plot_RD_AD_across_segment_choices.py <path/to/ADCdata> -o <custom/output/folder>
 
 # Full use
-python3 tests/calibration/sim_domain_segment_calibration/plot_RD_AD_across_segment_choices.py <input_folder_path> --rd_time_limit <max_diffusion_time_in_ms_for_plotting_radial_diffusivity> --ad_time_limit <max_diffusion_time_in_ms_for_plotting_axial_diffusivity> -o <output_folder_path>
+python3 tests/calibration/sim_domain_segment_calibration/plot_RD_AD_across_segment_choices.py <input_folder_path> --rd_time_limit <max_diffusion_time_in_miliseconds_for_plotting_radial_diffusivity> --ad_time_limit <max_diffusion_time_in_miliseconds_for_plotting_axial_diffusivity> -o <output_folder_path>
 ```
 #### Expected output:
 Validation plots showing that diffusion metrics remain consistent regardless of segment choice:
