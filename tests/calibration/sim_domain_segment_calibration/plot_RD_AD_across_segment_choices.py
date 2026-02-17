@@ -28,18 +28,18 @@ def extract_compartment_name_from_file_path(file_path):
     print("'intra' or 'extra' not found in filepath")
     return None
 
-def average_datasets_by_diameter(grouped_data):
+def average_datasets_by_compartment(grouped_data):
     """
-    Calculate both mean and standard deviation across multiple runs for each diameter.
+    Calculate both mean and standard deviation across multiple runs for each compartment.
     
     Args:
-        grouped_data: Dictionary with diameter as keys and list of datasets as values
+        grouped_data: Dictionary with compartment as keys and list of datasets as values
     
     Returns:
         Dictionary with averaged data and standard deviations
     """
     averaged_results = {}
-    for diameter, multi_runs_data in grouped_data.items():
+    for compartment, multi_runs_data in grouped_data.items():
         print('len multi_runs_data', len(multi_runs_data))
         if not multi_runs_data:
             continue
@@ -48,7 +48,7 @@ def average_datasets_by_diameter(grouped_data):
         all_dxy = []
         all_time = []
         
-        # Collect all multi_runs_data for this diameter
+        # Collect all multi_runs_data for this compartment
         for data in multi_runs_data:
             Dx, Dy, Dz, diff_time = data[:,0], data[:,1], data[:,2], data[:,3]
             Dxy = (Dx + Dy) / 2
@@ -65,7 +65,7 @@ def average_datasets_by_diameter(grouped_data):
         mean_time = np.mean(all_time, axis=0)
         
         # Store results including standard deviation
-        averaged_results[diameter] = {
+        averaged_results[compartment] = {
             'Dxy_mean': mean_dxy,
             'Dxy_std': std_dxy,
             'diff_time_mean': mean_time,
@@ -74,9 +74,9 @@ def average_datasets_by_diameter(grouped_data):
     
     return averaged_results
 
-def plot_Dxy_across_diameter(folder_path, diff_time_limit):
+def plot_Dxy_across_compartment(folder_path, diff_time_limit):
     '''
-    Plot Dxy across diameters with mean and shaded standard deviation regions
+    Plot Dxy across compartments with mean and shaded standard deviation regions
     '''
     folder_name = os.path.join(folder_path, 'figs')
     fig, ax = plt.subplots(figsize=(6,5))
@@ -89,7 +89,7 @@ def plot_Dxy_across_diameter(folder_path, diff_time_limit):
     num_files = count_num_files_in_folder(folder_path)
     print("Number of files:", num_files)
 
-    # Group data by diameter
+    # Group data by compartment
     grouped_data = defaultdict(list)
     
     # Process all pickle files in the directory
@@ -97,19 +97,19 @@ def plot_Dxy_across_diameter(folder_path, diff_time_limit):
         if filename.endswith('.pkl'):
             file_path = os.path.join(folder_path, filename)
             
-            # Extract diameter from filename
-            diameter = extract_compartment_name_from_file_path(file_path)
+            # Extract compartment from filename
+            compartment = extract_compartment_name_from_file_path(file_path)
             
-            if diameter is not None:
+            if compartment is not None:
                 # Load data
                 try:
                     with open(file_path, 'rb') as f:
                         Dx_Dy_Dz_difftime = pickle.load(f)
-                        grouped_data[diameter].append(Dx_Dy_Dz_difftime)
+                        grouped_data[compartment].append(Dx_Dy_Dz_difftime)
                 except Exception as e:
                     print(f"Error loading {filename}: {e}")
             else:
-                print(f"Could not extract diameter from: {filename}")
+                print(f"Could not extract compartment from: {filename}")
     
     if not grouped_data:
         print("No valid data files found.")
@@ -117,17 +117,17 @@ def plot_Dxy_across_diameter(folder_path, diff_time_limit):
     
     # Calculate averages and standard deviations
     print("Calculating averages and standard deviations...")
-    averaged_data = average_datasets_by_diameter(grouped_data)
+    averaged_data = average_datasets_by_compartment(grouped_data)
     
-    # Colors for different diameters
+    # Colors for different compartments
     colors = {
     'intra': '#FF8C00',  # Dark orange
     'extra': '#008B8B'   # Dark cyan/teal
     }
-    diameter_list = []
+    compartment_list = []
     
     # Plot with shaded error regions
-    for diameter, data in averaged_data.items():
+    for compartment, data in averaged_data.items():
         diff_time_mean = data['diff_time_mean']
         dxy_mean = data['Dxy_mean']
         dxy_std = data['Dxy_std']
@@ -137,13 +137,13 @@ def plot_Dxy_across_diameter(folder_path, diff_time_limit):
         diff_time_filtered = diff_time_mean[time_mask]
         dxy_mean_filtered = dxy_mean[time_mask]
         dxy_std_filtered = dxy_std[time_mask]
-        print(diameter+' mean std Dxy', np.mean(dxy_std_filtered))
-        diameter_list.append(diameter)
-        color_i = colors[diameter]
+        print(compartment+' mean std Dxy', np.mean(dxy_std_filtered))
+        compartment_list.append(compartment)
+        color_i = colors[compartment]
         
         # Plot mean line
         ax.semilogx(diff_time_filtered, dxy_mean_filtered, color=color_i, 
-                   label=str(diameter)+'-axonal', linewidth=2)
+                   label=str(compartment)+'-axonal', linewidth=2)
         
         # Add shaded area for standard deviation
         ax.fill_between(diff_time_filtered, 
@@ -154,18 +154,18 @@ def plot_Dxy_across_diameter(folder_path, diff_time_limit):
     # Handle legend with unique labels
     handles, labels = ax.get_legend_handles_labels()
     unique_labels = {}
-    unique_diameter_list = []
-    for handle, label, diameter in zip(handles, labels, diameter_list):
+    unique_compartment_list = []
+    for handle, label, compartment in zip(handles, labels, compartment_list):
         if label not in unique_labels:
             unique_labels[label] = handle
-            unique_diameter_list.append(diameter) 
+            unique_compartment_list.append(compartment) 
     
     print('Unique labels count:', len(list(unique_labels.keys())))
     
     ax.legend(handles=list(unique_labels.values()), labels=list(unique_labels.keys()), fontsize=18)
 
     # Save plot
-    plot_file_name = os.path.join(folder_name, 'RD_wrt_diameter_with_errorbars'+'_difftime_limit'+str(diff_time_limit)+'.png')
+    plot_file_name = os.path.join(folder_name, 'RD_wrt_compartment_with_errorbars'+'_difftime_limit'+str(diff_time_limit)+'.png')
     ax.tick_params(axis='both', which='major', labelsize=15)
     ax.set_xlabel(r'$t\;(\mathrm{ms})$', fontsize=25)
     ax.set_ylabel(r'$D_{\perp}\;(\mathrm{\mu m}^2/\mathrm{ms})$', fontsize=25) 
@@ -176,9 +176,9 @@ def plot_Dxy_across_diameter(folder_path, diff_time_limit):
     plt.savefig(plot_file_name, dpi=500, bbox_inches='tight')
     print('Done plotting')
 
-def plot_Dz_across_diameter(folder_path, diff_time_limit):
+def plot_Dz_across_compartment(folder_path, diff_time_limit):
     '''
-    Plot Dz across diameters with mean and shaded standard deviation regions
+    Plot Dz across compartments with mean and shaded standard deviation regions
     '''
     folder_name = os.path.join(folder_path, 'figs')
     fig, ax = plt.subplots(figsize=(6,5))
@@ -191,7 +191,7 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
     num_files = count_num_files_in_folder(folder_path)
     print("Number of files:", num_files)
  
-    # Group data by diameter
+    # Group data by compartment
     grouped_data = defaultdict(list)
     
     # Process all pickle files in the directory
@@ -199,19 +199,19 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
         if filename.endswith('.pkl'):
             file_path = os.path.join(folder_path, filename)
             
-            # Extract diameter from filename
-            diameter = extract_compartment_name_from_file_path(file_path)
+            # Extract compartment from filename
+            compartment = extract_compartment_name_from_file_path(file_path)
             
-            if diameter is not None:
+            if compartment is not None:
                 # Load data
                 try:
                     with open(file_path, 'rb') as f:
                         Dx_Dy_Dz_difftime = pickle.load(f)
-                        grouped_data[diameter].append(Dx_Dy_Dz_difftime)
+                        grouped_data[compartment].append(Dx_Dy_Dz_difftime)
                 except Exception as e:
                     print(f"Error loading {filename}: {e}")
             else:
-                print(f"Could not extract diameter from: {filename}")
+                print(f"Could not extract compartment from: {filename}")
     
     if not grouped_data:
         print("No valid data files found.")
@@ -219,7 +219,7 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
     
     # Calculate averages and standard deviations for Dz
     averaged_results = {}
-    for diameter, multi_runs_data in grouped_data.items():
+    for compartment, multi_runs_data in grouped_data.items():
         if not multi_runs_data:
             continue
             
@@ -238,7 +238,7 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
         std_dz = np.std(all_dz, axis=0, ddof=1)
         mean_time = np.mean(all_time, axis=0)
         
-        averaged_results[diameter] = {
+        averaged_results[compartment] = {
             'Dz_mean': mean_dz,
             'Dz_std': std_dz,
             'diff_time_mean': mean_time,
@@ -249,10 +249,10 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
     'intra': '#FF8C00',  # Dark orange
     'extra': '#008B8B'   # Dark cyan/teal
     }
-    diameter_list = []
+    compartment_list = []
     
     # Plot with shaded error regions
-    for diameter, data in averaged_results.items():
+    for compartment, data in averaged_results.items():
         diff_time = data['diff_time_mean']
         time_mask = diff_time <= diff_time_limit
         diff_time_filtered = diff_time[time_mask]
@@ -260,9 +260,9 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
         dz_mean_filtered = data['Dz_mean'][time_mask]
         dz_std_filtered = data['Dz_std'][time_mask]
         
-        diameter_list.append(diameter)
-        color = colors[diameter]
-        label=diameter+'-axonal'
+        compartment_list.append(compartment)
+        color = colors[compartment]
+        label=compartment+'-axonal'
         ax.plot(inv_sqrt_time, dz_mean_filtered, color=color, label=label, linewidth=2)
         ax.fill_between(inv_sqrt_time, 
                        dz_mean_filtered - dz_std_filtered, 
@@ -272,14 +272,14 @@ def plot_Dz_across_diameter(folder_path, diff_time_limit):
     # Handle legend with unique labels
     handles, labels = ax.get_legend_handles_labels()
     unique_labels = {}
-    unique_diameter_list = []
-    for handle, label, diameter in zip(handles, labels, diameter_list):
+    unique_compartment_list = []
+    for handle, label, compartment in zip(handles, labels, compartment_list):
         if label not in unique_labels:
             unique_labels[label] = handle
-            unique_diameter_list.append(diameter) 
+            unique_compartment_list.append(compartment) 
     
     # Save plot
-    plot_file_name = os.path.join(folder_name, 'AD_wrt_diameter_with_errorbars'+'_difftime_limit'+str(diff_time_limit)+'.png')
+    plot_file_name = os.path.join(folder_name, 'AD_wrt_compartment_with_errorbars'+'_difftime_limit'+str(diff_time_limit)+'.png')
     ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
     ax.tick_params(axis='both', which='major', labelsize=15)
     ax.set_xlabel(r'$1/\sqrt{t}\;(\mathrm{ms}^{-1/2})$', fontsize=25)
@@ -297,7 +297,7 @@ if __name__ == '__main__':
     AD_diff_time_limit = 120
     # Plot with error bars
     folder_path = './tests/calibration/sim_domain_segment_calibration/validate_same_results_with_same_substrate_different_segments_choices'
-    plot_Dxy_across_diameter(folder_path, RD_diff_time_limit)          
+    plot_Dxy_across_compartment(folder_path, RD_diff_time_limit)          
     folder_path = './tests/calibration/sim_domain_segment_calibration/validate_same_results_with_same_substrate_different_segments_choices'
-    plot_Dz_across_diameter(folder_path, AD_diff_time_limit)          
+    plot_Dz_across_compartment(folder_path, AD_diff_time_limit)          
     

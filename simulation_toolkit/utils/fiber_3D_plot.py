@@ -50,9 +50,13 @@ def plot_fibers( spheres_xyz_r_fid, overlap_indices=None,color=None, animation_i
     if POV=='horizontal_90':
         ax.view_init(azim=-90, elev=0)
         ax.set_xlabel("x (µm)", fontsize=15, labelpad=13)
+        ax.set_yticks([])
+        ax.set_zticks([])
     elif POV=='horizontal_0':
         ax.view_init(azim=0, elev=0)
         ax.set_ylabel("y (µm)", fontsize=15, labelpad=13)
+        ax.set_xticks([])
+        ax.set_zticks([])
     else:
         ax.set_xlabel("x (µm)", fontsize=15, labelpad=13)
         ax.set_ylabel("y (µm)", fontsize=15, labelpad=13)
