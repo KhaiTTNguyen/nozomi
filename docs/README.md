@@ -15,21 +15,25 @@ Clone NOZOMI repo:
 ```bash 
 git clone git@github.com:KhaiTTNguyen/nozomi.git
 ```
-Since of of the simulations can take a long time to run, it is recommended to use `tmux` to keep the processes running when you turn off your terminal
+Since of of the simulations can take a long time to run, it is recommended to use `tmux` to keep the processes running when you turn off your terminal:
 ```bash
 # To start a session
 tmux new -s <session-name>          
 
 # To exit a session
-Press and hold Ctrl, then press 'b', then release both keys. This is the tmux prefix.
-Immediately after, press the d key. 
+Press and hold Ctrl + <b>, then release both keys. This is the tmux prefix.
+Immediately after, press the <d> key. 
 
 # To attach to a session
 tmux a -t  <session-name> 
 
+# To create additional windows (after attaching to a session)
+Press and hold Ctrl + <b>, then release both keys.
+Immediately after, Shift + <5> OR Shift + <''>
+
 # To delete a session
-Press and hold Ctrl, then press 'b', then release both keys.
-Immediately after, press the 'x' key. 
+Press and hold Ctrl + <b>, then release both keys.
+Immediately after, <x> key. 
 
 ```
 
@@ -39,7 +43,9 @@ cd nozomi
 python3 -m venv sim_venv
 ```
 
-Activate virtual environment
+Activate virtual environment.
+ 
+ALWAYS activate virtual environment when opening a new `tmux` window / session.
 ```bash
 source sim_venv/bin/activate
 ```
@@ -49,7 +55,7 @@ pip install -r requirements.txt
 ```
 
 # User Guide
-Always activate virtual environment before any runs
+(Again) ALWAYS activate virtual environment when opening a new `tmux` window / session.
 ```bash
 source sim_venv/bin/activate
 ```
@@ -65,3 +71,6 @@ source sim_venv/bin/activate
 
 ## Monte Carlo Diffusion Simulation (MCDS) guide:
 - **[Monte Carlo Diffusion Simulation (MCDS) guide](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/4_simulation.md)** -  Details for running Monte Carlo simulations
+
+### Acknowledgements
+This project was supported by the National Institute of Biomedical Imaging and Bioengineering grant R01EB03195

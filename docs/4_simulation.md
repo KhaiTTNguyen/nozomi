@@ -13,23 +13,25 @@ MCDS can be setup in the `/nozomi/experiment/setup/simulation/default-sim.json`.
 ```
 To run simulation experiments:
 ```bash
+cd nozomi
+
 ./run-scripts/run-simulation.sh --substrates=<substrates-folder> --gpu=<gpu-number> --sim_time=<total-diffusion-time> --nseg=<number-of-segments-in-each-3Daxis> --compartment=<axonal-compartment>
 
 # Example:
 # NOTE: Substrates must be generated before simulation. 
-# If no substrates, generate them via:
+# If no substrates, generate the default substrate, configured at `nozomi/experiment/setup/substrate/default/default-substrate.json:
 ./run-scripts/run-geometry-gen.sh --gpu=0
 
 # Then run
 ./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=1 --sim_time=100  --nseg=20 --compartment=intra
 
-./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=1 --sim_time=100  --nseg=20 --compartment=extra 
+./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=3 --sim_time=100  --nseg=20 --compartment=extra 
 ```
 
 ### Output: 
 MCDS results are expected to be outputted to 
 ```bash
-/nozomi/experiment/experiment_result/<substrates-folder>/<single-susbtrate-folder>/sim 
+/nozomi/experiment/result/<substrates-folder>/<single-susbtrate-folder>/sim 
 ```
 
 The `sim` folder include:
@@ -37,3 +39,6 @@ The `sim` folder include:
 
 * A figure visualizing the diffusion coefficient ( $\mu\text{m}^2/\text{ms}$ ) with respect to diffusion time ($\text{ms}$)
 
+
+### Appendix:
+* Mathematical details for solving collision interaction water molecules and axon membranes are included [here](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/reference_for_solving_quadratic_quation.md).

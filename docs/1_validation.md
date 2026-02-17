@@ -4,6 +4,7 @@ These experiments validate the reliability of the Monte Carlo diffusion engine v
 * Intra and extra axonal compartmentation
 * Periodic boundary condition handling 
 
+The experiements are set to run for `100000 spins`, a time step of `dt = 0.002 ms`, a total of `nt = 50000` time steps, leading to a diffusion time of `100 ms`.
 #### How to run:
 ```bash
 # Run all tests

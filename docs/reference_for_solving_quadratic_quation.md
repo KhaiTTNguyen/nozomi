@@ -1,4 +1,4 @@
-## Numerically Stable Quadratic Equation Solving
+# 1) Numerically Stable Quadratic Equation Solving
 Collision detection was obtained from solving the quadratic equation for sphere-ray intersections. 
 
 ### Problem: 
@@ -28,9 +28,9 @@ float q = -0.5 * (b + copysign(sqterm, b));
 float x1 = q / a;
 float x2 = c / q;
 ```
-## Tolerance Handling Around Sphere Boundaries
+# 2) Tolerance Handling Around Sphere Boundaries
 ### Problem:
-If molecule's step ends exactly on boundary, adding a tolerance prevents particles from getting "stuck" exactly on boundaries.
+If molecule's step ends exactly on boundary, adding a tolerance prevents particles from getting "stuck" exactly on boundaries and to prevent leakage of molecules between compartments caused by floating-point precision. 
 
 ### Approach: 
 Create a "transition zone" of width `2 × tol` around each sphere
@@ -38,7 +38,7 @@ Create a "transition zone" of width `2 × tol` around each sphere
 * Outer tolerance: `r+tol`
 
 #### Tolerance Selection Rationale
-A 32-bit single-precision float has ~7 decimal digits
+A 32-bit single-precision float has ~7 decimal digits.
 Our tolerance `tol = 1e-4` provides safety margin while avoiding excessive buffer zones.
 
 This tolerance buffer around each sphere was implemented as:
