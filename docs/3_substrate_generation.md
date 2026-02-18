@@ -1,15 +1,15 @@
-## Substrate Generation Guide:
+# Substrate Generation Guide
 
 NOZOMI generates 3D white matter axon substrates with configurable microstructural properties. The substrate generation process creates realistic axonal geometries with controlled volume fraction, diameter distributions, orientation dispersion, and beading patterns.
 
-### Configuration Setup
+## Substrate configuration
 
 Substrate generation is configured via JSON files located in:
 ```bash
 /nozomi/experiment/setup/substrate/single_substrate/<your-substrate-name>.json
 ```
 
-#### Configuration File Structure
+### Configuration file structure
 ```json
 {
   "experiment_name": "auto_generated",  
@@ -31,38 +31,38 @@ Substrate generation is configured via JSON files located in:
       "bead_spacing_stdv": 2.88,
       "bead_amplitude_mean": 1.0,
       "bead_amplitude_stdv": 0.8,
-      "repeats": 4
+      "repeats": 1
   }
 }
 ```
-NOTE: `experiment_name` can be 
-* specified by in `<your-substrate-name>.json` config file above
-* `auto_generated` and will be named in the format: `VF{target_volume_fraction}_d{mean_diameter}_OD{orientation_shape_parameter}_bead{bead_amplitude_mean}_{num_fibers}axons`
+NOTE: `"experiment_name"` can be 
+* `"auto_generated"` and will be auto generated in the format: `VF{target_volume_fraction}_d{mean_diameter}_OD{orientation_shape_parameter}_bead{bead_amplitude_mean}_{num_fibers}axons`
+* user-specified in the `"experiment_name"` field.
 
-#### Parameter Descriptions
+### Parameter descriptions
 **User-controlled parameters includes:**
-- `orientation_shape_parameter` (K): Controls fiber orientation dispersion using Watson distribution. Higher values = more aligned fibers (typical: 7-200)
-- `target_volume_fraction`: Desired axonal volume fraction (0.0-1.0, typical: 0.3-0.7)
-- `mean_diameter`: Mean axon diameter in μm (typical: 1.0-9.0)
-- `sigma_diameter`: Standard deviation of diameter distribution in μm
-- `bead_amplitude_mean`: Mean amplitude of diameter variation due to beading
-- `num_fibers`: Number of axons to generate in the substrate (typical: 500 for good reproducibility of simulation results)
-- `repeats`: Number of substrate realizations to generate with same parameters
+- `orientation_shape_parameter` ($\kappa$): Controls fiber orientation dispersion using Watson distribution. Higher values = more aligned fibers (typical: 7-200).
+- `target_volume_fraction`: Desired axonal volume fraction (typical: 0.3-0.7).
+- `mean_diameter`: Mean axon diameter in $\mu m$ (typical: 1.0-9.0).
+- `sigma_diameter`: Standard deviation of diameter distribution in $\mu m$.
+- `bead_amplitude_mean`: Mean amplitude of diameter variation due to beading in $\mu m$.
+- `num_fibers`: Number of axons to generate in the substrate (typical: 500 for good reproducibility of simulation results).
+- `repeats`: Number of substrate realizations to generate with same parameters.
 
 **Default parameters include:**
-- `box_length_init`: Initial simulation box size in μm. Set to 0 for automatic calculation based on volume fraction
+- `box_length_init`: Initial simulation box size in $\mu m$. Set to 0 for automatic calculation based on `mean_diameter`, `target_volume_fraction` and `num_fibers`.
 - `dist_shape`: Shape parameter for Generalized Extreme Value diameter distribution (typical: 0.1)
 
-- `bead_spacing_mean`: Average distance between beads along axon in μm
-- `bead_spacing_stdv`: Standard deviation of bead spacing
-- `bead_amplitude_stdv`: Standard deviation of beading amplitude
-- `space_buffer_starts_ends`: Buffer space around fiber start/end points in μm
-- `spheres_spacing`: Spacing between spheres along axon centerline relative to diameter
-- `space_buffer_repulse`: Minimum separation distance between fibers in μm
+- `bead_spacing_mean`: Average distance between beads along axon in $\mu m$
+- `bead_spacing_stdv`: Standard deviation of bead spacing in $\mu m$
+- `bead_amplitude_stdv`: Standard deviation of beading amplitude in $\mu m$
+- `space_buffer_starts_ends`: Buffer space around fiber start/end points in $\mu m$
+- `spheres_spacing`: Spacing between spheres along axon centerline, as a ratio relative to radius.
+- `space_buffer_repulse`: Minimum separation distance between fibers in $\mu m$
 - `w_overlap`: Weight for overlap penalty in geometric optimization (typical: 10)
 - `w_curve`: Weight for curvature smoothness penalty (typical: 3)
 - `w_length`: Weight for length preservation penalty (typical: 3)
-#### Example choices for user-controlled parameters
+### Example choices for user-controlled parameters
 
 **High-density, dispersed substrate (e.g., corpus callosum):**
 ```json
@@ -80,57 +80,64 @@ NOTE: `experiment_name` can be
   "mean_diameter": 4.5
 ```
 
-### Running Substrate Generation
+## Substrate generation
+NOTE: `--gpu` number can be changed if multiple GPUs are available. 
 
 **Default example generation:**
+This will use the default substrate configuration at `nozomi/experiment/setup/substrate/default/default-substrate.json`:
+
 ```bash
+cd nozomi
+# ALWAYS activate virtual environment when opening a new `tmux` window / session.
+source sim_venv/bin/activate
+
 ./run-scripts/run-geometry-gen.sh --gpu=0
 ```
 
 **With custom configuration file:**
 ```bash
-./run-scripts/run-geometry-gen.sh --gpu=1 --config=./experiment/setup/substrate/single_substrate/d258-K20-substrate.json
+./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d258-K20-substrate.json
 ```
 
 **With custom configuration file and output folder:**
 ```bash
-./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d258-K200-substrate.json --output_folder_path=./tests/calibration/sim_domain_segment_calibration/data
+./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d168-K200-single-substrate-for-segment-calibration.json --output_folder_path=./tests/calibration/sim_domain_segment_calibration/data
 ```
 
 ### Output Structure
 
-Generated substrates are saved to `/nozomi/experiment/result/` with the following structure:
+Unless `--output_folder_path` is given, generated substrates are auto-saved to `/nozomi/experiment/result/` with the following structure:
 
 ```bash
 /nozomi/experiment/result/<experiment_name>/<timestamp>_d<mean_diameter>_K<orientation_shape_parameter>_ODI_<odi-value>_bead_<bead_amplitude>_<num_fibers>fibers/
 ├── data/
-│   └── <spheres_coordinates_file>.pkl                                    # 3D coordinates & radius of all spheres
+│   └── <spheres_coordinates>.pkl                                         # 3D coordinates & radius of all spheres
 └── figs/
     ├── init2D/                                                           
     │   ├── init2d.pkl                                                    # 2D packing data
-    │   ├── 2D_converged_packing_<...>.png                                # Initial 2D fiber positions
-    │   └── PBC_3D_start_end_<date>                                       # 3D visualization of start end points
+    │   ├── <2D_converged_initialization>.png                             # Initial 2D fiber positions
+    │   └── <Start_end_points_in_3D>.png                                  # 3D visualization of start end points
     ├── substrate_stats/                                                  # Substrate properties plots
-    │   ├── Optimized_diameter_distribution_mean<d>_std<std_d>_<date>.png # Diameter_distribution
-    │   ├── Optimized_along_axon_radius_variation_<date>.png              #Along axon radius variation
-    │   ├── Optimized_CV_outer_diameter_<date>_CVmean_<CVmean>_CVstd_<CVstd>.png # Coefficient of variation (CV) of diameter
+    │   ├── Diameter_distribution_mean<d>_std<std_d>_<date>.png           # Diameter_distribution
+    │   ├── Along_axon_radius_variation_<date>.png                        # Along axon radius variation
+    │   ├── CV_outer_diameter_<date>_CVmean_<CVmean>_CVstd_<CVstd>.png    # Coefficient of variation (CV) of diameter
     │   └── ODI/  
-    │       ├── OD_histogram                                               # Fiber orientation distribution (FOD) on unit sphere
-    │       ├── FOD_histogram                                              # FOD as 3D spherical harmonics glyph
-    │       └── watson_samples_kappa_<orientation_shape_parameter>.png     # Samples of fibers orientation from Watson distribution
+    │       ├── <OD_histogram>.png                                         # Fiber orientation distribution (FOD) on unit sphere
+    │       ├── <FOD_3D_glyph>.png                                         # FOD as 3D spherical harmonics glyph
+    │       └── Watson_samples_kappa_<orientation_shape_parameter>.png     # Samples of fibers orientation from Watson distribution
     └── visual/                    
-        └── optimized_<view>.png                                           # 3D substrate view
+        └── <3D_substrate_view>.png                                        # 3D substrate view
 ```
 
 #### Understanding the Output
 
 **Data Files:**
-- `spheres_coordinates.pkl`: Contains numpy array with columns [x, y, z, radius, fiber_id, sphere_id]. Use this for Monte Carlo simulations.
+- `<spheres_coordinates>.pkl`: Contains numpy array with `[optimized_fibers, box_length]` or `[[x, y, z, radius, fiber_id, sphere_id], box_length]`. Use this for Monte Carlo simulations.
 
 **Substrate visualization**
-- `optimized_<view>.png` show the 3D substrate view. The figure can take a few hours to be generated for a large number of fibers.
+- `<3D_substrate_view>.png` show the 3D substrate view. The figure can take a few hours to be generated for a large number of fibers.
 
 **Note for metrics in filenames:**
-- `K`: Watson distribution orientation shape parameter (higher = more aligned)
-- `ODI_<odi-value>` (Orientation Dispersion Index): 2/π × arctan(1/K), range 0-1
+- `K` or `kappa`: Watson distribution orientation shape parameter (higher = more aligned)
+- `ODI_<odi-value>` (Orientation Dispersion Index): 2/π × arctan(1/`K`), range 0-1
 

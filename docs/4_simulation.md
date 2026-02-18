@@ -23,9 +23,9 @@ cd nozomi
 ./run-scripts/run-geometry-gen.sh --gpu=0
 
 # Then run
-./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=1 --sim_time=100  --nseg=20 --compartment=intra
+./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=0 --sim_time=100  --nseg=20 --compartment=intra
 
-./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=3 --sim_time=100  --nseg=20 --compartment=extra 
+./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=0 --sim_time=100  --nseg=20 --compartment=extra 
 ```
 
 ### Output: 
@@ -41,4 +41,6 @@ The `sim` folder include:
 
 
 ### Appendix:
-* Mathematical details for solving collision interaction water molecules and axon membranes are included [here](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/reference_for_solving_quadratic_quation.md).
+Mathematical details included [here](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/numerical_precision_references.md) addresse:
+* Numerically-stable method for solving quadratic equation of collision interaction water molecules and axon membranes.
+* Tolerance handling numerical precision around sphere boundaries.

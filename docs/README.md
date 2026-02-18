@@ -29,7 +29,7 @@ tmux a -t  <session-name>
 
 # To create additional windows (after attaching to a session)
 Press and hold Ctrl + <b>, then release both keys.
-Immediately after, Shift + <5> OR Shift + <''>
+Immediately after, [Shift + <5>] OR [Shift + <''>]
 
 # To delete a session
 Press and hold Ctrl + <b>, then release both keys.

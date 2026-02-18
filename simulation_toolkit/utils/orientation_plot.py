@@ -124,11 +124,11 @@ def plot_3D_glyph( coeffs, fit_error, lmax, folder_name, optimized):
     ax.set_title('Sum of fitted-harmonics as 3D glyph',fontsize=17, pad=20)
     if optimized==True:
         plt.title("Along axon FOD - optimized fibers", fontsize=17, pad=20)
-        plt.savefig(folder_path+"/FOD_histogram_optimized_lmax_"+str(lmax)+"_rError_"+str(fit_error)+".png", 
+        plt.savefig(folder_path+"/FOD_3D_glyph.png", 
         dpi=500, edgecolor='b', format='png')
     else:
         plt.title("Along axon FOD - preoptimized fibers", fontsize=17, pad=20)
-        plt.savefig(folder_path+"/FOD_histogram_preoptimized_lmax_"+str(lmax)+"_rError_"+str(fit_error)+".png", 
+        plt.savefig(folder_path+"/FOD_3D_glyph_preoptimized.png", 
         dpi=500, edgecolor='b', format='png')
     plt.close(fig)
     
@@ -179,12 +179,12 @@ def plot_OD_density_sphere( all_points, optimized, folder_name):
     ax.set_zticks([])
     ax.zaxis.set_ticks_position('none')
     if optimized==True:
-        plt.title("Along axon FOD - optimized fibers", fontsize=17, pad=3)
-        plt.savefig(folder_path+"/FOD_histogram_optimized_"+str(len(all_points))+"_fibers.png", 
+        plt.title("Along axon OD - optimized fibers", fontsize=17, pad=3)
+        plt.savefig(folder_path+"/OD_histogram.png", 
         dpi=500, edgecolor='b', format='png')
     else:
-        plt.title("Along axon FOD - preoptimized fibers", fontsize=17, pad=3)
-        plt.savefig(folder_path+"/FOD_histogram_preoptimized_"+str(len(all_points))+"_fibers.png", 
+        plt.title("Along axon OD - preoptimized fibers", fontsize=17, pad=3)
+        plt.savefig(folder_path+"/OD_histogram_preoptimized.png", 
         dpi=500, edgecolor='b', format='png')
     plt.close(fig)
     return WW, XX, YY, ZZ

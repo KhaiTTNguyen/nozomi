@@ -84,14 +84,14 @@ def plot_fibers( spheres_xyz_r_fid, overlap_indices=None,color=None, animation_i
     ax.tick_params(axis='both', which='major', labelsize=13)
     if optimized==True:
         plt.title("3D plot of optimized fibers", fontsize=17, pad=20)
-        plt.savefig(folder_path+"/optimized_"+str(POV)+"_POV_"+str(len(fiber_list_xyz_r_fid))+"_fibers"+str(config_params.EXP_DATE_TIME)+'_avf_'+str(config_params.VOLUME_FRACTION)+".png", 
+        plt.savefig(folder_path+"/optimized_"+str(POV)+"_POV_"+str(len(fiber_list_xyz_r_fid))+"_fibers_"+str(config_params.EXP_DATE_TIME)+'_VF_'+str(config_params.VOLUME_FRACTION)+".png", 
         dpi=500, edgecolor='b', format='png')
         if animation_input==True:
             def rotate(angle):
                 ax.view_init(azim=angle,elev=0)
             print("Making animation")
             rot_animation = animation.FuncAnimation(fig, rotate, frames=np.arange(0, 362, 5), interval=100)
-            rot_animation.save(folder_path+"/GIF_optimized"+str(len(fiber_list_xyz_r_fid))+"_fibers_"+str(config_params.EXP_DATE_TIME)+'_avf_'+str(config_params.VOLUME_FRACTION)+".gif", dpi=500, writer='imagemagick')  
+            rot_animation.save(folder_path+"/GIF_optimized"+str(len(fiber_list_xyz_r_fid))+"_fibers_"+str(config_params.EXP_DATE_TIME)+'_VF_'+str(config_params.VOLUME_FRACTION)+".gif", dpi=500, writer='imagemagick')  
     else:   
         plt.title("3D plot of unoptimized fibers", fontsize=17, pad=20)
         plt.savefig(folder_path+"/unoptimized_"+str(POV)+"_POV_"+str(len(fiber_list_xyz_r_fid))+"_fibers"+str(config_params.EXP_DATE_TIME)+str(config_params.VOLUME_FRACTION)+"num_iter_"+str(num_iter)+".png", 

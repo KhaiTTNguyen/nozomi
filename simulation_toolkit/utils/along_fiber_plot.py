@@ -48,7 +48,7 @@ def plot_diameter_GEV_distribution(optimized_fibers):
     folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+"/figs/substrate_stats"
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
-    plt.savefig(folder_path+"/Optimized_diameter_distribution_mean"+str(config_params.GEV_DIAMETER_MEAN)+'_std'+str(config_params.GEV_DIAMETER_STDV)+'_'+config_params.EXP_DATE_TIME+"_"+".png",
+    plt.savefig(folder_path+"/Diameter_distribution_mean"+str(config_params.GEV_DIAMETER_MEAN)+'_std'+str(config_params.GEV_DIAMETER_STDV)+'_'+config_params.EXP_DATE_TIME+".png",
                  dpi=500)
     plt.close(fig)
 
@@ -91,7 +91,7 @@ def plot_along_axon_radius_variation(optimized_fibers, colors):
     folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+"/figs/substrate_stats"
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
-    plt.savefig(folder_path+"/Optimized_along_axon_radius_variation_"+config_params.EXP_DATE_TIME+"_"+".png", 
+    plt.savefig(folder_path+"/Along_axon_radius_variation_"+config_params.EXP_DATE_TIME+".png", 
                 dpi=500)
     plt.close(fig)
 
@@ -138,7 +138,7 @@ def plot_diameter_CV_distribution():
     folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+"/figs/substrate_stats"
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
-    plt.savefig(folder_path+"/Optimized_CV_outer_diameter"+"_"+config_params.EXP_DATE_TIME+"_CVmean_"+str(config_params.CV_OUTER_MEAN)+"_CVstd_"+str(config_params.CV_OUTER_STDV)+"_"+".png", 
+    plt.savefig(folder_path+"/CV_outer_diameter"+"_"+config_params.EXP_DATE_TIME+"_CVmean_"+str(config_params.CV_OUTER_MEAN)+"_CVstd_"+str(config_params.CV_OUTER_STDV)+".png", 
                 dpi=500)
     plt.close(fig)
     return

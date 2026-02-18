@@ -166,7 +166,7 @@ class WatsonDistribution:
         ODI_folder = os.path.join(config_params.SUBSTRATE_OUTPUT_FOLDER_PATH,"figs", "substrate_stats", "ODI")
         if not os.path.exists(ODI_folder):
                     os.makedirs(ODI_folder)
-        plt.savefig(f'{ODI_folder}/watson_samples_kappa_{kappa}.png')
+        plt.savefig(f'{ODI_folder}/Watson_samples_kappa_{kappa}.png')
 
     def demonstrate_watson_distribution(self, kappa_values= [4, 8, 16, 32, 64, 128]):
         """Demonstrate Watson distribution 
