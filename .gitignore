@@ -9,3 +9,4 @@ sim_venv
 **/result/
 **/figs/
 tests/calibration/num_molecules_and_time_step_calibration/figs/
+./docs/substrate_generation_math.md

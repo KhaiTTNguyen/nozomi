@@ -51,3 +51,13 @@ float c = dx*dx + dy*dy + dz*dz - (r-tol)*(r-tol);
 // Outside sphere: collision with (r + tol) 
 float c = dx*dx + dy*dy + dz*dz - (r+tol)*(r+tol);
 ```
+
+# 3) Molecule-Membrane Interaction: 
+Alternative to our multi-step collision and membrane scattering approach, we also acknowledge that molecule-membrane interaction has been modeled by rejection sampling<sup>30,88,92,93</sup>, where a step encountering a membrane is canceled, and the molecule stays still for the step. However, bias in $D_\parallel$ was shown when steps toward the membrane are rejected<sup>7</sup>. Our collision-scattering method preserves Brownian statistics by truncating steps at boundaries, and generating new random directions with variance-corrected remaining jump distance.
+
+## References
+7. Lee HH, Fieremans E, Novikov DS. Realistic Microstructure Simulator (RMS): Monte Carlo simulations of diffusion in three-dimensional cell segmentations of microscopy images. J Neurosci Methods. 2021;350:109018. doi:10.1016/j.jneumeth.2020.109018
+30. Ford JC, Hackney DB. Numerical model for calculation of apparent diffusion coefficients (ADC) in permeable cylinders—comparison with measured ADC in spinal cord white matter. Magnetic Resonance in Medicine. 1997;37(3):387-394. doi:10.1002/mrm.1910370315
+88. Nguyen KV, Hernández-Garzón E, Valette J. Efficient GPU-based Monte-Carlo simulation of diffusion in real astrocytes reconstructed from confocal microscopy. Journal of Magnetic Resonance. 2018;296:188-199. doi:10.1016/j.jmr.2018.09.013
+92. Palombo M, Ligneul C, Hernandez-Garzon E, Valette J. Can we detect the effect of spines and leaflets on the diffusion of brain intracellular metabolites? NeuroImage. 2018;182:283-293. doi:10.1016/j.neuroimage.2017.05.003
+93. Waudby CA, Christodoulou J. GPU accelerated Monte Carlo simulation of pulsed-field gradient NMR experiments. Journal of Magnetic Resonance. 2011;211(1):67-73. doi:10.1016/j.jmr.2011.04.004
