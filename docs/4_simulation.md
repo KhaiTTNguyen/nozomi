@@ -41,6 +41,7 @@ The `sim` folder include:
 
 
 ### Appendix:
-Mathematical details included [here](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/numerical_precision_references.md) addresse:
+Mathematical details included [here](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/simulation_references.md) address:
+* Modeling of the simulation mechanism
 * Numerically-stable method for solving quadratic equation of collision interaction water molecules and axon membranes.
 * Tolerance handling numerical precision around sphere boundaries.

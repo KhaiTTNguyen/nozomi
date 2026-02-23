@@ -141,3 +141,7 @@ Unless `--output_folder_path` is given, generated substrates are auto-saved to `
 - `K` or `kappa`: Watson distribution orientation shape parameter (higher = more aligned)
 - `ODI_<odi-value>` (Orientation Dispersion Index): 2/π × arctan(1/`K`), range 0-1
 
+### Appendix:
+Mathematical details included [here](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/substrate_generation_references.md) address:
+* Beading design
+* Substrate optimization design
