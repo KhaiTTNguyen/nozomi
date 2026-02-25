@@ -1,0 +1,14 @@
+{  
+  "sim_time" : 78, 
+  "time_step" : 0.002,
+  "num_spins" : 500000,
+  "D0_intra": 2.25,
+  "D0_extra": 2.0,
+  "nseg": 20,
+  "gradient" : {
+    "type": "OGSE",
+    "direction": [1, 0, 0],
+    "num_oscil": 1,
+    "duration": 38.4
+  }
+}

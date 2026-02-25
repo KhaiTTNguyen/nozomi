@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 from typing import List
 import torch
+
 # Add package to path for development
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import shutil
@@ -13,6 +14,7 @@ import json
 import simulation_toolkit.toolkit_params as config_params
 from simulation_toolkit.cli.substrate_main import substrate_main
 from simulation_toolkit.cli.simulation_main import simulation_main
+from simulation_toolkit.cli.simulation_gradient_main import simulation_gradient_main
 import simulation_toolkit.utils.common_utils as common_util
 from simulation_toolkit.config import config
 
@@ -30,7 +32,7 @@ class GeometryToolkitCLI:
             
         print(f"Substrate generation completed for {experiment_name}")
     
-    def run_simulation(self, full_sim_params):
+    def run_simulation(self, full_sim_params, pulse='narrow'):
         """Run substrate generation"""    
         main_folder = full_sim_params['substrates']
         if not os.path.isdir(main_folder):
@@ -64,7 +66,10 @@ class GeometryToolkitCLI:
                     print(f"=====Starting simulation {current_sim}/{total_substrates}=====")
                     substrate_path = os.path.join(data_folder, substrate_file)
                     torch.autograd.set_detect_anomaly(True)
-                    simulation_main(full_sim_params, substrate_path)
+                    if pulse == 'narrow':
+                        simulation_main(full_sim_params, substrate_path)
+                    elif pulse == 'wide':
+                        simulation_gradient_main(full_sim_params, substrate_path)
             else:
                 print(f"Warning: Data folder not found in {subfolder_path}")
 
@@ -106,6 +111,15 @@ def main():
     sim_parser.add_argument('--compartment', type=str, help='Compartment to simulate (e.g., intra, extra)')
     sim_parser.add_argument('--nseg', type=int, help='Number of segments for simulation')
     
+    # ============= Gradient simulation command =============
+    grad_sim_parser = subparsers.add_parser('gradient_simulation', help='Run gradient simulations')
+    grad_sim_parser.add_argument('--substrates', type=str, help='Path to substrates folder')
+    grad_sim_parser.add_argument('--sim_time', type=float, help='Total diffusion time')
+    grad_sim_parser.add_argument('--nseg', type=int, help='Number of segments for simulation')
+    grad_sim_parser.add_argument('--compartment', type=str, help='Compartment to simulate (e.g., intra, extra)')
+    grad_sim_parser.add_argument('--config', type=str, 
+                            default='./experiment/setup/simulation/pgse_sim_params.json',  # Add default here
+                            help='Path to JSON configuration file (default: ./experiment/setup/simulation/pgse_sim_params.json)')
     args = parser.parse_args()
     
     if not args.command:
@@ -137,11 +151,27 @@ def main():
         sim_config.update(cmd_params)
         # ===== START simulation =====
         config_params.EXP_DATE_TIME = str(common_util.get_date_time())
-        cli.run_simulation(sim_config)
+        cli.run_simulation(sim_config, pulse='narrow')
         # ===== END simulation =====
         
         # Save the complete simulation configuration as JSON
         config_filename = str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(config_params.SIM_CONFIG_FILE)
+        config_save_path = os.path.join(sim_config['substrates'], config_filename)
+        with open(config_save_path, 'w') as f:
+            json.dump(sim_config, f, indent=4)
+    
+    elif args.command == 'gradient_simulation':
+        sim_config = config.load_config_file(args.config)
+        cmd_params = vars(args)
+        # Merge config with command line params
+        sim_config.update(cmd_params)
+        # ===== START simulation =====
+        config_params.EXP_DATE_TIME = str(common_util.get_date_time())
+        cli.run_simulation(sim_config, pulse='wide')
+        # ===== END simulation =====
+        
+        # Save the complete simulation configuration as JSON
+        config_filename = str(config_params.EXP_DATE_TIME) + "_" + os.path.basename(args.config)
         config_save_path = os.path.join(sim_config['substrates'], config_filename)
         with open(config_save_path, 'w') as f:
             json.dump(sim_config, f, indent=4)

@@ -10,7 +10,7 @@ import numpy as np
 from simulation_toolkit.simulation_engine.diffsim3d import DiffSim3d
 from simulation_toolkit.simulation_engine.geometry import SimGeometry3D
 
-def test_free_diffision_empty_arena():
+def test_free_diffusion_empty_arena():
     '''
     Simulate Gaussian diffusion in an empty simulation arena 
     at the end of the simulation:

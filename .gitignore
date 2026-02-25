@@ -8,4 +8,5 @@ sim_venv
 /experiment/result/
 **/result/
 **/figs/
+**/test_figures/
 tests/calibration/num_molecules_and_time_step_calibration/figs/

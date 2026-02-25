@@ -5,7 +5,7 @@ This repo hosts the NOZOMI toolbox for generating 3D white matter numerical susb
 # Installation
 * An NVIDIA GPU is needed for fast computation of the framework. 
 
-The framework was developed and tested on NVIDIA RTX A5000 GPU with an AMD EPYC 7513 32-core CPU.
+The framework was developed and tested on a Linux machine with NVIDIA RTX A5000 GPUs and an AMD EPYC 7513 32-core CPU.
 
 Check GPU availability:
 ```bash

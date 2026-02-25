@@ -1,0 +1,15 @@
+{  
+  "sim_time" : 78, 
+  "time_step" : 0.002,
+  "num_spins" : 500000,
+  "D0_intra": 2.25,
+  "D0_extra": 2.0,
+  "nseg": 20,
+  "gradient" : {
+    "type": "PGSE",
+    "direction": [1, 0, 0],
+    "big_delta": 40.0,
+    "little_delta": 10.0
+  }
+}
+

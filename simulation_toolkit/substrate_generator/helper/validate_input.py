@@ -24,10 +24,16 @@ def validate_parameters(params):
             'max': 200,
             'description': 'Orientation parameter'
         },
-        'bead_amplitude_mean': {
+        # 'bead_amplitude_mean': {
+        #     'value': params.get('bead_amplitude_mean'),
+        #     'min': 0.2,
+        #     'max': 1.3,
+        #     'description': 'Bead amplitude mean (µm)'
+        # },
+                'bead_amplitude_mean': {
             'value': params.get('bead_amplitude_mean'),
             'min': 0.2,
-            'max': 1.3,
+            'max': 4.0,
             'description': 'Bead amplitude mean (µm)'
         },
         'target_volume_fraction': {
