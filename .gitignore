@@ -11,4 +11,5 @@ test_venv
 **/result/
 **/figs/
 **/test_figures/
+**/tests/calibration/sim_domain_segment_calibration/data
 tests/calibration/num_molecules_and_time_step_calibration/figs/
