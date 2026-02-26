@@ -3,14 +3,35 @@
 This repo hosts the NOZOMI toolbox for generating 3D white matter numerical susbtrates with periodic boundaries and running Monte Carlo simulation of water diffusion in such substrates.
 
 # Installation
-* An NVIDIA GPU is needed for fast computation of the framework. 
 
-The framework was developed and tested on a Linux machine with NVIDIA RTX A5000 GPUs and an AMD EPYC 7513 32-core CPU.
+## Hardware Requirements
 
-Check GPU availability:
+**⚠️ IMPORTANT:**
+As of this writing, an **NVIDIA GPU** copatible with **CUDA 12** is required for this framework. 
+
+### System Information
+**Development & Testing Environment**:
+* **Primary**: NVIDIA RTX A5000 GPUs + AMD EPYC 7513 32-core CPU
+* **OS**: Linux
+
+
+### Check Your System
 ```bash
+# Check GPU availability
 nvidia-smi
+
+# Check CUDA version, output for our system is below  
+nvcc --version
+# Cuda compilation tools, release 12.4, V12.4.131
+# Build cuda_12.4.r12.4/compiler.34097967_0
+
+# Check driver version, output for our system is below
+cat /proc/driver/nvidia/version
+# NVRM version: NVIDIA UNIX x86_64 Kernel Module  570.207 
+# GCC version:  gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.2) 
 ```
+
+## Installation Steps
 Clone NOZOMI repo:
 ```bash 
 git clone git@github.com:KhaiTTNguyen/nozomi.git
@@ -43,9 +64,7 @@ cd nozomi
 python3 -m venv sim_venv
 ```
 
-Activate virtual environment.
- 
-ALWAYS activate virtual environment when opening a new `tmux` window / session.
+**ALWAYS** activate virtual environment when opening a new `tmux` window / session.
 ```bash
 source sim_venv/bin/activate
 ```
@@ -55,7 +74,7 @@ pip install -r requirements.txt
 ```
 
 # User Guide
-(Again) ALWAYS activate virtual environment when opening a new `tmux` window / session.
+(Again) **ALWAYS** activate virtual environment when opening a new `tmux` window / session.
 ```bash
 source sim_venv/bin/activate
 ```
