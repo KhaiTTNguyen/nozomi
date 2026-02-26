@@ -1,5 +1,4 @@
-# NOZOMI Core Requirements (Cleaned)
-# Generated from dependency analysis - only packages actually used
+# NOZOMI Requirements
 
 # Core Scientific Computing
 numpy==1.24.4
@@ -30,7 +29,7 @@ nvidia-nvtx-cu12==12.1.105
 # Medical/Scientific Imaging
 dipy==1.8.0
 
-# Testing (Development only - consider separate requirements-dev.txt)
+# Testing
 pytest>=7.0.0
 pytest-cov>=4.0.0  
 pytest-mock>=3.10.0
