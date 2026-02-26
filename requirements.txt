@@ -1,31 +1,19 @@
-apptools==5.3.0
-certifi==2024.7.4
-configobj==5.0.9
-contourpy==1.1.1
-cycler==0.12.1
-Cython==3.0.11
-deepdiff==8.4.2
-dipy==1.8.0
-envisage==7.0.3
-filelock==3.16.1
-fonttools==4.53.1
-fsspec==2024.10.0
-h5py==3.11.0
-importlib-metadata==8.5.0
-importlib-resources==6.4.3
-jinja2==3.1.4
-kiwisolver==1.4.5
-line-profiler==4.2.0
-llvmlite==0.41.1
-Mako==1.3.6
-MarkupSafe==2.1.5
-matplotlib==3.7.5
-mayavi==4.8.2
-mpmath==1.3.0
-networkx==3.1
-nibabel==5.2.1
-numba==0.58.1
+# NOZOMI Core Requirements (Cleaned)
+# Generated from dependency analysis - only packages actually used
+
+# Core Scientific Computing
 numpy==1.24.4
+scipy==1.10.1
+pandas==2.0.3
+matplotlib==3.7.5
+seaborn==0.13.2
+
+# Machine Learning / Deep Learning  
+torch==2.4.1
+triton==3.0.0
+
+# CUDA Support (Required for GPU simulation)
+pycuda==2024.1.2
 nvidia-cublas-cu12==12.1.3.1
 nvidia-cuda-cupti-cu12==12.1.105
 nvidia-cuda-nvrtc-cu12==12.1.105
@@ -38,37 +26,11 @@ nvidia-cusparse-cu12==12.1.0.106
 nvidia-nccl-cu12==2.20.5
 nvidia-nvjitlink-cu12==12.6.85
 nvidia-nvtx-cu12==12.1.105
-orderly-set==5.5.0
-packaging==24.1
-pandas==2.0.3
-pillow==10.4.0
-platformdirs==4.3.6
-pycuda==2024.1.2
-pyface==8.0.0
-pygments==2.18.0
-pyparsing==3.1.2
-pyproj==3.5.0
-pyshp==2.3.1
-python-dateutil==2.9.0.post0
-pytools==2024.1.14
-pytz==2024.1
-scipy==1.10.1
-seaborn==0.13.2
-shapely==2.0.5
-six==1.16.0
-snakeviz==2.2.1
-sympy==1.13.3
-tomli==2.2.1
-torch==2.4.1
-tornado==6.4.2
-tqdm==4.67.1
-traits==6.4.3
-traitsui==8.0.0
-triton==3.0.0
-trx-python==0.3
-typing-extensions==4.12.2
-tzdata==2024.1
-zipp==3.20.0
+
+# Medical/Scientific Imaging
+dipy==1.8.0
+
+# Testing (Development only - consider separate requirements-dev.txt)
 pytest>=7.0.0
-pytest-cov>=4.0.0
+pytest-cov>=4.0.0  
 pytest-mock>=3.10.0

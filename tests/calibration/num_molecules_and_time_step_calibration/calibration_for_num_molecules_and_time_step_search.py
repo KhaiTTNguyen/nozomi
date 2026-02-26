@@ -287,10 +287,15 @@ def run_validation_study():
     total_sim_time = 100
 
     # Study parameters
-    molecules_values = [int(1e6), int(5e5), int(2e5), int(1e5), int(5e4), int(2e4), int(1e4)]
-    time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01]
-    n_repeats = 5
+    # molecules_values = [int(1e6), int(5e5), int(2e5), int(1e5), int(5e4), int(2e4), int(1e4)]
+    # time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01]
+    # n_repeats = 5
     
+    molecules_values = [int(2e4), int(1e4)]
+    time_step_values = [0.005, 0.01]
+    n_repeats = 1
+    
+
     # Create results directory
     config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH = "./tests/calibration/num_molecules_and_time_step_calibration/figs/cylinder_validation_" + str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) 
     if not os.path.exists(config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH):

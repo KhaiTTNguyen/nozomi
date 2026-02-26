@@ -1,9 +1,11 @@
 *.pyc
 sim_venv/
+test_venv/
+sim_venv
+test_venv
 *.pyc
 *.pkl
 *.png
-sim_venv
 */__pycache__/
 /experiment/result/
 **/result/

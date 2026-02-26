@@ -71,6 +71,9 @@ source sim_venv/bin/activate
 All software dependencies are included in `requirements.txt` file and can be installed by running:
 ```bash
 pip install -r requirements.txt
+
+# Then check
+python3 check_minimal_requirements.py
 ```
 
 # User Guide
@@ -83,7 +86,7 @@ source sim_venv/bin/activate
 - **[Validation Experiments Guide](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/1_validation.md)** - Validation experiments for Monte Carlo simulations
 
 ## Calibration Experiments
-- **[Calibration Experiments Guide](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/2_calibration.md)** - Calibration experiments for 
+- **[Calibration Experiments Guide](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/2_calibration.md)** - Calibration experiments for Monte Carlo simulations
 
 ## Substrate Generation Guide:
 - **[Substrate Generation Guide](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/3_substrate_generation.md)** - Detailed substrate generation guide
