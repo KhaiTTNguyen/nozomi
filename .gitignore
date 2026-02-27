@@ -14,3 +14,4 @@ test_venv
 **/tests/calibration/sim_domain_segment_calibration/data
 tests/calibration/num_molecules_and_time_step_calibration/figs/
 **/tests/validation/wide_pulse
+**/docs/5_gradient_simulation.md
