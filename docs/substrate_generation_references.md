@@ -10,7 +10,7 @@ $R_{\text{bead axon}}=\ R_\mathrm{axon}+R_\mathrm{amp}\cdot\frac{1}{\sigma_\math
 ### a) 2D Initialization
 Overlaps disks in 2D initialization are removed by minimizing the following cost function
 
-$\mathrm{argmin}_{x_i,y_i}⁡\sum_{k=1}^{N_\mathrm{overlaps}}\alpha_k^2 $
+$\mathrm{argmin}_{x_i,y_i}⁡\sum_{k=1}^{N_\mathrm{overlaps}}\alpha_k^2$
 
 $\alpha_k=\mathrm{min}\left(0, R_i  + R_j - \sqrt{(x_i-x_j )^2+(y_i-y_j )^2}  +l_\mathrm{min} \right);i,j∈N,i≠j $
 
