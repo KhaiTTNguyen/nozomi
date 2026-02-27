@@ -19,5 +19,6 @@ tests/calibration/num_molecules_and_time_step_calibration/figs/
 **/docs/5_gradient_simulation.md
 **/run-gradient-simulation.sh
 **/version-mgm.sh
+**/version-mgmt.sh
 **/tests/validation/wide_pulse/
 **/simulation_toolkit/utils/metric_visualization/
