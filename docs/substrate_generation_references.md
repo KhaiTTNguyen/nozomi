@@ -10,7 +10,7 @@ $R_{\text{bead axon}}=\ R_\mathrm{axon}+R_\mathrm{amp}\cdot\frac{1}{\sigma_\math
 ### a) 2D Initialization
 Overlaps disks in 2D initialization are removed by minimizing the following cost function
 
-$\text{argmin}_{x_i,y_i}\sum_{k=1}^{N_\mathrm{overlaps}}\alpha_k^2$
+$argmin_{x_i,y_i}\sum_{k=1}^{N_\mathrm{overlaps}}\alpha_k^2$
 
 $\alpha_k=\mathrm{min}\left(0, R_i  + R_j - \sqrt{(x_i-x_j )^2+(y_i-y_j )^2}  +l_\mathrm{min} \right);i,j∈N,i≠j $
 
@@ -19,7 +19,7 @@ where $N_\mathrm{overlaps}$ is the number of overlaps; $\alpha_k$ is the overlap
 ### b) 3D Geometric Optimization
 After meshing, overlaps between spheres of different axons are removed with an L-BFGS procedure that balances overlap removal, curvature regularization, and length preservation. The total cost function is
 
-${\mathrm{argmin}}_{x_i,y_i,z_i}[w_{\mathrm{overlap}}*\mathrm{F}_{\mathrm{overlap}} + w_\mathrm{curve}*\mathrm{F}_\mathrm{curve}+w_\mathrm{length}*\mathrm{F}_\mathrm{length}]$
+$argmin_{x_i,y_i,z_i}[w_{\mathrm{overlap}}*\mathrm{F}_{\mathrm{overlap}} + w_\mathrm{curve}*\mathrm{F}_\mathrm{curve}+w_\mathrm{length}*\mathrm{F}_\mathrm{length}]$
 
 where $w_\mathrm{overlap}, w_\mathrm{curve}, w_\mathrm{length}$ are the weights of each component cost terms. The overlap component cost term is defined as
 
