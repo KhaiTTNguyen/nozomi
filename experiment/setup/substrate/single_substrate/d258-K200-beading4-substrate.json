@@ -1,15 +1,15 @@
 {
-  "experiment_name": "auto_generated",  
+  "experiment_name": "d258-K200-beading4-VF045-substrate",  
   "parameters": {
       "orientation_shape_parameter": 200,
       "box_length_init": 0,
-      "target_volume_fraction": 0.65,
+      "target_volume_fraction": 0.45,
       "num_fibers": 500,
       "mean_diameter":  2.58,
       "sigma_diameter":  0.69,
       "dist_shape": 0.1,
       "space_buffer_starts_ends": 0.23,
-      "spheres_spacing": 0.35,
+      "spheres_spacing": 0.5,
       "space_buffer_repulse": 0.001,
       "w_overlap":10,
       "w_curve": 3, 
