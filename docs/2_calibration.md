@@ -15,7 +15,7 @@ n_repeats = 5                                                           # number
 2. Calculates time-dependent radial diffusion coefficient $D_{\perp}(t)$ 
 3. Compares simulation results against analytical solutions from Burcaw et al. (2015)
 4. Calculates Mean Absolute Error (MAE) and computation time
-5. Repeats 5 times per configuration for reproducibility assessement.
+5. Repeats 5 times per configuration for reproducibility assessment.
 
 #### How to run:
 This will take ~11hr to run all the simulations for all number of molecule/time step combinations and their repetitions. (Using a `tmux` session is recommended).
@@ -144,10 +144,10 @@ Each simulation for a diffusion time of `100 ms` using only `5 segments` can tak
 # 35 segments - extra axonal simulation
 ./run-scripts/run-simulation.sh --substrates=./tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons --gpu=0 --sim_time=100  --nseg=35 --compartment=extra
 ```
-The simulation data is stored in `VF0.65_d1.68_OD200_bead1.0_500axons/2026-02-13_17-37_d1.68_K200_ODI_0.0032_bead_1.0_500fibers/sim/ADCdata`.
+The simulation data is stored in `VF0.65_d1.68_OD200_bead1.0_500axons/<experiment_date>_d1.68_K200_ODI_0.0032_bead_1.0_500fibers/sim/ADCdata`.
 To plot computation time vs. number of segments:
 ```bash
-python3 tests/calibration/sim_domain_segment_calibration/plot_segment_calibration_from_files.py "tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons/2026-02-13_17-37_d1.68_K200_ODI_0.0032_bead_1.0_500fibers/sim/ADCdata"
+python3 tests/calibration/sim_domain_segment_calibration/plot_segment_calibration_from_files.py "tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons/<experiment_date>_d1.68_K200_ODI_0.0032_bead_1.0_500fibers/sim/ADCdata"
 ```
 
 #### Expected output:
@@ -159,7 +159,7 @@ Output will be saved to:
 ```bash
 cd nozomi
 # Basic usage with specified input folder:
-python3 tests/calibration/sim_domain_segment_calibration/plot_RD_AD_across_segment_choices.py tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons/2026-02-13_17-37_d1.68_K200_ODI_0.0032_bead_1.0_500fibers/sim/ADCdata
+python3 tests/calibration/sim_domain_segment_calibration/plot_RD_AD_across_segment_choices.py tests/calibration/sim_domain_segment_calibration/data/VF0.65_d1.68_OD200_bead1.0_500axons/<experiment_date>_d1.68_K200_ODI_0.0032_bead_1.0_500fibers/sim/ADCdata
 
 # Usage with specified input folder & output folder:
 python3 tests/calibration/sim_domain_segment_calibration/plot_RD_AD_across_segment_choices.py <path/to/ADCdata> -o <custom/output/folder>
