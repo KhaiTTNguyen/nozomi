@@ -1,9 +1,9 @@
 # Substrate Generation Details
 ## 1) Beading design
 
-Bead amplitudes $R_\mathrm{amp}$ are sampled from a Normal $\mathcal{N}\left(\mu_{R_\mathrm{amp}},\sigma_{R_\mathrm{amp}}^2\right)$. Bead spacings along the length of the axon are drawn from a $Lognormal\ \left(\mu_\mathrm{spacing},\ \sigma_{\operatorname{spacing}}^2\right)$, and are used to determine bead locations along the axon, $l_\mathrm{bead}$. The radii of spheres in a beaded axon, $R_\mathrm{bead\_axon}$, are computed by modifying the pre-bead radii of spheres $R_\mathrm{axon}$ at bead locations $l_\mathrm{bead}$, and smoothing of the axon radii local to the bead region using spheres’ positions along the axon $l$ and bead spatial spread $\sigma_\mathrm{bead}$, defined as
+Bead amplitudes $R_\mathrm{amp}$ are sampled from a Normal $\mathcal{N}\left(\mu_{R_\mathrm{amp}},\sigma_{R_\mathrm{amp}}^2\right)$. Bead spacings along the length of the axon are drawn from a $Lognormal\ \left(\mu_\mathrm{spacing},\ \sigma_{\mathrm{spacing}}^2\right)$, and are used to determine bead locations along the axon, $l_\mathrm{bead}$. The radii of spheres in a beaded axon, $R_{\text{bead axon}}$, are computed by modifying the pre-bead radii of spheres $R_\mathrm{axon}$ at bead locations $l_\mathrm{bead}$, and smoothing of the axon radii local to the bead region using spheres’ positions along the axon $l$ and bead spatial spread $\sigma_\mathrm{bead}$, defined as
 
-$R_\mathrm{bead\_axon}=\ R_\mathrm{axon}+R_\mathrm{amp}\cdot\frac{1}{\sigma_\mathrm{bead}\sqrt{2π}}\cdot\exp\left(-\frac{1}{2}\cdot \frac{(l - l_\mathrm{bead})^2}{\sigma_\mathrm{bead}^2} \right).$
+$R_{\text{bead axon}}=\ R_\mathrm{axon}+R_\mathrm{amp}\cdot\frac{1}{\sigma_\mathrm{bead}\sqrt{2π}}\cdot\exp\left(-\frac{1}{2}\cdot \frac{(l - l_\mathrm{bead})^2}{\sigma_\mathrm{bead}^2} \right).$
 
 
 ## 2) Substrate Optimization Design
