@@ -1,4 +1,8 @@
-# NOZOMI Documentation
+# NOZOMI v1.0.0 Documentation
+
+**Current Version: 1.0.0**
+
+[Latest Release](https://github.com/KhaiTTNguyen/nozomi/releases/tag/v1.0.0)
 
 This repo hosts the NOZOMI toolbox for generating 3D white matter numerical susbtrates with periodic boundaries and running Monte Carlo simulation of water diffusion in such substrates.
 
