@@ -1,6 +1,6 @@
-# 1) Molecule-Membrane Interaction Simulation
+# 1) Molecule-Membrane interaction simulation
 
-Molecule-Membrane Interaction search is done by computing collision distances between the molecule jump trajectory and spheres, and identifying the sphere that the molecule interacts with. In a segment, a molecule’s 3D position relative to a sphere, defined as $\vec{\mathbf{p}}_{\text{jump}}$, is parameterized as
+Molecule-Membrane interaction search is done by computing collision distances between the molecule jump trajectory and spheres, and identifying the sphere that the molecule interacts with. In a segment, a molecule’s 3D position relative to a sphere, defined as $\vec{\mathbf{p}}_{\text{jump}}$, is parameterized as
 
 $\vec{\mathbf{p}}_{\text{jump}} = \vec{\mathbf{p}}_0 + f \cdot \vec{\mathbf{j}}$
 
@@ -43,16 +43,16 @@ float q = -0.5 * (b + copysign(sqterm, b));
 float x1 = q / a;
 float x2 = c / q;
 ```
-# 2) Tolerance Handling Around Sphere Boundaries
+# 2) Tolerance handling around sphere membranes
 ### Problem:
-If molecule's step ends exactly on boundary, adding a tolerance prevents particles from getting "stuck" exactly on boundaries and to prevent leakage of molecules between compartments caused by floating-point precision. 
+If molecule's step ends exactly on membrane, adding a tolerance prevents particles from getting "stuck" exactly on membranes and to prevent leakage of molecules between compartments caused by floating-point precision. 
 
 ### Approach: 
 Create a "transition zone" of width `2 × tol` around each sphere
 * Inner tolerance: `r-tol`
 * Outer tolerance: `r+tol`
 
-#### Tolerance Selection Rationale
+#### Tolerance selection rationale
 A 32-bit single-precision float has ~7 decimal digits.
 Our tolerance `tol = 1e-4` provides safety margin while avoiding excessive buffer zones.
 
