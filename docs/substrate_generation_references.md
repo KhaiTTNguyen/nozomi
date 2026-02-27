@@ -23,7 +23,7 @@ $argmin_{x_i,y_i,z_i}\left[w_{\mathrm{overlap}}*F_{\mathrm{overlap}} + w_\mathrm
 
 where $w_\mathrm{overlap}, w_\mathrm{curve}, w_\mathrm{length}$ are the weights of each component cost terms. The overlap component cost term is defined as
 
-$\F_\mathrm{overlap}=\frac{R_i R_j}{\sqrt{N_\mathrm{spheres}}}
+$F_\mathrm{overlap}=\frac{R_i R_j}{\sqrt{N_\mathrm{spheres}}}
 \sum_{k=1}^{N_\mathrm{overlaps}}\left(\frac{\mathrm{Overlap}(S_i^a,S_j^b )}{R_i+R_j}\right)^2$
 
 $\text{Overlap}(S_i^a,S_j^b)=\mathrm{max}\left(R_i+R_j-|S_i^a-S_j^b|+l_\mathrm{min},0 \right)$
