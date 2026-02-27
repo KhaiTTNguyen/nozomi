@@ -1,10 +1,10 @@
 # 1) Molecule-Membrane Interaction Simulation
 
-Molecule-Membrane Interaction search is done by computing collision distances between the molecule jump trajectory and spheres, and identifying the sphere that the molecule interacts with. In a segment, a molecule’s 3D position relative to a sphere, defined as $\textbf{p}_\textbf{jump}$, is parameterized as
+Molecule-Membrane Interaction search is done by computing collision distances between the molecule jump trajectory and spheres, and identifying the sphere that the molecule interacts with. In a segment, a molecule’s 3D position relative to a sphere, defined as $\vec{\mathbf{p}}_{\text{jump}}$, is parameterized as
 
-$\textbf{p}_\textbf{jump}=\textbf{p}_\textbf{0}+f\cdot \textbf{j},$
+$\vec{\mathbf{p}}_{\text{jump}} = \vec{\mathbf{p}}_0 + f \cdot \vec{\mathbf{j}}$
 
-where $\textbf{p}_\textbf{0}=(\delta x,\delta y,\delta z)$ is the initial distance vector between the molecule and the center of the sphere in $x, y, z$. $\textbf{j}=(j_x,j_y,j_z)$ is the vector of the jump, and $f∈[0,1]$ represents the fraction of the jump to be used. To find where the molecule intersects the sphere, an analytic ray-sphere intersection equation was used
+where $\vec{\mathbf{p}}_0=(\delta x,\delta y,\delta z)$ is the initial distance vector between the molecule and the center of the sphere in $x, y, z$. $\textbf{j}=(j_x,j_y,j_z)$ is the vector of the jump, and $f∈[0,1]$ represents the fraction of the jump to be used. To find where the molecule intersects the sphere, an analytic ray-sphere intersection equation was used
 
 $(δx+f\cdot j_x )^2+(δy+f\cdot j_y )^2+(δz+f\cdot j_z )^2=(R±tol)^2.$
 
