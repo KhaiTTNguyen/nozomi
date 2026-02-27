@@ -14,28 +14,17 @@ $A\cdot f^2+2B \cdot f+C=0,$
 
 where
 
-$(A=j_x^2+j_y^2+j_z^2,)$
+$A=j_x^2+j_y^2+j_z^2,$
 
-$(B=δx\cdot j_x+δy\cdot j_y+δz\cdot j_z,)$
+$B=δx\cdot j_x+δy\cdot j_y+δz\cdot j_z,$
 
-$(C=(δx)^2+(δy)^2+(δz)^2-(R±tol)^2.)$
+$C=(δx)^2+(δy)^2+(δz)^2-(R±tol)^2.$
 
-The jump fraction $f$ is solved using Muller's method to account for numerical precision and avoid catastrophic cancellation<sup>1</sup>. A tolerance around the radius $R$ is added to prevent leakage of molecules between compartments caused by floating-point precision. Two distinct tolerance values are used: $(R-tol)$ for spins inside spheres, and $(R+tol)$ for those outside.
+The jump fraction $f$ is solved using Muller's method to account for numerical precision and avoid catastrophic cancellation<sup>1</sup>. A tolerance around the radius $R$ is added to prevent leakage of molecules between compartments caused by floating-point precision. Two distinct tolerance values are used: $(R-tol)$ for spins inside spheres, and $(R+tol)$ for those outside. More details below.
 
-Note: Alternative to our multi-step collision and membrane scattering approach, we also acknowledge that molecule-membrane interaction has been modeled by rejection sampling<sup>2,3,4,5</sup>, where a step encountering a membrane is canceled, and the molecule stays still for the step. However, bias in $D_\parallel$ was shown when steps toward the membrane are rejected<sup>6</sup>. Our collision-scattering method preserves Brownian statistics by truncating steps at boundaries, and generating new random directions with variance-corrected remaining jump distance.
-
-# 2) Numerically Stable Quadratic Equation Solving
-Collision detection was obtained from solving the quadratic equation for sphere-ray intersections. 
-
-### Problem: 
-Collision detection requires solving: 
+# 2) Muller's method for numerically stable quadratic equation solving
 ```bash
-ax² + bx + c = 0 where:
-a = jx² + jy² + jz² (squared jump magnitude)
-b = 2(jx·dx + jy·dy + jz·dz) (dot product terms)
-c = dx² + dy² + dz² - r² (distance to sphere surface)
-
-### Naive Implementation Issues
+### Naive solution for quadratic equation
 // UNSTABLE - suffers from catastrophic cancellation
 float discriminant = sqrt(b*b - 4*a*c);
 float x1 = (-b + discriminant) / (2*a);
@@ -77,6 +66,9 @@ float c = dx*dx + dy*dy + dz*dz - (r-tol)*(r-tol);
 // Outside sphere: collision with (r + tol) 
 float c = dx*dx + dy*dy + dz*dz - (r+tol)*(r+tol);
 ```
+
+Note: Alternative to our multi-step collision and membrane scattering approach, we also acknowledge that molecule-membrane interaction has been modeled by rejection sampling<sup>2,3,4,5</sup>, where a step encountering a membrane is canceled, and the molecule stays still for the step. However, bias in $D_\parallel$ was shown when steps toward the membrane are rejected<sup>6</sup>. Our collision-scattering method preserves Brownian statistics by truncating steps at boundaries, and generating new random directions with variance-corrected remaining jump distance.
+
 
 ## References
 1.	Accuracy and Stability of Numerical Algorithms | SIAM Publications Library. Other Titles in Applied Mathematics. Accessed October 8, 2025. https://epubs.siam.org/doi/book/10.1137/1.9780898718027
