@@ -19,24 +19,24 @@ where $N_\mathrm{overlaps}$ is the number of overlaps; $\alpha_k$ is the overlap
 ### b) 3D Geometric Optimization
 After meshing, overlaps between spheres of different axons are removed with an L-BFGS procedure that balances overlap removal, curvature regularization, and length preservation. The total cost function is
 
-$argmin_{x_i,y_i,z_i}[w_{\mathrm{overlap}}*\mathrm{F}_{\mathrm{overlap}} + w_\mathrm{curve}*\mathrm{F}_\mathrm{curve}+w_\mathrm{length}*\mathrm{F}_\mathrm{length}]$
+$argmin_{x_i,y_i,z_i}\left[w_{\mathrm{overlap}}*F_{\mathrm{overlap}} + w_\mathrm{curve}*F_\mathrm{curve}+w_\mathrm{length}*F_\mathrm{length}\right]$
 
 where $w_\mathrm{overlap}, w_\mathrm{curve}, w_\mathrm{length}$ are the weights of each component cost terms. The overlap component cost term is defined as
 
-$\text{F}_\mathrm{overlap}=\frac{R_i R_j}{\sqrt{N_\mathrm{spheres}}}
+$\F_\mathrm{overlap}=\frac{R_i R_j}{\sqrt{N_\mathrm{spheres}}}
 \sum_{k=1}^{N_\mathrm{overlaps}}\left(\frac{\mathrm{Overlap}(S_i^a,S_j^b )}{R_i+R_j}\right)^2$
 
 $\text{Overlap}(S_i^a,S_j^b)=\mathrm{max}\left(R_i+R_j-|S_i^a-S_j^b|+l_\mathrm{min},0 \right)$
 
 where $S_i^a,S_j^b$ are the 3D position vectors for the $i,j$ overlapping spheres of different fibers $\textbf{\textit{a}}$ and $\textbf{\textit{b}}$, $S_i^a=(x_i^a,y_i^a,z_i^a)$. The curvature component cost term is defined as
 
-$\text{F_\mathrm{curve}}=\sum_{a=1}^{N_\mathrm{fibers}}[\sum_{i=1}^{m_a-2}f_\mathrm{curve}] $
+$F_\mathrm{curve}=\sum_{a=1}^{N_\mathrm{fibers}}[\sum_{i=1}^{m_a-2}f_\mathrm{curve}] $
 
 $f_\mathrm{curve}=\frac{1}{3\overline{R^a}} \left(1-\frac{v_i^a \cdot v_{i+1}^a}{|v_i^a||v_{i+1}^a|}\right)^2;v_i^a=S_{i+1}^a-S_i^a;i=1,2,3,..,m_a $
 
 where $m_a$ is the number of spheres in fiber $\textbf{\textit{a}}$; $\overline{R^a}$ is the mean radius of fiber $\textbf{\textit{a}}$. The length component cost term is defined as
 
-$\text{F}_\mathrm{length}=\sum_{a=1}^{N_\mathrm{fibers}}\left[\sum_{i=1}^{m_{a-1}}f_\mathrm{length} \right]$
+$F_\mathrm{length}=\sum_{a=1}^{N_\mathrm{fibers}}\left[\sum_{i=1}^{m_{a-1}}f_\mathrm{length} \right]$
 
 
 
