@@ -4,7 +4,7 @@ Molecule-Membrane Interaction search is done by computing collision distances be
 
 $\vec{\mathbf{p}}_{\text{jump}} = \vec{\mathbf{p}}_0 + f \cdot \vec{\mathbf{j}}$
 
-where $\vec{\mathbf{p}}_0=(\delta x,\delta y,\delta z)$ is the initial distance vector between the molecule and the center of the sphere in $x, y, z$. $\textbf{j}=(j_x,j_y,j_z)$ is the vector of the jump, and $f∈[0,1]$ represents the fraction of the jump to be used. To find where the molecule intersects the sphere, an analytic ray-sphere intersection equation was used
+where $\vec{\mathbf{p}}_0=(\delta x,\delta y,\delta z)$ is the initial distance vector between the molecule and the center of the sphere in $x, y, z$. $$\vec{\mathbf{j}}=(j_x,j_y,j_z)$ is the vector of the jump, and $f∈[0,1]$ represents the fraction of the jump to be used. To find where the molecule intersects the sphere, an analytic ray-sphere intersection equation was used
 
 $(δx+f\cdot j_x )^2+(δy+f\cdot j_y )^2+(δz+f\cdot j_z )^2=(R±tol)^2.$
 
