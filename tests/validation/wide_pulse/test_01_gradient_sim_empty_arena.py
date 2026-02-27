@@ -1,16 +1,4 @@
 import pycuda.autoinit
-# import pycuda.driver as drv
-# import pycuda.gpuarray as gpuarray
-# import numpy as np
-# # import diffsim3d as ds3
-# import hipa.diffsim.geometry as geom
-# import hipa.diffsim.diffsim3d_additional as ds3
-
-# import hipa.diffsim.helper.simulation_report as simrep
-# import hipa.diffsim.helper.sim_util as sim_util
-# import matplotlib.pyplot as plt
-# import hipa.util.util as util
-# import hipa.util.adjust_geometry as ag
 from datetime import datetime
 # from matplotlib.pyplot import cm
 # from matplotlib.colors import LinearSegmentedColormap

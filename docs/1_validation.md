@@ -12,8 +12,6 @@ pytest
 
 # Run specific test file
 pytest tests/validation/narrow_pulse/test_03_periodic_boundary_xyz.py
-
-pytest tests/validation/wide_pulse/test_01_gradient_sim_empty_arena.py
 ```
 
 #### Expected output: 
