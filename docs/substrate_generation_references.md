@@ -19,7 +19,7 @@ where $N_\mathrm{overlaps}$ is the number of overlaps; $\alpha_k$ is the overlap
 ### b) 3D Geometric Optimization
 After meshing, overlaps between spheres of different axons are removed with an L-BFGS procedure that balances overlap removal, curvature regularization, and length preservation. The total cost function is
 
-$\text{argmin}_{x_i,y_i,z_i}[w_{\mathrm{overlap}}*\mathrm{F}_{\mathrm{overlap}} + w_\mathrm{curve}*\mathrm{F}_\mathrm{curve}+w_\mathrm{length}*\mathrm{F}_\mathrm{length}]$
+${\mathrm{argmin}}_{x_i,y_i,z_i}[w_{\mathrm{overlap}}*\mathrm{F}_{\mathrm{overlap}} + w_\mathrm{curve}*\mathrm{F}_\mathrm{curve}+w_\mathrm{length}*\mathrm{F}_\mathrm{length}]$
 
 where $w_\mathrm{overlap}, w_\mathrm{curve}, w_\mathrm{length}$ are the weights of each component cost terms. The overlap component cost term is defined as
 
