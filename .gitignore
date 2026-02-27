@@ -22,3 +22,4 @@ tests/calibration/num_molecules_and_time_step_calibration/figs/
 **/version-mgmt.sh
 **/tests/validation/wide_pulse/
 **/simulation_toolkit/utils/metric_visualization/
+**/simulation_gradient_main.py
