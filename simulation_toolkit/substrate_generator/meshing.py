@@ -64,17 +64,17 @@ class Meshing(object):
         beading_positions_along_axon = torch.cumsum(beading_spacings, dim=0)
         beading_positions_along_axon=beading_positions_along_axon[beading_positions_along_axon<positions_along_axon[-1]]
         r0=original_radius
-        mean_r1 = config_params.BEAD_AMPLITUDE_MEAN #1.5  # Control mean of gaussian distribution
-        std_r1 = config_params.BEAD_AMPLITUDE_STDV #0.85  # Control spread of the distribution
-        gaussian_dist = torch.distributions.normal.Normal(loc=mean_r1, scale=std_r1)   
+        alpha_mean = config_params.BEAD_ALPHA_MEAN  # Controls mean CV across axons
+        alpha_stdv = config_params.BEAD_ALPHA_STDV  # Controls stdv of CV across axons
+        alpha_dist = torch.distributions.normal.Normal(loc=alpha_mean, scale=alpha_stdv)
+        alpha = alpha_dist.sample((1,)).to(self.device)  # drawn once per axon
         result = torch.full(positions_along_axon.shape,r0.item()).to(self.device)
         for i in range(len(beading_positions_along_axon)):
-            r1 = gaussian_dist.sample((1,)).to(self.device)
             z = positions_along_axon
             mean = beading_positions_along_axon[i]
             sigma = torch.tensor(2.3, device=self.device)
-            gaussian_peak = torch.exp(-(z - mean)**2 / (2 * sigma**2)) / (sigma * torch.sqrt(torch.tensor(2 * torch.pi)))
-            result = result + r1*gaussian_peak
+            gaussian_peak = torch.exp(-(z - mean)**2 / (2 * sigma**2))
+            result = result + alpha * r0 * gaussian_peak
         result = self.process_result_endpoints(result, r0)
         return result
     
@@ -95,7 +95,7 @@ class Meshing(object):
         modified_y = modified_function(x, result)
         modified_y = modified_y - modified_y[0]
         modified_y = modified_y + target_value
-        modified_y = torch.clamp(modified_y, min=0.08)
+        modified_y = torch.clamp(modified_y, min=0.2)
         return modified_y
     
     def get_beading_spacings_along_axon(self, positions_along_axon):

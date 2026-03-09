@@ -25,6 +25,10 @@ cd nozomi
 # Then run
 ./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=0 --sim_time=100  --nseg=20 --compartment=intra
 
+
+./run-scripts/run-simulation.sh --substrates=./experiment/result/d35-K10-beading4-VF041-substrate --gpu=5 --sim_time=100  --nseg=20 --compartment=intra
+
+
 ./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=0 --sim_time=100  --nseg=20 --compartment=extra 
 ```
 

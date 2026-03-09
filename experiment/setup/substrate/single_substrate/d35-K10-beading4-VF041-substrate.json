@@ -1,12 +1,12 @@
 {
   "experiment_name": "auto_generated",  
   "parameters": {
-      "orientation_shape_parameter": 200,
+      "orientation_shape_parameter": 10,
       "box_length_init": 0,
-      "target_volume_fraction": 0.65,
+      "target_volume_fraction": 0.3,
       "num_fibers": 500,
-      "mean_diameter":  1.68,
-      "sigma_diameter":  0.45,
+      "mean_diameter":  3.5,
+      "sigma_diameter":  0.9375,
       "dist_shape": 0.1,
       "space_buffer_starts_ends": 0.23,
       "spheres_spacing": 0.5,
@@ -16,8 +16,8 @@
       "w_length": 3,
       "bead_spacing_mean": 5.70,
       "bead_spacing_stdv": 2.88,
-      "bead_alpha_mean": 0.21,
-      "bead_alpha_stdv": 0.17,
-      "repeats": 4
+      "bead_alpha_mean": 0.83,
+      "bead_alpha_stdv": 0.22,
+      "repeats": 3
   }
 }

@@ -29,14 +29,14 @@ Substrate generation is configured via JSON files located in:
       "w_length": 3,
       "bead_spacing_mean": 5.70,
       "bead_spacing_stdv": 2.88,
-      "bead_amplitude_mean": 1.0,
-      "bead_amplitude_stdv": 0.8,
+      "bead_alpha_mean": 0.21,
+      "bead_alpha_stdv": 0.17,
       "repeats": 1
   }
 }
 ```
 NOTE: `"experiment_name"` can be 
-* `"auto_generated"` and will be auto generated in the format: `VF{target_volume_fraction}_d{mean_diameter}_OD{orientation_shape_parameter}_bead{bead_amplitude_mean}_{num_fibers}axons`
+* `"auto_generated"` and will be auto generated in the format: `VF{target_volume_fraction}_d{mean_diameter}_OD{orientation_shape_parameter}_bead{bead_alpha_mean}_{num_fibers}axons`
 * user-specified in the `"experiment_name"` field.
 
 ### Parameter descriptions
@@ -45,7 +45,7 @@ NOTE: `"experiment_name"` can be
 - `target_volume_fraction`: Desired axonal volume fraction (typical: 0.3-0.7).
 - `mean_diameter`: Mean axon diameter in $\mu m$ (typical: 1.0-9.0).
 - `sigma_diameter`: Standard deviation of diameter distribution in $\mu m$.
-- `bead_amplitude_mean`: Mean amplitude of diameter variation due to beading in $\mu m$.
+- `bead_alpha_mean`: Dimensionless scaling factor controlling the mean beading amplitude relative to the local axon radius ($r_0$). The bead bump added at each bead location is `alpha × r0 × exp(...)`, so `bead_alpha_mean` directly controls mean CV of radius variation, independent of axon diameter. Typical range: 0.0–2.0 (e.g., 0.21 for mild beading, 0.83 for strong beading with CV≈0.28).
 - `num_fibers`: Number of axons to generate in the substrate (typical: 500 for good reproducibility of simulation results).
 - `repeats`: Number of substrate realizations to generate with same parameters.
 
@@ -55,7 +55,7 @@ NOTE: `"experiment_name"` can be
 
 - `bead_spacing_mean`: Average distance between beads along axon in $\mu m$
 - `bead_spacing_stdv`: Standard deviation of bead spacing in $\mu m$
-- `bead_amplitude_stdv`: Standard deviation of beading amplitude in $\mu m$
+- `bead_alpha_stdv`: Standard deviation of the alpha scaling factor across axons (dimensionless). Controls the spread of CV values across the population of axons. alpha is drawn once per axon from Normal(`bead_alpha_mean`, `bead_alpha_stdv`), so increasing this value increases CV_stdv across axons. Typical range: 0.0–1.0.
 - `space_buffer_starts_ends`: Buffer space around fiber start/end points in $\mu m$
 - `spheres_spacing`: Spacing between spheres along axon centerline, as a ratio relative to radius.
 - `space_buffer_repulse`: Minimum separation distance between fibers in $\mu m$
@@ -97,6 +97,8 @@ source sim_venv/bin/activate
 **With custom configuration file:**
 ```bash
 ./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d258-K20-substrate.json
+
+./run-scripts/run-geometry-gen.sh --gpu=7 --config=/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/setup/substrate/single_substrate/d45-K200-beading4-substrate.json
 ```
 
 **With custom configuration file and output folder:**
@@ -109,7 +111,7 @@ source sim_venv/bin/activate
 Unless `--output_folder_path` is given, generated substrates are auto-saved to `/nozomi/experiment/result/` with the following structure:
 
 ```bash
-/nozomi/experiment/result/<experiment_name>/<timestamp>_d<mean_diameter>_K<orientation_shape_parameter>_ODI_<odi-value>_bead_<bead_amplitude>_<num_fibers>fibers/
+/nozomi/experiment/result/<experiment_name>/<timestamp>_d<mean_diameter>_K<orientation_shape_parameter>_ODI_<odi-value>_bead_<bead_alpha_mean>_<num_fibers>fibers/
 ├── data/
 │   └── <spheres_coordinates>.pkl                                         # 3D coordinates & radius of all spheres
 └── figs/
@@ -120,7 +122,7 @@ Unless `--output_folder_path` is given, generated substrates are auto-saved to `
     ├── substrate_stats/                                                  # Substrate properties plots
     │   ├── Diameter_distribution_mean<d>_std<std_d>_<date>.png           # Diameter_distribution
     │   ├── Along_axon_radius_variation_<date>.png                        # Along axon radius variation
-    │   ├── CV_outer_diameter_<date>_CVmean_<CVmean>_CVstd_<CVstd>.png    # Coefficient of variation (CV) of diameter
+    │   ├── CV_outer_diameter_<date>_CVmean_<CVmean>_CVstd_<CVstd>.png    # Coefficient of variation (CV) of radius across and along axons
     │   └── ODI/  
     │       ├── <OD_histogram>.png                                         # Fiber orientation distribution (FOD) on unit sphere
     │       ├── <FOD_3D_glyph>.png                                         # FOD as 3D spherical harmonics glyph

@@ -60,7 +60,7 @@ def build_experiment_name_from_params(params):
         'target_volume_fraction',
         'mean_diameter',
         'orientation_shape_parameter',
-        'bead_amplitude_mean',
+        'bead_alpha_mean',
         'num_fibers'
     ]
     missing = [key for key in required_keys if key not in params]
@@ -69,7 +69,7 @@ def build_experiment_name_from_params(params):
         raise KeyError(f"Missing parameters for experiment naming: {missing_str}")
     vf = str(params['target_volume_fraction'])
     mean_d = str(params['mean_diameter'])
-    bead_amp = str(params['bead_amplitude_mean'])
+    bead_amp = str(params['bead_alpha_mean'])
     orientation = str(params['orientation_shape_parameter'])
     num_fibers = str(params['num_fibers'])
 

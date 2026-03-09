@@ -138,19 +138,29 @@ class DiffGradWaveform:
     def calculate_bvalue(self,gmax=None):
         ''' 
         calculate the b-value of gwave in units of ms/um^2
+        gmax is in mT/m; wave amplitude of 1 corresponds to 1 mT/m.
         '''
         if gmax is None:
             gmax = self.gmax
-        gwave_um = self.gwave/10e3; # mT/um
+        gwave_um = self.gwave / 1e6  # mT/m -> mT/um (1 mT/m = 1e-6 mT/um)
         return np.sum(np.cumsum(gmax*gamma*gwave_um)**2)*self.dt**3; # ms/um^2
 
     def calculate_bvalue_from_wave(self):
             ''' 
             calculate the b-value of gwave in units of ms/um^2
             following equation 15 in https://doi.org/10.1002/nbm.1520
+            Wave amplitude of 1 corresponds to gmax = 1 mT/m.
+            1 mT/m = 1e-6 mT/um. More generally,
+            b = \int_0^T [ dt * q(t) * q(t) ]
+                
+                where q(t) = \int_0^t gamma*[ g(t') dt'] (cumulative gradient moment)
+                
+                = \int_0^T [ dt * ( \int_0^t [gamma * g(t') dt'] )^2 ]
+
             '''
-            gwave_um = self.wave/10e3; # mT/um
-            return np.sum(np.cumsum(gamma*gwave_um)**2)*self.dt**3; # ms/um^2 
+            gwave_um = self.wave / 10e3  # mT/m -> mT/um (1 mT/m = 1e-6 mT/um)
+            # discrete form of \int_0^T [ dt * ( \int_0^t [gamma * g(t') dt'] )^2 ]
+            return np.sum(np.cumsum(gamma*gwave_um)**2)*self.dt**3; # ms/um^2 -- 1 ms/um^2 = 1000 sec/mm^2
 
     def set_bvalues(self,b):
         b0 = self.calculate_bvalue(1)
@@ -184,68 +194,6 @@ class PGDiffWaveform(DiffGradWaveform):
         second_lobe = (self.t > (self.te/2 + self.big_delta/2 - self.little_delta/2)) \
                 & (self.t < (self.te/2 + self.big_delta/2 + self.little_delta/2))
         self.wave[second_lobe] = -1
-
-class CosineOGDiffWaveform(DiffGradWaveform):
-    '''
-    Class to generate a cosine-modulated oscillating gradient diffusion waveform
-    '''
-    def __init__(self, num_oscillations, frequency, gmax, te, time_step=dt0):
-        self.num_oscillations = num_oscillations
-        self.frequency = frequency
-        self.gmax = gmax
-        self.te = te
-        self.dt = time_step
-
-        self.generate_waveform()
-
-    def generate_waveform(self):
-        self.t = np.arange(self.dt, self.te+self.dt, self.dt)
-        self.wave = np.zeros_like(self.t)
-        
-        # Calculate timing parameters
-        oscillation_period = 1.0 / self.frequency * 1000 #
-        cosine_duration = self.num_oscillations * oscillation_period
-        ramp_duration = oscillation_period / 8  # 1/4 cycle of double frequency
-        
-        # Total duration of a single waveform (first half of TE)
-        half_waveform_duration = cosine_duration + 2 * ramp_duration
-        
-        # Start time for first waveform (centered in first half of TE)
-        t1_start = self.te / 4 - half_waveform_duration / 2
-        
-        # First waveform (positive)
-        for i, t in enumerate(self.t):
-            if t1_start <= t < t1_start + ramp_duration:
-                # Initial ramp-up (1/4 sine of double frequency)
-                phase = (t - t1_start) / ramp_duration * np.pi / 2
-                self.wave[i] = self.gmax * np.sin(phase)
-            elif t1_start + ramp_duration <= t < t1_start + ramp_duration + cosine_duration:
-                # Cosine oscillations
-                phase = 2 * np.pi * self.frequency * (t - (t1_start + ramp_duration))
-                self.wave[i] = self.gmax * np.cos(phase)
-            elif t1_start + ramp_duration + cosine_duration <= t < t1_start + 2 * ramp_duration + cosine_duration:
-                # Final ramp-down (1/4 sine of double frequency)
-                # Mirror image of ramp-up: gmax to 0
-                phase = (t - (t1_start + ramp_duration + cosine_duration)) / ramp_duration * np.pi / 2
-                self.wave[i] = self.gmax * np.cos(phase)  # Starts at gmax, ends at 0
-        
-        # Second waveform (negative) - mirroring the first waveform
-        t2_start = 3 * self.te / 4 - half_waveform_duration / 2
-        
-        for i, t in enumerate(self.t):
-            if t2_start <= t < t2_start + ramp_duration:
-                # Initial ramp-up (1/4 sine of double frequency) - negative
-                phase = (t - t2_start) / ramp_duration * np.pi / 2
-                self.wave[i] = -self.gmax * np.sin(phase)
-            elif t2_start + ramp_duration <= t < t2_start + ramp_duration + cosine_duration:
-                # Cosine oscillations - negative
-                phase = 2 * np.pi * self.frequency * (t - (t2_start + ramp_duration))
-                self.wave[i] = -self.gmax * np.cos(phase)
-            elif t2_start + ramp_duration + cosine_duration <= t < t2_start + 2 * ramp_duration + cosine_duration:
-                # Final ramp-down (1/4 sine of double frequency) - negative
-                phase = (t - (t2_start + ramp_duration + cosine_duration)) / ramp_duration * np.pi / 2
-                self.wave[i] = -self.gmax * np.cos(phase)  # Starts at -gmax, ends at 0
-
 
 class ApodizedCosineOGSEWaveform(DiffGradWaveform):
     '''

@@ -24,11 +24,17 @@ def validate_parameters(params):
             'max': 200,
             'description': 'Orientation parameter'
         },
-        'bead_amplitude_mean': {
-            'value': params.get('bead_amplitude_mean'),
-            'min': 0.2,
-            'max': 1.3,
-            'description': 'Bead amplitude mean (µm)'
+        'bead_alpha_mean': {
+            'value': params.get('bead_alpha_mean'),
+            'min': 0.0,
+            'max': 2.0,
+            'description': 'Bead alpha mean (dimensionless)'
+        },
+        'bead_alpha_stdv': {
+            'value': params.get('bead_alpha_stdv'),
+            'min': 0.0,
+            'max': 1.0,
+            'description': 'Bead alpha stdv (dimensionless)'
         },
         'target_volume_fraction': {
             'value': params.get('target_volume_fraction'),

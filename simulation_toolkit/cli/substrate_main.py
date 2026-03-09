@@ -31,14 +31,14 @@ def substrate_main(params, experiment_folder):
     config_params.W_LENGTH = params['w_length']
     config_params.BEAD_SPACING_MEAN = params['bead_spacing_mean']   
     config_params.BEAD_SPACING_STDV = params['bead_spacing_stdv']
-    config_params.BEAD_AMPLITUDE_MEAN = params['bead_amplitude_mean']
-    config_params.BEAD_AMPLITUDE_STDV = params['bead_amplitude_stdv']
+    config_params.BEAD_ALPHA_MEAN = params['bead_alpha_mean']
+    config_params.BEAD_ALPHA_STDV = params['bead_alpha_stdv']
 
     print(f"Building substrate with: \
         volume_fraction={config_params.VOLUME_FRACTION},\
         diameter_mean={config_params.MEAN_DIAMETER},\
         orientation_shape_parameter={config_params.ORIENTATION_SHAPE_PARAM}, \
-        bead_amplitude_mean={config_params.BEAD_AMPLITUDE_MEAN},\
+        bead_alpha_mean={config_params.BEAD_ALPHA_MEAN},\
         num_fibers={config_params.NUM_FIBERS}") 
 
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -49,7 +49,7 @@ def substrate_main(params, experiment_folder):
                                                         '_d'+str(config_params.MEAN_DIAMETER)+\
                                                         '_K'+str(int(config_params.ORIENTATION_SHAPE_PARAM))+\
                                                     '_ODI_'+str(config_params.ODI_INDEX)+\
-                                                    '_bead_'+str(config_params.BEAD_AMPLITUDE_MEAN)+'_'+\
+                                                    '_bead_'+str(config_params.BEAD_ALPHA_MEAN)+'_'+\
                                                         str(config_params.NUM_FIBERS) +'fibers')
     not_converged=True
     while not_converged:
