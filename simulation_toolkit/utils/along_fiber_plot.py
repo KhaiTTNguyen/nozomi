@@ -124,7 +124,7 @@ def get_cv_of_diameter_or_radius_along_each_axon( radii):
     return np.array([std_of_samples / mean_of_samples])
 
 def plot_diameter_CV_distribution():
-    fig = plt.figure()
+    fig = plt.figure(figsize=(6, 6))
     # Plot the histogram
     plt.hist(config_params.CV_RADII, bins=55, density=True)
 
@@ -133,6 +133,17 @@ def plot_diameter_CV_distribution():
     plt.xlabel('CV (outer diameter)', fontsize=15, labelpad=3)
     plt.ylabel('Density', fontsize=15, labelpad=5)
     plt.tick_params(axis='both', which='major', labelsize=13)
+    plt.xlim(0, 0.6)
+    plt.ylim(0, 8)
+    # Calculate the mean + std for the label, ensure it's not directly config_params.CV_OUTER_MEAN which is already defined for the first line
+    mean_plus_std_val = config_params.CV_OUTER_MEAN + config_params.CV_OUTER_STDV
+    mean_minus_std_val = config_params.CV_OUTER_MEAN - config_params.CV_OUTER_STDV
+    # Updated legend label for the mean line to show 'CV Mean: X.XXX ± CV Std Dev: Y.YYY'
+    plt.axvline(x=config_params.CV_OUTER_MEAN, color='red', linestyle='--', linewidth=2,  label=f'CV = {config_params.CV_OUTER_MEAN:.3f} \u00B1 {config_params.CV_OUTER_STDV:.3f}')
+    plt.axvline(x=mean_plus_std_val, color='grey', linestyle='--', linewidth=2)
+    plt.axvline(x=mean_minus_std_val, color='grey', linestyle='--', linewidth=2)
+    plt.legend(fontsize=12)
+    plt.grid(True, alpha=0.3)
     # Adjust spacing between subplots
     plt.subplots_adjust(wspace=0.5)
     folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+"/figs/substrate_stats"

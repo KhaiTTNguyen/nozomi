@@ -3,7 +3,7 @@
   "parameters": {
       "orientation_shape_parameter": 200,
       "box_length_init": 0,
-      "target_volume_fraction": 0.3,
+      "target_volume_fraction": 0.25,
       "num_fibers": 500,
       "mean_diameter":  3.5,
       "sigma_diameter":  0.9375,
