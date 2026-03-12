@@ -73,5 +73,5 @@ def build_experiment_name_from_params(params):
     orientation = str(params['orientation_shape_parameter'])
     num_fibers = str(params['num_fibers'])
 
-    return f"d{mean_d}_OD{orientation}_bead{bead_amp}_initVF{vf}_{num_fibers}axons"
+    return f"bead{bead_amp}_d{mean_d}_OD{orientation}_initVF{vf}_{num_fibers}axons"
 

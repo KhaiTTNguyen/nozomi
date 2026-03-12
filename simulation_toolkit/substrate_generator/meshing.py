@@ -95,7 +95,7 @@ class Meshing(object):
         modified_y = modified_function(x, result)
         modified_y = modified_y - modified_y[0]
         modified_y = modified_y + target_value
-        modified_y = torch.clamp(modified_y, min=0.2)
+        modified_y = torch.clamp(modified_y, min=0.35)
         return modified_y
     
     def get_beading_spacings_along_axon(self, positions_along_axon):

@@ -55,7 +55,7 @@ class Init2D(object):
         gev_fitted_diameter = minimize(self.objective, [self.dist_shape, self.mean_diameter, self.sigma_radii], args=(self.mean_diameter, self.sigma_radii), method='Nelder-Mead')
         c_opt, loc_opt, scale_opt = gev_fitted_diameter.x
         diameter_np = genextreme.rvs(c=c_opt, loc=loc_opt, scale=scale_opt, size=self.num_fibers)
-        diameter_np = np.clip(diameter_np, a_min=0.15, a_max=None)
+        diameter_np = np.clip(diameter_np, a_min=0.5, a_max=None)
         
         radii_0 = torch.from_numpy(diameter_np/2)
         fid_0 = torch.arange(radii_0.shape[0])

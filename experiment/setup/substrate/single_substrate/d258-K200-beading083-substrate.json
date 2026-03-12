@@ -16,8 +16,8 @@
       "w_length": 3,
       "bead_spacing_mean": 5.70,
       "bead_spacing_stdv": 2.88,
-      "bead_alpha_mean": 0.5,
-      "bead_alpha_stdv": 0.15,
+      "bead_alpha_mean": 0.83,
+      "bead_alpha_stdv": 0.08,
       "repeats": 3
   }
 }
