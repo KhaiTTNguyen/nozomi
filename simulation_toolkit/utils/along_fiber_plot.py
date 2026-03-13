@@ -134,7 +134,7 @@ def plot_diameter_CV_distribution():
     plt.ylabel('Density', fontsize=15, labelpad=5)
     plt.tick_params(axis='both', which='major', labelsize=13)
     plt.xlim(0, 0.6)
-    plt.ylim(0, 8)
+    plt.ylim(0, 12)
     # Calculate the mean + std for the label, ensure it's not directly config_params.CV_OUTER_MEAN which is already defined for the first line
     mean_plus_std_val = config_params.CV_OUTER_MEAN + config_params.CV_OUTER_STDV
     mean_minus_std_val = config_params.CV_OUTER_MEAN - config_params.CV_OUTER_STDV
