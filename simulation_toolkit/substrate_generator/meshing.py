@@ -78,7 +78,7 @@ class Meshing(object):
         result = self.process_result_endpoints(result, r0)
         return result
     
-    def process_result_endpoints(self, result, target_value):
+    def process_result_endpoints(self, result, r0):
         x = torch.linspace(0, len(result), len(result),  device=self.device)
         # Calculate the slope of the linear transformation
         slope = (result[-1] - result[0]) / len(result)
@@ -94,8 +94,8 @@ class Meshing(object):
         # Calculate the modified function values
         modified_y = modified_function(x, result)
         modified_y = modified_y - modified_y[0]
-        modified_y = modified_y + target_value
-        modified_y = torch.clamp(modified_y, min=0.35)
+        modified_y = modified_y + r0
+        modified_y = torch.clamp(modified_y, min=0.415*r0)
         return modified_y
     
     def get_beading_spacings_along_axon(self, positions_along_axon):
