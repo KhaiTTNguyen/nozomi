@@ -3,10 +3,10 @@
   "parameters": {
       "orientation_shape_parameter": 200,
       "box_length_init": 0,
-      "target_volume_fraction": 0.38,
+      "target_volume_fraction": 0.47,
       "num_fibers": 500,
-      "mean_diameter":  3.5,
-      "sigma_diameter":  0.9375,
+      "mean_diameter":  4.5,
+      "sigma_diameter":  1.205,
       "dist_shape": 0.1,
       "space_buffer_starts_ends": 0.23,
       "spheres_spacing": 0.5,
@@ -16,8 +16,8 @@
       "w_length": 3,
       "bead_spacing_mean": 5.70,
       "bead_spacing_stdv": 2.88,
-      "bead_alpha_mean":  0.5,
-      "bead_alpha_stdv": 0.15,
+      "bead_alpha_mean":  0.3,
+      "bead_alpha_stdv": 0.18,
       "repeats": 3
   }
 }
