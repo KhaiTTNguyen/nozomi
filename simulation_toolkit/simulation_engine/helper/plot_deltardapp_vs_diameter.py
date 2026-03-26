@@ -65,6 +65,53 @@ def collect_deltardapp(data_root: str) -> dict:
     results = {
         "human_b300": defaultdict(lambda: defaultdict(list)),
         "animal_b800": defaultdict(lambda: defaultdict(list)),
+        "components": {
+            "intra": {
+                "human_b300": {
+                    "PGSE": defaultdict(lambda: defaultdict(list)),
+                    "OGSE": defaultdict(lambda: defaultdict(list)),
+                },
+                "animal_b800": {
+                    "PGSE": defaultdict(lambda: defaultdict(list)),
+                    "OGSE": defaultdict(lambda: defaultdict(list)),
+                },
+            },
+            "extra": {
+                "human_b300": {
+                    "PGSE": defaultdict(lambda: defaultdict(list)),
+                    "OGSE": defaultdict(lambda: defaultdict(list)),
+                },
+                "animal_b800": {
+                    "PGSE": defaultdict(lambda: defaultdict(list)),
+                    "OGSE": defaultdict(lambda: defaultdict(list)),
+                },
+            },
+            "total": {
+                "human_b300": {
+                    "PGSE": defaultdict(lambda: defaultdict(list)),
+                    "OGSE": defaultdict(lambda: defaultdict(list)),
+                },
+                "animal_b800": {
+                    "PGSE": defaultdict(lambda: defaultdict(list)),
+                    "OGSE": defaultdict(lambda: defaultdict(list)),
+                },
+            },
+        },
+    }
+
+    component_key_map = {
+        "total": {
+            "human_b300": {"PGSE": "RDapp_PGSE", "OGSE": "RDapp_OGSE"},
+            "animal_b800": {"PGSE": "RDapp_PGSE_2", "OGSE": "RDapp_OGSE_2"},
+        },
+        "intra": {
+            "human_b300": {"PGSE": "RDapp_PGSE_intra", "OGSE": "RDapp_OGSE_intra"},
+            "animal_b800": {"PGSE": "RDapp_PGSE_intra_2", "OGSE": "RDapp_OGSE_intra_2"},
+        },
+        "extra": {
+            "human_b300": {"PGSE": "RDapp_PGSE_extra", "OGSE": "RDapp_OGSE_extra"},
+            "animal_b800": {"PGSE": "RDapp_PGSE_extra_2", "OGSE": "RDapp_OGSE_extra_2"},
+        },
     }
 
     for exp_group in sorted(os.listdir(data_root)):
@@ -97,6 +144,13 @@ def collect_deltardapp(data_root: str) -> dict:
             if delta_animal is not None:
                 delta_animal = float(delta_animal)
                 results["animal_b800"][od][diam].append(delta_animal)
+
+            for component_name, scenario_map in component_key_map.items():
+                for scenario_key, seq_map in scenario_map.items():
+                    for seq_label, rd_key in seq_map.items():
+                        value = r.get(rd_key, None)
+                        if value is not None:
+                            results["components"][component_name][scenario_key][seq_label][od][diam].append(float(value))
 
             print(
                 f"  {exp_group}/{substrate_id}  d={diam} OD={od}"
@@ -192,6 +246,401 @@ def plot_deltardapp(results: dict, output_path: Optional[str] = None):
         plt.show()
 
     return fig, ax
+
+
+def plot_rdapp_component(results: dict, component: str, output_path: Optional[str] = None):
+    """
+    Plot RDapp_PGSE and RDapp_OGSE versus mean diameter for one compartment.
+
+    Parameters
+    ----------
+    results     : output of collect_deltardapp()
+    component   : one of {"intra", "extra", "total"}
+    output_path : file to save figure; if None, shows interactively
+    """
+    component_results = results.get("components", {}).get(component, {})
+    if not component_results:
+        raise ValueError(f"No component results found for '{component}'.")
+
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5), sharey=True)
+    scenario_meta = [
+        ("human_b300", "Human scanner", r"$b=300$ s/mm$^2$"),
+        ("animal_b800", "Animal scanner", r"$b=800$ s/mm$^2$"),
+    ]
+
+    component_label_map = {
+        "intra": "Intra-axonal",
+        "extra": "Extra-axonal",
+        "total": "Volume-fraction weighted total",
+    }
+    component_label = component_label_map.get(component, component)
+
+    for ax, (scenario_key, scanner_label, b_label) in zip(axes, scenario_meta):
+        seq_maps = component_results.get(scenario_key, {})
+        pgse_map = seq_maps.get("PGSE", {})
+        ogse_map = seq_maps.get("OGSE", {})
+        od_values = sorted(set(pgse_map.keys()) | set(ogse_map.keys()))
+
+        # Plot sequence groups in order so legend is grouped by OGSE then PGSE.
+        for seq_name, seq_map in [
+            ("OGSE", ogse_map),
+            ("PGSE", pgse_map),
+        ]:
+            for od in od_values:
+                style = _OD_STYLES.get(od, {'color': 'gray', 'marker': 'x',
+                                            'label': f'OD{od}'})
+                diam_dict = seq_map.get(od, {})
+                diams_sorted = sorted(diam_dict.keys())
+                if not diams_sorted:
+                    continue
+
+                means = np.array([np.mean(diam_dict[d]) for d in diams_sorted])
+                stds = np.array([
+                    np.std(diam_dict[d], ddof=1) if len(diam_dict[d]) > 1 else 0.0
+                    for d in diams_sorted
+                ])
+                counts = [len(diam_dict[d]) for d in diams_sorted]
+
+                marker_face = 'white' if seq_name == "OGSE" else style['color']
+                ax.errorbar(
+                    diams_sorted, means, yerr=stds,
+                    color=style['color'],
+                    marker=style['marker'],
+                    markerfacecolor=marker_face,
+                    markeredgecolor=style['color'],
+                    linestyle='None',
+                    linewidth=1.8,
+                    markersize=7,
+                    capsize=5,
+                    capthick=1.5,
+                    elinewidth=1.2,
+                    label=f"{style['label']} {seq_name} (n={counts[0]})",
+                )
+
+        ax.set_xlabel('Mean axon diameter (µm)', fontsize=12)
+        ax.set_title(f'{scanner_label}\n{b_label}', fontsize=12)
+        ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
+        ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.25))
+        ax.grid(True, which='major', linestyle='--', alpha=0.5)
+        ax.grid(True, which='minor', linestyle=':', alpha=0.25)
+        ax.legend(fontsize=8, framealpha=0.9)
+
+    axes[0].set_ylabel(r'$RD^{app}_{\perp}$ (µm²/ms)', fontsize=12)
+    fig.suptitle(
+        f'{component_label} compartment: ' +
+        r'$RD^{app}_{\mathrm{PGSE}}$ and $RD^{app}_{\mathrm{OGSE}}$ vs mean axon diameter',
+        fontsize=13,
+    )
+    fig.tight_layout()
+
+    if output_path:
+        os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+        fig.savefig(output_path, dpi=300, bbox_inches='tight')
+        print(f"Figure saved → {output_path}")
+    else:
+        plt.show()
+
+    return fig, axes
+
+
+def plot_rdapp_total_by_od(results: dict, output_dir: str):
+    """
+    Create one figure per OD value for the total compartment.
+    Each figure contains two panels (human and animal), and each panel shows
+    OGSE vs PGSE RDapp as marker-only points with error bars.
+
+    Parameters
+    ----------
+    results    : output of collect_deltardapp()
+    output_dir : directory where figures are saved
+    """
+    total_results = results.get("components", {}).get("total", {})
+    human_maps = total_results.get("human_b300", {})
+    animal_maps = total_results.get("animal_b800", {})
+
+    human_pgse = human_maps.get("PGSE", {})
+    human_ogse = human_maps.get("OGSE", {})
+    animal_pgse = animal_maps.get("PGSE", {})
+    animal_ogse = animal_maps.get("OGSE", {})
+
+    od_values = sorted(
+        set(human_pgse.keys()) | set(human_ogse.keys()) |
+        set(animal_pgse.keys()) | set(animal_ogse.keys())
+    )
+    if not od_values:
+        print("No OD-specific total RDapp values found.")
+        return
+
+    os.makedirs(output_dir, exist_ok=True)
+    scenario_meta = [
+        ("human_b300", "Human scanner", r"$b=300$ s/mm$^2$"),
+        ("animal_b800", "Animal scanner", r"$b=800$ s/mm$^2$"),
+    ]
+
+    for od in od_values:
+        style = _OD_STYLES.get(od, {'color': 'gray', 'marker': 'x', 'label': f'OD{od}'})
+        fig, axes = plt.subplots(1, 2, figsize=(13, 5), sharey=True)
+
+        for ax, (scenario_key, scanner_label, b_label) in zip(axes, scenario_meta):
+            seq_maps = total_results.get(scenario_key, {})
+            pgse_map = seq_maps.get("PGSE", {})
+            ogse_map = seq_maps.get("OGSE", {})
+
+            for seq_name, diam_dict in [
+                ("OGSE", ogse_map.get(od, {})),
+                ("PGSE", pgse_map.get(od, {})),
+            ]:
+                diams_sorted = sorted(diam_dict.keys())
+                if not diams_sorted:
+                    continue
+
+                means = np.array([np.mean(diam_dict[d]) for d in diams_sorted])
+                stds = np.array([
+                    np.std(diam_dict[d], ddof=1) if len(diam_dict[d]) > 1 else 0.0
+                    for d in diams_sorted
+                ])
+                counts = [len(diam_dict[d]) for d in diams_sorted]
+
+                marker_face = 'white' if seq_name == "OGSE" else style['color']
+                ax.errorbar(
+                    diams_sorted, means, yerr=stds,
+                    color=style['color'],
+                    marker=style['marker'],
+                    markerfacecolor=marker_face,
+                    markeredgecolor=style['color'],
+                    linestyle='None',
+                    linewidth=1.8,
+                    markersize=7,
+                    capsize=5,
+                    capthick=1.5,
+                    elinewidth=1.2,
+                    label=f"{seq_name} (n={counts[0]})",
+                )
+
+            ax.set_xlabel('Mean axon diameter (µm)', fontsize=12)
+            ax.set_title(f'{scanner_label}\n{b_label}', fontsize=12)
+            ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
+            ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.25))
+            ax.grid(True, which='major', linestyle='--', alpha=0.5)
+            ax.grid(True, which='minor', linestyle=':', alpha=0.25)
+            ax.legend(fontsize=10, framealpha=0.9)
+
+        axes[0].set_ylabel(r'$RD^{app}_{\perp}$ (µm²/ms)', fontsize=12)
+        fig.suptitle(
+            f"{style['label']} total compartment: " +
+            r'$RD^{app}_{\mathrm{PGSE}}$ and $RD^{app}_{\mathrm{OGSE}}$ vs mean axon diameter',
+            fontsize=14,
+        )
+        fig.tight_layout()
+
+        out_path = os.path.join(output_dir, f'rdapp_total_{od}.png')
+        fig.savefig(out_path, dpi=300, bbox_inches='tight')
+        plt.close(fig)
+        print(f"Figure saved → {out_path}")
+
+
+def plot_rdapp_total_by_od_combined(results: dict, output_dir: str):
+    """
+    Create one combined figure with one row per OD value and two columns
+    (human and animal scanner panels) for total-compartment RDapp.
+
+    Parameters
+    ----------
+    results    : output of collect_deltardapp()
+    output_dir : directory where the combined figure is saved
+    """
+    total_results = results.get("components", {}).get("total", {})
+    human_maps = total_results.get("human_b300", {})
+    animal_maps = total_results.get("animal_b800", {})
+
+    human_pgse = human_maps.get("PGSE", {})
+    human_ogse = human_maps.get("OGSE", {})
+    animal_pgse = animal_maps.get("PGSE", {})
+    animal_ogse = animal_maps.get("OGSE", {})
+
+    od_values = sorted(
+        set(human_pgse.keys()) | set(human_ogse.keys()) |
+        set(animal_pgse.keys()) | set(animal_ogse.keys())
+    )
+    if not od_values:
+        print("No OD-specific total RDapp values found for combined figure.")
+        return
+
+    os.makedirs(output_dir, exist_ok=True)
+    n_od = len(od_values)
+    fig, axes = plt.subplots(n_od, 2, figsize=(13, 4.4 * n_od), sharex=True, sharey=True)
+    if n_od == 1:
+        axes = np.array([axes])
+
+    scenario_meta = [
+        ("human_b300", "Human scanner", r"$b=300$ s/mm$^2$"),
+        ("animal_b800", "Animal scanner", r"$b=800$ s/mm$^2$"),
+    ]
+
+    for row_idx, od in enumerate(od_values):
+        style = _OD_STYLES.get(od, {'color': 'gray', 'marker': 'x', 'label': f'OD{od}'})
+        for col_idx, (scenario_key, scanner_label, b_label) in enumerate(scenario_meta):
+            ax = axes[row_idx, col_idx]
+            seq_maps = total_results.get(scenario_key, {})
+            pgse_map = seq_maps.get("PGSE", {})
+            ogse_map = seq_maps.get("OGSE", {})
+
+            for seq_name, diam_dict in [
+                ("OGSE", ogse_map.get(od, {})),
+                ("PGSE", pgse_map.get(od, {})),
+            ]:
+                diams_sorted = sorted(diam_dict.keys())
+                if not diams_sorted:
+                    continue
+
+                means = np.array([np.mean(diam_dict[d]) for d in diams_sorted])
+                stds = np.array([
+                    np.std(diam_dict[d], ddof=1) if len(diam_dict[d]) > 1 else 0.0
+                    for d in diams_sorted
+                ])
+                counts = [len(diam_dict[d]) for d in diams_sorted]
+
+                marker_face = 'white' if seq_name == "OGSE" else style['color']
+                ax.errorbar(
+                    diams_sorted, means, yerr=stds,
+                    color=style['color'],
+                    marker=style['marker'],
+                    markerfacecolor=marker_face,
+                    markeredgecolor=style['color'],
+                    linestyle='None',
+                    linewidth=1.8,
+                    markersize=7,
+                    capsize=5,
+                    capthick=1.5,
+                    elinewidth=1.2,
+                    label=f"{seq_name} (n={counts[0]})",
+                )
+
+            if row_idx == 0:
+                ax.set_title(f'{scanner_label}\n{b_label}', fontsize=12)
+            if col_idx == 0:
+                ax.set_ylabel(
+                    f"{style['label']}\n" + r'$RD^{app}_{\perp}$ (µm²/ms)',
+                    fontsize=11,
+                )
+            if row_idx == n_od - 1:
+                ax.set_xlabel('Mean axon diameter (µm)', fontsize=12)
+
+            ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
+            ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.25))
+            ax.grid(True, which='major', linestyle='--', alpha=0.5)
+            ax.grid(True, which='minor', linestyle=':', alpha=0.25)
+            ax.legend(fontsize=10, framealpha=0.9)
+
+    fig.suptitle(
+        r'Total compartment: $RD^{app}_{\mathrm{PGSE}}$ and '
+        r'$RD^{app}_{\mathrm{OGSE}}$ by OD',
+        fontsize=14,
+    )
+    fig.tight_layout()
+
+    out_path = os.path.join(output_dir, 'rdapp_total_all_ODI_combined.png')
+    fig.savefig(out_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"Figure saved → {out_path}")
+
+
+def plot_rdapp_components_stacked(results: dict, output_path: Optional[str] = None):
+    """
+    Plot a single figure with 3 stacked rows (intra, extra, total), each with
+    PGSE and OGSE RDapp versus mean diameter.
+
+    Parameters
+    ----------
+    results     : output of collect_deltardapp()
+    output_path : file to save figure; if None, shows interactively
+    """
+    components = [
+        ("intra", "Intra-axonal"),
+        ("extra", "Extra-axonal"),
+        ("total", "Volume-fraction weighted total"),
+    ]
+    scenario_meta = [
+        ("human_b300", "Human scanner", r"$b=300$ s/mm$^2$"),
+        ("animal_b800", "Animal scanner", r"$b=800$ s/mm$^2$"),
+    ]
+
+    fig, axes = plt.subplots(3, 2, figsize=(14, 13), sharex=True)
+
+    for row_idx, (component, component_label) in enumerate(components):
+        component_results = results.get("components", {}).get(component, {})
+
+        for col_idx, (scenario_key, scanner_label, b_label) in enumerate(scenario_meta):
+            ax = axes[row_idx, col_idx]
+
+            seq_maps = component_results.get(scenario_key, {})
+            pgse_map = seq_maps.get("PGSE", {})
+            ogse_map = seq_maps.get("OGSE", {})
+            od_values = sorted(set(pgse_map.keys()) | set(ogse_map.keys()))
+
+            for od in od_values:
+                style = _OD_STYLES.get(od, {'color': 'gray', 'marker': 'x',
+                                            'label': f'OD{od}'})
+
+                for seq_name, diam_dict, line_style, marker_face in [
+                    ("PGSE", pgse_map.get(od, {}), '-', style['color']),
+                    ("OGSE", ogse_map.get(od, {}), '--', 'white'),
+                ]:
+                    diams_sorted = sorted(diam_dict.keys())
+                    if not diams_sorted:
+                        continue
+
+                    means = np.array([np.mean(diam_dict[d]) for d in diams_sorted])
+                    stds = np.array([
+                        np.std(diam_dict[d], ddof=1) if len(diam_dict[d]) > 1 else 0.0
+                        for d in diams_sorted
+                    ])
+                    counts = [len(diam_dict[d]) for d in diams_sorted]
+
+                    ax.errorbar(
+                        diams_sorted, means, yerr=stds,
+                        color=style['color'],
+                        marker=style['marker'],
+                        markerfacecolor=marker_face,
+                        markeredgecolor=style['color'],
+                        linestyle=line_style,
+                        linewidth=1.6,
+                        markersize=6,
+                        capsize=4,
+                        capthick=1.2,
+                        elinewidth=1.0,
+                        label=f"{style['label']} {seq_name} (n={counts[0]})",
+                    )
+
+            if row_idx == 0:
+                ax.set_title(f'{scanner_label}\n{b_label}', fontsize=12)
+            if col_idx == 0:
+                ax.set_ylabel(f'{component_label}\n$RD^{{app}}_{{\\perp}}$ (µm²/ms)', fontsize=11)
+
+            ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
+            ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.25))
+            ax.grid(True, which='major', linestyle='--', alpha=0.5)
+            ax.grid(True, which='minor', linestyle=':', alpha=0.25)
+            ax.legend(fontsize=7, framealpha=0.9, ncol=1)
+
+    for ax in axes[-1, :]:
+        ax.set_xlabel('Mean axon diameter (µm)', fontsize=12)
+
+    fig.suptitle(
+        r'Compartment-wise $RD^{app}_{\mathrm{PGSE}}$ and '
+        r'$RD^{app}_{\mathrm{OGSE}}$ vs mean axon diameter',
+        fontsize=14,
+    )
+    fig.tight_layout()
+
+    if output_path:
+        os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+        fig.savefig(output_path, dpi=300, bbox_inches='tight')
+        print(f"Figure saved → {output_path}")
+    else:
+        plt.show()
+
+    return fig, axes
 
 
 # ------------------------------------------------------------------
@@ -371,7 +820,7 @@ def main():
         )
         output = os.path.normpath(output)
 
-    plot_deltardapp(results, output_path=output)
+    # plot_deltardapp(results, output_path=output)
 
     # Per-OD plot with linear fit (saved alongside the grouped plot)
     output_per_od = os.path.join(
@@ -379,6 +828,37 @@ def main():
         'deltardapp_per_od_linear_fit.png',
     )
     plot_deltardapp_per_od(results, output_path=output_per_od)
+
+    # output_intra = os.path.join(
+    #     os.path.dirname(os.path.abspath(output)),
+    #     'rdapp_intra_pgse_ogse_vs_diameter.png',
+    # )
+    # plot_rdapp_component(results, component='intra', output_path=output_intra)
+
+    # output_extra = os.path.join(
+    #     os.path.dirname(os.path.abspath(output)),
+    #     'rdapp_extra_pgse_ogse_vs_diameter.png',
+    # )
+    # plot_rdapp_component(results, component='extra', output_path=output_extra)
+
+    # output_total = os.path.join(
+    #     os.path.dirname(os.path.abspath(output)),
+    #     'rdapp_total_pgse_ogse_vs_diameter.png',
+    # )
+    # plot_rdapp_component(results, component='total', output_path=output_total)
+
+    output_by_odi_dir = os.path.join(
+        _nozomi_root,
+        'experiment', 'visualization', 'plots', 'rdapp_by_ODI',
+    )
+    plot_rdapp_total_by_od(results, output_dir=output_by_odi_dir)
+    plot_rdapp_total_by_od_combined(results, output_dir=output_by_odi_dir)
+
+    # output_stacked = os.path.join(
+    #     os.path.dirname(os.path.abspath(output)),
+    #     'rdapp_components_stacked_pgse_ogse_vs_diameter.png',
+    # )
+    # plot_rdapp_components_stacked(results, output_path=output_stacked)
 
 
 if __name__ == '__main__':

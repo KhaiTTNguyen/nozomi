@@ -49,8 +49,6 @@ if str(_NOZOMI_ROOT) not in sys.path:
 from simulation_toolkit.simulation_engine.helper.sim_util import (
     build_gradient_waveform,
     wide_pulse_gradient_integration,
-    bvalue_pgse_ms_um2,
-    bvalue_ogse_apodized_cosine_ms_um2,
 )
 
 # ------------------------------------------------------------------
@@ -216,36 +214,84 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
     RD_total = VF * RD_intra + (1.0 - VF) * RD_extra
 
     # ------------------------------------------------------------------
-    # Helper: build waveform, print parameters, run GPA integration
+    # Helper: build waveform once, then run GPA per compartment
     # ------------------------------------------------------------------
-    def _run_gpa(cfg, label):
+    def _build_waveform(cfg, label):
         te = float(cfg["te_ms"])
         gwave = build_gradient_waveform(cfg, te, _WAVE_DT_MS)
         print(f"  {label:<12s}  b={gwave.bvalue_s_mm2:6.1f} s/mm²"
               f"  ({gwave.bvalue_ms_um2:.4e} ms/µm²)"
               f"  Gmax={gwave.gmax_mT_per_m:7.2f} mT/m  TE={te:.0f}ms")
-        rdapp = wide_pulse_gradient_integration(
+
+        return gwave
+
+    def _integrate_component(gwave, diffusion_coeff):
+        return wide_pulse_gradient_integration(
             diffusion_time_ms=diff_time,
-            diffusion_coeff=RD_total,
+            diffusion_coeff=diffusion_coeff,
             gradient_waveform=gwave.wave,
             gradient_dt_ms=gwave.dt,
         )
-        print(f"  {label:<12s}  RDapp = {rdapp:.6f} µm²/ms")
-        return rdapp, gwave
+
+    def _run_protocol(cfg, label):
+        gwave = _build_waveform(cfg, label)
+        rdapp_intra = _integrate_component(gwave, RD_intra)
+        rdapp_extra = _integrate_component(gwave, RD_extra)
+        rdapp_total = _integrate_component(gwave, RD_total)
+
+        print(f"  {label:<12s}  RDapp_intra = {rdapp_intra:.6f} µm²/ms")
+        print(f"  {label:<12s}  RDapp_extra = {rdapp_extra:.6f} µm²/ms")
+        print(f"  {label:<12s}  RDapp_total = {rdapp_total:.6f} µm²/ms")
+
+        return {
+            "intra": rdapp_intra,
+            "extra": rdapp_extra,
+            "total": rdapp_total,
+            "gwave": gwave,
+        }
 
     # ---- Protocol 1: b=300 s/mm², TE=100 ms ----
     print("  --- Protocol 1: b=300 s/mm², TE=100 ms ---")
-    RDapp_PGSE,  gw_pgse  = _run_gpa(_PGSE_CONFIG,   "PGSE")
-    RDapp_OGSE,  gw_ogse  = _run_gpa(_OGSE_CONFIG,   "OGSE")
-    DeltaRDapp             = RDapp_OGSE - RDapp_PGSE
-    print(f"  {'':12s}  ΔRDapp = {DeltaRDapp:.6f} µm²/ms")
+    pgse_res = _run_protocol(_PGSE_CONFIG, "PGSE")
+    ogse_res = _run_protocol(_OGSE_CONFIG, "OGSE")
+
+    RDapp_PGSE = pgse_res["total"]
+    RDapp_OGSE = ogse_res["total"]
+    RDapp_PGSE_intra = pgse_res["intra"]
+    RDapp_OGSE_intra = ogse_res["intra"]
+    RDapp_PGSE_extra = pgse_res["extra"]
+    RDapp_OGSE_extra = ogse_res["extra"]
+
+    DeltaRDapp = RDapp_OGSE - RDapp_PGSE
+    DeltaRDapp_intra = RDapp_OGSE_intra - RDapp_PGSE_intra
+    DeltaRDapp_extra = RDapp_OGSE_extra - RDapp_PGSE_extra
+    print(f"  {'':12s}  ΔRDapp_total = {DeltaRDapp:.6f} µm²/ms")
+    print(f"  {'':12s}  ΔRDapp_intra = {DeltaRDapp_intra:.6f} µm²/ms")
+    print(f"  {'':12s}  ΔRDapp_extra = {DeltaRDapp_extra:.6f} µm²/ms")
 
     # ---- Protocol 2: b=800 s/mm², TE=40 ms ----
     print("  --- Protocol 2: b=800 s/mm², TE=40 ms ---")
-    RDapp_PGSE_2, gw_pgse2 = _run_gpa(_PGSE_CONFIG_2, "PGSE_2")
-    RDapp_OGSE_2, gw_ogse2 = _run_gpa(_OGSE_CONFIG_2, "OGSE_2")
-    DeltaRDapp_2            = RDapp_OGSE_2 - RDapp_PGSE_2
-    print(f"  {'':12s}  ΔRDapp = {DeltaRDapp_2:.6f} µm²/ms")
+    pgse_res_2 = _run_protocol(_PGSE_CONFIG_2, "PGSE_2")
+    ogse_res_2 = _run_protocol(_OGSE_CONFIG_2, "OGSE_2")
+
+    RDapp_PGSE_2 = pgse_res_2["total"]
+    RDapp_OGSE_2 = ogse_res_2["total"]
+    RDapp_PGSE_intra_2 = pgse_res_2["intra"]
+    RDapp_OGSE_intra_2 = ogse_res_2["intra"]
+    RDapp_PGSE_extra_2 = pgse_res_2["extra"]
+    RDapp_OGSE_extra_2 = ogse_res_2["extra"]
+
+    DeltaRDapp_2 = RDapp_OGSE_2 - RDapp_PGSE_2
+    DeltaRDapp_intra_2 = RDapp_OGSE_intra_2 - RDapp_PGSE_intra_2
+    DeltaRDapp_extra_2 = RDapp_OGSE_extra_2 - RDapp_PGSE_extra_2
+    print(f"  {'':12s}  ΔRDapp_total = {DeltaRDapp_2:.6f} µm²/ms")
+    print(f"  {'':12s}  ΔRDapp_intra = {DeltaRDapp_intra_2:.6f} µm²/ms")
+    print(f"  {'':12s}  ΔRDapp_extra = {DeltaRDapp_extra_2:.6f} µm²/ms")
+
+    gw_pgse = pgse_res["gwave"]
+    gw_ogse = ogse_res["gwave"]
+    gw_pgse2 = pgse_res_2["gwave"]
+    gw_ogse2 = ogse_res_2["gwave"]
 
     return {
         'substrate_dir': substrate_dir,
@@ -267,7 +313,13 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
         'OGSE_gmax_mT_per_m':   gw_ogse.gmax_mT_per_m,
         'RDapp_PGSE':           RDapp_PGSE,
         'RDapp_OGSE':           RDapp_OGSE,
+        'RDapp_PGSE_intra':     RDapp_PGSE_intra,
+        'RDapp_OGSE_intra':     RDapp_OGSE_intra,
+        'RDapp_PGSE_extra':     RDapp_PGSE_extra,
+        'RDapp_OGSE_extra':     RDapp_OGSE_extra,
         'DeltaRDapp':           DeltaRDapp,
+        'DeltaRDapp_intra':     DeltaRDapp_intra,
+        'DeltaRDapp_extra':     DeltaRDapp_extra,
         # --- Protocol 2 ---
         'PGSE_config_2':        _PGSE_CONFIG_2,
         'PGSE_bvalue_s_mm2_2':  gw_pgse2.bvalue_s_mm2,
@@ -279,7 +331,13 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
         'OGSE_gmax_mT_per_m_2': gw_ogse2.gmax_mT_per_m,
         'RDapp_PGSE_2':         RDapp_PGSE_2,
         'RDapp_OGSE_2':         RDapp_OGSE_2,
+        'RDapp_PGSE_intra_2':   RDapp_PGSE_intra_2,
+        'RDapp_OGSE_intra_2':   RDapp_OGSE_intra_2,
+        'RDapp_PGSE_extra_2':   RDapp_PGSE_extra_2,
+        'RDapp_OGSE_extra_2':   RDapp_OGSE_extra_2,
         'DeltaRDapp_2':         DeltaRDapp_2,
+        'DeltaRDapp_intra_2':   DeltaRDapp_intra_2,
+        'DeltaRDapp_extra_2':   DeltaRDapp_extra_2,
     }
 
 

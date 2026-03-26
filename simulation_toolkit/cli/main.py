@@ -41,7 +41,7 @@ class GeometryToolkitCLI:
         
         # Get all subfolders in the main folder
         subfolders = [f for f in os.listdir(main_folder) if os.path.isdir(os.path.join(main_folder, f))]
-
+        
         # Count total substrate files for progress tracking
         total_substrates = 0
         for subfolder in subfolders:
