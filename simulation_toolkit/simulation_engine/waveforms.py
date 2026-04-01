@@ -315,3 +315,176 @@ class ApodizedCosineOGSEWaveform(DiffGradWaveform):
             'frequency_ratio': f_apod / f_cosine
         }
         return info
+
+
+class TrapezoidalCosineOGSEWaveform(DiffGradWaveform):
+    '''
+    Xu-style trapezoidal cosine OGSE waveform with paired bipolar blocks.
+
+    One active block follows a piecewise trapezoid-cosine structure with:
+    - rise/fall time tr (= trise)
+    - edge plateau time tp (first and last positive peaks)
+    - interior timing parameter t3 = tp + tr/2
+    - interior OGSE plateaus with duration 2*t3
+    - 2N+1 alternating plateaus (+, -, +, ..., +)
+
+    Two identical blocks are generated with opposite polarity. The
+    separation_duration is interpreted as start-to-start spacing between
+    the positive and negative blocks.
+
+    Effective diffusion time convention: t_eff = T/(4N), where T is the
+    active duration of one block.
+    '''
+
+    def __init__(
+        self,
+        N_cycles,
+        T_duration,
+        separation_duration,
+        trise=None,
+        tp=None,
+        te=None,
+        gmax=1.0,
+        time_step=dt0,
+    ):
+        self.N_cycles = int(N_cycles)
+        self.T_duration = float(T_duration)
+        self.separation_duration = float(separation_duration)
+        self.gmax = float(gmax)
+        self.dt = float(time_step)
+
+        if self.N_cycles <= 0:
+            raise ValueError("N_cycles must be a positive integer.")
+        if self.T_duration <= 0:
+            raise ValueError("T_duration must be positive.")
+        if self.separation_duration < 0:
+            raise ValueError("separation_duration must be non-negative.")
+
+        if trise is None and tp is None:
+            self.trise = 1.0
+        elif trise is None:
+            self.trise = np.nan
+        else:
+            self.trise = float(trise)
+        self.tp = None if tp is None else float(tp)
+
+        if self.tp is None:
+            if not np.isfinite(self.trise) or self.trise <= 0:
+                raise ValueError("When tp is not provided, trise must be positive.")
+            # For the implemented block layout (edge tp, interior 2*t3,
+            # t3 = tp + tr/2), enforce exact on-time T:
+            # T = 4*N*tp + (6*N + 1)*tr.
+            self.tp = (self.T_duration - (6.0 * self.N_cycles + 1.0) * self.trise) / (4.0 * self.N_cycles)
+        else:
+            if self.tp <= 0:
+                raise ValueError("tp must be positive.")
+            if not np.isfinite(self.trise):
+                self.trise = (self.T_duration - 4.0 * self.N_cycles * self.tp) / (6.0 * self.N_cycles + 1.0)
+
+        if self.trise <= 0:
+            raise ValueError("Computed trise is non-positive. Adjust T_duration/trise/tp.")
+        if self.tp <= 0:
+            raise ValueError("Computed tp is non-positive. Adjust T_duration/trise/tp.")
+
+        self.t3 = self.tp + 0.5 * self.trise
+        self.single_lobe_duration = 4.0 * self.N_cycles * self.tp + (6.0 * self.N_cycles + 1.0) * self.trise
+        if not np.isclose(self.single_lobe_duration, self.T_duration, rtol=0.0, atol=max(1e-9, self.dt)):
+            raise ValueError(
+                "Inconsistent trapezoid timing: computed lobe on-time does not match T_duration. "
+                f"Computed={self.single_lobe_duration:.6f} ms, T_duration={self.T_duration:.6f} ms."
+            )
+
+        self.t_eff = self.T_duration / (4.0 * self.N_cycles)
+
+        self.full_gradient_duration = self.separation_duration + self.T_duration
+
+        if te is None:
+            # User-requested convention: TE = full_gradient_duration + T_duration.
+            self.te = self.full_gradient_duration + self.T_duration
+        else:
+            self.te = float(te)
+
+        min_te = self.full_gradient_duration
+        if self.te < min_te:
+            raise ValueError(
+                f"te={self.te} is too short; minimum is full_gradient_duration = {min_te}."
+            )
+
+        self.generate_waveform()
+
+    def generate_waveform(self):
+        self.t = np.arange(0.0, self.te + self.dt, self.dt)
+        self.wave = np.zeros_like(self.t)
+
+        active_total = self.full_gradient_duration
+        t_margin = 0.5 * (self.te - active_total)
+
+        self.block1_start = t_margin
+        self.block2_start = self.block1_start + self.separation_duration
+
+        self._add_trapezoid_cosine_block(self.block1_start, polarity=1.0)
+        self._add_trapezoid_cosine_block(self.block2_start, polarity=-1.0)
+
+    def _add_trapezoid_cosine_block(self, t_start, polarity):
+        # Build explicit Xu-style sequence: ramp, plateaus, and 2*tr transitions.
+        signs = np.array([1.0 if (k % 2 == 0) else -1.0 for k in range(2 * self.N_cycles + 1)], dtype=float)
+        plateau_durations = np.full(signs.size, 2.0 * self.t3, dtype=float)
+        plateau_durations[0] = self.tp
+        plateau_durations[-1] = self.tp
+
+        cursor = t_start
+
+        # Initial ramp: 0 -> +1
+        self._add_linear_segment(cursor, self.trise, 0.0, signs[0] * polarity)
+        cursor += self.trise
+
+        # Plateau / transition chain.
+        for idx in range(signs.size):
+            amp = signs[idx] * polarity
+            self._add_constant_segment(cursor, plateau_durations[idx], amp)
+            cursor += plateau_durations[idx]
+
+            if idx < (signs.size - 1):
+                # One sign flip realized as two ramps of duration tr each => 2*tr total.
+                next_amp = signs[idx + 1] * polarity
+                self._add_linear_segment(cursor, 2.0 * self.trise, amp, next_amp)
+                cursor += 2.0 * self.trise
+
+        # Final ramp: +1 -> 0
+        self._add_linear_segment(cursor, self.trise, signs[-1] * polarity, 0.0)
+
+    def _add_constant_segment(self, t_start, duration, value):
+        if duration <= 0:
+            return
+        mask = (self.t >= t_start) & (self.t < (t_start + duration))
+        self.wave[mask] = self.gmax * value
+
+    def _add_linear_segment(self, t_start, duration, v0, v1):
+        if duration <= 0:
+            return
+        mask = (self.t >= t_start) & (self.t < (t_start + duration))
+        if not np.any(mask):
+            return
+        tau = (self.t[mask] - t_start) / duration
+        self.wave[mask] = self.gmax * (v0 + (v1 - v0) * tau)
+
+    def get_effective_diffusion_time(self):
+        return self.t_eff
+
+    def get_waveform_info(self):
+        return {
+            'N_cycles': self.N_cycles,
+            'T_duration_ms': self.T_duration,
+            'single_lobe_duration_ms': self.single_lobe_duration,
+            'separation_duration_ms': self.separation_duration,
+            'full_gradient_duration_ms': self.full_gradient_duration,
+            'trise_ms': self.trise,
+            'tp_ms': self.tp,
+            't3_ms': self.t3,
+            'ogse_plateau_ms': 2.0 * self.t3,
+            'effective_diffusion_time_ms': self.t_eff,
+            'total_echo_time_ms': self.te,
+            'cosine_frequency_Hz': (self.N_cycles / self.T_duration) * 1000.0,
+            'block1_start_ms': self.block1_start,
+            'block2_start_ms': self.block2_start,
+        }
