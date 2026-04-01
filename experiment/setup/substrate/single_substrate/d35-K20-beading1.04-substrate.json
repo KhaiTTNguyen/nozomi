@@ -1,9 +1,9 @@
 {
   "experiment_name": "auto_generated",  
   "parameters": {
-      "orientation_shape_parameter": 10,
+      "orientation_shape_parameter": 20,
       "box_length_init": 0,
-      "target_volume_fraction": 0.34,
+      "target_volume_fraction": 0.206,
       "num_fibers": 500,
       "mean_diameter":  3.5,
       "sigma_diameter":  0.9375,
@@ -16,7 +16,7 @@
       "w_length": 3,
       "bead_spacing_mean": 5.70,
       "bead_spacing_stdv": 2.88,
-      "bead_alpha_mean":  0.5,
+      "bead_alpha_mean": 1.04,
       "bead_alpha_stdv": 0.15,
       "repeats": 3
   }
