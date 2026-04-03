@@ -98,14 +98,14 @@ source sim_venv/bin/activate
 ```bash
 ./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d258-K20-substrate.json
 
-./run-scripts/run-geometry-gen.sh --gpu=7 --config=/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/setup/substrate/single_substrate/d45-K200-beading4-substrate.json
+./run-scripts/run-geometry-gen.sh --gpu=7 --config=./experiment/setup/substrate/single_substrate/d45-K200-beading4-substrate.json
 ```
 
 **With custom configuration file and output folder:**
 ```bash
 ./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d168-K200-single-substrate-for-segment-calibration.json --output_folder_path=./tests/calibration/sim_domain_segment_calibration/data
 
-./run-scripts/run-geometry-gen.sh --gpu=4 --config=./experiment/setup/substrate/single_substrate/d45-K10-beading1.04-substrate.json --output_folder_path=./experiment/result/2026-03-22_bead_1.04
+./run-scripts/run-geometry-gen.sh --gpu=4 --config=./experiment/setup/substrate/single_substrate/2026-03-22-bead1.24/d35-K20-beading1.24-substrate.json --output_folder_path=./experiment/result/2026-03-22_bead_1.24
 ```
 
 ### Output Structure
