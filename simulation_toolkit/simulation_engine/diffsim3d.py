@@ -3,6 +3,7 @@ import pycuda.gpuarray as gpuarray
 import numpy as np
 from scipy import integrate
 from pycuda.compiler import SourceModule
+from simulation_toolkit.simulation_engine.waveforms import gamma
 kernel_file = './simulation_toolkit/simulation_engine/sim3d_kernel.cu'
 
 class DiffSim3d:
@@ -68,7 +69,7 @@ class DiffSim3d:
             diffdir = np.array([[1,0,0],[0,1,0],[0,0,1]])
         
         if np.isscalar(diffdir):
-            raise TypeError("diffdir cannot be a scalar (so far)")
+            raise TypeError("diffdir must be a 3xN array of N diffusion directions.")
         
         # check dimensions
         if (diffdir.shape[0] != 3) or (diffdir.ndim != 2):
@@ -231,12 +232,12 @@ class DwiSim3d(DiffSim3d):
         '''
         Simulates DWI signal in a simulation gometry
         '''
+        mt_per_m_to_mt_per_um = 1e-6
         G_area_at_each_time_step = integrate.cumulative_trapezoid(gwave.wave, dx=1.0, initial=0)*gwave.dt
-
         for n,_ in enumerate(gwave.wave):
             self.dwi_step(gwave.dt, 
-                          gwave.wave[n]*gwave.dt*267.5/10000, 
-                          G_area_at_each_time_step[n]*267.7/10000)
+                          gwave.wave[n] * gwave.dt * gamma * mt_per_m_to_mt_per_um,
+                          G_area_at_each_time_step[n] * gamma * mt_per_m_to_mt_per_um)
         # Get the result back from GPU
         phase_accumulated = self.phase_d.get()
         
@@ -245,14 +246,18 @@ class DwiSim3d(DiffSim3d):
     
     def simulate_multi_directions(self,gwave,structures=None,initstates=None):
         '''
-        Simulates DWI signal in a simulation gometry
+        Simulates DWI signal in a simulation geometry
         '''
+        mt_per_m_to_mt_per_um = 1e-6
         G_area_at_each_time_step = integrate.cumulative_trapezoid(gwave.wave, dx=1.0, initial=0)*gwave.dt
-
+        # gamma = 2.675 * 10^8 rad/s/T = 2.675 * 10^8 * 1e-6 rad/ms/mT = 267.5 rad/ms/mT
+        # Gmax / gradient strength G here is unit corrected and scaled by 'dt' and 'gamma
+        # the unit for Gmax here is mT/m =  mT/m * ms * rad/ms/mT / 10^-6 --> /um
+        
         for n,_ in enumerate(gwave.wave):
             self.dwi_multidirections_step(gwave.dt, 
-                          gwave.wave[n]*gwave.dt*267.5/10000, 
-                          G_area_at_each_time_step[n]*267.7/10000)
+                          gwave.wave[n] * gwave.dt * gamma * mt_per_m_to_mt_per_um,
+                          G_area_at_each_time_step[n] * gamma * mt_per_m_to_mt_per_um)
 
         # Get the result back from GPU
         phase_accumulated = self.phase_d.get()

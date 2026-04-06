@@ -1,7 +1,8 @@
 import numpy as np
 from scipy.optimize import linprog
 
-gamma = 267.513; # rad/ms/mT
+gamma = 267.513; # rad/ms/mT 
+# gamma = 2.675*10^8 rad/s/T = 2.675*10^8 * 1e-6 rad/ms/mT = 267.5 rad/ms/mT
 
 dt0 = 0.0001 # default time step is 0.0001 ms
 
@@ -158,7 +159,7 @@ class DiffGradWaveform:
                 = \int_0^T [ dt * ( \int_0^t [gamma * g(t') dt'] )^2 ]
 
             '''
-            gwave_um = self.wave / 10e3  # mT/m -> mT/um (1 mT/m = 1e-6 mT/um)
+            gwave_um = self.wave / 1e6  # mT/m -> mT/um (1 mT/m = 1e-6 mT/um)
             # discrete form of \int_0^T [ dt * ( \int_0^t [gamma * g(t') dt'] )^2 ]
             return np.sum(np.cumsum(gamma*gwave_um)**2)*self.dt**3; # ms/um^2 -- 1 ms/um^2 = 1000 sec/mm^2
 
@@ -184,7 +185,8 @@ class PGDiffWaveform(DiffGradWaveform):
         self.generate_waveform()
 
     def generate_waveform(self):
-        self.t = np.arange(self.dt,self.te+self.dt,self.dt)
+        # Use a TE-anchored timeline: starts at 0 and includes TE.
+        self.t = np.arange(0, self.te + self.dt, self.dt)
         self.wave = np.zeros_like(self.t)
         
         first_lobe = (self.t > (self.te/2 - self.big_delta/2 - self.little_delta/2)) \

@@ -34,12 +34,6 @@ def save_waveform_object(waveform_obj,file_name):
         Path to the output file
     overwrite : bool, default False
         Whether to overwrite existing files
-        
-    Example:
-    --------
-    from gradient_waveforms import PGDiffWaveform
-    waveform = PGDiffWaveform(duration=0.01, max_amplitude=1.0, time_step=1e-5)
-    save_waveform_object(waveform, 'pg_waveform.json')
     """
 
     # Create directory if it doesn't exist
@@ -94,16 +88,6 @@ def load_waveform_object(file_name):
     waveform_obj : object
         Reconstructed waveform object (if class is available)
         If class cannot be imported, returns None
-    obj_data : dict
-        Complete object data including parameters and arrays
-        
-    Example:
-    --------
-     waveform, data = load_waveform_object('pg_waveform.json')
-     if waveform is not None:
-         print(f"Loaded {waveform.__class__.__name__}")
-     else:
-         print("Object data:", data['parameters'])
     """
     # Load main pkl file
     with open(file_name, 'rb') as file:
