@@ -202,7 +202,10 @@ class ApodizedCosineOGSEWaveform(DiffGradWaveform):
     Class to generate apodized cosine modulated oscillating gradient waveform
     Based on Does et al. 2003 - Oscillating gradient measurements of water diffusion
     
-    Structure: 1/4 sine (2x freq) + N cosine cycles + 1/4 sine (2x freq)
+    Structure: half-sine lobe + cosine segment + half-sine lobe,
+    where each half-sine lobe is at 2x the cosine frequency and has shape 0->1->0.
+    The cosine segment starts at zero with a negative lobe and ends at zero
+    on a negative lobe, matching the pattern used in Does et al. Appendix A.
     Effective diffusion time: t_eff = T/(4N)
     '''
     def __init__(self, N_cycles, T_duration, te=None, gmax=1.0, time_step=dt0):
@@ -237,18 +240,17 @@ class ApodizedCosineOGSEWaveform(DiffGradWaveform):
         self.t = np.arange(0, self.te + self.dt, self.dt)
         self.wave = np.zeros_like(self.t)
         
-        # Simplified approach for apodized cosine OGSE:
-        # Structure: 1/4 sine + N cosine cycles + 1/4 sine
-        # If apodization frequency = 2 * cosine frequency, then:
-        # Total time T = 2*(1/4 cycle at 2f) + N cycles at f = 0.25/f + N/f = (0.25 + N)/f
-        # Therefore: f_cosine = (0.25 + N) / T
-        
-        f_cosine = (0.25 + self.N_cycles) / self.T_duration  # cycles per ms
+        # Apodized cosine OGSE with half-sine endcaps at 2f:
+        # - each half-sine has duration 1/(4f)
+        # - middle cosine segment has duration (N - 0.5)/f so it starts and
+        #   ends at zero on negative lobes: 0->-1->0 ... ->-1->0
+        # Total: T = 2*(1/(4f)) + (N - 0.5)/f = N/f  =>  f = N/T
+        f_cosine = self.N_cycles / self.T_duration  # cycles per ms
         f_apod = 2 * f_cosine  # apodization frequency (2x)
         
         # Calculate durations
-        apod_duration = 0.25 / f_apod  # Duration of 1/4 cycle at apodization frequency
-        cosine_duration = self.N_cycles / f_cosine  # Duration of N cycles at cosine frequency
+        apod_duration = 0.5 / f_apod  # Duration of 1/2 cycle at apodization frequency
+        cosine_duration = (self.N_cycles - 0.5) / f_cosine  # Duration of negative-start/negative-end cosine segment
         
         # Verify total duration
         total_calc = 2 * apod_duration + cosine_duration
@@ -258,39 +260,37 @@ class ApodizedCosineOGSEWaveform(DiffGradWaveform):
         # Generate encoding waveform (positive)
         t_start_encode = self.te/4 - self.T_duration/2  # Center in first quarter of TE
         
-        self._generate_single_waveform(t_start_encode, 1.0, apod_duration, cosine_duration)
+        self._generate_single_waveform(t_start_encode, 1.0, apod_duration, cosine_duration, f_cosine)
         
         # Generate decoding waveform (negative) 
         t_start_decode = 3*self.te/4 - self.T_duration/2  # Center in third quarter of TE
         
-        self._generate_single_waveform(t_start_decode, -1.0, apod_duration, cosine_duration)
+        self._generate_single_waveform(t_start_decode, -1.0, apod_duration, cosine_duration, f_cosine)
     
-    def _generate_single_waveform(self, t_start, polarity, apod_duration, cosine_duration):
+    def _generate_single_waveform(self, t_start, polarity, apod_duration, cosine_duration, f_cosine):
         """Generate a single apodized cosine waveform"""
         
         for i, t in enumerate(self.t):
             t_rel = t - t_start  # Time relative to waveform start
             
             if 0 <= t_rel < apod_duration:
-                # First 1/4 sine (ramp up from 0 to 1)
-                # sin goes from 0 to 1 over π/2 (quarter cycle)
-                phase = (t_rel / apod_duration) * (np.pi / 2)
+                # First half-sine endcap at 2f: 0 -> 1 -> 0.
+                phase = (t_rel / apod_duration) * np.pi
                 self.wave[i] = polarity * self.gmax * np.sin(phase)
                 
             elif apod_duration <= t_rel < apod_duration + cosine_duration:
-                # N cosine cycles, starting and ending at +1
-                # To ensure we end at +1, we need exactly N complete cycles
+                # N cosine-frequency cycles in between endcaps, starting at zero
+                # and beginning with a negative lobe, ending at zero on a
+                # negative lobe: 0 -> -1 -> 0 ... -> -1 -> 0.
                 t_cosine = t_rel - apod_duration
-                progress = t_cosine / cosine_duration  # 0 to 1
-                phase = 2 * np.pi * self.N_cycles * progress  # Exactly N cycles
-                self.wave[i] = polarity * self.gmax * np.cos(phase)
+                phase = 2 * np.pi * (f_cosine * t_cosine)
+                self.wave[i] = -polarity * self.gmax * np.sin(phase)
                 
             elif apod_duration + cosine_duration <= t_rel < 2*apod_duration + cosine_duration:
-                # Final 1/4 sine (ramp down from 1 to 0)
-                # cos goes from 1 to 0 over π/2 (quarter cycle)
+                # Final half-sine endcap at 2f: 0 -> 1 -> 0.
                 t_final = t_rel - (apod_duration + cosine_duration)
-                phase = (t_final / apod_duration) * (np.pi / 2)
-                self.wave[i] = polarity * self.gmax * np.cos(phase)
+                phase = (t_final / apod_duration) * np.pi
+                self.wave[i] = polarity * self.gmax * np.sin(phase)
     
     def get_effective_diffusion_time(self):
         """Returns the effective diffusion time in ms"""
@@ -298,12 +298,12 @@ class ApodizedCosineOGSEWaveform(DiffGradWaveform):
     
     def get_waveform_info(self):
         """Returns information about the waveform parameters"""
-        # Use the simplified frequency calculation
-        f_cosine = (0.25 + self.N_cycles) / self.T_duration  # cycles per ms
+        # With negative-start/negative-end cosine segment, T = N/f.
+        f_cosine = self.N_cycles / self.T_duration  # cycles per ms
         f_apod = 2 * f_cosine  # apodization frequency
         
-        apod_duration = 0.25 / f_apod
-        cosine_duration = self.N_cycles / f_cosine
+        apod_duration = 0.5 / f_apod
+        cosine_duration = (self.N_cycles - 0.5) / f_cosine
         
         info = {
             'N_cycles': self.N_cycles,
@@ -317,6 +317,89 @@ class ApodizedCosineOGSEWaveform(DiffGradWaveform):
             'frequency_ratio': f_apod / f_cosine
         }
         return info
+
+
+class CosineOGSEWaveform(DiffGradWaveform):
+    '''
+    Non-apodized cosine OGSE waveform with paired bipolar blocks.
+
+    Each active block is a non-apodized cosine with very short linear edge
+    ramps: 0->1 (quick), cosine core, then 1->0 (quick). The second block has
+    opposite polarity.
+    '''
+
+    def __init__(self, N_cycles, T_duration, te=None, gmax=1.0, time_step=dt0):
+        self.N_cycles = int(N_cycles)
+        self.T_duration = float(T_duration)
+        self.gmax = float(gmax)
+        self.dt = float(time_step)
+
+        if self.N_cycles <= 0:
+            raise ValueError("N_cycles must be a positive integer.")
+        if self.T_duration <= 0:
+            raise ValueError("T_duration must be positive.")
+
+        self.t_eff = self.T_duration / (4.0 * self.N_cycles)
+
+        if te is None:
+            self.te = 4.0 * self.T_duration
+        else:
+            self.te = float(te)
+
+        self.generate_waveform()
+
+    def generate_waveform(self):
+        self.t = np.arange(0.0, self.te + self.dt, self.dt)
+        self.wave = np.zeros_like(self.t)
+
+        f_cosine = self.N_cycles / self.T_duration  # cycles/ms
+        t_start_encode = self.te / 4.0 - self.T_duration / 2.0
+        t_start_decode = 3.0 * self.te / 4.0 - self.T_duration / 2.0
+
+        self._generate_single_waveform(t_start_encode, 1.0, self.T_duration, f_cosine)
+        self._generate_single_waveform(t_start_decode, -1.0, self.T_duration, f_cosine)
+
+    def _generate_single_waveform(self, t_start, polarity, cosine_duration, f_cosine):
+        # Use a near-instant ramp equal to one simulation step when possible.
+        ramp_duration = min(self.dt, max(0.0, 0.25 * cosine_duration))
+        core_duration = max(cosine_duration - 2.0 * ramp_duration, 0.0)
+        if core_duration > 0.0:
+            f_core = self.N_cycles / core_duration
+        else:
+            f_core = f_cosine
+
+        for i, t in enumerate(self.t):
+            t_rel = t - t_start
+
+            if 0.0 <= t_rel < ramp_duration:
+                # Quick linear ramp from 0 to block peak.
+                amp = (t_rel / max(ramp_duration, 1e-15))
+                self.wave[i] = polarity * self.gmax * amp
+
+            elif ramp_duration <= t_rel < (ramp_duration + core_duration):
+                # Cosine core starting near +1 and oscillating at the OGSE frequency.
+                t_core = t_rel - ramp_duration
+                phase = 2.0 * np.pi * (f_core * t_core)
+                self.wave[i] = polarity * self.gmax * np.cos(phase)
+
+            elif (ramp_duration + core_duration) <= t_rel < (2.0 * ramp_duration + core_duration):
+                # Quick linear ramp from block peak back to zero.
+                tau = (t_rel - (ramp_duration + core_duration)) / max(ramp_duration, 1e-15)
+                self.wave[i] = polarity * self.gmax * (1.0 - tau)
+
+    def get_effective_diffusion_time(self):
+        return self.t_eff
+
+    def get_waveform_info(self):
+        f_cosine = self.N_cycles / self.T_duration
+        return {
+            'N_cycles': self.N_cycles,
+            'T_duration_ms': self.T_duration,
+            'effective_diffusion_time_ms': self.t_eff,
+            'total_echo_time_ms': self.te,
+            'cosine_duration_ms': self.T_duration,
+            'cosine_frequency_Hz': f_cosine * 1000.0,
+        }
 
 
 class TrapezoidalCosineOGSEWaveform(DiffGradWaveform):

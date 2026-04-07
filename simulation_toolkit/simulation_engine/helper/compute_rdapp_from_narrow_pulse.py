@@ -9,7 +9,7 @@ Gaussian Phase Approximation (GPA) integral:
 
 Two acquisition protocols are evaluated per substrate:
 
-  Protocol 1 - b = 300 s/mm², TE = 100 ms
+    Protocol 1 - b = 300 s/mm², TE = 78 ms
     PGSE : Δ=50 ms, δ=12 ms
     OGSE : ApodizedCosine, T=26 ms, N=1  (t_eff = 6.5 ms)
 
@@ -58,13 +58,13 @@ from simulation_toolkit.simulation_engine.helper.sim_util import (
 # RDapp from the GPA autocorrelation ratio is independent of Gmax;
 # Gmax is stored for reporting and cross-checking against scanner params.
 
-# ---- Protocol 1: b = 300 s/mm², TE = 100 ms -----------------------
+# ---- Protocol 1: b = 300 s/mm², TE = 78 ms ------------------------
 _PGSE_CONFIG = {
     "type": "PGSE",
     "big_delta": 50.0,        # ms  (Δ)
     "little_delta": 12.0,    # ms  (δ)
     "b_value_s_mm2": 300.0, # s/mm²
-    "te_ms": 100.0,           # echo time / simulation window (ms)
+    "te_ms": 78.0,            # echo time / simulation window (ms)
 }
 
 _OGSE_CONFIG = {
@@ -72,7 +72,7 @@ _OGSE_CONFIG = {
     "N_cycles": 1,
     "T_duration": 26.0,      # ms  (t_eff = T/(4N) = 6.5 ms)
     "b_value_s_mm2": 300.0, # s/mm²
-    "te_ms": 100.0,
+    "te_ms": 78.0,
 }
 
 # ---- Protocol 2: b = 800 s/mm², TE = 40 ms -------------------------
@@ -94,6 +94,9 @@ _OGSE_CONFIG_2 = {
 
 # Waveform time step used when building G(t)
 _WAVE_DT_MS = 0.01   # ms  (10 µs)
+
+# Save one PGSE/OGSE waveform figure per substrate alongside rdapp_result.pkl.
+_SAVE_WAVEFORM_PLOT = True
 
 # ------------------------------------------------------------------
 # Helpers
@@ -166,6 +169,82 @@ def _find_adc_pairs(adc_dir: str):
         _pick_file(intra_files, 'intra'),
         _pick_file(extra_files, 'extra'),
     )
+
+
+def _save_protocol_waveform_plot(
+    substrate_dir: str,
+    human_pgse,
+    human_ogse,
+    animal_pgse,
+    animal_ogse,
+) -> str:
+    """
+        Save a 4-panel figure with one waveform per panel:
+            - Human PGSE
+            - Human OGSE
+            - Animal PGSE
+            - Animal OGSE
+
+    Returns the saved file path, or an empty string if plotting is unavailable.
+    """
+    try:
+        import matplotlib.pyplot as plt
+    except Exception as exc:
+        print(f"  [warn] Skipping waveform plot (matplotlib unavailable): {exc}")
+        return ""
+
+    rdapp_dir = os.path.join(substrate_dir, 'sim', 'RDapp')
+    os.makedirs(rdapp_dir, exist_ok=True)
+    out_path = os.path.join(rdapp_dir, 'pgse_ogse_waveforms.png')
+
+    fig, axes = plt.subplots(2, 2, figsize=(12, 7), sharex=False, sharey=True)
+
+    panels = [
+        (
+            axes[0, 0],
+            "Human PGSE (b=300 s/mm², TE=78 ms)",
+            human_pgse,
+            "PGSE",
+        ),
+        (
+            axes[0, 1],
+            "Human OGSE (b=300 s/mm², TE=78 ms)",
+            human_ogse,
+            "OGSE",
+        ),
+        (
+            axes[1, 0],
+            "Animal PGSE (b=800 s/mm², TE=40 ms)",
+            animal_pgse,
+            "PGSE",
+        ),
+        (
+            axes[1, 1],
+            "Animal OGSE (b=800 s/mm², TE=40 ms)",
+            animal_ogse,
+            "OGSE",
+        ),
+    ]
+
+    for ax, title, wave_obj, wave_label in panels:
+        ax.plot(wave_obj.t, wave_obj.wave, linewidth=1.7, label=f"{wave_label} (TE={wave_obj.te:.0f} ms)")
+        ax.set_title(title, fontsize=11)
+        ax.set_ylabel('G (mT/m)', fontsize=10)
+        ax.grid(True, linestyle='--', alpha=0.35)
+        ax.legend(fontsize=9)
+
+    axes[1, 0].set_xlabel('Time (ms)', fontsize=10)
+    axes[1, 1].set_xlabel('Time (ms)', fontsize=10)
+
+    fig.suptitle(
+        f"PGSE/OGSE gradient waveforms: {os.path.basename(substrate_dir)}",
+        fontsize=12,
+    )
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=250, bbox_inches='tight')
+    plt.close(fig)
+    print(f"  waveform plot saved at {out_path}")
+    return out_path
 
 
 def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
@@ -250,8 +329,8 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
             "gwave": gwave,
         }
 
-    # ---- Protocol 1: b=300 s/mm², TE=100 ms ----
-    print("  --- Protocol 1: b=300 s/mm², TE=100 ms ---")
+    # ---- Protocol 1: b=300 s/mm², TE=78 ms ----
+    print("  --- Protocol 1: b=300 s/mm², TE=78 ms ---")
     pgse_res = _run_protocol(_PGSE_CONFIG, "PGSE")
     ogse_res = _run_protocol(_OGSE_CONFIG, "OGSE")
 
@@ -292,6 +371,15 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
     gw_ogse = ogse_res["gwave"]
     gw_pgse2 = pgse_res_2["gwave"]
     gw_ogse2 = ogse_res_2["gwave"]
+    waveform_plot_path = ""
+    if _SAVE_WAVEFORM_PLOT:
+        waveform_plot_path = _save_protocol_waveform_plot(
+            substrate_dir=substrate_dir,
+            human_pgse=gw_pgse,
+            human_ogse=gw_ogse,
+            animal_pgse=gw_pgse2,
+            animal_ogse=gw_ogse2,
+        )
 
     return {
         'substrate_dir': substrate_dir,
@@ -338,6 +426,7 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
         'DeltaRDapp_2':         DeltaRDapp_2,
         'DeltaRDapp_intra_2':   DeltaRDapp_intra_2,
         'DeltaRDapp_extra_2':   DeltaRDapp_extra_2,
+        'waveform_plot_path':   waveform_plot_path,
     }
 
 

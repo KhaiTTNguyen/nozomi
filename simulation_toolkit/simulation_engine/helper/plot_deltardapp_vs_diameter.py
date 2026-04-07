@@ -37,6 +37,9 @@ from scipy.stats import linregress
 _EXP_RE = re.compile(
     r'experiment_d(?P<diam>[\d.]+)_.*_reproducibility_OD(?P<od>\d+)$'
 )
+_SUBSTRATE_MEAN_RE = re.compile(
+    r'Optimized_diameter_distribution_mean(?P<mean>[\d.]+)_std[\d.]+_.*\.png$'
+)
 
 
 def _parse_exp_folder(name: str):
@@ -45,6 +48,26 @@ def _parse_exp_folder(name: str):
     if m is None:
         return None
     return float(m.group('diam')), int(m.group('od'))
+
+
+def _extract_substrate_mean_diameter(substrate_path: str):
+    """Return mean diameter (um) parsed from substrate_stats filename, else None."""
+    stats_dir = os.path.join(substrate_path, 'figs', 'substrate_stats')
+    if not os.path.isdir(stats_dir):
+        return None
+
+    candidates = []
+    for fn in os.listdir(stats_dir):
+        m = _SUBSTRATE_MEAN_RE.match(fn)
+        if m is not None:
+            candidates.append((fn, float(m.group('mean'))))
+
+    if not candidates:
+        return None
+
+    # If multiple files exist, use the latest by filename sort convention.
+    candidates.sort(key=lambda x: x[0])
+    return candidates[-1][1]
 
 
 # ------------------------------------------------------------------
@@ -65,6 +88,10 @@ def collect_deltardapp(data_root: str) -> dict:
     results = {
         "human_b300": defaultdict(lambda: defaultdict(list)),
         "animal_b800": defaultdict(lambda: defaultdict(list)),
+        "individual_pairs": {
+            "human_b300": defaultdict(list),
+            "animal_b800": defaultdict(list),
+        },
         "components": {
             "intra": {
                 "human_b300": {
@@ -118,7 +145,7 @@ def collect_deltardapp(data_root: str) -> dict:
         meta = _parse_exp_folder(exp_group)
         if meta is None:
             continue
-        diam, od = meta
+        exp_diam, od = meta
         exp_path = os.path.join(data_root, exp_group)
 
         for substrate_id in sorted(os.listdir(exp_path)):
@@ -134,26 +161,56 @@ def collect_deltardapp(data_root: str) -> dict:
             with open(rdapp_pkl, 'rb') as fh:
                 r = pickle.load(fh)
 
+            substrate_mean_diam = _extract_substrate_mean_diameter(substrate_path)
+            if substrate_mean_diam is None:
+                substrate_mean_diam = exp_diam
+                print(
+                    f"  [warn] No substrate mean diameter PNG found for {substrate_id}; "
+                    f"falling back to experiment diameter={exp_diam:.3f}"
+                )
+
             delta_human = r.get('DeltaRDapp', None)
             delta_animal = r.get('DeltaRDapp_2', None)
+            human_pgse = r.get('RDapp_PGSE', None)
+            human_ogse = r.get('RDapp_OGSE', None)
+            animal_pgse = r.get('RDapp_PGSE_2', None)
+            animal_ogse = r.get('RDapp_OGSE_2', None)
 
             if delta_human is not None:
                 delta_human = float(delta_human)
-                results["human_b300"][od][diam].append(delta_human)
+                results["human_b300"][od][substrate_mean_diam].append(delta_human)
 
             if delta_animal is not None:
                 delta_animal = float(delta_animal)
-                results["animal_b800"][od][diam].append(delta_animal)
+                results["animal_b800"][od][substrate_mean_diam].append(delta_animal)
+
+            if human_pgse is not None and human_ogse is not None:
+                results["individual_pairs"]["human_b300"][od].append({
+                    "diameter": float(substrate_mean_diam),
+                    "pgse": float(human_pgse),
+                    "ogse": float(human_ogse),
+                    "substrate_id": substrate_id,
+                    "exp_group": exp_group,
+                })
+
+            if animal_pgse is not None and animal_ogse is not None:
+                results["individual_pairs"]["animal_b800"][od].append({
+                    "diameter": float(substrate_mean_diam),
+                    "pgse": float(animal_pgse),
+                    "ogse": float(animal_ogse),
+                    "substrate_id": substrate_id,
+                    "exp_group": exp_group,
+                })
 
             for component_name, scenario_map in component_key_map.items():
                 for scenario_key, seq_map in scenario_map.items():
                     for seq_label, rd_key in seq_map.items():
                         value = r.get(rd_key, None)
                         if value is not None:
-                            results["components"][component_name][scenario_key][seq_label][od][diam].append(float(value))
+                            results["components"][component_name][scenario_key][seq_label][od][substrate_mean_diam].append(float(value))
 
             print(
-                f"  {exp_group}/{substrate_id}  d={diam} OD={od}"
+                f"  {exp_group}/{substrate_id}  d={substrate_mean_diam:.3f} OD={od}"
                 f"  ΔRDapp_b300={delta_human if delta_human is not None else 'NA'}"
                 f"  ΔRDapp_b800={delta_animal if delta_animal is not None else 'NA'}"
             )
@@ -180,7 +237,7 @@ def plot_deltardapp(results: dict, output_path: Optional[str] = None):
     results     : output of collect_deltardapp()
     output_path : file to save figure; if None, shows interactively
     """
-    fig, axes = plt.subplots(1, 2, figsize=(13, 5), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 5.8), sharey=True)
     scenario_meta = [
         ("human_b300", "Human scanner", r"$b=300$ s/mm$^2$"),
         ("animal_b800", "Animal scanner", r"$b=800$ s/mm$^2$"),
@@ -379,7 +436,8 @@ def plot_rdapp_total_by_od(results: dict, output_dir: str):
 
     for od in od_values:
         style = _OD_STYLES.get(od, {'color': 'gray', 'marker': 'x', 'label': f'OD{od}'})
-        fig, axes = plt.subplots(1, 2, figsize=(13, 5), sharey=True)
+        fig, axes = plt.subplots(1, 2, figsize=(11, 5.8), sharey=True)
+        fig.subplots_adjust(wspace=0.08)
 
         for ax, (scenario_key, scanner_label, b_label) in zip(axes, scenario_meta):
             seq_maps = total_results.get(scenario_key, {})
@@ -468,7 +526,8 @@ def plot_rdapp_total_by_od_combined(results: dict, output_dir: str):
 
     os.makedirs(output_dir, exist_ok=True)
     n_od = len(od_values)
-    fig, axes = plt.subplots(n_od, 2, figsize=(13, 4.4 * n_od), sharex=True, sharey=True)
+    fig, axes = plt.subplots(n_od, 2, figsize=(11, 5.0 * n_od), sharex=True, sharey=True)
+    fig.subplots_adjust(wspace=0.08, hspace=0.22)
     if n_od == 1:
         axes = np.array([axes])
 
@@ -540,6 +599,201 @@ def plot_rdapp_total_by_od_combined(results: dict, output_dir: str):
     fig.tight_layout()
 
     out_path = os.path.join(output_dir, 'rdapp_total_all_ODI_combined.png')
+    fig.savefig(out_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"Figure saved → {out_path}")
+
+
+def plot_individual_pgse_ogse_pairs_by_od(results: dict, output_dir: str):
+    """
+    Create one figure per OD value with two panels (human/animal), plotting
+    individual substrate PGSE/OGSE pairs at each substrate's mean diameter.
+    """
+    pairs = results.get("individual_pairs", {})
+    human_pairs_by_od = pairs.get("human_b300", {})
+    animal_pairs_by_od = pairs.get("animal_b800", {})
+    od_values = sorted(set(human_pairs_by_od.keys()) | set(animal_pairs_by_od.keys()))
+    if not od_values:
+        print("No individual PGSE/OGSE pairs found.")
+        return
+
+    os.makedirs(output_dir, exist_ok=True)
+    scenario_meta = [
+        ("human_b300", "Human scanner", r"$b=300$ s/mm$^2$"),
+        ("animal_b800", "Animal scanner", r"$b=800$ s/mm$^2$"),
+    ]
+
+    for od in od_values:
+        style = _OD_STYLES.get(od, {'color': 'gray', 'marker': 'x', 'label': f'OD{od}'})
+        fig, axes = plt.subplots(1, 2, figsize=(13, 5), sharey=True)
+
+        for ax, (scenario_key, scanner_label, b_label) in zip(axes, scenario_meta):
+            entries = sorted(
+                pairs.get(scenario_key, {}).get(od, []),
+                key=lambda item: item["diameter"],
+            )
+
+            for idx, item in enumerate(entries):
+                x = item["diameter"]
+                y_pgse = item["pgse"]
+                y_ogse = item["ogse"]
+
+                pgse_label = 'PGSE' if idx == 0 else '_nolegend_'
+                ogse_label = 'OGSE' if idx == 0 else '_nolegend_'
+                ax.scatter(
+                    x, y_pgse,
+                    s=36,
+                    marker=style['marker'],
+                    facecolor='white',
+                    edgecolor=style['color'],
+                    linewidth=1.4,
+                    label=pgse_label,
+                    zorder=3,
+                )
+                ax.scatter(
+                    x, y_ogse,
+                    marker=style['marker'],
+                    color=style['color'],
+                    edgecolor=style['color'],
+                    label=ogse_label,
+                    zorder=3,
+                )
+
+            ax.set_xlabel('Mean axon diameter (µm)', fontsize=12)
+            ax.set_title(f'{scanner_label}\n{b_label}', fontsize=12)
+            ax.grid(True, which='major', linestyle='--', alpha=0.5)
+            ax.grid(True, which='minor', linestyle=':', alpha=0.25)
+            handles, labels = ax.get_legend_handles_labels()
+            if handles:
+                ordered_handles = []
+                ordered_labels = []
+                for target in ('OGSE', 'PGSE'):
+                    for h, l in zip(handles, labels):
+                        if l == target and l not in ordered_labels:
+                            ordered_handles.append(h)
+                            ordered_labels.append(l)
+                ax.legend(
+                    ordered_handles,
+                    ordered_labels,
+                    fontsize=14,
+                    framealpha=0.9,
+                    loc='upper left',
+                )
+
+        axes[0].set_ylabel(r'$RD^{app}_{\perp}$ (µm²/ms)', fontsize=12)
+        fig.suptitle(
+            f"{style['label']} individual substrate pairs: "
+            r"$RD^{app}_{\mathrm{PGSE}}$ and $RD^{app}_{\mathrm{OGSE}}$",
+            fontsize=13,
+        )
+        fig.tight_layout()
+
+        out_path = os.path.join(output_dir, f'rdapp_total_individual_pairs_OD{od}.png')
+        fig.savefig(out_path, dpi=300, bbox_inches='tight')
+        plt.close(fig)
+        print(f"Figure saved → {out_path}")
+
+
+def plot_individual_pgse_ogse_pairs_all_od_combined(results: dict, output_dir: str):
+    """
+    Create one large combined figure containing all OD values.
+    Rows correspond to OD values and columns are human/animal panels.
+    """
+    pairs = results.get("individual_pairs", {})
+    human_pairs_by_od = pairs.get("human_b300", {})
+    animal_pairs_by_od = pairs.get("animal_b800", {})
+    od_values = sorted(set(human_pairs_by_od.keys()) | set(animal_pairs_by_od.keys()))
+    if not od_values:
+        print("No individual PGSE/OGSE pairs found for combined figure.")
+        return
+
+    os.makedirs(output_dir, exist_ok=True)
+    scenario_meta = [
+        ("human_b300", "Human scanner", r"$b=300$ s/mm$^2$"),
+        ("animal_b800", "Animal scanner", r"$b=800$ s/mm$^2$"),
+    ]
+
+    n_od = len(od_values)
+    fig, axes = plt.subplots(n_od, 2, figsize=(13, 4.4 * n_od), sharex=True, sharey=True)
+    if n_od == 1:
+        axes = np.array([axes])
+
+    for row_idx, od in enumerate(od_values):
+        style = _OD_STYLES.get(od, {'color': 'gray', 'marker': 'x', 'label': f'OD{od}'})
+
+        for col_idx, (scenario_key, scanner_label, b_label) in enumerate(scenario_meta):
+            ax = axes[row_idx, col_idx]
+            entries = sorted(
+                pairs.get(scenario_key, {}).get(od, []),
+                key=lambda item: item["diameter"],
+            )
+
+            for idx, item in enumerate(entries):
+                x = item["diameter"]
+                y_pgse = item["pgse"]
+                y_ogse = item["ogse"]
+
+                pgse_label = 'PGSE' if idx == 0 else '_nolegend_'
+                ogse_label = 'OGSE' if idx == 0 else '_nolegend_'
+                ax.scatter(
+                    x, y_pgse,
+                    s=36,
+                    marker=style['marker'],
+                    facecolor='white',
+                    edgecolor=style['color'],
+                    linewidth=1.4,
+                    label=pgse_label,
+                    zorder=3,
+                )
+                ax.scatter(
+                    x, y_ogse,
+                    s=40,
+                    marker=style['marker'],
+                    color=style['color'],
+                    edgecolor=style['color'],
+                    label=ogse_label,
+                    zorder=3,
+                )
+
+            if row_idx == 0:
+                ax.set_title(f'{scanner_label}\n{b_label}', fontsize=12)
+            if col_idx == 0:
+                ax.set_ylabel(
+                    f"{style['label']}\n" + r'$RD^{app}_{\perp}$ (µm²/ms)',
+                    fontsize=11,
+                )
+            if row_idx == n_od - 1:
+                ax.set_xlabel('Mean axon diameter (µm)', fontsize=12)
+
+            ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
+            ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.25))
+            ax.grid(True, which='major', linestyle='--', alpha=0.5)
+            ax.grid(True, which='minor', linestyle=':', alpha=0.25)
+            handles, labels = ax.get_legend_handles_labels()
+            if handles:
+                ordered_handles = []
+                ordered_labels = []
+                for target in ('OGSE', 'PGSE'):
+                    for h, l in zip(handles, labels):
+                        if l == target and l not in ordered_labels:
+                            ordered_handles.append(h)
+                            ordered_labels.append(l)
+                ax.legend(
+                    ordered_handles,
+                    ordered_labels,
+                    fontsize=14,
+                    framealpha=0.9,
+                    loc='upper left',
+                )
+
+    fig.suptitle(
+        r'All OD values: individual substrate ' +
+        r'$RD^{app}_{\mathrm{PGSE}}$ and $RD^{app}_{\mathrm{OGSE}}$',
+        fontsize=14,
+    )
+    fig.tight_layout()
+
+    out_path = os.path.join(output_dir, 'rdapp_total_individual_pairs_all_OD_combined.png')
     fig.savefig(out_path, dpi=300, bbox_inches='tight')
     plt.close(fig)
     print(f"Figure saved → {out_path}")
@@ -651,7 +905,7 @@ def plot_deltardapp_per_od(results: dict, output_path: Optional[str] = None):
     """
     One subplot per OD value, each showing:
       - Individual replicate scatter points
-      - Mean ± std error bars per diameter
+    - Linear fits computed from individual scattered points
       - Linear fit  ΔRDapp = α·d + β
       - Pearson r annotation
 
@@ -660,9 +914,10 @@ def plot_deltardapp_per_od(results: dict, output_path: Optional[str] = None):
     results     : output of collect_deltardapp()
     output_path : file to save figure; if None, shows interactively
     """
-    human_results = results.get("human_b300", {})
-    animal_results = results.get("animal_b800", {})
-    od_values = sorted(set(human_results.keys()) | set(animal_results.keys()))
+    pair_results = results.get("individual_pairs", {})
+    human_pairs = pair_results.get("human_b300", {})
+    animal_pairs = pair_results.get("animal_b800", {})
+    od_values = sorted(set(human_pairs.keys()) | set(animal_pairs.keys()))
     n_od = len(od_values)
 
     fig, axes = plt.subplots(1, n_od, figsize=(5 * n_od, 5), sharey=True)
@@ -673,59 +928,38 @@ def plot_deltardapp_per_od(results: dict, output_path: Optional[str] = None):
         style = _OD_STYLES.get(od, {'color': 'gray', 'marker': 'o',
                                      'label': f'OD{od}'})
         color = style['color']
-        marker = style['marker']
 
         scenario_specs = [
-            ("human_b300", human_results.get(od, {}), '-', 'Human b=300'),
-            ("animal_b800", animal_results.get(od, {}), '--', 'Animal b=800'),
+            ("human_b300", human_pairs.get(od, []), '-', 'Human b=300', 'D'),
+            ("animal_b800", animal_pairs.get(od, []), '--', 'Animal b=800', 'X'),
         ]
 
         ann_y = 0.96
-        for _, diam_dict, line_style, scenario_label in scenario_specs:
-            diams_sorted = sorted(diam_dict.keys())
-            if not diams_sorted:
+        for _, entries, line_style, scenario_label, scatter_marker in scenario_specs:
+            if not entries:
                 continue
 
-            # Flatten all replicates → used for regression & correlation
-            all_x, all_y = [], []
-            for d in diams_sorted:
-                for v in diam_dict[d]:
-                    all_x.append(d)
-                    all_y.append(v)
-            all_x = np.array(all_x)
-            all_y = np.array(all_y)
+            # Build per-substrate scattered delta values: ΔRDapp = OGSE - PGSE.
+            all_x = np.array([float(item["diameter"]) for item in entries], dtype=float)
+            all_y = np.array(
+                [float(item["ogse"]) - float(item["pgse"]) for item in entries],
+                dtype=float,
+            )
             if len(all_x) < 2:
                 continue
 
             slope, intercept, r_value, p_value, _ = linregress(all_x, all_y)
 
-            means = np.array([np.mean(diam_dict[d]) for d in diams_sorted])
-            stds = np.array([
-                np.std(diam_dict[d], ddof=1) if len(diam_dict[d]) > 1 else 0.0
-                for d in diams_sorted
-            ])
-            counts = [len(diam_dict[d]) for d in diams_sorted]
-
             ax.scatter(
                 all_x, all_y,
-                color=color, marker=marker,
-                s=26, alpha=0.35, zorder=2,
-                label='_nolegend_',
-            )
-
-            ax.errorbar(
-                diams_sorted, means, yerr=stds,
-                color=color, marker=marker,
-                linestyle='None',
-                label=f'{scenario_label}: mean ± std (n={counts[0]})',
-                linewidth=1.8, markersize=7,
-                capsize=5, capthick=1.5, elinewidth=1.2,
-                zorder=4,
+                color=color, marker=scatter_marker,
+                s=40, alpha=0.55, zorder=3,
+                label=f'{scenario_label}: data (n={len(all_x)})',
             )
 
             x_fit = np.linspace(
-                min(diams_sorted) * 0.88,
-                max(diams_sorted) * 1.06,
+                float(np.min(all_x)) * 0.88,
+                float(np.max(all_x)) * 1.06,
                 200,
             )
             y_fit = slope * x_fit + intercept
@@ -735,7 +969,6 @@ def plot_deltardapp_per_od(results: dict, output_path: Optional[str] = None):
                 color=color, linestyle=line_style, linewidth=1.6, zorder=3,
                 label=(
                     f'{scenario_label} fit: '
-                    rf'$\alpha={slope:.4f}$, '
                     rf'$\beta{sign if sign=="+" else "-"}{abs(intercept):.4f}$'
                 ),
             )
@@ -851,8 +1084,8 @@ def main():
         _nozomi_root,
         'experiment', 'visualization', 'plots', 'rdapp_by_ODI',
     )
-    plot_rdapp_total_by_od(results, output_dir=output_by_odi_dir)
-    plot_rdapp_total_by_od_combined(results, output_dir=output_by_odi_dir)
+    plot_individual_pgse_ogse_pairs_by_od(results, output_dir=output_by_odi_dir)
+    plot_individual_pgse_ogse_pairs_all_od_combined(results, output_dir=output_by_odi_dir)
 
     # output_stacked = os.path.join(
     #     os.path.dirname(os.path.abspath(output)),
