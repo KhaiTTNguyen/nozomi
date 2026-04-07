@@ -26,7 +26,7 @@ cd nozomi
 ./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=0 --sim_time=100  --nseg=20 --compartment=intra
 
 
-./run-scripts/run-simulation.sh --substrates=./experiment/result/2026-03-22_bead_1.24/bead1.24_d1.68_OD20_initVF0.218_500axons --gpu=1 --sim_time=100  --nseg=20 --compartment=intra
+./run-scripts/run-simulation.sh --substrates=./experiment/result/2026-03-22_bead_1.24/bead1.24_d2.58_OD10_initVF0.17_500axons --gpu=2 --sim_time=100  --nseg=20 --compartment=intra
 
 
 ./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=0 --sim_time=100  --nseg=20 --compartment=extra 

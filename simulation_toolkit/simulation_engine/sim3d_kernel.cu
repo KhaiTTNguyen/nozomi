@@ -887,27 +887,27 @@ extern "C"
         }
         
         //enforce periodic boundary conditions in the arena
-        '''
-        G(t) here is scaled by gamma
-        phase = ∫ G(t) * (wrapped_position(t)) * dt
-        so when a spin crosses a periodic boundary, 
-        we need to add/subtract the contribution of the area swept by the spin as 
-        it crosses the boundary to the accumulated phase. 
-
-        If a spin crosses periodic boundaries, stored position jumps by ±L (wrapped), 
-        but the physical path is continuous (unwrapped).
-        So wrapped position differs from unwrapped by an integer box shift:
-            
-        wrapped_position = unwrapped_position + L
         
-        Plugging this into phase gives a missing term:
+        // G(t) here is scaled by gamma
+        // phase = ∫ G(t) * (wrapped_position(t)) * dt
+        // so when a spin crosses a periodic boundary, 
+        // we need to add/subtract the contribution of the area swept by the spin as 
+        // it crosses the boundary to the accumulated phase. 
 
-        phase = ∫ G(t) * (unwrapped_position(t) + L) * dt
-              = ∫ G(t) * unwrapped_position(t) * dt + L * ∫ G(t) * dt
-              = (original phase calculation) + L * G_area_at_this_time_step
+        // If a spin crosses periodic boundaries, stored position jumps by ±L (wrapped), 
+        // but the physical path is continuous (unwrapped).
+        // So wrapped position differs from unwrapped by an integer box shift:
+            
+        // wrapped_position = unwrapped_position + L
+        
+        // Plugging this into phase gives a missing term:
 
-        where G_area_at_this_time_step is the integral of G(t) over the time step during which the crossing occurs.
-        '''
+        // phase = ∫ G(t) * (unwrapped_position(t) + L) * dt
+        //       = ∫ G(t) * unwrapped_position(t) * dt + L * ∫ G(t) * dt
+        //       = (original phase calculation) + L * G_area_at_this_time_step
+
+        // where G_area_at_this_time_step is the integral of G(t) over the time step during which the crossing occurs.
+        
         // X periodic boundaries
         if (x[spinIdx] < -Lx/2)
         {
