@@ -135,16 +135,16 @@ def grad_lobe_by_dur(dt,nt,grad_lim,slew_lim,accel_lim):
 
 
 class DiffGradWaveform:
-
-    def calculate_bvalue(self,gmax=None):
-        ''' 
-        calculate the b-value of gwave in units of ms/um^2
-        gmax is in mT/m; wave amplitude of 1 corresponds to 1 mT/m.
-        '''
-        if gmax is None:
-            gmax = self.gmax
-        gwave_um = self.gwave / 1e6  # mT/m -> mT/um (1 mT/m = 1e-6 mT/um)
-        return np.sum(np.cumsum(gmax*gamma*gwave_um)**2)*self.dt**3; # ms/um^2
+    '''deprecated'''
+    # def calculate_bvalue(self,gmax=None):
+    #     ''' 
+    #     calculate the b-value of gwave in units of ms/um^2
+    #     gmax is in mT/m; wave amplitude of 1 corresponds to 1 mT/m.
+    #     '''
+    #     if gmax is None:
+    #         gmax = self.gmax
+    #     gwave_um = self.gwave / 1e6  # mT/m -> mT/um (1 mT/m = 1e-6 mT/um)
+    #     return np.sum(np.cumsum(gmax*gamma*gwave_um)**2)*self.dt**3; # ms/um^2
 
     def calculate_bvalue_from_wave(self):
             ''' 
@@ -159,18 +159,20 @@ class DiffGradWaveform:
                 = \int_0^T [ dt * ( \int_0^t [gamma * g(t') dt'] )^2 ]
 
             '''
-            gwave_um = self.wave / 1e6  # mT/m -> mT/um (1 mT/m = 1e-6 mT/um)
+            gwave_um = self.wave / 1e6  # mT/m -> mT/um 
             # discrete form of \int_0^T [ dt * ( \int_0^t [gamma * g(t') dt'] )^2 ]
-            return np.sum(np.cumsum(gamma*gwave_um)**2)*self.dt**3; # ms/um^2 -- 1 ms/um^2 = 1000 sec/mm^2
-
-    def set_bvalues(self,b):
-        b0 = self.calculate_bvalue(1)
-        self.b = b
-        self.gmax = np.sqrt(b/b0)
-
-    def set_gmax(self,gmax):
-        self.gmax = gmax
-        self.b = self.calculate_bvalue(gmax)
+            # gamma = 267.513; # rad/ms/mT 
+            # gwave_um in mT/um 
+            return np.sum(np.cumsum(gamma*gwave_um)**2)*self.dt**3; # ms/um^2 -- 1 ms/um^2 = 1000 s/mm^2
+    '''deprecated'''
+    # def set_bvalues(self,b):
+    #     b0 = self.calculate_bvalue(1)
+    #     self.b = b
+    #     self.gmax = np.sqrt(b/b0)
+    '''deprecated'''
+    # def set_gmax(self,gmax):
+    #     self.gmax = gmax
+    #     self.b = self.calculate_bvalue(gmax)
 
 class PGDiffWaveform(DiffGradWaveform):
     '''
