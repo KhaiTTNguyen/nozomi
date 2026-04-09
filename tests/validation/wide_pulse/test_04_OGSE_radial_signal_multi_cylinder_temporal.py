@@ -355,7 +355,7 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
             T_duration=t_duration_ms,
             te=te_ms,
             gmax=1.0,
-            time_step=0.0001,
+            time_step=0.01,
         )
 
         # Enforce explicit timing requested for visualization: first block,

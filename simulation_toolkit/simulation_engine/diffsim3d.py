@@ -46,7 +46,7 @@ class DiffSim3d:
         self.phase_d = gpuarray.zeros(self.ndiffdir * self.nspins, dtype=np.float32)
         
         self.randomWalk3d = self.mod.get_function("randomWalk3d")
-        self.randomWalk3d_phase = self.mod.get_function("randomWalk3d_phase")
+        # self.randomWalk3d_phase = self.mod.get_function("randomWalk3d_phase")
         self.randomWalk3d_phase_multi_dirr = self.mod.get_function("randomWalk3d_phase_multidirr")
         self.initstates = self.mod.get_function("initstates")
         self.compute_diffusion_coefficients_and_kurtosis = self.mod.get_function("computeDiffusionCoefficientsAndKurtosis")
@@ -205,15 +205,16 @@ class DiffSim3d:
                           self.spins_d,self.spins0_d,self.sig_d,
                           block=(self.nblock,1,1), grid=(self.ngrid,1))
     
-    def dwi_step(self, gwave_dt, G, G_area_at_each_time_step):
-        if not self.issetup:
-            self.setup()
+    # deprecated
+    #  def dwi_step(self, gwave_dt, G, G_area_at_each_time_step):
+    #     if not self.issetup:
+    #         self.setup()
     
-        self.randomWalk3d_phase(np.float32(gwave_dt),self.spheres_d,self.segments_d,
-                          self.spins_d,self.spins0_d,
-                          self.phase_d, 
-                          np.float32(G), np.float32(G_area_at_each_time_step),  
-                          block=(self.nblock,1,1), grid=(self.ngrid,1))
+    #     self.randomWalk3d_phase(np.float32(gwave_dt),self.spheres_d,self.segments_d,
+    #                       self.spins_d,self.spins0_d,
+    #                       self.phase_d, 
+    #                       np.float32(G), np.float32(G_area_at_each_time_step),  
+    #                       block=(self.nblock,1,1), grid=(self.ngrid,1))
     
     def dwi_multidirections_step(self, gwave_dt, G, G_area_at_each_time_step):
         if not self.issetup:
@@ -254,7 +255,7 @@ class DwiSim3d(DiffSim3d):
             np.random.randint(np.iinfo(np.int32).max, dtype=np.int32),
             block=(self.nblock, 1, 1), grid=(self.ngrid, 1)
         )
-        
+
     def simulate_multi_directions(self,gwave,structures=None,initstates=None):
         '''
         Simulates DWI signal in a simulation geometry

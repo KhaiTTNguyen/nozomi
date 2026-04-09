@@ -104,6 +104,126 @@ def _build_grid_cylinder_geometry(
     return sg3
 
 
+def _plot_cylinder_grid_geometry_3d(output_dir, lx, ly, lz, nx, ny, spacing_um, radius_um):
+    """Save a publication-style 3D rendering of the full cylinder grid geometry."""
+    x_coords = (np.arange(nx, dtype=float) - (nx - 1) / 2.0) * float(spacing_um)
+    y_coords = (np.arange(ny, dtype=float) - (ny - 1) / 2.0) * float(spacing_um)
+
+    n_theta = 90
+    n_z = 80
+    n_r = 40
+    theta = np.linspace(0.0, 2.0 * np.pi, n_theta)
+    z_lin = np.linspace(-lz / 2.0, lz / 2.0, n_z)
+    theta_side, z_side = np.meshgrid(theta, z_lin)
+    r_lin = np.linspace(0.0, radius_um, n_r)
+    theta_cap, r_cap = np.meshgrid(theta, r_lin)
+
+    z_top = lz / 2.0
+    z_bottom = -lz / 2.0
+
+    fig = plt.figure(figsize=(9.2, 7.8), facecolor="white")
+    ax = fig.add_subplot(111, projection="3d")
+    ax.set_facecolor("white")
+
+    side_color = "#5DA5DA"
+    cap_color = "#2C7FB8"
+    edge_color = "#1D3557"
+
+    for cx in x_coords:
+        for cy in y_coords:
+            x_side = cx + radius_um * np.cos(theta_side)
+            y_side = cy + radius_um * np.sin(theta_side)
+
+            x_cap = cx + r_cap * np.cos(theta_cap)
+            y_cap = cy + r_cap * np.sin(theta_cap)
+            z_cap_top = np.full_like(x_cap, z_top)
+            z_cap_bottom = np.full_like(x_cap, z_bottom)
+
+            ax.plot_surface(
+                x_side,
+                y_side,
+                z_side,
+                rstride=1,
+                cstride=1,
+                color=side_color,
+                edgecolor="none",
+                linewidth=0.0,
+                antialiased=True,
+                alpha=0.96,
+                shade=True,
+            )
+            ax.plot_surface(
+                x_cap,
+                y_cap,
+                z_cap_top,
+                rstride=1,
+                cstride=1,
+                color=cap_color,
+                edgecolor="none",
+                linewidth=0.0,
+                antialiased=True,
+                alpha=0.98,
+                shade=True,
+            )
+            ax.plot_surface(
+                x_cap,
+                y_cap,
+                z_cap_bottom,
+                rstride=1,
+                cstride=1,
+                color=cap_color,
+                edgecolor="none",
+                linewidth=0.0,
+                antialiased=True,
+                alpha=0.98,
+                shade=True,
+            )
+
+            # Subtle top and bottom rims to improve perceived sharpness in print.
+            ax.plot(
+                cx + radius_um * np.cos(theta),
+                cy + radius_um * np.sin(theta),
+                np.full_like(theta, z_top),
+                color=edge_color,
+                linewidth=0.5,
+                alpha=0.65,
+            )
+            ax.plot(
+                cx + radius_um * np.cos(theta),
+                cy + radius_um * np.sin(theta),
+                np.full_like(theta, z_bottom),
+                color=edge_color,
+                linewidth=0.4,
+                alpha=0.45,
+            )
+
+    ax.set_xlim(-lx / 2.0, lx / 2.0)
+    ax.set_ylim(-ly / 2.0, ly / 2.0)
+    ax.set_zlim(-lz / 2.0, lz / 2.0)
+    ax.set_box_aspect((lx, ly, lz))
+    ax.set_xlabel("x (um)")
+    ax.set_ylabel("y (um)")
+    ax.set_zlabel("z (um)")
+    ax.set_title(
+        f"Test05 geometry: {nx}x{ny} cylinders (diameter={2.0 * radius_um:.2f} um, spacing={spacing_um:.2f} um)",
+        pad=14,
+    )
+    ax.view_init(elev=26, azim=40)
+    ax.grid(False)
+
+    # Keep axes clean and publication-friendly.
+    for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
+        axis.pane.set_alpha(0.0)
+
+    plt.tight_layout()
+    plt.savefig(
+        os.path.join(output_dir, "test_05_cylinder_geometry_3d.png"),
+        dpi=300,
+        bbox_inches="tight",
+    )
+    plt.close(fig)
+
+
 def _cosine_ogse_signal_eq11(
     gmax,
     frequency_hz,
@@ -236,6 +356,16 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
         diameter_um=diameter_um,
         spacing_um=spacing_um,
     )
+    _plot_cylinder_grid_geometry_3d(
+        output_dir=plot_dir,
+        lx=lx,
+        ly=ly,
+        lz=lz,
+        nx=5,
+        ny=5,
+        spacing_um=spacing_um,
+        radius_um=radius_um,
+    )
 
     num_spins = 50000
     sim = DwiSim3d(sg3, num_spins)
@@ -248,7 +378,7 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
             ]
         )
     )
-    sim.set_segments(nsegx=5, nsegy=5, nsegz=5)
+    sim.set_segments(nsegx=20, nsegy=20, nsegz=20)
     sim.setup(structures=list(np.arange(0, sg3.nstructures)))
 
     n_roots = 200
@@ -279,7 +409,7 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
             T_duration=t_duration_ms,
             te=te_ms,
             gmax=1.0,
-            time_step=0.0001,
+            time_step=0.01,
         )
         _reposition_cosine_waveform_blocks(
             waveform=waveform,
