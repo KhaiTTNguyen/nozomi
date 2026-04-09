@@ -227,23 +227,34 @@ class DiffSim3d:
                           block=(self.nblock,1,1), grid=(self.ngrid,1))
     
 class DwiSim3d(DiffSim3d):
-
-    def simulate(self,gwave,structures=None,initstates=None):
-        '''
-        Simulates DWI signal in a simulation gometry
-        '''
-        mt_per_m_to_mt_per_um = 1e-6
-        G_area_at_each_time_step = integrate.cumulative_trapezoid(gwave.wave, dx=1.0, initial=0)*gwave.dt
-        for n,_ in enumerate(gwave.wave):
-            self.dwi_step(gwave.dt, 
-                          gwave.wave[n] * gwave.dt * gamma * mt_per_m_to_mt_per_um,
-                          G_area_at_each_time_step[n] * gamma * mt_per_m_to_mt_per_um)
-        # Get the result back from GPU
-        phase_accumulated = self.phase_d.get()
+    '''deprecated'''
+    # def simulate(self,gwave,structures=None,initstates=None):
+    #     '''
+    #     Simulates DWI signal in a simulation gometry
+    #     '''
+    #     mt_per_m_to_mt_per_um = 1e-6
+    #     G_area_at_each_time_step = integrate.cumulative_trapezoid(gwave.wave, dx=1.0, initial=0)*gwave.dt
+    #     for n,_ in enumerate(gwave.wave):
+    #         self.dwi_step(gwave.dt, 
+    #                       gwave.wave[n] * gwave.dt * gamma * mt_per_m_to_mt_per_um,
+    #                       G_area_at_each_time_step[n] * gamma * mt_per_m_to_mt_per_um)
+    #     # Get the result back from GPU
+    #     phase_accumulated = self.phase_d.get()
         
-        # Reshape to match expected format (3, nspin)
-        return phase_accumulated.reshape(self.ndiffdir, self.nspins)
+    #     # Reshape to match expected format (3, nspin)
+    #     return phase_accumulated.reshape(self.ndiffdir, self.nspins)
     
+    def reset_simulation(self, initial_spins=None):
+        """Reset phase and spin state for a fresh simulation on the same geometry."""
+        self.phase_d.fill(0)
+        if initial_spins is not None:
+            self.spins_d = gpuarray.to_gpu(initial_spins.astype(np.float32))
+            self.spins0_d = gpuarray.to_gpu(initial_spins.astype(np.float32))
+        self.initstates(
+            np.random.randint(np.iinfo(np.int32).max, dtype=np.int32),
+            block=(self.nblock, 1, 1), grid=(self.ngrid, 1)
+        )
+        
     def simulate_multi_directions(self,gwave,structures=None,initstates=None):
         '''
         Simulates DWI signal in a simulation geometry
