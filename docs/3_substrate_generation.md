@@ -105,7 +105,7 @@ source sim_venv/bin/activate
 ```bash
 ./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d168-K200-single-substrate-for-segment-calibration.json --output_folder_path=./tests/calibration/sim_domain_segment_calibration/data
 
-./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/2026-03-22-bead083/d05-K200-beading0.83-substrate.json --output_folder_path=./experiment/result/2026-03-18_bead_083_simulated
+./run-scripts/run-geometry-gen.sh --gpu=4 --config=./experiment/setup/substrate/single_substrate/2026-03-22-bead0.3/d05-K200-beading0.3-substrate.json --output_folder_path=./experiment/result/2026-03-22_bead_03
 ```
 
 ### Output Structure

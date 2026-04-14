@@ -39,7 +39,7 @@ def validate_parameters(params):
         'target_volume_fraction': {
             'value': params.get('target_volume_fraction'),
             'min': 0.01,
-            'max': 0.7,
+            'max': 0.98,
             'description': 'Volume fraction'
         }
     }
@@ -63,6 +63,25 @@ def validate_parameters(params):
                 f"ERROR: {description} ({param_name}) = {value} is out of range.\n"
                 f"       Acceptable range: {min_val} - {max_val}"
             )
+
+    # Apply diameter-dependent volume fraction rule.
+    mean_diameter = params.get('mean_diameter')
+    target_volume_fraction = params.get('target_volume_fraction')
+    if mean_diameter is not None and target_volume_fraction is not None:
+        if 0.5 <= mean_diameter <= 1.0:
+            if not (0.01 <= target_volume_fraction <= 0.98):
+                errors.append(
+                    "ERROR: Volume fraction (target_volume_fraction) is out of range for "
+                    f"mean diameter {mean_diameter} um.\n"
+                    "       Acceptable range: 0.01 - 0.98 when mean_diameter is 0.5 - 1.0 um"
+                )
+        else:
+            if not (0.01 <= target_volume_fraction <= 0.7):
+                errors.append(
+                    "ERROR: Volume fraction (target_volume_fraction) is out of range for "
+                    f"mean diameter {mean_diameter} um.\n"
+                    "       Acceptable range: 0.01 - 0.7 when mean_diameter is above 1.0 um"
+                )
     
     if errors:
         print("\n" + "="*60)
@@ -75,6 +94,8 @@ def validate_parameters(params):
         print("-" * 40)
         for param_name, rules in validation_rules.items():
             print(f"  {rules['description']:25}: {rules['min']} - {rules['max']}")
+        print("  Volume fraction (special): 0.01 - 0.98 for mean_diameter 0.5 - 1.0 um")
+        print("                             0.01 - 0.7 for mean_diameter above 1.0 um")
         
         print("\nUpdate your substrate JSON config file with valid parameter choices.")
         print("="*60)
