@@ -179,11 +179,11 @@ def _save_protocol_waveform_plot(
     animal_ogse,
 ) -> str:
     """
-        Save a 4-panel figure with one waveform per panel:
-            - Human PGSE
-            - Human OGSE
-            - Animal PGSE
-            - Animal OGSE
+        Save a 4-panel figure with one waveform per panel.
+
+        Layout:
+            Left column  = Human scanner (PGSE top, OGSE bottom)
+            Right column = Animal scanner (PGSE top, OGSE bottom)
 
     Returns the saved file path, or an empty string if plotting is unavailable.
     """
@@ -207,13 +207,13 @@ def _save_protocol_waveform_plot(
             "PGSE",
         ),
         (
-            axes[0, 1],
+            axes[1, 0],
             "Human OGSE (b=300 s/mm², TE=78 ms)",
             human_ogse,
             "OGSE",
         ),
         (
-            axes[1, 0],
+            axes[0, 1],
             "Animal PGSE (b=800 s/mm², TE=40 ms)",
             animal_pgse,
             "PGSE",
@@ -226,12 +226,11 @@ def _save_protocol_waveform_plot(
         ),
     ]
 
-    for ax, title, wave_obj, wave_label in panels:
-        ax.plot(wave_obj.t, wave_obj.wave, linewidth=1.7, label=f"{wave_label} (TE={wave_obj.te:.0f} ms)")
+    for ax, title, wave_obj, _ in panels:
+        ax.plot(wave_obj.t, wave_obj.wave, linewidth=1.7)
         ax.set_title(title, fontsize=11)
         ax.set_ylabel('G (mT/m)', fontsize=10)
         ax.grid(True, linestyle='--', alpha=0.35)
-        ax.legend(fontsize=9)
 
     axes[1, 0].set_xlabel('Time (ms)', fontsize=10)
     axes[1, 1].set_xlabel('Time (ms)', fontsize=10)

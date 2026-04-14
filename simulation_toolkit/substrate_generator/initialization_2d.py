@@ -55,7 +55,7 @@ class Init2D(object):
         gev_fitted_diameter = minimize(self.objective, [self.dist_shape, self.mean_diameter, self.sigma_radii], args=(self.mean_diameter, self.sigma_radii), method='Nelder-Mead')
         c_opt, loc_opt, scale_opt = gev_fitted_diameter.x
         diameter_np = genextreme.rvs(c=c_opt, loc=loc_opt, scale=scale_opt, size=self.num_fibers)
-        diameter_np = np.clip(diameter_np, a_min=0.5, a_max=None)
+        diameter_np = np.clip(diameter_np, a_min=0.1, a_max=None)
         
         radii_0 = torch.from_numpy(diameter_np/2)
         fid_0 = torch.arange(radii_0.shape[0])
@@ -252,8 +252,8 @@ class Init2D(object):
         ax.tick_params(axis='both', which='major', labelsize=13)
         
         # Dynamic color assignment based on MEAN_DIAMETER
-        # Normalize MEAN_DIAMETER from range [0.5, 8] to [0, 1]
-        diameter_range = (0.5, 8.0)
+        # Normalize MEAN_DIAMETER from range [0.1, 8] to [0, 1]
+        diameter_range = (0.1, 8.0)
         normalized_diameter = (config_params.MEAN_DIAMETER - diameter_range[0]) / (diameter_range[1] - diameter_range[0])
         normalized_diameter = np.clip(normalized_diameter, 0, 1)  # Ensure it's within [0,1]
         
