@@ -23,7 +23,7 @@ def substrate_main(params, experiment_folder):
     config_params.MEAN_DIAMETER = params['mean_diameter']   
     config_params.SIGMA_DIAMETER = params['sigma_diameter']   
     config_params.DISTRIBUTION_SHAPE = params['dist_shape']   
-    config_params.SPACE_BUFFER_STARTS_ENDS = params['space_buffer_starts_ends']   
+    config_params.SPACE_BUFFER_STARTS_ENDS = 0.137 * params['mean_diameter']   
     config_params.SPHERE_SPACING = params['spheres_spacing']   
     config_params.SPACE_BUFFER_REPULSE = params['space_buffer_repulse']  
     config_params.W_OVERLAP = params['w_overlap'] 

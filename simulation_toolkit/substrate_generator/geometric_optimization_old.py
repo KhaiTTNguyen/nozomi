@@ -198,7 +198,8 @@ class GeometricOptimization(object):
         rm = radii_left + radii_right
         space_buffer = self.space_buffer_repulse
         collision_depths = torch.clamp(rm + space_buffer - dm, min=0, max=None) # depth >= 0 
-        overlap_cost =  torch.sum(torch.square(collision_depths/rm))
+        pos_length = torch.tensor(math.sqrt(len(positions[0])), device=self.device)
+        overlap_cost =  torch.sum(torch.square((collision_depths/rm))*radii_left*radii_right)/ pos_length # / number of spheres? or # of overlaps?
         return overlap_cost
 
     def length_cost_function(self, positions, mask_starts_ends,torch_wrapped_ra):
@@ -215,15 +216,11 @@ class GeometricOptimization(object):
         for start_idx, end_idx in zip(start_indices, end_indices):
             new_row_distances[start_idx: end_idx] = row_distances[start_idx: end_idx] - start_end_distances[count]
             count=count+1
-        '''create new tensor to scale distances — normalize by expected spacing for dimensionless cost'''
-        expected_spacing = torch.zeros_like(row_distances)
-        count = 0
-        for start_idx, end_idx in zip(start_indices, end_indices):
-            expected_spacing[start_idx: end_idx] = start_end_distances[count]
-            count=count+1
+        '''create new tensor to scale distances'''
+        scaled_row_distances = 2*torch.square(new_row_distances)/(torch_wrapped_ra[:-1] + torch_wrapped_ra[1:])
         space_mask = torch.logical_not(torch.logical_and(mask_starts_ends[:-1], mask_starts_ends[1:]))
-        scaled_row_distances = torch.square(new_row_distances[space_mask] / expected_spacing[space_mask].clamp(min=1e-8))
-        return torch.sum(scaled_row_distances)
+        remaining_distances = scaled_row_distances[space_mask]
+        return torch.sum(remaining_distances)
 
     def curvature_cost_function(self, positions, mask_starts_ends, wrapped_ra):
         '''
@@ -243,7 +240,7 @@ class GeometricOptimization(object):
         element_wise_mul = vec1 * vec2 # Element-wise multiplication
         dot_product = torch.sum(element_wise_mul, dim=1) # # Sum along axis 1 (to get the dot product of corresponding rows)
         cosine = dot_product/(torch.norm(vec1, dim=1)*torch.norm(vec2, dim=1))
-        return torch.sum(torch.square(1-cosine))
+        return torch.sum(torch.square(1-cosine)/(r1+r2+r3))
 
     def filter_start_ends(self, a):
         b = torch.ones_like(a)

@@ -72,7 +72,7 @@ class Meshing(object):
         for i in range(len(beading_positions_along_axon)):
             z = positions_along_axon
             mean = beading_positions_along_axon[i]
-            sigma = torch.tensor(2.3, device=self.device)
+            sigma = 2.74 * r0
             gaussian_peak = torch.exp(-(z - mean)**2 / (2 * sigma**2))
             result = result + alpha * r0 * gaussian_peak
         result = self.process_result_endpoints(result, r0)
