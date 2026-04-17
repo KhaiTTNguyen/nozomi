@@ -36,13 +36,23 @@ def validate_parameters(params):
             'max': 1.0,
             'description': 'Bead alpha stdv (dimensionless)'
         },
-        'target_volume_fraction': {
+    }
+
+    # Validate volume fraction: accept either final_volume_fraction or target_volume_fraction
+    if 'final_volume_fraction' in params:
+        validation_rules['final_volume_fraction'] = {
+            'value': params.get('final_volume_fraction'),
+            'min': 0.01,
+            'max': 0.98,
+            'description': 'Final 3D volume fraction'
+        }
+    else:
+        validation_rules['target_volume_fraction'] = {
             'value': params.get('target_volume_fraction'),
             'min': 0.01,
             'max': 0.98,
             'description': 'Volume fraction'
         }
-    }
     
     errors = []
     
@@ -64,10 +74,11 @@ def validate_parameters(params):
                 f"       Acceptable range: {min_val} - {max_val}"
             )
 
-    # Apply diameter-dependent volume fraction rule.
+    # Apply diameter-dependent volume fraction rule (only for manual target_volume_fraction).
+    # When using final_volume_fraction, the initial VF is auto-computed and doesn't need this check.
     mean_diameter = params.get('mean_diameter')
     target_volume_fraction = params.get('target_volume_fraction')
-    if mean_diameter is not None and target_volume_fraction is not None:
+    if 'final_volume_fraction' not in params and mean_diameter is not None and target_volume_fraction is not None:
         if 0.5 <= mean_diameter <= 1.0:
             if not (0.01 <= target_volume_fraction <= 0.98):
                 errors.append(

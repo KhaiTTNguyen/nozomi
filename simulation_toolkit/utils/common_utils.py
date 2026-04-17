@@ -57,17 +57,20 @@ def split_matrix_to_list(A):
 def build_experiment_name_from_params(params):
     """Generate experiment name using required substrate parameters."""
     required_keys = [
-        'target_volume_fraction',
         'mean_diameter',
         'orientation_shape_parameter',
         'bead_alpha_mean',
         'num_fibers'
     ]
+    # Accept either final_volume_fraction or target_volume_fraction
+    has_vf = 'final_volume_fraction' in params or 'target_volume_fraction' in params
     missing = [key for key in required_keys if key not in params]
+    if not has_vf:
+        missing.append('target_volume_fraction or final_volume_fraction')
     if missing:
         missing_str = ', '.join(missing)
         raise KeyError(f"Missing parameters for experiment naming: {missing_str}")
-    vf = str(params['target_volume_fraction'])
+    vf = str(params.get('final_volume_fraction', params.get('target_volume_fraction')))
     mean_d = str(params['mean_diameter'])
     bead_amp = str(params['bead_alpha_mean'])
     orientation = str(params['orientation_shape_parameter'])
