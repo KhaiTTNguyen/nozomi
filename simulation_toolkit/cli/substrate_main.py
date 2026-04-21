@@ -250,6 +250,10 @@ def substrate_main(params, experiment_folder):
         along_fiber_plot.plot_diameter_CV_distribution()
         along_fiber_plot.plot_diameter_GEV_distribution(substrate.optimized_fibers)
         orientation_plot.plot_along_axon_OD(substrate.optimized_fibers, optimized=True)
+        # Arc-length-based OD/FOD + Watson-kappa fit (Callaghan/ConFiG-style
+        # substrate validation). Saved with an "_arclength" suffix alongside
+        # the original OD/FOD plots for side-by-side comparison.
+        orientation_plot.plot_along_axon_OD_arclength(substrate.optimized_fibers, optimized=True)
         
         print("====== Substrate generated in folder:"+ config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+ " ======")
         print("\n")

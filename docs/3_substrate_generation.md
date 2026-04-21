@@ -149,3 +149,11 @@ Unless `--output_folder_path` is given, generated substrates are auto-saved to `
 Mathematical details included [here](https://github.com/KhaiTTNguyen/nozomi/blob/master/docs/substrate_generation_references.md) address:
 * Beading design
 * Substrate optimization design
+
+To plot OD histogram and FOD 3D glyph
+```bash
+cd /home/nguyt16@ds.vanderbilt.edu/nozomi
+source sim_venv/bin/activate
+python simulation_toolkit/cli/reprocess_substrate_orientation.py \
+    --root experiment/result/2026-03-22_bead_03
+```
