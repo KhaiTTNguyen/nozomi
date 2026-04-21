@@ -75,10 +75,10 @@ def van_gelderen_multi_cylinder_signal(big_delta, little_delta, gmax, radii, dif
 
 
 def axon_delta_gen(n_axons, axon_area_fraction, mean_diameter_um, rng_seed=0):
-    """Generate axon packing with x-y periodic copies.
+    """Generate primary axon packing in a 2D periodic square.
 
-    Returns x/y centers with 9 periodic copies per accepted axon, outer radii,
-    and box size L.
+    Returns one center per accepted axon, centered in ``[-L/2, L/2]``, the
+    outer radii, and box size ``L``.
     """
     if not (0.0 < axon_area_fraction < 1.0):
         raise ValueError("axon_area_fraction must be in (0, 1)")
@@ -105,19 +105,62 @@ def axon_delta_gen(n_axons, axon_area_fraction, mean_diameter_um, rng_seed=0):
             x_arr = np.asarray(x0)
             y_arr = np.asarray(y0)
             d_arr = np.asarray(d0)
-            sep = np.sqrt((xi - x_arr) ** 2 + (yi - y_arr) ** 2)
+            dx = np.abs(xi - x_arr)
+            dy = np.abs(yi - y_arr)
+            dx = np.minimum(dx, l_box - dx)
+            dy = np.minimum(dy, l_box - dy)
+            sep = np.sqrt(dx**2 + dy**2)
             min_sep = diameter / 2.0 + d_arr / 2.0
             if np.all(sep > min_sep):
                 break
 
-        x0.extend([xi - l_box, xi - l_box, xi - l_box, xi, xi, xi, xi + l_box, xi + l_box, xi + l_box])
-        y0.extend([yi - l_box, yi, yi + l_box, yi - l_box, yi, yi + l_box, yi - l_box, yi, yi + l_box])
-        d0.extend([diameter] * 9)
+        # Store in [0, L] so the minimum-image distance check above stays
+        # in a consistent coordinate frame throughout the loop.
+        x0.append(xi)
+        y0.append(yi)
+        d0.append(diameter)
 
-    x0 = np.asarray(x0, dtype=float)
-    y0 = np.asarray(y0, dtype=float)
+    # Shift to [-L/2, L/2] only after all placements are done.
+    x0 = np.asarray(x0, dtype=float) - l_box / 2.0
+    y0 = np.asarray(y0, dtype=float) - l_box / 2.0
     r0 = np.asarray(d0, dtype=float) / 2.0
     return x0, y0, r0, l_box
+
+
+def build_edge_ghost_cylinders(centers_xy, radii, lx, ly, edge_distance):
+    """Add periodic ghost cylinders only near x/y boundaries.
+
+    Each primary cylinder is kept once. Additional copies are added when the
+    cylinder center lies within ``edge_distance`` of an x or y boundary.
+    Corner copies are included when both x and y conditions are met.
+    """
+    x_min = -lx / 2.0
+    x_max = lx / 2.0
+    y_min = -ly / 2.0
+    y_max = ly / 2.0
+
+    expanded_centers = []
+    expanded_radii = []
+
+    for (cx, cy), radius in zip(np.asarray(centers_xy, dtype=float), np.asarray(radii, dtype=float)):
+        x_shifts = [0.0]
+        y_shifts = [0.0]
+
+        if (cx - x_min) <= edge_distance:
+            x_shifts.append(lx)
+        if (x_max - cx) <= edge_distance:
+            x_shifts.append(-lx)
+        if (cy - y_min) <= edge_distance:
+            y_shifts.append(ly)
+        if (y_max - cy) <= edge_distance:
+            y_shifts.append(-ly)
+
+        for dx in x_shifts:
+            for dy in y_shifts:
+                expanded_centers.append((cx + dx, cy + dy))
+                expanded_radii.append(radius)
+
+    return np.asarray(expanded_centers, dtype=float), np.asarray(expanded_radii, dtype=float)
 
 
 def _build_multi_periodic_cylinder_geometry(
@@ -198,7 +241,7 @@ def _plot_axon_geometry(centers_xy, radii, lx, ly, output_dir):
     ax.text(
         0.02,
         0.02,
-        f"Primary axons in box: {np.count_nonzero(in_box)}\nTotal cylinders (incl. periodic copies): {centers_xy.shape[0]}",
+        f"Primary/ghost cylinders in box: {np.count_nonzero(in_box)}\nTotal cylinders (incl. edge ghosts): {centers_xy.shape[0]}",
         transform=ax.transAxes,
         fontsize=10,
         bbox={"facecolor": "white", "alpha": 0.85, "edgecolor": "gray"},
@@ -248,8 +291,16 @@ def _run_radial_diffusion_multi_cylinder_van_gelderen_pgse_case(
     lx, ly, lz = lxy, lxy, 20.0
 
     # Build cylinders from inner radii to emulate the intra-axonal domain.
-    centers_xy = np.column_stack((x_centers, y_centers))
-    radii = inner_radii
+    primary_centers_xy = np.column_stack((x_centers, y_centers))
+    primary_radii = inner_radii
+    ghost_edge_distance = lxy / 5.0
+    centers_xy, radii = build_edge_ghost_cylinders(
+        centers_xy=primary_centers_xy,
+        radii=primary_radii,
+        lx=lx,
+        ly=ly,
+        edge_distance=ghost_edge_distance,
+    )
 
     sg3 = _build_multi_periodic_cylinder_geometry(
         lx=lx,
@@ -308,7 +359,7 @@ def _run_radial_diffusion_multi_cylinder_van_gelderen_pgse_case(
         big_delta=big_delta,
         little_delta=little_delta,
         gmax=gmax,
-        radii=radii,
+        radii=primary_radii,
         diffusivity=diffusivity,
     )
 
