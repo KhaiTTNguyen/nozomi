@@ -478,7 +478,7 @@ def plot_numerical_vs_analytical_comparison(
     # Volume-weighted long-time asymptote D ~ <r²>_w / (4t) (orange dashed)
     if primary_radii is not None:
         r2_vw = np.sum(weights * primary_radii**2)
-        t_asymptotic = np.logspace(np.log10(0.05), 2, 100)
+        t_asymptotic = np.logspace(np.log10(0.3), 2, 100)
         D_asymptotic = r2_vw / (4.0 * t_asymptotic)
         ax.semilogx(
             t_asymptotic, D_asymptotic, color="orange", linestyle="dashed", linewidth=5,
@@ -630,11 +630,7 @@ def run_validation_study():
     # Calibration grid
     molecules_values = [int(1e6), int(5e5), int(2e5), int(1e5), int(5e4), int(2e4), int(1e4)]
     time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01]
-    n_repeats = 5
-
-    # molecules_values = [int(5e4), int(1e4)]
-    # time_step_values = [0.1, 0.01]
-    # n_repeats = 1
+    n_repeats = 10
 
     # Create output directory
     config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH = (
