@@ -156,4 +156,6 @@ cd /home/nguyt16@ds.vanderbilt.edu/nozomi
 source sim_venv/bin/activate
 python simulation_toolkit/cli/reprocess_substrate_orientation.py \
     --root experiment/result/2026-03-22_bead_03
+
+python -m simulation_toolkit.cli.reprocess_substrate_orientation --root ./experiment/result/2026-03-22_bead_1.24 --lmax 6
 ```

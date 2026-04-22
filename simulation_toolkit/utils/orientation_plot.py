@@ -103,9 +103,10 @@ def plot_3D_glyph( coeffs, fit_error, lmax, folder_name, optimized):
     large abs z value = blue
     '''
     colors = np.zeros((x_abs.shape[0], x_abs.shape[1], 3))
-    colors[:, :, 0]=x_abs
-    colors[:, :, 1]=y_abs
-    colors[:, :, 2]=z_abs
+    norm = Ymax if Ymax > 0 else 1.0
+    colors[:, :, 0] = x_abs / norm
+    colors[:, :, 1] = y_abs / norm
+    colors[:, :, 2] = z_abs / norm
     ls = LightSource(azdeg=0, altdeg=65)
     
     ls = LightSource(60, 45)
@@ -494,9 +495,12 @@ def _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_name,
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     colors = np.zeros((x_abs.shape[0], x_abs.shape[1], 3))
-    colors[:, :, 0] = x_abs
-    colors[:, :, 1] = y_abs
-    colors[:, :, 2] = z_abs
+    # Normalise to [0, 1] — raw coordinates can exceed 1 when peak radius > 1,
+    # which causes matplotlib to raise "RGBA values should be within 0-1 range".
+    norm = Ymax if Ymax > 0 else 1.0
+    colors[:, :, 0] = x_abs / norm
+    colors[:, :, 1] = y_abs / norm
+    colors[:, :, 2] = z_abs / norm
     ls = LightSource(60, 45)
     rgb = ls.shade_rgb(colors, z, vert_exag=0.1, blend_mode='soft')
     ax.plot_surface(x, y, z, rstride=1, cstride=1, facecolors=rgb,
