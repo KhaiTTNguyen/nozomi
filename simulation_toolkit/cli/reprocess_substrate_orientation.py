@@ -79,7 +79,7 @@ def _find_substrate_folders(root: Path):
         yield data_dir.parent, pkls[0]
 
 
-def _reprocess_one(substrate_folder: Path, pkl_path: str, ds=None):
+def _reprocess_one(substrate_folder: Path, pkl_path: str, ds=None, lmax=8):
     print(f"\n=== Reprocessing: {substrate_folder}")
     print(f"    pickle: {os.path.basename(pkl_path)}")
 
@@ -95,7 +95,7 @@ def _reprocess_one(substrate_folder: Path, pkl_path: str, ds=None):
         config_params.ORIENTATION_SHAPE_PARAM = k_prescribed
 
     fit = orientation_plot.plot_along_axon_OD_arclength(
-        optimized_fibers, optimized=True, ds=ds)
+        optimized_fibers, optimized=True, ds=ds, lmax=lmax)
 
     return {
         'substrate_folder': str(substrate_folder),
@@ -116,6 +116,11 @@ def main():
     parser.add_argument("--ds", type=float, default=None,
                         help="Uniform arc-length step (same units as sphere "
                              "coords, typically um). Default: per-fiber auto.")
+    parser.add_argument("--lmax", type=int, default=8,
+                        help="Max (even) SH degree for the FOD glyph fit. "
+                             "Lower values (6-10) suppress equatorial "
+                             "ringing that pinches broad FODs; higher "
+                             "values sharpen narrow FODs. Default: 8.")
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
@@ -124,7 +129,8 @@ def main():
     failures = []
     for substrate_folder, pkl_path in _find_substrate_folders(root):
         try:
-            rows.append(_reprocess_one(substrate_folder, pkl_path, ds=args.ds))
+            rows.append(_reprocess_one(substrate_folder, pkl_path,
+                                       ds=args.ds, lmax=args.lmax))
         except Exception as exc:
             print(f"    FAILED: {exc}")
             traceback.print_exc()

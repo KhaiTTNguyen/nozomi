@@ -232,6 +232,46 @@ def calculate_an( n):
     bn_terms = [2*i + 1 for i in range(0, n+1, 2)]
     return sum(bn_terms), [n for n in range(0, n+1, 2)]
 
+
+def spherical_harmonics_fit_from_tangents(tangents, lmax):
+    """Compute even-SH FOD coefficients directly from unit tangent vectors.
+
+    Uses the closed-form projection:
+        c_lm = (1/N) * sum_i  conj(Y_lm(theta_i, phi_i))
+
+    This avoids histogram discretisation, lat-lon area bias, hemisphere
+    restriction, and bin_radius tuning — all sources of the equatorial
+    ringing / pinched-waist artifact.  Because only even-l harmonics are
+    used (antipodal symmetry) and Y_lm(-n) == Y_lm(n) for even l, it does
+    not matter whether tangents are pre-flipped to the upper hemisphere.
+
+    Parameters
+    ----------
+    tangents : ndarray, shape (N, 3)
+        Unit tangent vectors (Cartesian).
+    lmax : int
+        Maximum even SH degree.
+
+    Returns
+    -------
+    coeffs : ndarray, complex, shape (total_SH_coeffs,)
+    fit_error : float  (0.0 — no density-map reference to compare against)
+    """
+    _, degrees = calculate_an(lmax)
+    t = np.asarray(tangents, dtype=float)
+    # Spherical angles
+    azimuth = np.arctan2(t[:, 1], t[:, 0])          # theta in scipy convention
+    polar   = np.arctan2(np.hypot(t[:, 0], t[:, 1]),
+                         t[:, 2])                    # phi in scipy convention
+    total_coeffs = sum(2 * l + 1 for l in degrees)
+    coeffs = np.zeros(total_coeffs, dtype=complex)
+    idx = 0
+    for l in degrees:
+        for m in range(-l, l + 1):
+            coeffs[idx] = np.conj(sph_harm(m, l, azimuth, polar)).mean()
+            idx += 1
+    return coeffs, 0.0
+
 def filter_spheres_outside_voxel( fiber, L):
     x = fiber[:, 0]
     y = fiber[:, 1]
@@ -301,7 +341,8 @@ def _kappa_file_tag(fit):
     return f"Kdes_{float(k_des):g}_{k_str}"
 
 
-def plot_along_axon_OD_arclength(spheres_xyz_r_fid, optimized=True, ds=None):
+def plot_along_axon_OD_arclength(spheres_xyz_r_fid, optimized=True, ds=None,
+                                 lmax=8):
     """Arc-length variant of plot_along_axon_OD.
 
     - Resamples each fiber's centerline at uniform arc length before taking
@@ -311,6 +352,14 @@ def plot_along_axon_OD_arclength(spheres_xyz_r_fid, optimized=True, ds=None):
       and filenames.
     - Saves next to the existing OD / FOD plots but with an ``_arclength``
       suffix so it does NOT overwrite the previous outputs.
+
+    Parameters
+    ----------
+    lmax : int
+        Maximum (even) SH degree used to fit/render the FOD glyph. Lower
+        values (e.g. 6-10) suppress Gibbs-style ringing at the equator that
+        shows up as a pinched waist for broad FODs; high values sharpen
+        glyphs for narrow FODs at the cost of equatorial ringing.
     """
     folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH + "/figs/substrate_stats/ODI"
     if not os.path.exists(folder_path):
@@ -331,13 +380,14 @@ def plot_along_axon_OD_arclength(spheres_xyz_r_fid, optimized=True, ds=None):
         print("[plot_along_axon_OD_arclength] Too few tangent samples; skipping plots.")
         return fit
 
-    # --- density map on unit hemisphere ---
+    # --- density map on unit hemisphere (kept for the 2-D OD visualisation) ---
     density_map, XX, YY, ZZ = _plot_OD_density_sphere_arclength(
         tangents, fit, optimized=optimized, folder_name=folder_path)
 
-    # --- spherical-harmonics glyph ---
-    lmax = 20
-    coeffs, fit_error = spherical_harmonics_fit(density_map, XX, YY, ZZ, lmax=lmax)
+    # --- spherical-harmonics glyph via direct closed-form projection ---
+    # Bypasses histogram discretisation, lat-lon area bias, and hemisphere
+    # restriction — all sources of the equatorial ringing artifact.
+    coeffs, fit_error = spherical_harmonics_fit_from_tangents(tangents, lmax=lmax)
     _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_path,
                              fit, optimized=optimized)
 
@@ -459,9 +509,10 @@ def _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_name,
     ax.set_zlabel('Z superior-inferior', fontsize=15, labelpad=10)
 
     stage = "optimized" if optimized else "preoptimized"
-    title = f"Along axon FOD (arc-length) - {stage} fibers" + _kappa_title_suffix(fit)
+    title = (f"Along axon FOD (arc-length, lmax={lmax}) - {stage} fibers"
+             + _kappa_title_suffix(fit))
     plt.title(title, fontsize=14, pad=20)
-    fname = f"FOD_3D_glyph_arclength_{_kappa_file_tag(fit)}"
+    fname = f"FOD_3D_glyph_arclength_direct_lmax{lmax}_{_kappa_file_tag(fit)}"
     if not optimized:
         fname += "_preoptimized"
     plt.savefig(os.path.join(folder_path, fname + ".png"),
