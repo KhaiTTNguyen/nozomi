@@ -1,0 +1,7 @@
+{
+  "time_step": 0.005,
+  "num_spins": 20000,
+  "D0_intra": 2.25,
+  "D0_extra": 2.0,
+  "nseg": 10
+}

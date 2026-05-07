@@ -1,0 +1,18 @@
+{
+  "created": "20260505_084020",
+  "kind": "smoke",
+  "source_substrate_manifest": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/setup/substrate/batch/20260505_115200_manifest_smoke.json",
+  "sim_params": {
+    "time_step": 0.005,
+    "num_spins": 10000,
+    "D0_intra": 2.25,
+    "D0_extra": 2.0,
+    "nseg": 20,
+    "sim_time": 5.0
+  },
+  "n_substrates_done": 0,
+  "n_substrates_skipped": 0,
+  "skipped_substrate_job_ids": [],
+  "n_jobs": 0,
+  "jobs": []
+}

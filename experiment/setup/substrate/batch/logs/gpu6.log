@@ -1,0 +1,20 @@
+[2026-05-05 00:19:01][gpu6] worker started, CUDA_VISIBLE_DEVICES=6
+[2026-05-05 00:19:03][gpu6] START j00003 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(3.6,0.3469) -> smoke_20260504_172908
+[2026-05-05 00:19:58][gpu6] worker started, CUDA_VISIBLE_DEVICES=6
+[2026-05-05 00:19:59][gpu6] START j00001 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260504_172908
+[2026-05-05 01:50:29][gpu6] DONE  j00001 in 5429.4s (rolling avg 5429.4s) -> experiment/result/smoke_20260504_172908/d0.5_K10_ODI_0.0635_bead_2.5_VF_0.65/2026-05-05_00-19-59_d0.5_K10_ODI_0.0635_bead_2.5_5fibers_rep0
+[2026-05-05 01:50:29][gpu6] START j00004 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(3.6,0.3469) -> smoke_20260504_172908
+[2026-05-05 02:55:16][gpu6] DONE  j00004 in 3887.6s (rolling avg 4658.5s) -> experiment/result/smoke_20260504_172908/d0.5_K10_ODI_0.0635_bead_3.6_VF_0.65/2026-05-05_01-50-29_d0.5_K10_ODI_0.0635_bead_3.6_5fibers_rep1
+[2026-05-05 02:55:18][gpu6] queue empty, exiting
+[2026-05-05 16:27:27][gpu6] worker started, CUDA_VISIBLE_DEVICES=6
+[2026-05-05 16:27:28][gpu6] START j00002 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_162506
+[2026-05-05 16:29:05][gpu6] worker started, CUDA_VISIBLE_DEVICES=6
+[2026-05-05 16:29:07][gpu6] START j00002 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_162506
+[2026-05-05 16:29:43][gpu6] worker started, CUDA_VISIBLE_DEVICES=6
+[2026-05-05 16:29:44][gpu6] START j00001 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_162506
+[2026-05-06 06:51:23][gpu6] worker started, CUDA_VISIBLE_DEVICES=6
+[2026-05-06 06:51:25][gpu6] START j00001 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_162506
+[2026-05-06 08:05:27][gpu6] FAIL  j00001 in 4442.1s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-06 08:05:27][gpu6] START j00004 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(3.6,0.3469) -> smoke_20260505_162506
+[2026-05-06 09:40:37][gpu6] FAIL  j00004 in 5709.9s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-06 09:40:39][gpu6] queue empty, exiting

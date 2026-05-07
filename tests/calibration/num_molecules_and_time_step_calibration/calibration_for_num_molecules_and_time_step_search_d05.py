@@ -4,6 +4,9 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
+import argparse
+import hashlib
+import json
 import pandas as pd
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -25,6 +28,25 @@ logging.getLogger('matplotlib.font_manager').setLevel(logging.WARNING)
 import simulation_toolkit.simulation_engine.diffsim3d as ds3
 import simulation_toolkit.simulation_engine.geometry as geom
 import simulation_toolkit.toolkit_params as config_params
+
+MANIFEST_FILENAME = "experiment_config.json"
+SUBSTRATE_FILENAME = "substrate_checkpoint.npz"
+ANALYTICAL_FILENAME = "analytical_reference.npz"
+REPEAT_RESULTS_FILENAME = "repeat_results.csv"
+
+REPEAT_RESULT_COLUMNS = [
+    "molecules",
+    "time_step",
+    "run_id",
+    "repeat_seed",
+    "time_threshold",
+    "mae",
+    "computation_time",
+    "status",
+    "started_at",
+    "finished_at",
+    "error",
+]
 
 # ---------------------------------------------------------------------------
 # Analytical D(t) functions
@@ -278,40 +300,62 @@ def build_edge_ghost_cylinders(centers_xy, radii, lx, ly, edge_distance):
 
 
 def build_multi_cylinder_geometry(
-    centers_xy, radii, lx, ly, lz, D0, n_segments=100, extension_segments=20
+    centers_xy, radii, lx, ly, lz, D0,
+    dz_over_r=0.5, extension_fraction=0.30, min_segments=20,
 ):
     """Build a SimGeometry3D with z-aligned cylinders (no T2 weighting).
 
     Each cylinder is represented as a chain of overlapping spheres along z.
+    Uses *relative* discretization: each cylinder gets a number of spheres
+    chosen so that the spacing dz_i ≈ dz_over_r * r_i.  This guarantees the
+    sphere chain overlaps (dz_i < 2 r_i for any dz_over_r < 2) regardless of
+    the cylinder radius — important for substrates with a wide radius
+    distribution (e.g. Gamma θ=0.15 μm).
+
+    Parameters
+    ----------
+    dz_over_r          : target ratio of sphere spacing to cylinder radius
+                         along z.  0.5 means ~2 spheres per radius along z.
+    extension_fraction : periodic-extension spheres on each side of the box,
+                         expressed as a fraction of n_segments_i.  0.30 matches
+                         the OLD single-cylinder convention (30 of 100).
+    min_segments       : floor on per-cylinder n_segments_i to keep very large
+                         radii reasonably sampled.
     """
     T2 = 1e10   # effectively infinite T2 — no T2 weighting
     rho = 1.0
     sg3 = geom.SimGeometry3D(lx, ly, lz, D0, T2, rho)
 
-    base_z = np.linspace(-lz / 2.0, lz / 2.0, num=n_segments)
-
+    total_spheres = 0
     for (cx, cy), radius in zip(centers_xy, radii):
+        n_segments_i = max(min_segments, int(np.ceil(lz / (dz_over_r * radius))))
+        extension_segments_i = max(1, int(np.ceil(extension_fraction * n_segments_i)))
+
+        base_z = np.linspace(-lz / 2.0, lz / 2.0, num=n_segments_i)
         sx = np.full_like(base_z, cx, dtype=float)
         sy = np.full_like(base_z, cy, dtype=float)
-        sz = base_z.copy()
+        sz = base_z
         sr = np.full_like(base_z, radius, dtype=float)
 
         sz_ext = np.concatenate(
-            (sz[-extension_segments:] - lz, sz, sz[:extension_segments] + lz)
+            (sz[-extension_segments_i:] - lz, sz, sz[:extension_segments_i] + lz)
         )
         sx_ext = np.concatenate(
-            (sx[-extension_segments:], sx, sx[:extension_segments])
+            (sx[-extension_segments_i:], sx, sx[:extension_segments_i])
         )
         sy_ext = np.concatenate(
-            (sy[-extension_segments:], sy, sy[:extension_segments])
+            (sy[-extension_segments_i:], sy, sy[:extension_segments_i])
         )
         sr_ext = np.concatenate(
-            (sr[-extension_segments:], sr, sr[:extension_segments])
+            (sr[-extension_segments_i:], sr, sr[:extension_segments_i])
         )
 
         cylinder = geom.Structure3D(sx_ext, sy_ext, sz_ext, sr_ext, D0, T2, rho)
         sg3.add_structure(cylinder)
+        total_spheres += sx_ext.size
 
+    print(f"  build_multi_cylinder_geometry: dz_over_r={dz_over_r}, "
+          f"extension_fraction={extension_fraction}, total spheres={total_spheres}")
     return sg3
 
 
@@ -353,13 +397,6 @@ def _plot_substrate_geometry(centers_xy, radii, lx, ly, output_dir):
         "Calibration substrate – Gamma(κ, θ) cylinder radii\n"
         "(blue: primary box, gray: periodic ghosts)"
     )
-    ax.text(
-        0.02, 0.02,
-        f"Primary cylinders: {np.count_nonzero(in_box)}\n"
-        f"Total incl. ghosts: {len(x)}",
-        transform=ax.transAxes, fontsize=10,
-        bbox={"facecolor": "white", "alpha": 0.85, "edgecolor": "gray"},
-    )
     plt.tight_layout()
     plt.savefig(
         os.path.join(output_dir, "calibration_substrate_geometry.png"),
@@ -372,22 +409,40 @@ def _plot_substrate_geometry(centers_xy, radii, lx, ly, output_dir):
 # Numerical simulation
 # ---------------------------------------------------------------------------
 
-def calculateDnumerical(sg3, D0, molecules, time_step, total_sim_time=100, run_id=0):
-    """Run DiffSim3d on a pre-built geometry; return radial D(t).
+def reseed_sim_fresh_positions(sim, struct_idxs):
+    """Re-seed the simulator with fresh spin positions and a new RNG state.
 
-    Seeds all spins inside all cylinder structures (intra-axonal only).
+    Reuses the already-compiled kernel and segment list — only the GPU spin
+    positions, signal, and curand state are reset.  Used between repeats so
+    each repeat starts from a different random configuration without paying
+    the kernel-compile / set_segments cost again.
+    """
+    sim.spins = sim.geom.gpu_seed(
+        sim.gpu_seed_kernel, sim.nspins, structIdxs=struct_idxs
+    ).astype(np.float32)
+    sim.spins_d = gpuarray.to_gpu(sim.spins)
+    sim.spins0_d = sim.spins_d.copy()
+    sim.sig_d.fill(np.float32(1.0))
+    sim.initstates(
+        np.int32(np.random.randint(np.iinfo(np.int32).max, dtype=np.int64)),
+        block=(sim.nblock, 1, 1), grid=(sim.ngrid, 1),
+    )
+
+
+def calculateDnumerical(sim, time_step, total_sim_time=100):
+    """Run DiffSim3d on an already-set-up simulator; return radial D(t).
+
+    The caller is expected to have already created `sim`, called
+    `set_segments`, `setup`, and (for repeats) `reseed_sim_fresh_positions`.
     Returns radial (transverse) D(t) = (Dx + Dy) / 2.
     """
     nt = int(total_sim_time / time_step)
     numsteps = nt + 1
 
-    sim = ds3.DiffSim3d(sg3, int(molecules))
-    sim.set_segments(nsegx=20, nsegy=20, nsegz=20)
-    sim.setup(structures=list(np.arange(0, sg3.nstructures)))
-
     Dxarray = gpuarray.zeros(numsteps, dtype=np.float32)
     Dyarray = gpuarray.zeros(numsteps, dtype=np.float32)
     Dzarray = gpuarray.zeros(numsteps, dtype=np.float32)
+    # Arrays for storing second (variance) and fourth moments (NOT used but allocated due to simulation function signature)
     Kx2array = gpuarray.zeros(numsteps, dtype=np.float32)
     Ky2array = gpuarray.zeros(numsteps, dtype=np.float32)
     Kz2array = gpuarray.zeros(numsteps, dtype=np.float32)
@@ -434,6 +489,201 @@ def calculate_mae(D_numerical, D_long_interp, difftime, time_threshold=0.05):
     D_num_filt = D_numerical[valid_mask]
     D_ana_filt = D_long_interp(np.log10(difftime_filt))
     return np.mean(np.abs(D_num_filt - D_ana_filt))
+
+
+# ---------------------------------------------------------------------------
+# Checkpoint / resume helpers
+# ---------------------------------------------------------------------------
+
+def _json_ready(value):
+    """Convert numpy scalars/arrays into JSON-serialisable Python values."""
+    if isinstance(value, np.ndarray):
+        return value.tolist()
+    if isinstance(value, np.integer):
+        return int(value)
+    if isinstance(value, np.floating):
+        return float(value)
+    if isinstance(value, dict):
+        return {key: _json_ready(val) for key, val in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_ready(item) for item in value]
+    return value
+
+
+def _config_hash(config):
+    payload = json.dumps(_json_ready(config), sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
+
+
+def _atomic_write_json(path, payload):
+    tmp_path = f"{path}.tmp"
+    with open(tmp_path, "w", encoding="utf-8") as f:
+        json.dump(_json_ready(payload), f, indent=2, sort_keys=True)
+        f.write("\n")
+    os.replace(tmp_path, path)
+
+
+def _atomic_write_dataframe(df, path):
+    tmp_path = f"{path}.tmp"
+    df.to_csv(tmp_path, index=False)
+    os.replace(tmp_path, path)
+
+
+def _summary_csv_path(base_dir, kappa, theta_um, time_threshold):
+    return os.path.join(
+        base_dir,
+        f"cylinder_validation_summary_kappa{kappa}_theta{theta_um}"
+        f"_threshold{time_threshold}.csv",
+    )
+
+
+def _load_manifest(base_dir):
+    manifest_path = os.path.join(base_dir, MANIFEST_FILENAME)
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        manifest = json.load(f)
+    return manifest
+
+
+def _save_manifest(base_dir, config):
+    manifest = {
+        "config": _json_ready(config),
+        "config_hash": _config_hash(config),
+        "created_at": datetime.now().isoformat(timespec="seconds"),
+    }
+    _atomic_write_json(os.path.join(base_dir, MANIFEST_FILENAME), manifest)
+
+
+def _save_substrate_checkpoint(base_dir, x_centers, y_centers, primary_radii,
+                                primary_centers_xy, centers_xy, radii, lx, ly, lz):
+    np.savez_compressed(
+        os.path.join(base_dir, SUBSTRATE_FILENAME),
+        x_centers=x_centers,
+        y_centers=y_centers,
+        primary_radii=primary_radii,
+        primary_centers_xy=primary_centers_xy,
+        centers_xy=centers_xy,
+        radii=radii,
+        lx=np.float64(lx),
+        ly=np.float64(ly),
+        lz=np.float64(lz),
+    )
+
+
+def _load_substrate_checkpoint(base_dir):
+    data = np.load(os.path.join(base_dir, SUBSTRATE_FILENAME))
+    return {
+        "x_centers": data["x_centers"],
+        "y_centers": data["y_centers"],
+        "primary_radii": data["primary_radii"],
+        "primary_centers_xy": data["primary_centers_xy"],
+        "centers_xy": data["centers_xy"],
+        "radii": data["radii"],
+        "lx": float(data["lx"]),
+        "ly": float(data["ly"]),
+        "lz": float(data["lz"]),
+    }
+
+
+def _save_analytical_checkpoint(base_dir, t_analytical, D_analytical):
+    np.savez_compressed(
+        os.path.join(base_dir, ANALYTICAL_FILENAME),
+        t_analytical=t_analytical,
+        D_analytical=D_analytical,
+    )
+
+
+def _load_analytical_checkpoint(base_dir):
+    data = np.load(os.path.join(base_dir, ANALYTICAL_FILENAME))
+    return data["t_analytical"], data["D_analytical"]
+
+
+def _repeat_results_path(base_dir):
+    return os.path.join(base_dir, REPEAT_RESULTS_FILENAME)
+
+
+def load_repeat_results(base_dir):
+    path = _repeat_results_path(base_dir)
+    if not os.path.exists(path):
+        return pd.DataFrame(columns=REPEAT_RESULT_COLUMNS)
+    df = pd.read_csv(path)
+    for column in REPEAT_RESULT_COLUMNS:
+        if column not in df.columns:
+            df[column] = np.nan
+    return df[REPEAT_RESULT_COLUMNS]
+
+
+def save_repeat_results(df, base_dir):
+    df = df.copy()
+    df = df.sort_values(["molecules", "time_step", "run_id"])
+    _atomic_write_dataframe(df[REPEAT_RESULT_COLUMNS], _repeat_results_path(base_dir))
+
+
+def upsert_repeat_result(base_dir, record):
+    df = load_repeat_results(base_dir)
+    record_df = pd.DataFrame([{column: record.get(column, np.nan) for column in REPEAT_RESULT_COLUMNS}])
+    df = pd.concat([df, record_df], ignore_index=True)
+    df = df.drop_duplicates(["molecules", "time_step", "run_id"], keep="last")
+    save_repeat_results(df, base_dir)
+
+
+def repeat_completed(repeat_results, molecules, time_step, run_id):
+    if repeat_results.empty:
+        return False
+    mask = (
+        (repeat_results["molecules"].astype(int) == int(molecules))
+        & np.isclose(repeat_results["time_step"].astype(float), float(time_step))
+        & (repeat_results["run_id"].astype(int) == int(run_id))
+        & (repeat_results["status"] == "success")
+    )
+    return bool(mask.any())
+
+
+def build_summary_from_repeat_results(repeat_results):
+    if repeat_results.empty:
+        return pd.DataFrame()
+    df = repeat_results[repeat_results["status"] == "success"].copy()
+    if df.empty:
+        return pd.DataFrame()
+    df["mae"] = pd.to_numeric(df["mae"], errors="coerce")
+    df["computation_time"] = pd.to_numeric(df["computation_time"], errors="coerce")
+    df = df.dropna(subset=["mae"])
+    summary = (
+        df.groupby(["molecules", "time_step", "time_threshold"], as_index=False)
+        .agg(
+            mae=("mae", "mean"),
+            std_mae=("mae", "std"),
+            min_mae=("mae", "min"),
+            max_mae=("mae", "max"),
+            mean_computation_time=("computation_time", "mean"),
+            std_computation_time=("computation_time", "std"),
+            n_successful_runs=("mae", "count"),
+        )
+    )
+    summary[["std_mae", "std_computation_time"]] = summary[["std_mae", "std_computation_time"]].fillna(0.0)
+    return summary.sort_values(["molecules", "time_step"])
+
+
+def refresh_summary_checkpoint(base_dir, kappa, theta_um, time_threshold):
+    repeat_results = load_repeat_results(base_dir)
+    summary = build_summary_from_repeat_results(repeat_results)
+    if not summary.empty:
+        _atomic_write_dataframe(summary, _summary_csv_path(base_dir, kappa, theta_um, time_threshold))
+    return summary
+
+
+def make_repeat_seed(config_hash, molecules, time_step, run_id):
+    payload = f"{config_hash}|{int(molecules)}|{float(time_step):.12g}|{int(run_id)}"
+    return int(hashlib.sha256(payload.encode("utf-8")).hexdigest()[:8], 16)
+
+
+def calculateDnumerical_mock(time_step, total_sim_time, D_long_interp, repeat_seed):
+    """Cheap deterministic stand-in for interruption/resume testing."""
+    rng = np.random.default_rng(repeat_seed)
+    nt = max(1, int(total_sim_time / time_step))
+    difftime = np.arange(1, nt + 1, dtype=float) * time_step
+    baseline = D_long_interp(np.log10(difftime))
+    noise = rng.normal(loc=0.0, scale=1e-4, size=difftime.shape)
+    return difftime, np.clip(baseline + noise, 0.0, None)
 
 
 # ---------------------------------------------------------------------------
@@ -517,13 +767,9 @@ def save_experiment_data(
 
 def save_summary_results(summary_results, base_dir, kappa, theta_um, time_threshold):
     """Save summary results to CSV."""
-    df = pd.DataFrame(summary_results)
-    csv_path = os.path.join(
-        base_dir,
-        f"cylinder_validation_summary_kappa{kappa}_theta{theta_um}"
-        f"_threshold{time_threshold}.csv",
-    )
-    df.to_csv(csv_path, index=False)
+    df = summary_results if isinstance(summary_results, pd.DataFrame) else pd.DataFrame(summary_results)
+    csv_path = _summary_csv_path(base_dir, kappa, theta_um, time_threshold)
+    _atomic_write_dataframe(df, csv_path)
     print(f"\nSummary results saved to: {csv_path}")
 
 
@@ -531,7 +777,10 @@ def create_analysis_plots(
     summary_results, base_dir, kappa, theta_um, time_threshold, total_time_hours
 ):
     """Three-panel figure: MAE vs time step | computation time log | computation time linear."""
-    df = pd.DataFrame(summary_results)
+    df = summary_results if isinstance(summary_results, pd.DataFrame) else pd.DataFrame(summary_results)
+    if df.empty:
+        print("\nNo summary results available yet; skipping analysis plot.")
+        return
 
     molecules_list = sorted(df["molecules"].unique())
     time_steps_list = sorted(df["time_step"].unique())
@@ -611,62 +860,146 @@ def create_analysis_plots(
 # Main study
 # ---------------------------------------------------------------------------
 
-def run_validation_study():
-    """Run num_molecules × time_step calibration on a Gamma-distributed cylinder substrate."""
+def run_validation_study(resume_dir=None, mock=False, max_new_runs=None, output_dir=None,
+                         dz_over_r=None, molecules_override=None,
+                         time_steps_override=None, n_repeats_override=None):
+    """Run num_molecules × time_step calibration with durable checkpoints."""
     st = time.time()
 
-    # Physical parameters
-    D0 = 2.0              # μm²/ms
-    total_sim_time = 100  # ms
-    time_threshold = 0.05 # ms (lower bound for MAE window)
+    default_config = {
+        "D0": 2.0,
+        "total_sim_time": 100,
+        "time_threshold": 0.05,
+        "kappa": 4.0,
+        "theta_um": 0.15,
+        "n_axons": 500,
+        "axon_area_fraction": 0.65,
+        "rng_seed": 42,
+        "molecules_values": [int(1e6), int(5e5), int(2e5), int(1e5), int(5e4), int(2e4), int(1e4)],
+        "time_step_values": [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01],
+        "n_repeats": 5,
+        "nsegx": 20,
+        "nsegy": 20,
+        "nsegz": 20,
+        # Per-cylinder relative discretization. dz_over_r controls sphere
+        # spacing along z relative to each cylinder's radius (dz_i = dz_over_r * r_i).
+        # Smaller -> more spheres -> smoother cylinder wall, higher kernel cost.
+        "dz_over_r": 0.5,
+        "extension_fraction": 0.30,
+        "min_segments": 20,
+        "mock": False,
+    }
 
-    # Gamma distribution for axon diameters: Ŵ(κ, θ), θ in μm
-    # θ = 1.5×10⁻⁷ m = 0.15 μm  →  mean diameter = κ × θ = 0.6 μm
-    kappa = 4.0
-    theta_um = 0.15
-    n_axons = 500
-    axon_area_fraction = 0.65
+    if mock:
+        default_config.update({
+            "total_sim_time": 0.1,
+            "time_threshold": 0.01,
+            "n_axons": 4,
+            "molecules_values": [1000, 2000],
+            "time_step_values": [0.01, 0.02],
+            "n_repeats": 3,
+            "mock": True,
+        })
 
-    # Calibration grid
-    molecules_values = [int(1e6), int(5e5), int(2e5), int(1e5), int(5e4), int(2e4), int(1e4)]
-    time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01]
-    n_repeats = 5
+    if resume_dir is not None:
+        base_dir = resume_dir
+        manifest = _load_manifest(base_dir)
+        config = manifest["config"]
+        config_hash = manifest["config_hash"]
+        print(f"Resuming checkpointed calibration from: {base_dir}")
+    else:
+        config = default_config
+        # Apply CLI overrides BEFORE hashing so different settings get fresh dirs.
+        if dz_over_r is not None:
+            config["dz_over_r"] = float(dz_over_r)
+        if molecules_override is not None:
+            config["molecules_values"] = [int(m) for m in molecules_override]
+        if time_steps_override is not None:
+            config["time_step_values"] = [float(t) for t in time_steps_override]
+        if n_repeats_override is not None:
+            config["n_repeats"] = int(n_repeats_override)
+        config_hash = _config_hash(config)
+        if output_dir is None:
+            suffix = "mock_" if config["mock"] else ""
+            output_dir = (
+                "./tests/calibration/num_molecules_and_time_step_calibration/figs/"
+                f"cylinder_validation_{suffix}" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            )
+        base_dir = output_dir
+        os.makedirs(base_dir, exist_ok=True)
+        _save_manifest(base_dir, config)
+        save_repeat_results(pd.DataFrame(columns=REPEAT_RESULT_COLUMNS), base_dir)
+        print(f"Starting new checkpointed calibration in: {base_dir}")
 
-    # molecules_values = [int(1e4)]
-    # time_step_values = [0.01]
-    # n_repeats = 1
+    config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH = base_dir
+    os.makedirs(base_dir, exist_ok=True)
 
+    D0 = float(config["D0"])
+    total_sim_time = float(config["total_sim_time"])
+    time_threshold = float(config["time_threshold"])
+    kappa = float(config["kappa"])
+    theta_um = float(config["theta_um"])
+    n_axons = int(config["n_axons"])
+    axon_area_fraction = float(config["axon_area_fraction"])
+    rng_seed = int(config["rng_seed"])
+    molecules_values = [int(value) for value in config["molecules_values"]]
+    time_step_values = [float(value) for value in config["time_step_values"]]
+    n_repeats = int(config["n_repeats"])
+    dz_over_r = float(config.get("dz_over_r", 0.5))
+    extension_fraction = float(config.get("extension_fraction", 0.30))
+    min_segments = int(config.get("min_segments", 20))
+    is_mock = bool(config.get("mock", False))
 
-    # Create output directory
-    config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH = (
-        "./tests/calibration/num_molecules_and_time_step_calibration/figs/"
-        "cylinder_validation_" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    )
-    os.makedirs(config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, exist_ok=True)
-
-    # ── 1. Generate substrate (once) ────────────────────────────────────────
-    print("Generating Gamma-distributed cylinder substrate (L-BFGS packing)...")
-    x_centers, y_centers, primary_radii, lxy = axon_gamma_dist_gen(
-        n_axons=n_axons,
-        axon_area_fraction=axon_area_fraction,
-        kappa=kappa,
-        theta_um=theta_um,
-        rng_seed=42,
-    )
-    lx, ly, lz = lxy, lxy, 20.0
-    primary_centers_xy = np.column_stack((x_centers, y_centers))
-
-    centers_xy, radii = build_edge_ghost_cylinders(
-        centers_xy=primary_centers_xy,
-        radii=primary_radii,
-        lx=lx,
-        ly=ly,
-        edge_distance=lxy / 5.0,
-    )
+    # ── 1. Load or generate substrate (once) ────────────────────────────────
+    substrate_path = os.path.join(base_dir, SUBSTRATE_FILENAME)
+    if os.path.exists(substrate_path):
+        print("Loading substrate checkpoint...")
+        substrate = _load_substrate_checkpoint(base_dir)
+        x_centers = substrate["x_centers"]
+        y_centers = substrate["y_centers"]
+        primary_radii = substrate["primary_radii"]
+        primary_centers_xy = substrate["primary_centers_xy"]
+        centers_xy = substrate["centers_xy"]
+        radii = substrate["radii"]
+        lx, ly, lz = substrate["lx"], substrate["ly"], substrate["lz"]
+    elif is_mock:
+        print("Generating mock substrate checkpoint...")
+        primary_radii = np.array([0.20, 0.24, 0.30, 0.36], dtype=float)
+        x_centers = np.array([-0.45, 0.45, -0.45, 0.45], dtype=float)
+        y_centers = np.array([-0.45, -0.45, 0.45, 0.45], dtype=float)
+        lx = ly = lz = 2.0
+        primary_centers_xy = np.column_stack((x_centers, y_centers))
+        centers_xy, radii = primary_centers_xy.copy(), primary_radii.copy()
+        _save_substrate_checkpoint(
+            base_dir, x_centers, y_centers, primary_radii,
+            primary_centers_xy, centers_xy, radii, lx, ly, lz,
+        )
+    else:
+        print("Generating Gamma-distributed cylinder substrate (L-BFGS packing)...")
+        x_centers, y_centers, primary_radii, lxy = axon_gamma_dist_gen(
+            n_axons=n_axons,
+            axon_area_fraction=axon_area_fraction,
+            kappa=kappa,
+            theta_um=theta_um,
+            rng_seed=rng_seed,
+        )
+        lx, ly, lz = lxy, lxy, lxy
+        primary_centers_xy = np.column_stack((x_centers, y_centers))
+        centers_xy, radii = build_edge_ghost_cylinders(
+            centers_xy=primary_centers_xy,
+            radii=primary_radii,
+            lx=lx,
+            ly=ly,
+            edge_distance=lxy / 5.0,
+        )
+        _save_substrate_checkpoint(
+            base_dir, x_centers, y_centers, primary_radii,
+            primary_centers_xy, centers_xy, radii, lx, ly, lz,
+        )
 
     print(f"  Primary cylinders placed: {len(primary_radii)}")
     print(f"  Total incl. edge ghosts:  {len(radii)}")
-    print(f"  Box side:                 {lxy:.2f} μm")
+    print(f"  Box side:                 {lx:.2f} μm")
     print(f"  Mean radius (primary):    {primary_radii.mean():.3f} μm "
           f"± {primary_radii.std():.3f} μm")
 
@@ -674,17 +1007,34 @@ def run_validation_study():
         centers_xy=centers_xy,
         radii=radii,
         lx=lx, ly=ly,
-        output_dir=config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH,
+        output_dir=base_dir,
     )
 
     # ── 2. Build SimGeometry3D (once) ───────────────────────────────────────
-    print("\nBuilding SimGeometry3D (this may take a moment)...")
-    sg3 = build_multi_cylinder_geometry(centers_xy, radii, lx, ly, lz, D0)
-    print(f"  nstructures: {sg3.nstructures}")
+    if is_mock:
+        sg3 = None
+        struct_idxs = []
+        print("\nMock mode: skipping SimGeometry3D/DiffSim3d setup.")
+    else:
+        print("\nBuilding SimGeometry3D (this may take a moment)...")
+        sg3 = build_multi_cylinder_geometry(
+            centers_xy, radii, lx, ly, lz, D0,
+            dz_over_r=dz_over_r,
+            extension_fraction=extension_fraction,
+            min_segments=min_segments,
+        )
+        print(f"  nstructures: {sg3.nstructures}")
+        struct_idxs = list(np.arange(0, sg3.nstructures))
 
     # ── 3. Volume-weighted analytical D(t) (once) ───────────────────────────
-    print("\nComputing volume-weighted analytical D(t)...")
-    t_analytical, D_analytical = calculateDanalytical_multi_cylinder(primary_radii, D0)
+    analytical_path = os.path.join(base_dir, ANALYTICAL_FILENAME)
+    if os.path.exists(analytical_path):
+        print("\nLoading analytical D(t) checkpoint...")
+        t_analytical, D_analytical = _load_analytical_checkpoint(base_dir)
+    else:
+        print("\nComputing volume-weighted analytical D(t)...")
+        t_analytical, D_analytical = calculateDanalytical_multi_cylinder(primary_radii, D0)
+        _save_analytical_checkpoint(base_dir, t_analytical, D_analytical)
     D_interp = interp1d(
         np.log10(t_analytical), D_analytical,
         bounds_error=False,
@@ -693,75 +1043,205 @@ def run_validation_study():
     print("  Done.")
 
     # ── 4. Parameter sweep ──────────────────────────────────────────────────
-    summary_results = []
     total_combinations = len(molecules_values) * len(time_step_values)
     current_combination = 0
+    new_runs_completed = 0
 
     for molecules in molecules_values:
+        repeat_results = load_repeat_results(base_dir)
+        pending_for_molecules = any(
+            not repeat_completed(repeat_results, molecules, time_step, run_id)
+            for time_step in time_step_values
+            for run_id in range(n_repeats)
+        )
+        if not pending_for_molecules:
+            print(f"\n[Skip] All repeats already complete for molecules={molecules}.")
+            current_combination += len(time_step_values)
+            continue
+
+        # Build sim ONCE per `molecules` (nspins is baked into the CUDA kernel
+        # at compile time, so we only re-build when nspins changes).
+        if is_mock:
+            sim = None
+        else:
+            t_setup = time.time()
+            sim = ds3.DiffSim3d(sg3, int(molecules))
+            nsegx, nsegy, nsegz = int(config["nsegx"]), int(config["nsegy"]), int(config["nsegz"])
+            sim.set_segments(nsegx=nsegx, nsegy=nsegy, nsegz=nsegz)
+            print(f"\n[Setup] Building DiffSim3d for molecules={molecules}, segments=({nsegx}, {nsegy}, {nsegz}) "
+                  f"...")
+            sim.setup(structures=struct_idxs)
+            print(f"[Setup] done in {time.time() - t_setup:.1f} s  "
+                  f"(nspheres_per_seg={sim.spheres_per_segment})")
+
         for time_step in time_step_values:
             current_combination += 1
             print(f"\n{'='*40}")
             print(f"Combination {current_combination}/{total_combinations}  "
                   f"| molecules={molecules}  time_step={time_step} ms")
 
-            mae_values = []
-            computation_times = []
-
             for run_id in range(n_repeats):
+                repeat_results = load_repeat_results(base_dir)
+                if repeat_completed(repeat_results, molecules, time_step, run_id):
+                    print(f"  Run {run_id + 1}/{n_repeats} already complete; skipping.")
+                    continue
+
+                if max_new_runs is not None and new_runs_completed >= max_new_runs:
+                    print(f"\nReached --max-new-runs={max_new_runs}; stopping early for interruption test.")
+                    summary = refresh_summary_checkpoint(base_dir, kappa, theta_um, time_threshold)
+                    total_hours = (time.time() - st) / 3600.0
+                    create_analysis_plots(summary, base_dir, kappa, theta_um, time_threshold, total_hours)
+                    return base_dir
+
+                repeat_seed = make_repeat_seed(config_hash, molecules, time_step, run_id)
                 print(f"  Run {run_id + 1}/{n_repeats}", end=" ... ", flush=True)
                 t0 = time.time()
+                started_at = datetime.now().isoformat(timespec="seconds")
+                upsert_repeat_result(base_dir, {
+                    "molecules": int(molecules),
+                    "time_step": float(time_step),
+                    "run_id": int(run_id),
+                    "repeat_seed": int(repeat_seed),
+                    "time_threshold": float(time_threshold),
+                    "status": "running",
+                    "started_at": started_at,
+                    "finished_at": "",
+                    "error": "",
+                })
                 try:
-                    difftime, D_numerical = calculateDnumerical(
-                        sg3, D0, molecules, time_step, total_sim_time, run_id,
-                    )
+                    if is_mock:
+                        difftime, D_numerical = calculateDnumerical_mock(
+                            time_step, total_sim_time, D_interp, repeat_seed,
+                        )
+                    else:
+                        np.random.seed(repeat_seed)
+                        reseed_sim_fresh_positions(sim, struct_idxs)
+                        difftime, D_numerical = calculateDnumerical(
+                            sim, time_step, total_sim_time,
+                        )
                     elapsed = time.time() - t0
                     print(f"{elapsed:.1f} s")
 
                     mae = calculate_mae(D_numerical, D_interp, difftime, time_threshold)
-                    mae_values.append(mae)
-                    computation_times.append(elapsed)
 
                     save_experiment_data(
                         difftime, D_numerical, t_analytical, D_analytical,
                         molecules, time_step, run_id,
-                        config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH,
+                        base_dir,
                         mae, time_threshold,
                         primary_radii=primary_radii, D0=D0,
                     )
+                    upsert_repeat_result(base_dir, {
+                        "molecules": int(molecules),
+                        "time_step": float(time_step),
+                        "run_id": int(run_id),
+                        "repeat_seed": int(repeat_seed),
+                        "time_threshold": float(time_threshold),
+                        "mae": float(mae),
+                        "computation_time": float(elapsed),
+                        "status": "success",
+                        "started_at": started_at,
+                        "finished_at": datetime.now().isoformat(timespec="seconds"),
+                        "error": "",
+                    })
+                    new_runs_completed += 1
                 except Exception as e:
                     print(f"ERROR: {e}")
+                    upsert_repeat_result(base_dir, {
+                        "molecules": int(molecules),
+                        "time_step": float(time_step),
+                        "run_id": int(run_id),
+                        "repeat_seed": int(repeat_seed),
+                        "time_threshold": float(time_threshold),
+                        "status": "failed",
+                        "started_at": started_at,
+                        "finished_at": datetime.now().isoformat(timespec="seconds"),
+                        "error": str(e),
+                    })
                     continue
 
-            if mae_values:
-                valid_mae = [x for x in mae_values if not np.isnan(x)]
-                if valid_mae:
-                    summary_results.append({
-                        "molecules": molecules,
-                        "time_step": time_step,
-                        "time_threshold": time_threshold,
-                        "mae": np.mean(valid_mae),
-                        "std_mae": np.std(valid_mae),
-                        "min_mae": np.min(valid_mae),
-                        "max_mae": np.max(valid_mae),
-                        "mean_computation_time": np.mean(computation_times),
-                        "std_computation_time": np.std(computation_times),
-                        "n_successful_runs": len(valid_mae),
-                    })
+            refresh_summary_checkpoint(base_dir, kappa, theta_um, time_threshold)
 
     total_hours = (time.time() - st) / 3600.0
+    summary_results = refresh_summary_checkpoint(base_dir, kappa, theta_um, time_threshold)
     save_summary_results(
         summary_results,
-        config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH,
+        base_dir,
         kappa, theta_um, time_threshold,
     )
     create_analysis_plots(
         summary_results,
-        config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH,
+        base_dir,
         kappa, theta_um, time_threshold, total_hours,
     )
+    return base_dir
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Run or resume the num_molecules/time_step calibration study."
+    )
+    parser.add_argument(
+        "--resume-dir",
+        default=None,
+        help="Existing calibration output directory to resume from.",
+    )
+    parser.add_argument(
+        "--mock",
+        action="store_true",
+        help="Use a tiny synthetic calibration grid for checkpoint/resume testing.",
+    )
+    parser.add_argument(
+        "--max-new-runs",
+        type=int,
+        default=None,
+        help="Stop after this many newly completed repeats; useful for interruption tests.",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=None,
+        help="Output directory for a new run. Ignored when --resume-dir is used.",
+    )
+    parser.add_argument(
+        "--dz-over-r",
+        type=float,
+        default=None,
+        help="Override dz_over_r (per-cylinder relative discretization).",
+    )
+    parser.add_argument(
+        "--molecules",
+        type=int,
+        nargs="+",
+        default=None,
+        help="Override molecules_values list (e.g. --molecules 200000).",
+    )
+    parser.add_argument(
+        "--time-steps",
+        type=float,
+        nargs="+",
+        default=None,
+        help="Override time_step_values list (e.g. --time-steps 0.001).",
+    )
+    parser.add_argument(
+        "--n-repeats",
+        type=int,
+        default=None,
+        help="Override n_repeats.",
+    )
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
+    args = parse_args()
     print("=======Starting Analytical Validation Study=======")
-    run_validation_study()
+    run_validation_study(
+        resume_dir=args.resume_dir,
+        mock=args.mock,
+        max_new_runs=args.max_new_runs,
+        output_dir=args.output_dir,
+        dz_over_r=args.dz_over_r,
+        molecules_override=args.molecules,
+        time_steps_override=args.time_steps,
+        n_repeats_override=args.n_repeats,
+    )
     print("\nAnalytical validation study completed!")

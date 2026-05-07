@@ -1,11 +1,23 @@
 from datetime import datetime
 import pickle
+from dataclasses import dataclass
+from typing import Optional
 import torch
 import numpy as np
 import simulation_toolkit.toolkit_params as params
 
+
+@dataclass
+class LoadedSubstrate:
+    box_length: float
+    outer_fibers: np.ndarray
+    inner_fibers: Optional[np.ndarray] = None
+    is_myelinated: bool = False
+    g_ratio: Optional[float] = None
+    inner_sphere_spacing_ratio: Optional[float] = None
+
 def get_date_time():        
-    return str(datetime.now().strftime("%Y-%m-%d_%H-%M"))
+    return str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
 
 def load_data_pickle(file_name):
     # Open the Pickle file for reading in binary mode ('rb')
@@ -15,8 +27,47 @@ def load_data_pickle(file_name):
     return loaded_data
 
 def import_array_geometry_full_path(file_name):
-    optimized_fibers, L = load_data_pickle(file_name)
-    return optimized_fibers.cpu().numpy(), L
+    substrate = load_substrate_geometry(file_name)
+    return substrate.outer_fibers, substrate.box_length
+
+
+def _geometry_to_numpy(geometry):
+    if isinstance(geometry, torch.Tensor):
+        return geometry.detach().cpu().numpy()
+    return np.asarray(geometry)
+
+
+def fiber_id_column(spheres_xyz_r_fid):
+    if spheres_xyz_r_fid.shape[1] < 5:
+        raise ValueError("Fiber geometry must have at least x, y, z, radius, fiber_id columns")
+    return 4
+
+
+def fiber_id_values(spheres_xyz_r_fid):
+    return spheres_xyz_r_fid[:, fiber_id_column(spheres_xyz_r_fid)]
+
+
+def load_substrate_geometry(file_name):
+    loaded_data = load_data_pickle(file_name)
+    if isinstance(loaded_data, dict):
+        outer_fibers = _geometry_to_numpy(loaded_data["outer_fibers"]).astype(np.float32, copy=False)
+        inner_fibers = loaded_data.get("inner_fibers")
+        if inner_fibers is not None:
+            inner_fibers = _geometry_to_numpy(inner_fibers).astype(np.float32, copy=False)
+        return LoadedSubstrate(
+            box_length=float(loaded_data["box_length"]),
+            outer_fibers=outer_fibers,
+            inner_fibers=inner_fibers,
+            is_myelinated=inner_fibers is not None,
+            g_ratio=loaded_data.get("g_ratio"),
+            inner_sphere_spacing_ratio=loaded_data.get("inner_sphere_spacing_ratio"),
+        )
+
+    optimized_fibers, L = loaded_data
+    return LoadedSubstrate(
+        box_length=float(L),
+        outer_fibers=_geometry_to_numpy(optimized_fibers).astype(np.float32, copy=False),
+    )
 
 def save_data_array_to_pickle(file_name, optimized_fibers, L):
     with open(file_name, 'wb') as f:
@@ -24,18 +75,35 @@ def save_data_array_to_pickle(file_name, optimized_fibers, L):
     print('Done saving data file')
     return
 
+
+def save_myelinated_substrate_to_pickle(file_name, outer_fibers, inner_fibers, L, g_ratio, inner_sphere_spacing_ratio):
+    payload = {
+        "version": 2,
+        "box_length": float(L),
+        "outer_fibers": _geometry_to_numpy(outer_fibers).astype(np.float32, copy=False),
+        "inner_fibers": _geometry_to_numpy(inner_fibers).astype(np.float32, copy=False),
+        "g_ratio": float(g_ratio),
+        "inner_sphere_spacing_ratio": float(inner_sphere_spacing_ratio),
+    }
+    with open(file_name, 'wb') as f:
+        pickle.dump(payload, f, protocol=pickle.HIGHEST_PROTOCOL)
+    print('Done saving myelinated substrate data file')
+    return
+
 def map_matrix_to_list_numpy(spheres_xyz_r_fid):
-    unique_values = torch.unique(spheres_xyz_r_fid[:, -1])
+    fid_col = fiber_id_column(spheres_xyz_r_fid)
+    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])
     current_fiber_list = []
     for value in unique_values:
-        current_fiber_list.append(spheres_xyz_r_fid[spheres_xyz_r_fid[:, -1] == value].cpu().numpy())
+        current_fiber_list.append(spheres_xyz_r_fid[spheres_xyz_r_fid[:, fid_col] == value].cpu().numpy())
     return current_fiber_list
 
 def map_matrix_to_list_torch(spheres_xyz_r_fid):
-    unique_values = torch.unique(spheres_xyz_r_fid[:, -1])
+    fid_col = fiber_id_column(spheres_xyz_r_fid)
+    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])
     current_fiber_list = []
     for value in unique_values:
-        current_fiber_list.append(spheres_xyz_r_fid[spheres_xyz_r_fid[:, -1] == value])
+        current_fiber_list.append(spheres_xyz_r_fid[spheres_xyz_r_fid[:, fid_col] == value])
     return current_fiber_list
 
 def split_matrix_to_list(A):

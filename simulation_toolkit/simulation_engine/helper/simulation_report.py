@@ -34,23 +34,24 @@ def plot_ADC_vs_time(diff_time, Dx_step, Dy_step, Dz_step, folder_name, file_nam
     
     plt.savefig(file_name)
 
-# def plot_K_vs_time(diff_time, Kx_step, Ky_step, Kz_step, folder_name, file_name, compartment):
-#     fig, ax = plt.subplots(figsize=(10,5))
-#     Kxy_step = (Kx_step + Ky_step)/2   
-#     ax.set_xlabel(r'$t\;(\mathrm{ms})$', fontsize=27)
-#     if compartment == 'intra':
-#         ax.plot(diff_time, Kz_step, 'g.',markersize=10)  
-#         ax.set_ylabel(r'$K_{\mathrm{i},\!\!\perp}$', fontsize=27)
-#         ax.set_xlim([0.002, 100])
-#         ax.set_ylim([0.0, 10])
-#     else:
-#         ax.plot(diff_time, Kxy_step, 'g.',markersize=10)  
-#         ax.set_ylabel(r'$K_{\mathrm{e},\!\!\perp}$', fontsize=27)
-#         ax.set_xlim([0.002, 20])
-#         ax.set_ylim([0.0, 0.8])
-#     ax.tick_params(axis='both', which='major', labelsize=15)
-#     ax.grid(True)
-#     if not os.path.exists(folder_name):
-#         os.makedirs(folder_name)
-#     file_name = os.path.join(folder_name, 'difftime_'+str(np.round(np.max(diff_time), 2))+'_'+file_name+'.png')
-#     plt.savefig(file_name)
+def plot_K_vs_time(diff_time, Kx_step, Ky_step, Kz_step, folder_name, file_name):
+    """Plot per-axis kurtosis (Kx, Ky, Kz) and radial kurtosis K_radial=(Kx+Ky)/2
+    vs diffusion time. Mirrors plot_ADC_vs_time so the pair is saved alongside."""
+    fig, ax = plt.subplots()
+    K_radial = (Kx_step + Ky_step) / 2
+    ax.semilogx(diff_time, Kx_step, 'b.', markersize=10)
+    ax.semilogx(diff_time, Ky_step, 'y.', markersize=10)
+    ax.semilogx(diff_time, K_radial, 'g.', markersize=10)
+    ax.semilogx(diff_time, Kz_step, 'r.', markersize=10)
+    ax.set_xlabel('t (ms)')
+    ax.set_ylabel('K')
+    ax.tick_params(axis='both', which='major', labelsize=13)
+    ax.set_title(" Kurtosis vs. diffusion time ", fontsize=17)
+    ax.grid(True)
+    ax.set_xlim([0.0001, max(diff_time)])
+    ax.legend(['Kx', 'Ky', 'K_radial', 'Kz'], fontsize=18)
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
+    file_name = os.path.join(folder_name, 'difftime_'+str(np.round(np.max(diff_time), 2))+'_kurtosis_'+file_name+'.png')
+    plt.savefig(file_name)
+    plt.close(fig)

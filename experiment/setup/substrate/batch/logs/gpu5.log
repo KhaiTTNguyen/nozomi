@@ -1,0 +1,20 @@
+[2026-05-05 00:19:01][gpu5] worker started, CUDA_VISIBLE_DEVICES=5
+[2026-05-05 00:19:03][gpu5] START j00002 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260504_172908
+[2026-05-05 00:19:58][gpu5] worker started, CUDA_VISIBLE_DEVICES=5
+[2026-05-05 00:19:59][gpu5] START j00002 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260504_172908
+[2026-05-05 02:38:16][gpu5] DONE  j00002 in 8296.8s (rolling avg 8296.8s) -> experiment/result/smoke_20260504_172908/d0.5_K10_ODI_0.0635_bead_2.5_VF_0.65/2026-05-05_00-19-59_d0.5_K10_ODI_0.0635_bead_2.5_5fibers_rep1
+[2026-05-05 02:38:18][gpu5] queue empty, exiting
+[2026-05-05 16:27:27][gpu5] worker started, CUDA_VISIBLE_DEVICES=5
+[2026-05-05 16:27:28][gpu5] START j00001 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_162506
+[2026-05-05 16:29:05][gpu5] worker started, CUDA_VISIBLE_DEVICES=5
+[2026-05-05 16:29:07][gpu5] START j00003 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(3.6,0.3469) -> smoke_20260505_162506
+[2026-05-05 16:29:42][gpu5] worker started, CUDA_VISIBLE_DEVICES=5
+[2026-05-05 16:29:44][gpu5] START j00002 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_162506
+[2026-05-06 06:51:23][gpu5] worker started, CUDA_VISIBLE_DEVICES=5
+[2026-05-06 06:51:25][gpu5] START j00002 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_162506
+[2026-05-06 10:26:39][gpu5] FAIL  j00002 in 12914.7s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-06 10:26:41][gpu5] queue empty, exiting
+[2026-05-06 19:46:21][gpu5] worker started, CUDA_VISIBLE_DEVICES=5
+[2026-05-06 19:46:23][gpu5] START j00002 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=1 d=0.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_194301
+[2026-05-06 19:58:56][gpu5] worker started, CUDA_VISIBLE_DEVICES=5
+[2026-05-06 19:58:57][gpu5] START j00006 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=1 d=0.5 K=100 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745

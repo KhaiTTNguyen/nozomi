@@ -1,6 +1,7 @@
 from simulation_toolkit.substrate_generator.initialization_2d import Init2D
 from simulation_toolkit.substrate_generator.meshing import Meshing
 from simulation_toolkit.substrate_generator.geometric_optimization import GeometricOptimization
+from simulation_toolkit.substrate_generator.myelin import generate_inner_fibers
 from simulation_toolkit.substrate_generator.helper.validate_input import validate_parameters
 import simulation_toolkit.substrate_generator.helper.watson_distribution as wd
 import simulation_toolkit.toolkit_params as config_params
@@ -13,6 +14,7 @@ from matplotlib.pyplot import cm
 from simulation_toolkit.utils import fiber_3D_plot
 from simulation_toolkit.utils import along_fiber_plot
 from simulation_toolkit.utils import orientation_plot
+from simulation_toolkit.utils import cross_section_plot
 
 
 def estimate_initial_vf(target_3d_vf, kappa, mean_diameter,
@@ -24,14 +26,14 @@ def estimate_initial_vf(target_3d_vf, kappa, mean_diameter,
     Estimate the 2D initial volume fraction needed to achieve a target 3D volume fraction.
 
     The 3D VF amplifies relative to the 2D VF by two factors:
-      VF_3D ≈ (VF_2D / A_buffer) × A_path × A_bead
+      VF_3D ≈ (VF_2D / A_buffer) x A_path x A_bead
 
     A_path:   helix arc length / Lz, averaged over Watson(K) fiber directions.
     A_bead:   mean(r_beaded² / r₀²), capturing beading-induced volume inflation.
     A_buffer: (r₀ + b/2)² / r₀², corrects for the 2D packing using buffered radii
               while 3D VF uses real radii.
 
-    Returns the estimated VF_2D = VF_3D_target × A_buffer / (A_path × A_bead).
+    Returns the estimated VF_2D = VF_3D_target x A_buffer / (A_path x A_bead).
     """
     # --- A_buffer: space buffer correction ---
     if space_buffer is None:
@@ -101,7 +103,7 @@ def estimate_initial_vf(target_3d_vf, kappa, mean_diameter,
     return vf_2d
 
 
-def substrate_main(params, experiment_folder):
+def substrate_main(params, experiment_folder, folder_suffix=""):
     # Validate parameters before proceeding
     validate_parameters(params)
     config_params.ORIENTATION_SHAPE_PARAM = params['orientation_shape_parameter']
@@ -135,6 +137,8 @@ def substrate_main(params, experiment_folder):
     config_params.BEAD_SPACING_STDV = params['bead_spacing_stdv']
     config_params.BEAD_ALPHA_MEAN = params['bead_alpha_mean']
     config_params.BEAD_ALPHA_STDV = params['bead_alpha_stdv']
+    g_ratio = params.get('g_ratio')
+    inner_sphere_spacing_ratio = params.get('inner_sphere_spacing_ratio', 0.5)
 
     print(f"Building substrate with: \
         volume_fraction={config_params.VOLUME_FRACTION},\
@@ -146,13 +150,20 @@ def substrate_main(params, experiment_folder):
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     config_params.EXP_DATE_TIME = util.get_date_time()        
     config_params.ODI_INDEX = np.round(2/np.pi * np.arctan(1/config_params.ORIENTATION_SHAPE_PARAM), 4)
+    vf_label = target_3d_vf if target_3d_vf is not None else config_params.VOLUME_FRACTION
+    combo_folder = ('d'+str(config_params.MEAN_DIAMETER)+
+                    '_K'+str(int(config_params.ORIENTATION_SHAPE_PARAM))+
+                    '_ODI_'+str(config_params.ODI_INDEX)+
+                    '_bead_'+str(config_params.BEAD_ALPHA_MEAN)+
+                    '_VF_'+str(vf_label))
     config_params.SUBSTRATE_OUTPUT_FOLDER_PATH = os.path.join(config_params.OUTPUT_FOLDER_PATH, experiment_folder, \
+                                                       combo_folder, \
                                                        str(config_params.EXP_DATE_TIME)+\
                                                         '_d'+str(config_params.MEAN_DIAMETER)+\
                                                         '_K'+str(int(config_params.ORIENTATION_SHAPE_PARAM))+\
                                                     '_ODI_'+str(config_params.ODI_INDEX)+\
                                                     '_bead_'+str(config_params.BEAD_ALPHA_MEAN)+'_'+\
-                                                        str(config_params.NUM_FIBERS) +'fibers')
+                                                        str(config_params.NUM_FIBERS) +'fibers'+str(folder_suffix))
 
     # --- Iterative VF refinement loop ---
     vf_tolerance = 0.03
@@ -234,26 +245,67 @@ def substrate_main(params, experiment_folder):
 
         # # save data with Pickle format
         data_file_name = os.path.join(data_folder, file_name_root)
-        util.save_data_array_to_pickle(data_file_name, substrate.optimized_fibers.cpu(), 
-                                initialization2D.box_length.cpu().item()) 
+        inner_fibers = None
+        if g_ratio is not None:
+            inner_fibers = generate_inner_fibers(
+                substrate.optimized_fibers,
+                g_ratio=g_ratio,
+                inner_sphere_spacing_ratio=inner_sphere_spacing_ratio,
+                box_length=initialization2D.box_length.cpu().item(),
+            )
+            util.save_myelinated_substrate_to_pickle(
+                data_file_name,
+                substrate.optimized_fibers.cpu(),
+                inner_fibers,
+                initialization2D.box_length.cpu().item(),
+                g_ratio,
+                inner_sphere_spacing_ratio,
+            )
+            print(f"Generated myelin geometry: outer_spheres={substrate.optimized_fibers.shape[0]}, inner_spheres={inner_fibers.shape[0]}, g_ratio={g_ratio}")
+        else:
+            util.save_data_array_to_pickle(data_file_name, substrate.optimized_fibers.cpu(), 
+                                    initialization2D.box_length.cpu().item()) 
         # Plot
         fiber_list = util.map_matrix_to_list_numpy(substrate.optimized_fibers)
         color = cm.rainbow(np.linspace(0.0, 1.0, len(fiber_list)))
         np.random.shuffle(color)
+        # -------- Cross-section slice at mid-box (z=0) --------
+        cross_section_plot.plot_cross_section_z_mid(
+            outer_fibers=substrate.optimized_fibers,
+            inner_fibers=inner_fibers,
+            box_length=initialization2D.box_length.cpu().item(),
+            color=color,
+        )
         '''Choose FOV to plot, can include 3D animation GIF'''
-        fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, optimized=True, POV='horizontal_90') 
+        fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, optimized=True, POV='horizontal_90', component_label='outer')
+        # fiber_3D_plot.plot_myelinated_fibers(substrate.optimized_fibers, inner_fibers, color=color, POV='horizontal_90')
+        # if inner_fibers is not None:
+        #     fiber_3D_plot.plot_fibers(inner_fibers, overlap_indices=None, color=color, optimized=True, POV='horizontal_90', component_label='inner')
         # fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, animation_input=False, optimized=True)
-        # fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, optimized=True, POV='horizontal_0')                    
-        # fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, optimized=True, POV='horizontal_90', animation_input=True)       
-        
-        along_fiber_plot.plot_along_axon_radius_variation(substrate.optimized_fibers, colors=color)
-        along_fiber_plot.plot_diameter_CV_distribution()
-        along_fiber_plot.plot_diameter_GEV_distribution(substrate.optimized_fibers)
-        orientation_plot.plot_along_axon_OD(substrate.optimized_fibers, optimized=True)
+
+        along_fiber_plot.plot_along_axon_radius_variation(substrate.optimized_fibers, colors=color, component_label='outer')
+        along_fiber_plot.plot_diameter_CV_distribution(component_label='outer')
+        _diam_outer = along_fiber_plot.extract_radius_all(substrate.optimized_fibers) * 2
+        _x_max_diam = float(np.max(_diam_outer)) if len(_diam_outer) > 0 else None
+        if inner_fibers is not None:
+            _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2
+            if len(_diam_inner) > 0:
+                _x_max_diam = max(_x_max_diam, float(np.max(_diam_inner)))
+        along_fiber_plot.plot_diameter_GEV_distribution(substrate.optimized_fibers, component_label='outer', x_max=_x_max_diam)
+        if inner_fibers is not None:
+            along_fiber_plot.plot_along_axon_radius_variation(inner_fibers, colors=color, component_label='inner')
+            along_fiber_plot.plot_diameter_CV_distribution(component_label='inner')
+            along_fiber_plot.plot_diameter_GEV_distribution(inner_fibers, component_label='inner', x_max=_x_max_diam)
+        along_fiber_plot.save_effective_axon_diameter_stats_from_pickle(data_file_name)
+        # orientation_plot.plot_along_axon_OD(substrate.optimized_fibers, optimized=True, component_label='outer')
+        # if inner_fibers is not None:
+            # orientation_plot.plot_along_axon_OD(inner_fibers, optimized=True, component_label='inner')
         # Arc-length-based OD/FOD + Watson-kappa fit (Callaghan/ConFiG-style
         # substrate validation). Saved with an "_arclength" suffix alongside
         # the original OD/FOD plots for side-by-side comparison.
-        orientation_plot.plot_along_axon_OD_arclength(substrate.optimized_fibers, optimized=True)
+        orientation_plot.plot_along_axon_OD_arclength(substrate.optimized_fibers, optimized=True, component_label='outer')
+        if inner_fibers is not None:
+            orientation_plot.plot_along_axon_OD_arclength(inner_fibers, optimized=True, component_label='inner')
         
         print("====== Substrate generated in folder:"+ config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+ " ======")
         print("\n")

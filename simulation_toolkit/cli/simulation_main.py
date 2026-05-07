@@ -34,9 +34,17 @@ def simulation_main(params, substrate_file):
         os.makedirs(folder_name)
     
     # =========== Setup simulation ===========
-    optimized_fibers, L = common_util.import_array_geometry_full_path(file_path) # optimized_fibers = xyz_r_fid
+    substrate = common_util.load_substrate_geometry(file_path)
+    L = substrate.box_length
     config_params.BOX_LENGTH = L
-    fiberlist_xyz_r_fid = common_util.split_matrix_to_list(optimized_fibers)
+    if compartment == 'intra' and substrate.is_myelinated:
+        geometry_fibers = substrate.inner_fibers
+        print(f"Using myelinated intra-axonal geometry: inner membrane spheres, g_ratio={substrate.g_ratio}")
+    else:
+        geometry_fibers = substrate.outer_fibers
+        if compartment == 'extra' and substrate.is_myelinated:
+            print("Using myelinated extra-axonal geometry: outer membrane spheres")
+    fiberlist_xyz_r_fid = common_util.split_matrix_to_list(geometry_fibers)
     print('box length',config_params.BOX_LENGTH)
     D = D0_intra # um^2/ms
     if compartment=='intra':
@@ -119,6 +127,11 @@ def simulation_main(params, substrate_file):
     Ky_final = np.array(Ky_final_array.get())[1:]
     Kz_final = np.array(Kz_final_array.get())[1:]
 
+    # Radial kurtosis: average of perpendicular components.
+    # Substrates use Watson distribution with main axis along z, so
+    # axial = Kz, radial = (Kx + Ky) / 2.
+    K_radial = (Kx_final + Ky_final) / 2.0
+
     # # get the execution time
     elapsed_time = np.round(time.time() - sim_start_time,2)
 
@@ -133,8 +146,15 @@ def simulation_main(params, substrate_file):
     if not os.path.exists(data_folder_name):
         os.makedirs(data_folder_name)
     data_file_path = os.path.join(data_folder_name, file_name_new+'.pkl')
-    simrep.save_data_pickle(data_file_path, np.column_stack((Dx_step, Dy_step, Dz_step, diff_time)))
+    # Saved column order: [Dx, Dy, Dz, diff_time, Kx, Ky, Kz, K_radial]
+    # First 4 columns kept identical to legacy schema for backward compatibility.
+    simrep.save_data_pickle(
+        data_file_path,
+        np.column_stack((Dx_step, Dy_step, Dz_step, diff_time,
+                         Kx_final, Ky_final, Kz_final, K_radial)),
+    )
     simrep.plot_ADC_vs_time(diff_time, Dx_step, Dy_step, Dz_step, folder_name, file_name_new )
+    simrep.plot_K_vs_time(diff_time, Kx_final, Ky_final, Kz_final, folder_name, file_name_new)
 
     print(f"\nSimulation completed!")
     # Clean up GPU memory

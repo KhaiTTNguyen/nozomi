@@ -1,0 +1,11 @@
+{
+    "time_step": 0.002,
+    "num_spins": 500000,
+    "D0_intra": 2.25,
+    "D0_extra": 2.0,
+    "nseg": 20,
+    "command": "simulation",
+    "substrates": "./experiment/visualization/dataVF03/VF0.3_experiment_d1.68_sig0.45_500axons_reproducibility_OD10",
+    "sim_time": 100.0,
+    "compartment": "extra"
+}

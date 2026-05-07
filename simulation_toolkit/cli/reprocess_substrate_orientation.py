@@ -97,12 +97,18 @@ def _reprocess_one(substrate_folder: Path, pkl_path: str, ds=None, lmax=8):
     fit = orientation_plot.plot_along_axon_OD_arclength(
         optimized_fibers, optimized=True, ds=ds, lmax=lmax)
 
+    fit_global = orientation_plot.plot_global_axon_OD(
+        optimized_fibers, optimized=True, lmax=lmax)
+
     return {
         'substrate_folder': str(substrate_folder),
         'kappa_prescribed': k_prescribed,
         'kappa_fit': float(fit.get('kappa', np.nan)),
         'ODI_fit': float(fit.get('ODI', np.nan)),
         'n_tangent_samples': int(fit.get('n_samples', 0)),
+        'kappa_fit_global': float(fit_global.get('kappa', np.nan)),
+        'ODI_fit_global': float(fit_global.get('ODI', np.nan)),
+        'n_global_samples': int(fit_global.get('n_samples', 0)),
     }
 
 
@@ -138,12 +144,14 @@ def main():
 
     if rows:
         # Short console summary (no files written).
-        print("\n{:<14} {:<14} {:<14} {:<10}".format(
-            "K_designed", "K_fit", "ODI_fit", "n_samples"))
+        print("\n{:<12} {:<12} {:<12} {:<12} {:<12} {:<10}".format(
+            "K_designed", "K_arclen", "ODI_arclen", "K_global", "ODI_global", "n_tan"))
         for r in rows:
-            print("{:<14} {:<14.3f} {:<14.5f} {:<10}".format(
+            print("{:<12} {:<12.3f} {:<12.5f} {:<12.3f} {:<12.5f} {:<10}".format(
                 str(r['kappa_prescribed']),
-                r['kappa_fit'], r['ODI_fit'], r['n_tangent_samples']))
+                r['kappa_fit'], r['ODI_fit'],
+                r['kappa_fit_global'], r['ODI_fit_global'],
+                r['n_tangent_samples']))
     else:
         print("No substrate pickles found.")
 

@@ -1,0 +1,227 @@
+{
+  "created": "20260505_084103",
+  "kind": "smoke",
+  "source_substrate_manifest": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/setup/substrate/batch/20260504_172908_manifest_smoke.json",
+  "sim_params": {
+    "time_step": 0.005,
+    "num_spins": 10000,
+    "D0_intra": 2.25,
+    "D0_extra": 2.0,
+    "nseg": 20,
+    "sim_time": 5.0
+  },
+  "n_substrates_done": 4,
+  "n_substrates_skipped": 0,
+  "skipped_substrate_job_ids": [],
+  "n_jobs": 8,
+  "jobs": [
+    {
+      "job_id": "j00001",
+      "substrate_job_id": "j00001",
+      "sets": [
+        "smoke"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/result/smoke_20260504_172908/d0.5_K10_ODI_0.0635_bead_2.5_VF_0.65/2026-05-05_00-19-59_d0.5_K10_ODI_0.0635_bead_2.5_5fibers_rep0/data/array5_fibers_boxL_2.0_2026-05-05_00-19-59_avf_0.47_d0.5_sig0.1339wo10_wc3_wl3_K10_ODI_0.0635_1258.45_sec.pkl",
+      "params": {
+        "time_step": 0.005,
+        "num_spins": 10000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 5.0,
+        "compartment": "intra"
+      },
+      "status": "pending",
+      "gpu_id": null,
+      "output_pkl": null,
+      "start_time": null,
+      "end_time": null,
+      "duration_sec": null,
+      "error": null
+    },
+    {
+      "job_id": "j00002",
+      "substrate_job_id": "j00001",
+      "sets": [
+        "smoke"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/result/smoke_20260504_172908/d0.5_K10_ODI_0.0635_bead_2.5_VF_0.65/2026-05-05_00-19-59_d0.5_K10_ODI_0.0635_bead_2.5_5fibers_rep0/data/array5_fibers_boxL_2.0_2026-05-05_00-19-59_avf_0.47_d0.5_sig0.1339wo10_wc3_wl3_K10_ODI_0.0635_1258.45_sec.pkl",
+      "params": {
+        "time_step": 0.005,
+        "num_spins": 10000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 5.0,
+        "compartment": "extra"
+      },
+      "status": "pending",
+      "gpu_id": null,
+      "output_pkl": null,
+      "start_time": null,
+      "end_time": null,
+      "duration_sec": null,
+      "error": null
+    },
+    {
+      "job_id": "j00003",
+      "substrate_job_id": "j00002",
+      "sets": [
+        "smoke"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/result/smoke_20260504_172908/d0.5_K10_ODI_0.0635_bead_2.5_VF_0.65/2026-05-05_00-19-59_d0.5_K10_ODI_0.0635_bead_2.5_5fibers_rep1/data/array5_fibers_boxL_2.0_2026-05-05_00-19-59_avf_0.52_d0.5_sig0.1339wo10_wc3_wl3_K10_ODI_0.0635_1437.42_sec.pkl",
+      "params": {
+        "time_step": 0.005,
+        "num_spins": 10000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 5.0,
+        "compartment": "intra"
+      },
+      "status": "pending",
+      "gpu_id": null,
+      "output_pkl": null,
+      "start_time": null,
+      "end_time": null,
+      "duration_sec": null,
+      "error": null
+    },
+    {
+      "job_id": "j00004",
+      "substrate_job_id": "j00002",
+      "sets": [
+        "smoke"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/result/smoke_20260504_172908/d0.5_K10_ODI_0.0635_bead_2.5_VF_0.65/2026-05-05_00-19-59_d0.5_K10_ODI_0.0635_bead_2.5_5fibers_rep1/data/array5_fibers_boxL_2.0_2026-05-05_00-19-59_avf_0.52_d0.5_sig0.1339wo10_wc3_wl3_K10_ODI_0.0635_1437.42_sec.pkl",
+      "params": {
+        "time_step": 0.005,
+        "num_spins": 10000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 5.0,
+        "compartment": "extra"
+      },
+      "status": "pending",
+      "gpu_id": null,
+      "output_pkl": null,
+      "start_time": null,
+      "end_time": null,
+      "duration_sec": null,
+      "error": null
+    },
+    {
+      "job_id": "j00005",
+      "substrate_job_id": "j00003",
+      "sets": [
+        "smoke"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/result/smoke_20260504_172908/d0.5_K10_ODI_0.0635_bead_3.6_VF_0.65/2026-05-05_00-20-00_d0.5_K10_ODI_0.0635_bead_3.6_5fibers_rep0/data/array5_fibers_boxL_3.0_2026-05-05_00-20-00_avf_0.23_d0.5_sig0.1339wo10_wc3_wl3_K10_ODI_0.0635_614.64_sec.pkl",
+      "params": {
+        "time_step": 0.005,
+        "num_spins": 10000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 5.0,
+        "compartment": "intra"
+      },
+      "status": "pending",
+      "gpu_id": null,
+      "output_pkl": null,
+      "start_time": null,
+      "end_time": null,
+      "duration_sec": null,
+      "error": null
+    },
+    {
+      "job_id": "j00006",
+      "substrate_job_id": "j00003",
+      "sets": [
+        "smoke"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/result/smoke_20260504_172908/d0.5_K10_ODI_0.0635_bead_3.6_VF_0.65/2026-05-05_00-20-00_d0.5_K10_ODI_0.0635_bead_3.6_5fibers_rep0/data/array5_fibers_boxL_3.0_2026-05-05_00-20-00_avf_0.23_d0.5_sig0.1339wo10_wc3_wl3_K10_ODI_0.0635_614.64_sec.pkl",
+      "params": {
+        "time_step": 0.005,
+        "num_spins": 10000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 5.0,
+        "compartment": "extra"
+      },
+      "status": "pending",
+      "gpu_id": null,
+      "output_pkl": null,
+      "start_time": null,
+      "end_time": null,
+      "duration_sec": null,
+      "error": null
+    },
+    {
+      "job_id": "j00007",
+      "substrate_job_id": "j00004",
+      "sets": [
+        "smoke"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/result/smoke_20260504_172908/d0.5_K10_ODI_0.0635_bead_3.6_VF_0.65/2026-05-05_01-50-29_d0.5_K10_ODI_0.0635_bead_3.6_5fibers_rep1/data/array5_fibers_boxL_2.0_2026-05-05_01-50-29_avf_0.53_d0.5_sig0.1339wo10_wc3_wl3_K10_ODI_0.0635_1090.61_sec.pkl",
+      "params": {
+        "time_step": 0.005,
+        "num_spins": 10000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 5.0,
+        "compartment": "intra"
+      },
+      "status": "pending",
+      "gpu_id": null,
+      "output_pkl": null,
+      "start_time": null,
+      "end_time": null,
+      "duration_sec": null,
+      "error": null
+    },
+    {
+      "job_id": "j00008",
+      "substrate_job_id": "j00004",
+      "sets": [
+        "smoke"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/result/smoke_20260504_172908/d0.5_K10_ODI_0.0635_bead_3.6_VF_0.65/2026-05-05_01-50-29_d0.5_K10_ODI_0.0635_bead_3.6_5fibers_rep1/data/array5_fibers_boxL_2.0_2026-05-05_01-50-29_avf_0.53_d0.5_sig0.1339wo10_wc3_wl3_K10_ODI_0.0635_1090.61_sec.pkl",
+      "params": {
+        "time_step": 0.005,
+        "num_spins": 10000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 5.0,
+        "compartment": "extra"
+      },
+      "status": "pending",
+      "gpu_id": null,
+      "output_pkl": null,
+      "start_time": null,
+      "end_time": null,
+      "duration_sec": null,
+      "error": null
+    }
+  ]
+}

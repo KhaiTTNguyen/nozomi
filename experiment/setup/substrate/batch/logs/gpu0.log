@@ -1,0 +1,38 @@
+[2026-05-04 17:31:35][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-04 17:31:37][gpu0] START j00001 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260504_172908
+[2026-05-04 21:37:50][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-04 21:37:51][gpu0] START j00004 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(3.6,0.3469) -> smoke_20260504_172908
+[2026-05-04 21:46:25][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-04 21:46:27][gpu0] START j00002 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260504_172908
+[2026-05-04 21:48:06][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-04 21:48:08][gpu0] START j00003 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(3.6,0.3469) -> smoke_20260504_172908
+[2026-05-04 21:54:12][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-04 21:54:13][gpu0] START j00001 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260504_172908
+[2026-05-04 22:09:15][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-04 22:09:17][gpu0] START j00001 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260504_172908
+[2026-05-04 22:09:23][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-04 22:09:24][gpu0] START j00003 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(3.6,0.3469) -> smoke_20260504_172908
+[2026-05-04 23:53:43][gpu0] DONE  j00003 in 6258.9s (rolling avg 6258.9s) -> experiment/result/smoke_20260504_172908/2026-05-04_22-09_d0.5_K10_ODI_0.0635_bead_3.6_5fibers
+[2026-05-04 23:53:45][gpu0] queue empty, exiting
+[2026-05-04 23:57:47][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-04 23:57:48][gpu0] START j00002 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260504_172908
+[2026-05-05 00:02:12][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-05 00:02:16][gpu0] queue empty, exiting
+[2026-05-05 00:04:05][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-05 00:04:07][gpu0] START j00001 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_115200
+[2026-05-05 00:04:59][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-05 00:05:00][gpu0] START j00002 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_115200
+[2026-05-05 00:09:29][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-05 00:09:30][gpu0] START j00003 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(3.6,0.3469) -> smoke_20260505_115200
+[2026-05-05 00:13:21][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-05 00:13:23][gpu0] START j00003 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(3.6,0.3469) -> smoke_20260505_115200
+[2026-05-05 00:16:51][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-05 00:16:53][gpu0] START j00002 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_115200
+[2026-05-05 18:31:55][gpu0] DONE  j00002 in 65702.4s (rolling avg 65702.4s) -> experiment/result/smoke_20260505_115200/d0.5_K10_ODI_0.0635_bead_2.5_VF_0.65/2026-05-05_00-16-53_d0.5_K10_ODI_0.0635_bead_2.5_200fibers_rep1
+[2026-05-05 18:31:57][gpu0] queue empty, exiting
+[2026-05-06 07:23:42][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-06 07:23:43][gpu0] START j00003 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=2 d=0.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_072043
+[2026-05-06 19:46:21][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-06 19:46:23][gpu0] START j00004 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=3 d=0.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_194301
+[2026-05-06 19:58:56][gpu0] worker started, CUDA_VISIBLE_DEVICES=0
+[2026-05-06 19:58:57][gpu0] START j00004 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=3 d=0.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745

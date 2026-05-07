@@ -105,7 +105,10 @@ source sim_venv/bin/activate
 ```bash
 ./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d168-K200-single-substrate-for-segment-calibration.json --output_folder_path=./tests/calibration/sim_domain_segment_calibration/data
 
-./run-scripts/run-geometry-gen.sh --gpu=4 --config=./experiment/setup/substrate/single_substrate/2026-03-22-bead0.3/d05-K200-beading0.3-substrate.json --output_folder_path=./experiment/result/2026-03-22_bead_03
+./run-scripts/run-geometry-gen.sh --gpu=1 --config=./experiment/setup/substrate/single_substrate/2026-03-22-bead0.5/d45-K7-beading0.5-substrate.json --output_folder_path=./experiment/result/2026-03-22_bead0.5
+
+./run-scripts/run-geometry-gen.sh --gpu=6 --config=./experiment/setup/substrate/default/myelin-small-1-substrate.json --output_folder_path=./experiment/result/myelin-mock
+
 ```
 
 ### Output Structure
@@ -137,6 +140,18 @@ Unless `--output_folder_path` is given, generated substrates are auto-saved to `
 
 **Data Files:**
 - `<spheres_coordinates>.pkl`: Contains numpy array with `[optimized_fibers, box_length]` or `[[x, y, z, radius, fiber_id, sphere_id], box_length]`. Use this for Monte Carlo simulations.
+- Myelinated substrates are generated when the substrate config includes `g_ratio`, for example `"g_ratio": 0.7`. The saved pickle then contains a versioned dictionary with `outer_fibers`, `inner_fibers`, `box_length`, `g_ratio`, and `inner_sphere_spacing_ratio`. Legacy non-myelinated substrate files remain supported by the simulation loader.
+- For myelinated substrates, `outer_fibers` represent the outer axonal/myelin boundary, and `inner_fibers` represent the intra-axonal boundary. The inner radius follows the local beaded outer radius as `inner_radius = g_ratio * outer_radius`; consecutive inner sphere centers use `inner_sphere_spacing_ratio * inner_radius` spacing.
+
+**Effective axon diameter stats:**
+- Substrate generation writes JSON files in `figs/substrate_stats/` named `<component>_effective_axon_diameter_stats_<date>.json`, where `<component>` is `outer` and, for myelinated substrates, `inner`.
+- The stats are computed from all axon-chain segments stored in the substrate pickle. Each segment is aligned to an endpoint-defined local axis, sampled at a fixed physical step, and each cross-sectional area is estimated with a rasterized union of intersecting sphere disks. The local effective radius is `r(z) = sqrt(A(z) / pi)`.
+- The JSON includes bundle-level and per-axon moments for `r^1`, `r^2`, `r^3`, `r^4`, and `r^6`, plus area-weighted effective diameter `d_eff(p=3,q=2)`, wide-pulse/Neuman apparent radius from `<r^6>/<r^2>`, and apparent internal radius from `<r^4>/<r^2>`.
+
+**Current myelin simulation behavior:**
+- `compartment="intra"`: seeds and restricts molecules inside `inner_fibers` when a myelinated substrate is used.
+- `compartment="extra"`: seeds and restricts molecules outside `outer_fibers` when a myelinated substrate is used.
+- The myelin sheath geometry is stored as the space between `inner_fibers` and `outer_fibers`, but explicit myelin-compartment diffusion is reserved for later development.
 
 **Substrate visualization**
 - `<3D_substrate_view>.png` show the 3D substrate view. The figure can take a few hours to be generated for a large number of fibers.
@@ -152,7 +167,7 @@ Mathematical details included [here](https://github.com/KhaiTTNguyen/nozomi/blob
 
 To plot OD histogram and FOD 3D glyph
 ```bash
-cd /home/nguyt16@ds.vanderbilt.edu/nozomi
+cd /path/to/nozomi
 source sim_venv/bin/activate
 python simulation_toolkit/cli/reprocess_substrate_orientation.py \
     --root experiment/result/2026-03-22_bead_03

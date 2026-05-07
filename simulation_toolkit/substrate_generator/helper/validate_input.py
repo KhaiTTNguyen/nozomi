@@ -8,7 +8,7 @@ def validate_parameters(params):
     validation_rules = {
         'num_fibers': {
             'value': params.get('num_fibers'),
-            'min': 50,
+            'min': 1,
             'max': 1000,
             'description': 'Number of fibers'
         },
@@ -20,14 +20,14 @@ def validate_parameters(params):
         },
         'orientation_shape_parameter': {
             'value': params.get('orientation_shape_parameter'),
-            'min': 10,
+            'min': 7,
             'max': 200,
             'description': 'Orientation parameter'
         },
         'bead_alpha_mean': {
             'value': params.get('bead_alpha_mean'),
             'min': 0.0,
-            'max': 2.0,
+            'max': 4.0,
             'description': 'Bead alpha mean (dimensionless)'
         },
         'bead_alpha_stdv': {
@@ -52,6 +52,20 @@ def validate_parameters(params):
             'min': 0.01,
             'max': 0.98,
             'description': 'Volume fraction'
+        }
+
+    if 'g_ratio' in params:
+        validation_rules['g_ratio'] = {
+            'value': params.get('g_ratio'),
+            'min': 0.01,
+            'max': 0.99,
+            'description': 'Myelin g-ratio'
+        }
+        validation_rules['inner_sphere_spacing_ratio'] = {
+            'value': params.get('inner_sphere_spacing_ratio', 0.5),
+            'min': 0.01,
+            'max': 2.0,
+            'description': 'Inner membrane sphere spacing ratio'
         }
     
     errors = []
@@ -107,6 +121,8 @@ def validate_parameters(params):
             print(f"  {rules['description']:25}: {rules['min']} - {rules['max']}")
         print("  Volume fraction (special): 0.01 - 0.98 for mean_diameter 0.5 - 1.0 um")
         print("                             0.01 - 0.7 for mean_diameter above 1.0 um")
+        print("  Optional myelin g_ratio   : 0.01 - 0.99")
+        print("  Optional inner spacing    : 0.01 - 2.0")
         
         print("\nUpdate your substrate JSON config file with valid parameter choices.")
         print("="*60)

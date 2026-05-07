@@ -17,6 +17,7 @@ Usage:
 """
 
 import argparse
+import json
 import os
 import re
 import sys
@@ -35,11 +36,38 @@ from scipy.stats import linregress
 # Parse folder-name metadata
 # ------------------------------------------------------------------
 _EXP_RE = re.compile(
-    r'experiment_d(?P<diam>[\d.]+)_.*_reproducibility_OD(?P<od>\d+)$'
+    r'(?:VF[\d.]+_)?experiment_d(?P<diam>[\d.]+)_.*_reproducibility_OD(?P<od>\d+)$'
 )
 _SUBSTRATE_MEAN_RE = re.compile(
     r'Optimized_diameter_distribution_mean(?P<mean>[\d.]+)_std[\d.]+_.*\.png$'
 )
+_EFF_DIAM_JSON_RE = re.compile(r'outer_effective_axon_diameter_stats.*\.json$')
+
+# Diameter metrics available from the effective-diameter JSON.
+# Each entry: (metric_key_in_results, entry_field, x-axis label, filename tag)
+DIAMETER_METRICS = [
+    (
+        "d_eff_p3_q2",
+        "diameter_d_eff",
+        r"$d_{\mathrm{eff}}$ ($p=3,\,q=2$) (µm)",
+        "d_eff_p3q2",
+        r"Area-weighted mean: $d_{\mathrm{eff}}$ ($p=3,q=2$)",
+    ),
+    (
+        "d_app_wide_pulse",
+        "diameter_d_wp",
+        r"$d_{\mathrm{app}}$ (wide pulse) (µm)",
+        "d_app_wp",
+        r"Wide-pulse apparent diameter: $d_{\mathrm{app,WP}}$",
+    ),
+    (
+        "d_app_internal",
+        "diameter_d_int",
+        r"$d_{\mathrm{app}}$ (internal) (µm)",
+        "d_app_int",
+        r"Apparent internal diameter: $d_{\mathrm{app,int}}$",
+    ),
+]
 
 
 def _parse_exp_folder(name: str):
@@ -65,9 +93,47 @@ def _extract_substrate_mean_diameter(substrate_path: str):
     if not candidates:
         return None
 
-    # If multiple files exist, use the latest by filename sort convention.
     candidates.sort(key=lambda x: x[0])
     return candidates[-1][1]
+
+
+def _extract_effective_diameter_metrics(substrate_path: str):
+    """
+    Read ``outer_effective_axon_diameter_stats*.json`` and return a dict with
+    the three bundle-level diameter metrics, or None if the file is missing.
+
+    Returns
+    -------
+    dict with keys:
+        ``d_eff_p3_q2``, ``d_app_wide_pulse``, ``d_app_internal``  (all in µm)
+    """
+    stats_dir = os.path.join(substrate_path, 'figs', 'substrate_stats')
+    if not os.path.isdir(stats_dir):
+        return None
+
+    candidates = sorted(
+        fn for fn in os.listdir(stats_dir) if _EFF_DIAM_JSON_RE.match(fn)
+    )
+    if not candidates:
+        return None
+
+    json_path = os.path.join(stats_dir, candidates[-1])
+    with open(json_path) as fh:
+        stats = json.load(fh)
+
+    bundle = stats.get("bundle", {})
+    d_eff = bundle.get("d_eff_p3_q2_um")
+    d_wp  = bundle.get("d_app_wide_pulse_um")
+    d_int = bundle.get("d_app_internal_um")
+
+    if any(v is None for v in (d_eff, d_wp, d_int)):
+        return None
+
+    return {
+        "d_eff_p3_q2":    float(d_eff),
+        "d_app_wide_pulse": float(d_wp),
+        "d_app_internal":  float(d_int),
+    }
 
 
 # ------------------------------------------------------------------
@@ -169,6 +235,18 @@ def collect_deltardapp(data_root: str) -> dict:
                     f"falling back to experiment diameter={exp_diam:.3f}"
                 )
 
+            eff_metrics = _extract_effective_diameter_metrics(substrate_path)
+            if eff_metrics is None:
+                print(
+                    f"  [warn] No effective diameter JSON found for {substrate_id}; "
+                    f"falling back to experiment diameter for all 3 metrics"
+                )
+                eff_metrics = {
+                    "d_eff_p3_q2":     exp_diam,
+                    "d_app_wide_pulse": exp_diam,
+                    "d_app_internal":  exp_diam,
+                }
+
             delta_human = r.get('DeltaRDapp', None)
             delta_animal = r.get('DeltaRDapp_2', None)
             human_pgse = r.get('RDapp_PGSE', None)
@@ -187,6 +265,9 @@ def collect_deltardapp(data_root: str) -> dict:
             if human_pgse is not None and human_ogse is not None:
                 results["individual_pairs"]["human_b300"][od].append({
                     "diameter": float(substrate_mean_diam),
+                    "diameter_d_eff": float(eff_metrics["d_eff_p3_q2"]),
+                    "diameter_d_wp":  float(eff_metrics["d_app_wide_pulse"]),
+                    "diameter_d_int": float(eff_metrics["d_app_internal"]),
                     "pgse": float(human_pgse),
                     "ogse": float(human_ogse),
                     "substrate_id": substrate_id,
@@ -196,6 +277,9 @@ def collect_deltardapp(data_root: str) -> dict:
             if animal_pgse is not None and animal_ogse is not None:
                 results["individual_pairs"]["animal_b800"][od].append({
                     "diameter": float(substrate_mean_diam),
+                    "diameter_d_eff": float(eff_metrics["d_eff_p3_q2"]),
+                    "diameter_d_wp":  float(eff_metrics["d_app_wide_pulse"]),
+                    "diameter_d_int": float(eff_metrics["d_app_internal"]),
                     "pgse": float(animal_pgse),
                     "ogse": float(animal_ogse),
                     "substrate_id": substrate_id,
@@ -604,10 +688,22 @@ def plot_rdapp_total_by_od_combined(results: dict, output_dir: str):
     print(f"Figure saved → {out_path}")
 
 
-def plot_individual_pgse_ogse_pairs_by_od(results: dict, output_dir: str):
+def plot_individual_pgse_ogse_pairs_by_od(
+        results: dict,
+        output_dir: str,
+        diameter_field: str = "diameter",
+        xlabel: str = "Mean axon diameter (µm)",
+        tag: str = "",
+):
     """
     Create one figure per OD value with two panels (human/animal), plotting
     individual substrate PGSE/OGSE pairs at each substrate's mean diameter.
+
+    Parameters
+    ----------
+    diameter_field : key in each entry dict to use as x-axis value
+    xlabel         : x-axis label string
+    tag            : short string appended to output filename (e.g. ``d_eff_p3q2``)
     """
     pairs = results.get("individual_pairs", {})
     human_pairs_by_od = pairs.get("human_b300", {})
@@ -630,11 +726,11 @@ def plot_individual_pgse_ogse_pairs_by_od(results: dict, output_dir: str):
         for ax, (scenario_key, scanner_label, b_label) in zip(axes, scenario_meta):
             entries = sorted(
                 pairs.get(scenario_key, {}).get(od, []),
-                key=lambda item: item["diameter"],
+                key=lambda item: item[diameter_field],
             )
 
             for idx, item in enumerate(entries):
-                x = item["diameter"]
+                x = item[diameter_field]
                 y_pgse = item["pgse"]
                 y_ogse = item["ogse"]
 
@@ -659,7 +755,7 @@ def plot_individual_pgse_ogse_pairs_by_od(results: dict, output_dir: str):
                     zorder=3,
                 )
 
-            ax.set_xlabel('Mean axon diameter (µm)', fontsize=12)
+            ax.set_xlabel(xlabel, fontsize=12)
             ax.set_title(f'{scanner_label}\n{b_label}', fontsize=12)
             ax.grid(True, which='major', linestyle='--', alpha=0.5)
             ax.grid(True, which='minor', linestyle=':', alpha=0.25)
@@ -688,16 +784,29 @@ def plot_individual_pgse_ogse_pairs_by_od(results: dict, output_dir: str):
         )
         fig.tight_layout()
 
-        out_path = os.path.join(output_dir, f'rdapp_total_individual_pairs_OD{od}.png')
+        fname_tag = f'_{tag}' if tag else ''
+        out_path = os.path.join(output_dir, f'rdapp_total_individual_pairs_OD{od}{fname_tag}.png')
         fig.savefig(out_path, dpi=300, bbox_inches='tight')
         plt.close(fig)
         print(f"Figure saved → {out_path}")
 
 
-def plot_individual_pgse_ogse_pairs_all_od_combined(results: dict, output_dir: str):
+def plot_individual_pgse_ogse_pairs_all_od_combined(
+        results: dict,
+        output_dir: str,
+        diameter_field: str = "diameter",
+        xlabel: str = "Mean axon diameter (µm)",
+        tag: str = "",
+):
     """
     Create one large combined figure containing all OD values.
     Rows correspond to OD values and columns are human/animal panels.
+
+    Parameters
+    ----------
+    diameter_field : key in each entry dict to use as x-axis value
+    xlabel         : x-axis label string
+    tag            : short string appended to output filename
     """
     pairs = results.get("individual_pairs", {})
     human_pairs_by_od = pairs.get("human_b300", {})
@@ -725,11 +834,11 @@ def plot_individual_pgse_ogse_pairs_all_od_combined(results: dict, output_dir: s
             ax = axes[row_idx, col_idx]
             entries = sorted(
                 pairs.get(scenario_key, {}).get(od, []),
-                key=lambda item: item["diameter"],
+                key=lambda item: item[diameter_field],
             )
 
             for idx, item in enumerate(entries):
-                x = item["diameter"]
+                x = item[diameter_field]
                 y_pgse = item["pgse"]
                 y_ogse = item["ogse"]
 
@@ -763,7 +872,7 @@ def plot_individual_pgse_ogse_pairs_all_od_combined(results: dict, output_dir: s
                     fontsize=11,
                 )
             if row_idx == n_od - 1:
-                ax.set_xlabel('Mean axon diameter (µm)', fontsize=12)
+                ax.set_xlabel(xlabel, fontsize=12)
 
             ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
             ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.25))
@@ -793,7 +902,8 @@ def plot_individual_pgse_ogse_pairs_all_od_combined(results: dict, output_dir: s
     )
     fig.tight_layout()
 
-    out_path = os.path.join(output_dir, 'rdapp_total_individual_pairs_all_OD_combined.png')
+    fname_tag = f'_{tag}' if tag else ''
+    out_path = os.path.join(output_dir, f'rdapp_total_individual_pairs_all_OD_combined{fname_tag}.png')
     fig.savefig(out_path, dpi=300, bbox_inches='tight')
     plt.close(fig)
     print(f"Figure saved → {out_path}")
@@ -901,7 +1011,13 @@ def plot_rdapp_components_stacked(results: dict, output_path: Optional[str] = No
 # Per-OD plot with linear fit
 # ------------------------------------------------------------------
 
-def plot_deltardapp_per_od(results: dict, output_path: Optional[str] = None):
+def plot_deltardapp_per_od(
+        results: dict,
+        output_path: Optional[str] = None,
+        diameter_field: str = "diameter",
+        xlabel: str = "Mean axon diameter (µm)",
+        title_suffix: str = "",
+):
     """
     One subplot per OD value, each showing:
       - Individual replicate scatter points
@@ -911,8 +1027,11 @@ def plot_deltardapp_per_od(results: dict, output_path: Optional[str] = None):
 
     Parameters
     ----------
-    results     : output of collect_deltardapp()
-    output_path : file to save figure; if None, shows interactively
+    results        : output of collect_deltardapp()
+    output_path    : file to save figure; if None, shows interactively
+    diameter_field : key in each ``individual_pairs`` entry to use as x-axis
+    xlabel         : x-axis label string
+    title_suffix   : appended to the figure suptitle (e.g. diameter type name)
     """
     pair_results = results.get("individual_pairs", {})
     human_pairs = pair_results.get("human_b300", {})
@@ -940,7 +1059,7 @@ def plot_deltardapp_per_od(results: dict, output_path: Optional[str] = None):
                 continue
 
             # Build per-substrate scattered delta values: ΔRDapp = OGSE - PGSE.
-            all_x = np.array([float(item["diameter"]) for item in entries], dtype=float)
+            all_x = np.array([float(item[diameter_field]) for item in entries], dtype=float)
             all_y = np.array(
                 [float(item["ogse"]) - float(item["pgse"]) for item in entries],
                 dtype=float,
@@ -983,7 +1102,7 @@ def plot_deltardapp_per_od(results: dict, output_path: Optional[str] = None):
             ann_y -= 0.11
 
         ax.set_title(f'{style["label"]}', fontsize=12)
-        ax.set_xlabel('Mean axon diameter (µm)', fontsize=12)
+        ax.set_xlabel(xlabel, fontsize=12)
         if od == od_values[0]:
             ax.set_ylabel(
                 r'$\Delta RD^{app}$ (µm²/ms)',
@@ -995,11 +1114,13 @@ def plot_deltardapp_per_od(results: dict, output_path: Optional[str] = None):
         ax.grid(True, which='minor', linestyle=':', alpha=0.25)
         ax.legend(fontsize=9, framealpha=0.9)
 
-    fig.suptitle(
+    suptitle = (
         r'$\Delta RD^{app} = \alpha \cdot d + \beta$ — linear fit per OD '
-        r'(human $b=300$ and animal $b=800$)',
-        fontsize=13, y=1.02,
+        r'(human $b=300$ and animal $b=800$)'
     )
+    if title_suffix:
+        suptitle += f'\n{title_suffix}'
+    fig.suptitle(suptitle, fontsize=13, y=1.02)
     fig.tight_layout()
 
     if output_path:
@@ -1045,53 +1166,50 @@ def main():
         sys.exit(1)
 
     # Default output: next to the data_root in a plots subfolder
-    output = args.output
-    if output is None:
-        output = os.path.join(
-            os.path.abspath(args.data_root),
-            '..', 'plots', 'deltardapp_vs_diameter.png'
-        )
-        output = os.path.normpath(output)
-
-    # plot_deltardapp(results, output_path=output)
-
-    # Per-OD plot with linear fit (saved alongside the grouped plot)
-    output_per_od = os.path.join(
-        os.path.dirname(os.path.abspath(output)),
-        'deltardapp_per_od_linear_fit.png',
+    plots_dir = os.path.normpath(
+        os.path.join(os.path.abspath(args.data_root), '..', 'plots')
     )
-    plot_deltardapp_per_od(results, output_path=output_per_od)
-
-    # output_intra = os.path.join(
-    #     os.path.dirname(os.path.abspath(output)),
-    #     'rdapp_intra_pgse_ogse_vs_diameter.png',
-    # )
-    # plot_rdapp_component(results, component='intra', output_path=output_intra)
-
-    # output_extra = os.path.join(
-    #     os.path.dirname(os.path.abspath(output)),
-    #     'rdapp_extra_pgse_ogse_vs_diameter.png',
-    # )
-    # plot_rdapp_component(results, component='extra', output_path=output_extra)
-
-    # output_total = os.path.join(
-    #     os.path.dirname(os.path.abspath(output)),
-    #     'rdapp_total_pgse_ogse_vs_diameter.png',
-    # )
-    # plot_rdapp_component(results, component='total', output_path=output_total)
+    output = args.output if args.output else os.path.join(plots_dir, 'deltardapp_vs_diameter.png')
 
     output_by_odi_dir = os.path.join(
         _nozomi_root,
         'experiment', 'visualization', 'plots', 'rdapp_by_ODI',
     )
-    plot_individual_pgse_ogse_pairs_by_od(results, output_dir=output_by_odi_dir)
-    plot_individual_pgse_ogse_pairs_all_od_combined(results, output_dir=output_by_odi_dir)
 
-    # output_stacked = os.path.join(
-    #     os.path.dirname(os.path.abspath(output)),
-    #     'rdapp_components_stacked_pgse_ogse_vs_diameter.png',
-    # )
-    # plot_rdapp_components_stacked(results, output_path=output_stacked)
+    # ------------------------------------------------------------------
+    # Generate plots for each of the 3 effective diameter metrics
+    # (metric_key, entry_field, xlabel, filename_tag, long_label)
+    # ------------------------------------------------------------------
+    for _, diameter_field, xlabel, tag, long_label in DIAMETER_METRICS:
+
+        # ΔRDapp vs diameter — linear fit, per-OD subplots
+        output_per_od = os.path.join(
+            plots_dir,
+            f'deltardapp_per_od_linear_fit_{tag}.png',
+        )
+        plot_deltardapp_per_od(
+            results,
+            output_path=output_per_od,
+            diameter_field=diameter_field,
+            xlabel=xlabel,
+            title_suffix=long_label,
+        )
+
+        # RDapp PGSE/OGSE vs diameter — per-OD individual substrate scatter
+        plot_individual_pgse_ogse_pairs_by_od(
+            results,
+            output_dir=output_by_odi_dir,
+            diameter_field=diameter_field,
+            xlabel=xlabel,
+            tag=tag,
+        )
+        plot_individual_pgse_ogse_pairs_all_od_combined(
+            results,
+            output_dir=output_by_odi_dir,
+            diameter_field=diameter_field,
+            xlabel=xlabel,
+            tag=tag,
+        )
 
 
 if __name__ == '__main__':

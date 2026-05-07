@@ -31,7 +31,7 @@
 #         big_delta = 12
 #         little_delta= 3
 #         spins = int(1e5)
-#         diffdir_file='/home/nguyt16@ds.vanderbilt.edu/HIPASimExperiment/biophysical_sim/NODDI/gradient/DWI_10dir.bvec'
+#         diffdir_file='<REPO_ROOT>/HIPASimExperiment/biophysical_sim/NODDI/gradient/DWI_10dir.bvec'
 #         folder_date_time = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
 #         st = time.time()
 #         Lx = 20.0 # um

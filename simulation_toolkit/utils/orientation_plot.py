@@ -11,7 +11,20 @@ import simulation_toolkit.toolkit_params as config_params
 import numpy as np
 import matplotlib.ticker as ticker
 
-def plot_along_axon_OD(spheres_xyz_r_fid ,  optimized=True):
+
+def _as_numpy(spheres_xyz_r_fid):
+    if hasattr(spheres_xyz_r_fid, 'detach'):
+        return spheres_xyz_r_fid.detach().cpu().numpy()
+    return np.asarray(spheres_xyz_r_fid)
+
+
+def _component_suffix(component_label):
+    if component_label is None:
+        return "", ""
+    tag = component_label.lower().replace(" ", "_")
+    return f" ({component_label})", f"_{tag}"
+
+def plot_along_axon_OD(spheres_xyz_r_fid ,  optimized=True, component_label=None):
     '''
     compute bundle mean orientation,
     for each fiber, 
@@ -26,7 +39,7 @@ def plot_along_axon_OD(spheres_xyz_r_fid ,  optimized=True):
     subtract by the macroangle
     (angles are in degrees)'''
     L = config_params.BOX_LENGTH.detach().cpu().numpy()
-    fiberlist_xyz_r_fid = util.split_matrix_to_list(spheres_xyz_r_fid.detach().cpu().numpy())
+    fiberlist_xyz_r_fid = util.split_matrix_to_list(_as_numpy(spheres_xyz_r_fid))
     folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+"/figs/substrate_stats/ODI"
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
@@ -41,13 +54,13 @@ def plot_along_axon_OD(spheres_xyz_r_fid ,  optimized=True):
 
     all_points = np.concatenate(points, axis=0)
     # plot density on sphere
-    density_map, XX, YY, ZZ = plot_OD_density_sphere(all_points, optimized=True, folder_name=folder_path)
+    density_map, XX, YY, ZZ = plot_OD_density_sphere(all_points, optimized=True, folder_name=folder_path, component_label=component_label)
     # plot 3D harmonics glyphs
     lmax=20
     coeffs, fit_error = spherical_harmonics_fit(density_map, XX, YY, ZZ, lmax=lmax)
-    plot_3D_glyph(coeffs, fit_error, lmax, folder_path, optimized)
+    plot_3D_glyph(coeffs, fit_error, lmax, folder_path, optimized, component_label=component_label)
     
-def plot_3D_glyph( coeffs, fit_error, lmax, folder_name, optimized):
+def plot_3D_glyph( coeffs, fit_error, lmax, folder_name, optimized, component_label=None):
     theta = np.linspace(0, 2 * np.pi, 180)
     phi = np.linspace(0, np.pi, 180)
     '''
@@ -124,17 +137,18 @@ def plot_3D_glyph( coeffs, fit_error, lmax, folder_name, optimized):
     ax.set_ylabel('Y anterior-posterior', fontsize=15, labelpad=10)
     ax.set_zlabel('Z superior-inferior', fontsize=15, labelpad=10)
     ax.set_title('Sum of fitted-harmonics as 3D glyph',fontsize=17, pad=20)
+    component_title, component_tag = _component_suffix(component_label)
     if optimized==True:
-        plt.title("Along axon FOD - optimized fibers", fontsize=17, pad=20)
-        plt.savefig(folder_path+"/FOD_3D_glyph.png", 
+        plt.title("Along axon FOD" + component_title + " - optimized fibers", fontsize=17, pad=20)
+        plt.savefig(folder_path+"/FOD_3D_glyph"+component_tag+".png", 
         dpi=500, edgecolor='b', format='png')
     else:
-        plt.title("Along axon FOD - preoptimized fibers", fontsize=17, pad=20)
-        plt.savefig(folder_path+"/FOD_3D_glyph_preoptimized.png", 
+        plt.title("Along axon FOD" + component_title + " - preoptimized fibers", fontsize=17, pad=20)
+        plt.savefig(folder_path+"/FOD_3D_glyph"+component_tag+"_preoptimized.png", 
         dpi=500, edgecolor='b', format='png')
     plt.close(fig)
     
-def plot_OD_density_sphere( all_points, optimized, folder_name):
+def plot_OD_density_sphere( all_points, optimized, folder_name, component_label=None):
     folder_path = folder_name
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
@@ -180,13 +194,14 @@ def plot_OD_density_sphere( all_points, optimized, folder_name):
     ax.zaxis.set_tick_params(labelleft=False, bottom=False, top=False, labelbottom=False)
     ax.set_zticks([])
     ax.zaxis.set_ticks_position('none')
+    component_title, component_tag = _component_suffix(component_label)
     if optimized==True:
-        plt.title("Along axon OD - optimized fibers", fontsize=17, pad=3)
-        plt.savefig(folder_path+"/OD_histogram.png", 
+        plt.title("Along axon OD" + component_title + " - optimized fibers", fontsize=17, pad=3)
+        plt.savefig(folder_path+"/OD_histogram"+component_tag+".png", 
         dpi=500, edgecolor='b', format='png')
     else:
-        plt.title("Along axon OD - preoptimized fibers", fontsize=17, pad=3)
-        plt.savefig(folder_path+"/OD_histogram_preoptimized.png", 
+        plt.title("Along axon OD" + component_title + " - preoptimized fibers", fontsize=17, pad=3)
+        plt.savefig(folder_path+"/OD_histogram"+component_tag+"_preoptimized.png", 
         dpi=500, edgecolor='b', format='png')
     plt.close(fig)
     return WW, XX, YY, ZZ
@@ -324,26 +339,31 @@ def _arclength_tangents_and_fit(spheres_xyz_r_fid, ds=None):
 
 def _kappa_title_suffix(fit):
     k = fit.get('kappa', np.nan)
+    odi = fit.get('ODI', np.nan)
     k_des = fit.get('kappa_prescribed', None)
     if not np.isfinite(k):
         return "  (arc-length fit failed)"
+    odi_part = f",  $ODI_{{fit}}$={odi:.4f}" if np.isfinite(odi) else ""
     if k_des is None or not np.isfinite(float(k_des)):
-        return f"\n$\\kappa_{{fit}}$={k:.2f}"
+        return f"\n$\\kappa_{{fit}}$={k:.2f}{odi_part}"
     return (f"\n$\\kappa_{{designed}}$={float(k_des):g}"
-            f",  $\\kappa_{{fit}}$={k:.2f}")
+            f",  $\\kappa_{{fit}}$={k:.2f}{odi_part}")
 
 
 def _kappa_file_tag(fit):
     k = fit.get('kappa', np.nan)
+    odi = fit.get('ODI', np.nan)
     k_des = fit.get('kappa_prescribed', None)
     k_str = "Kfit_nan" if not np.isfinite(k) else f"Kfit_{k:.2f}"
+    odi_str = "ODIfit_nan" if not np.isfinite(odi) else f"ODIfit_{odi:.4f}"
+    base = f"{k_str}_{odi_str}"
     if k_des is None or not np.isfinite(float(k_des)):
-        return k_str
-    return f"Kdes_{float(k_des):g}_{k_str}"
+        return base
+    return f"Kdes_{float(k_des):g}_{base}"
 
 
 def plot_along_axon_OD_arclength(spheres_xyz_r_fid, optimized=True, ds=None,
-                                 lmax=8):
+                                 lmax=8, component_label=None):
     """Arc-length variant of plot_along_axon_OD.
 
     - Resamples each fiber's centerline at uniform arc length before taking
@@ -383,25 +403,60 @@ def plot_along_axon_OD_arclength(spheres_xyz_r_fid, optimized=True, ds=None,
 
     # --- density map on unit hemisphere (kept for the 2-D OD visualisation) ---
     density_map, XX, YY, ZZ = _plot_OD_density_sphere_arclength(
-        tangents, fit, optimized=optimized, folder_name=folder_path)
+        tangents, fit, optimized=optimized, folder_name=folder_path, component_label=component_label)
 
     # --- spherical-harmonics glyph via direct closed-form projection ---
     # Bypasses histogram discretisation, lat-lon area bias, and hemisphere
     # restriction — all sources of the equatorial ringing artifact.
     coeffs, fit_error = spherical_harmonics_fit_from_tangents(tangents, lmax=lmax)
     _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_path,
-                             fit, optimized=optimized)
+                             fit, optimized=optimized, component_label=component_label)
 
     # --- achieved Watson-samples scatter (mirrors the prescribed
     #     Watson_samples_kappa_<K>.png style for direct comparison) ---
-    _plot_watson_samples_achieved(tangents, fit, folder_path, optimized=optimized)
+    _plot_watson_samples_achieved(tangents, fit, folder_path, optimized=optimized, component_label=component_label)
     return fit
 
 
-def _plot_OD_density_sphere_arclength(all_points, fit, optimized, folder_name):
+def _plot_OD_density_sphere_arclength(all_points, fit, optimized, folder_name,
+                                      method_tag="arclength",
+                                      method_label="arc-length",
+                                      component_label=None):
+    """Smoothed upper-hemisphere density of the SAME tangent samples that
+    appear in the achieved Watson-samples scatter plot.
+
+    Pipeline (matches ``_plot_watson_samples_achieved`` exactly):
+      1. Flip every tangent with z<0 to the upper hemisphere (Watson is axial;
+         t and -t are physically identical). Without this, any tangent landing
+         below the equator is silently missed, so broad FODs look too tight.
+      2. Evaluate a spherical (von Mises-Fisher) kernel on a lat-lon grid
+         covering the upper hemisphere. The kernel bandwidth (``kappa_kde``)
+         adapts to the fitted Watson kappa so both sharp and broad
+         distributions are rendered with comparable visual smoothness.
+      3. Normalise by the max so the colormap uses the full [0,1] range.
+    """
     folder_path = folder_name
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
+
+    pts = np.asarray(all_points, dtype=float)
+    if pts.size == 0:
+        return None, None, None, None
+    # Axial symmetry: mirror lower hemisphere into the upper one, matching
+    # the scatter plot in _plot_watson_samples_achieved.
+    flip = pts[:, 2] < 0
+    if np.any(flip):
+        pts = pts.copy()
+        pts[flip] = -pts[flip]
+
+    # Kernel bandwidth: use the fitted Watson kappa when available; otherwise
+    # fall back to a moderate concentration. Clamp so that very sharp fits
+    # still render as visible blobs and very broad fits do not oversmooth.
+    k_fit = fit.get('kappa', np.nan)
+    if np.isfinite(k_fit) and k_fit > 0:
+        kappa_kde = float(np.clip(k_fit, 5.0, 200.0))
+    else:
+        kappa_kde = 20.0
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1, projection='3d')
@@ -412,14 +467,22 @@ def _plot_OD_density_sphere_arclength(all_points, fit, optimized, folder_name):
     XX = np.outer(np.cos(u), np.sin(v))
     YY = np.outer(np.sin(u), np.sin(v))
     ZZ = np.outer(np.ones(np.size(u)), np.cos(v))
-    WW = XX.copy()
-    bin_radius = 0.1
-    for i in range(len(XX)):
-        for j in range(len(XX[0])):
-            x = XX[i, j]
-            y = YY[i, j]
-            z = ZZ[i, j]
-            WW[i, j] = near(np.array([x, y, z]), all_points, bin_radius)
+
+    # Vectorised spherical KDE: density at each grid node is
+    #   WW(n) = (1/N) * sum_i exp(kappa * (n . t_i))
+    # where n is the grid unit vector and t_i are the tangent samples.
+    # (We drop the vMF normalisation constant because we only visualise the
+    # max-normalised heatmap.)
+    grid = np.stack([XX.ravel(), YY.ravel(), ZZ.ravel()], axis=1)  # (G, 3)
+    # Chunk to cap memory at ~G * chunk * 8B.
+    chunk = 4096
+    WW_flat = np.zeros(grid.shape[0], dtype=float)
+    for start in range(0, pts.shape[0], chunk):
+        block = pts[start:start + chunk]             # (B, 3)
+        cos_ang = grid @ block.T                      # (G, B)
+        WW_flat += np.exp(kappa_kde * cos_ang).sum(axis=1)
+    WW_flat /= max(pts.shape[0], 1)
+    WW = WW_flat.reshape(XX.shape)
 
     if WW.max() > 0:
         WW = WW / np.amax(WW)
@@ -443,9 +506,10 @@ def _plot_OD_density_sphere_arclength(all_points, fit, optimized, folder_name):
     ax.zaxis.set_ticks_position('none')
 
     stage = "optimized" if optimized else "preoptimized"
-    title = f"Along axon OD (arc-length) - {stage} fibers" + _kappa_title_suffix(fit)
+    component_title, component_tag = _component_suffix(component_label)
+    title = f"Along axon OD{component_title} ({method_label}) - {stage} fibers" + _kappa_title_suffix(fit)
     plt.title(title, fontsize=14, pad=3)
-    fname = f"OD_histogram_arclength_{_kappa_file_tag(fit)}"
+    fname = f"OD_histogram{component_tag}_{method_tag}_{_kappa_file_tag(fit)}"
     if not optimized:
         fname += "_preoptimized"
     plt.savefig(os.path.join(folder_path, fname + ".png"),
@@ -455,7 +519,10 @@ def _plot_OD_density_sphere_arclength(all_points, fit, optimized, folder_name):
 
 
 def _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_name,
-                             fit, optimized):
+                             fit, optimized,
+                             method_tag="arclength",
+                             method_label="arc-length",
+                             component_label=None):
     theta = np.linspace(0, 2 * np.pi, 180)
     phi = np.linspace(0, np.pi, 180)
     xx = np.outer(np.cos(theta), np.sin(phi))
@@ -480,13 +547,17 @@ def _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_name,
                     index += 1
     Yvals = np.sum(Yvals, axis=2)
     Ymax, Ymin = Yvals.max(), Yvals.min()
-    radii = np.clip(Yvals, 0, None) if (Ymax != Ymin) else np.zeros_like(Yvals)
+    # Clip negative lobes to zero. Truncated SH reconstruction of a sharp
+    # Watson PDF can dip slightly negative near the equator; clipping removes
+    # those spurious lobes without altering the positive structure.
+    if Ymax > 0:
+        radii = np.clip(Yvals, 0, None)
+    else:
+        radii = np.zeros_like(Yvals)
+    Ymax = radii.max() if radii.max() > 0 else 1.0
     x = radii * xx
     y = radii * yy
     z = radii * zz
-    x_abs = np.abs(x)
-    y_abs = np.abs(y)
-    z_abs = np.abs(z)
 
     folder_path = folder_name
     if not os.path.exists(folder_path):
@@ -494,13 +565,15 @@ def _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_name,
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    colors = np.zeros((x_abs.shape[0], x_abs.shape[1], 3))
-    # Normalise to [0, 1] — raw coordinates can exceed 1 when peak radius > 1,
-    # which causes matplotlib to raise "RGBA values should be within 0-1 range".
-    norm = Ymax if Ymax > 0 else 1.0
-    colors[:, :, 0] = x_abs / norm
-    colors[:, :, 1] = y_abs / norm
-    colors[:, :, 2] = z_abs / norm
+    # Color by DIRECTION (unit-sphere coords), not by radius-scaled coords.
+    # Using radius-scaled |x|,|y|,|z| makes every point near the equator black
+    # (radius -> 0 so all RGB channels -> 0), producing a spurious dark ring /
+    # pinched waist on sharp FODs. Unit-direction coloring is the standard
+    # convention for FOD glyphs (e.g. MRtrix, Dipy).
+    colors = np.zeros((xx.shape[0], xx.shape[1], 3))
+    colors[:, :, 0] = np.abs(xx)
+    colors[:, :, 1] = np.abs(yy)
+    colors[:, :, 2] = np.abs(zz)
     ls = LightSource(60, 45)
     rgb = ls.shade_rgb(colors, z, vert_exag=0.1, blend_mode='soft')
     ax.plot_surface(x, y, z, rstride=1, cstride=1, facecolors=rgb,
@@ -513,10 +586,11 @@ def _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_name,
     ax.set_zlabel('Z superior-inferior', fontsize=15, labelpad=10)
 
     stage = "optimized" if optimized else "preoptimized"
-    title = (f"Along axon FOD (arc-length, lmax={lmax}) - {stage} fibers"
+    component_title, component_tag = _component_suffix(component_label)
+    title = (f"Along axon FOD{component_title} ({method_label}, lmax={lmax}) - {stage} fibers"
              + _kappa_title_suffix(fit))
     plt.title(title, fontsize=14, pad=20)
-    fname = f"FOD_3D_glyph_arclength_direct_lmax{lmax}_{_kappa_file_tag(fit)}"
+    fname = f"FOD_3D_glyph{component_tag}_{method_tag}_direct_lmax{lmax}_{_kappa_file_tag(fit)}"
     if not optimized:
         fname += "_preoptimized"
     plt.savefig(os.path.join(folder_path, fname + ".png"),
@@ -525,8 +599,11 @@ def _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_name,
 
 
 def _plot_watson_samples_achieved(tangents, fit, folder_name,
-                                  optimized=True, max_points=3000):
-    """Scatter plot of the achieved arc-length tangent vectors on the upper
+                                  optimized=True, max_points=3000,
+                                  method_tag="arclength",
+                                  method_label="arc-length",
+                                  component_label=None):
+    """Scatter plot of the achieved tangent vectors on the upper
     hemisphere, styled to mirror ``WatsonDistribution.visualize_watson_samples``
     so the prescribed Watson_samples_kappa_<K>.png can be compared directly
     to the achieved orientations of the final substrate.
@@ -570,7 +647,8 @@ def _plot_watson_samples_achieved(tangents, fit, folder_name,
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
     stage = "optimized" if optimized else "preoptimized"
-    title = (f"Achieved tangent samples on upper hemisphere ({stage})"
+    component_title, component_tag = _component_suffix(component_label)
+    title = (f"Achieved tangent samples{component_title} ({method_label}) - {stage}"
              + _kappa_title_suffix(fit))
     ax.set_title(title, fontsize=14)
     ax.set_xlim([-1, 1])
@@ -578,9 +656,89 @@ def _plot_watson_samples_achieved(tangents, fit, folder_name,
     ax.set_zlim([-1, 1])
     plt.tight_layout()
 
-    fname = f"Watson_samples_achieved_arclength_{_kappa_file_tag(fit)}"
+    fname = f"Watson_samples_achieved{component_tag}_{method_tag}_{_kappa_file_tag(fit)}"
     if not optimized:
         fname += "_preoptimized"
     plt.savefig(os.path.join(folder_path, fname + ".png"),
                 dpi=500, edgecolor='b', format='png')
     plt.close(fig)
+
+
+# =====================================================================
+# Global (end-to-end) orientation statistics + Watson-kappa fitting
+# One unit vector per fiber: (last_sphere_xyz - first_sphere_xyz), normalised.
+# Captures the *global* bundle dispersion, independent of local waviness.
+# =====================================================================
+
+def _global_endpoint_tangents_and_fit(spheres_xyz_r_fid):
+    """Extract one unit end-to-end vector per fiber and fit a Watson
+    distribution on those vectors.
+
+    Returns (tangents, fit_result). ``tangents`` has shape (n_fibers, 3).
+    """
+    if hasattr(spheres_xyz_r_fid, 'detach'):
+        arr = spheres_xyz_r_fid.detach().cpu().numpy()
+    else:
+        arr = np.asarray(spheres_xyz_r_fid)
+
+    L = _box_length_as_float()
+    fiber_list = util.split_matrix_to_list(arr)
+    fiber_list = [filter_spheres_outside_voxel(f, L) for f in fiber_list]
+    fiber_list = [f for f in fiber_list if f.shape[0] >= 2]
+
+    vecs = []
+    for f in fiber_list:
+        v = f[-1, :3] - f[0, :3]
+        n = np.linalg.norm(v)
+        if n > 0:
+            vecs.append(v / n)
+    if not vecs:
+        tangents = np.zeros((0, 3))
+    else:
+        tangents = np.vstack(vecs)
+
+    result = watson_fit.fit_watson_scatter(tangents)
+    result['n_fibers'] = len(fiber_list)
+    return tangents, result
+
+
+def plot_global_axon_OD(spheres_xyz_r_fid, optimized=True, lmax=8):
+    """Global (end-to-end) variant of plot_along_axon_OD_arclength.
+
+    - One unit vector per fiber: (endpoint - startpoint), normalised.
+    - Fits a bipolar Watson distribution via scatter-matrix MLE on those
+      global orientation vectors.
+    - Emits OD histogram, 3D FOD glyph (closed-form SH projection) and
+      achieved-samples scatter, all tagged with ``global`` in both the
+      title and the filename so they coexist with the arc-length outputs.
+    """
+    folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH + "/figs/substrate_stats/ODI"
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    tangents, fit = _global_endpoint_tangents_and_fit(spheres_xyz_r_fid)
+
+    k_prescribed = getattr(config_params, 'ORIENTATION_SHAPE_PARAM', None)
+    try:
+        k_prescribed = float(k_prescribed) if k_prescribed else None
+    except Exception:
+        k_prescribed = None
+    fit['kappa_prescribed'] = k_prescribed
+
+    if tangents.shape[0] < 3:
+        print("[plot_global_axon_OD] Too few end-to-end vectors; skipping plots.")
+        return fit
+
+    _plot_OD_density_sphere_arclength(
+        tangents, fit, optimized=optimized, folder_name=folder_path,
+        method_tag="global", method_label="global")
+
+    coeffs, fit_error = spherical_harmonics_fit_from_tangents(tangents, lmax=lmax)
+    _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_path,
+                             fit, optimized=optimized,
+                             method_tag="global", method_label="global")
+
+    _plot_watson_samples_achieved(tangents, fit, folder_path,
+                                  optimized=optimized,
+                                  method_tag="global", method_label="global")
+    return fit

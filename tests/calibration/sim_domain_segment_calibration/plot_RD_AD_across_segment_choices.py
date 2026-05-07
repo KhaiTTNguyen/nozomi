@@ -294,8 +294,12 @@ def plot_Dz_across_compartment(folder_path, diff_time_limit, output_folder):
 def main():
     parser = argparse.ArgumentParser(description='Generate RD and AD plots grouped by compartment from ADC data files')
     parser.add_argument('input_folder', help='Path to ADCdata folder containing pickle files')
-    parser.add_argument('-o', '--output', 
-                       default='/home/nguyt16@ds.vanderbilt.edu/nozomi/tests/calibration/sim_domain_segment_calibration/validate_same_results_with_same_substrate_different_segments_choices/figs',
+    # Default output: sibling `figs/` folder next to this script.
+    _default_out = str(Path(__file__).resolve().parent /
+                       'validate_same_results_with_same_substrate_different_segments_choices' /
+                       'figs')
+    parser.add_argument('-o', '--output',
+                       default=_default_out,
                        help='Output folder for plots')
     parser.add_argument('--rd_time_limit', type=float, default=120.0, 
                        help='Time limit for RD plot in ms (default: 120)')

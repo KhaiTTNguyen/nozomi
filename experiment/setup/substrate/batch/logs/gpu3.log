@@ -1,0 +1,22 @@
+[2026-05-05 00:02:12][gpu3] worker started, CUDA_VISIBLE_DEVICES=3
+[2026-05-05 00:02:13][gpu3] START j00002 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260504_172908
+[2026-05-05 00:04:05][gpu3] worker started, CUDA_VISIBLE_DEVICES=3
+[2026-05-05 00:04:09][gpu3] queue empty, exiting
+[2026-05-05 00:04:59][gpu3] worker started, CUDA_VISIBLE_DEVICES=3
+[2026-05-05 00:05:00][gpu3] START j00001 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_115200
+[2026-05-05 00:09:29][gpu3] worker started, CUDA_VISIBLE_DEVICES=3
+[2026-05-05 00:09:30][gpu3] START j00004 sets=['smoke'] rep=1 d=0.5 K=10 VF=0.65 bead=(3.6,0.3469) -> smoke_20260505_115200
+[2026-05-05 00:13:21][gpu3] worker started, CUDA_VISIBLE_DEVICES=3
+[2026-05-05 00:13:23][gpu3] START j00001 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_115200
+[2026-05-05 00:16:51][gpu3] worker started, CUDA_VISIBLE_DEVICES=3
+[2026-05-05 00:16:53][gpu3] START j00001 sets=['smoke'] rep=0 d=0.5 K=10 VF=0.65 bead=(2.5,0.24) -> smoke_20260505_115200
+[2026-05-05 21:48:20][gpu3] DONE  j00001 in 77487.8s (rolling avg 77487.8s) -> experiment/result/smoke_20260505_115200/d0.5_K10_ODI_0.0635_bead_2.5_VF_0.65/2026-05-05_00-16-53_d0.5_K10_ODI_0.0635_bead_2.5_200fibers_rep0
+[2026-05-05 21:48:22][gpu3] queue empty, exiting
+[2026-05-06 07:23:41][gpu3] worker started, CUDA_VISIBLE_DEVICES=3
+[2026-05-06 07:23:43][gpu3] START j00001 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=0.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_072043
+[2026-05-06 13:27:19][gpu3] FAIL  j00001 in 21815.7s: AssertionError: Inner end of fiber_id=871.0 [ 2.0766659  9.048065  10.       ] does not match outer end [  2.0766659 -10.951935   10.       ].
+[2026-05-06 13:27:19][gpu3] START j00005 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=0.5 K=100 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_072043
+[2026-05-06 19:46:21][gpu3] worker started, CUDA_VISIBLE_DEVICES=3
+[2026-05-06 19:46:23][gpu3] START j00001 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=0.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_194301
+[2026-05-06 19:58:56][gpu3] worker started, CUDA_VISIBLE_DEVICES=3
+[2026-05-06 19:58:57][gpu3] START j00003 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=2 d=0.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745

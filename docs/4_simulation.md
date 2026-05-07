@@ -30,6 +30,12 @@ cd nozomi
 
 
 ./run-scripts/run-simulation.sh --substrates=./experiment/result/VF0.5_d2.58_OD200_bead1.0_100axons --gpu=0 --sim_time=100  --nseg=20 --compartment=extra 
+
+
+./run-scripts/run-simulation.sh --substrates=./experiment/result/myelin-mock/myelin_small_200_verification --gpu=2 --sim_time=100  --nseg=20 --compartment=intra
+
+./run-scripts/run-simulation.sh --substrates=./experiment/result/arXiv_set1_healthy_20260506_072043/d0.5_K200_ODI_0.0032_bead_0.5_VF_0.65 --gpu=6 --sim_time=100  --nseg=20 --compartment=extra
+
 ```
 
 ### Output: 
