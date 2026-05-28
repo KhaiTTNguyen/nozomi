@@ -105,9 +105,10 @@ source sim_venv/bin/activate
 ```bash
 ./run-scripts/run-geometry-gen.sh --gpu=0 --config=./experiment/setup/substrate/single_substrate/d168-K200-single-substrate-for-segment-calibration.json --output_folder_path=./tests/calibration/sim_domain_segment_calibration/data
 
-./run-scripts/run-geometry-gen.sh --gpu=1 --config=./experiment/setup/substrate/single_substrate/2026-03-22-bead0.5/d45-K7-beading0.5-substrate.json --output_folder_path=./experiment/result/2026-03-22_bead0.5
+./run-scripts/run-geometry-gen.sh --gpu=2 --config=./experiment/setup/substrate/single_substrate/2026-05-26-bead0.5_myelin/d35-K200-beading0.5-substrate.json --output_folder_path=./experiment/result/2026-05-26_myelin_bead05_overlap_length_curve_cost_rollback
 
-./run-scripts/run-geometry-gen.sh --gpu=6 --config=./experiment/setup/substrate/default/myelin-small-1-substrate.json --output_folder_path=./experiment/result/myelin-mock
+# CMD prepped for d4.5 K200
+./run-scripts/run-geometry-gen.sh --gpu=3 --config=./experiment/setup/substrate/single_substrate/2026-05-26-bead0.5_myelin/d35-K10-beading0.5-substrate.json --output_folder_path=./experiment/result/set1_healthy_20260506_195745
 
 ```
 

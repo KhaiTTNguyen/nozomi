@@ -18,3 +18,21 @@
 [2026-05-06 19:46:23][gpu5] START j00002 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=1 d=0.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_194301
 [2026-05-06 19:58:56][gpu5] worker started, CUDA_VISIBLE_DEVICES=5
 [2026-05-06 19:58:57][gpu5] START j00006 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=1 d=0.5 K=100 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-07 04:33:52][gpu5] FAIL  j00006 in 30895.2s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-07 04:33:52][gpu5] START j00009 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=0.5 K=20 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-07 11:31:54][gpu5] FAIL  j00009 in 25082.0s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-07 11:31:55][gpu5] START j00013 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=0.5 K=10 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-08 14:18:41][gpu5] FAIL  j00013 in 96406.6s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-08 14:18:41][gpu5] START j00024 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=3 d=1.0 K=100 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-08 23:02:58][gpu5] FAIL  j00024 in 31456.4s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-08 23:02:58][gpu5] START j00029 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=1.0 K=10 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-10 13:23:22][gpu5] FAIL  j00029 in 138024.3s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-10 13:23:22][gpu5] START j00042 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=1 d=1.5 K=20 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-11 02:41:54][gpu5] FAIL  j00042 in 47912.6s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-11 02:41:55][gpu5] START j00048 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=3 d=1.5 K=10 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-12 08:09:42][gpu5] FAIL  j00048 in 106067.1s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-12 08:09:42][gpu5] START j00055 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=2 d=2.5 K=100 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-13 18:53:36][gpu5] FAIL  j00055 in 125034.5s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-13 18:53:36][gpu5] START j00060 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=3 d=2.5 K=20 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-14 20:19:04][gpu5] FAIL  j00060 in 91527.6s: RuntimeError: Function 'PowBackward0' returned nan values in its 0th output.
+[2026-05-14 20:19:04][gpu5] START j00062 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=1 d=2.5 K=10 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745

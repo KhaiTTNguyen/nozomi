@@ -166,65 +166,84 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
                                                         str(config_params.NUM_FIBERS) +'fibers'+str(folder_suffix))
 
     # --- Iterative VF refinement loop ---
-    vf_tolerance = 0.03
-    max_vf_refinements = 3 if target_3d_vf is not None else 1
+    # A single attempt = one Init2D + Meshing + GeometricOptimization pass.
+    # Each attempt is consumed regardless of outcome:
+    #   - If geometry fails to converge (overlap optimizer gives up): scale
+    #     VF_2D *down* by ``vf_backoff_factor`` and retry, because the requested
+    #     packing is likely infeasible at this VF_2D.
+    #   - If geometry converges but measured 3D VF is off target by more than
+    #     ``vf_tolerance``: scale VF_2D by (target / measured) and retry.
+    # This prevents the previous behavior of looping forever on the same
+    # (infeasible) VF_2D when the optimizer never reaches 0 overlaps.
+    vf_tolerance = 0.04
+    vf_backoff_factor = 0.9
+    max_vf_refinements = 6 if target_3d_vf is not None else 4
     current_vf_2d = config_params.VOLUME_FRACTION
+    prev_vf_2d = current_vf_2d
 
     for vf_iter in range(max_vf_refinements):
         if vf_iter > 0:
             print(f"\n--- VF refinement iteration {vf_iter + 1}: adjusting VF_2D from {prev_vf_2d:.4f} to {current_vf_2d:.4f} ---")
             config_params.BOX_LENGTH = params['box_length_init']  # reset box length for recalculation
         config_params.VOLUME_FRACTION = current_vf_2d
-        not_converged=True
-        while not_converged:
-            st = time.time()
-            # -------- 2D initialization of axon start/end points --------
-            initialization2D = Init2D(  device=device,
-                                        date_time=config_params.EXP_DATE_TIME,
-                                        orientation_shape_parameter=config_params.ORIENTATION_SHAPE_PARAM, 
-                                        target_volume_fraction=config_params.VOLUME_FRACTION, 
-                                        num_fibers=config_params.NUM_FIBERS,
-                                        dist_shape=config_params.DISTRIBUTION_SHAPE,
-                                        mean_diameter=config_params.MEAN_DIAMETER, 
-                                        sigma_radii=config_params.SIGMA_DIAMETER,
-                                        space_buffer=config_params.SPACE_BUFFER_STARTS_ENDS,
-                                        box_length_init=config_params.BOX_LENGTH)
+        st = time.time()
+        # -------- 2D initialization of axon start/end points --------
+        initialization2D = Init2D(  device=device,
+                                    date_time=config_params.EXP_DATE_TIME,
+                                    orientation_shape_parameter=config_params.ORIENTATION_SHAPE_PARAM,
+                                    target_volume_fraction=config_params.VOLUME_FRACTION,
+                                    num_fibers=config_params.NUM_FIBERS,
+                                    dist_shape=config_params.DISTRIBUTION_SHAPE,
+                                    mean_diameter=config_params.MEAN_DIAMETER,
+                                    sigma_radii=config_params.SIGMA_DIAMETER,
+                                    space_buffer=config_params.SPACE_BUFFER_STARTS_ENDS,
+                                    box_length_init=config_params.BOX_LENGTH)
 
-            data_folder = os.path.join(config_params.SUBSTRATE_OUTPUT_FOLDER_PATH,'data')
-            if not os.path.exists(data_folder):
-                        os.makedirs(data_folder)
+        data_folder = os.path.join(config_params.SUBSTRATE_OUTPUT_FOLDER_PATH,'data')
+        if not os.path.exists(data_folder):
+                    os.makedirs(data_folder)
 
-            init2d_data_folder = os.path.join(config_params.SUBSTRATE_OUTPUT_FOLDER_PATH,'figs','init2D')
-            if not os.path.exists(init2d_data_folder):
-                        os.makedirs(init2d_data_folder)
+        init2d_data_folder = os.path.join(config_params.SUBSTRATE_OUTPUT_FOLDER_PATH,'figs','init2D')
+        if not os.path.exists(init2d_data_folder):
+                    os.makedirs(init2d_data_folder)
 
-            # save data with Pickle format
-            init2d_data_file_name = os.path.join(init2d_data_folder ,'init2d.pkl')
-            util.save_data_array_to_pickle(init2d_data_file_name, initialization2D.initial_positions, 
-                                    initialization2D.box_length.cpu().item()) 
+        # save data with Pickle format
+        init2d_data_file_name = os.path.join(init2d_data_folder ,'init2d.pkl')
+        util.save_data_array_to_pickle(init2d_data_file_name, initialization2D.initial_positions,
+                                initialization2D.box_length.cpu().item())
 
-            initialization2D.plot_PBC()
-            # -------- Sphere-Based Meshing of Axons --------
-            meshing = Meshing(initialization2D, config_params.SPHERE_SPACING, config_params.BEAD_SPACING_MEAN, config_params.BEAD_SPACING_STDV, device)
-            # -------- Geometric Optimization --------
-            substrate = GeometricOptimization(device, meshing, config_params.SPHERE_SPACING, 
-                                                config_params.W_OVERLAP, config_params.W_CURVE, config_params.W_LENGTH, \
-                                                config_params.SPACE_BUFFER_REPULSE, initialization2D.mean_d_underlying, initialization2D.sigma_d_underlying,\
-                                                config_params.BEAD_SPACING_MEAN, config_params.BEAD_SPACING_STDV)
-            not_converged = not substrate.optimized
+        initialization2D.plot_PBC()
+        # -------- Sphere-Based Meshing of Axons --------
+        meshing = Meshing(initialization2D, config_params.SPHERE_SPACING, config_params.BEAD_SPACING_MEAN, config_params.BEAD_SPACING_STDV, device)
+        # -------- Geometric Optimization --------
+        substrate = GeometricOptimization(device, meshing, config_params.SPHERE_SPACING,
+                                            config_params.W_OVERLAP, config_params.W_CURVE, config_params.W_LENGTH, \
+                                            config_params.SPACE_BUFFER_REPULSE, initialization2D.mean_d_underlying, initialization2D.sigma_d_underlying,\
+                                            config_params.BEAD_SPACING_MEAN, config_params.BEAD_SPACING_STDV)
 
-        # --- Check if VF refinement is needed ---
-        if target_3d_vf is not None and substrate.optimized:
-            measured_vf = config_params.VOLUME_FRACTION  # overwritten by get_volume_fraction()
-            if abs(measured_vf - target_3d_vf) <= vf_tolerance:
-                print(f"VF refinement converged: measured={measured_vf:.3f}, target={target_3d_vf:.3f}")
-                break
+        # --- Decide next action based on outcome ---
+        if not substrate.optimized:
+            # Geometry optimizer gave up (still has overlaps after max iters).
+            # Back off VF_2D and try again -- the requested packing is likely
+            # infeasible at this VF_2D for this combo of diameter/kappa/beading.
             prev_vf_2d = current_vf_2d
-            current_vf_2d = current_vf_2d * (target_3d_vf / measured_vf)
-            print(f"VF refinement: measured={measured_vf:.3f}, target={target_3d_vf:.3f}, "
-                  f"scaling VF_2D by {target_3d_vf / measured_vf:.4f}")
-        else:
+            current_vf_2d = current_vf_2d * vf_backoff_factor
+            print(f"VF refinement: geometry did not converge at VF_2D={prev_vf_2d:.4f}; "
+                  f"backing off to VF_2D={current_vf_2d:.4f} (x{vf_backoff_factor}).")
+            continue
+
+        # Converged. If no 3D VF target, we're done.
+        if target_3d_vf is None:
             break
+
+        measured_vf = config_params.VOLUME_FRACTION  # overwritten by get_volume_fraction()
+        if abs(measured_vf - target_3d_vf) <= vf_tolerance:
+            print(f"VF refinement converged: measured={measured_vf:.3f}, target={target_3d_vf:.3f}")
+            break
+        prev_vf_2d = current_vf_2d
+        current_vf_2d = current_vf_2d * (target_3d_vf / measured_vf)
+        print(f"VF refinement: measured={measured_vf:.3f}, target={target_3d_vf:.3f}, "
+              f"scaling VF_2D by {target_3d_vf / measured_vf:.4f}")
 
     if (substrate.optimized == True):
 
@@ -283,31 +302,38 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
         #     fiber_3D_plot.plot_fibers(inner_fibers, overlap_indices=None, color=color, optimized=True, POV='horizontal_90', component_label='inner')
         # fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, animation_input=False, optimized=True)
 
-        along_fiber_plot.plot_along_axon_radius_variation(substrate.optimized_fibers, colors=color, component_label='outer')
-        along_fiber_plot.plot_diameter_CV_distribution(component_label='outer')
-        _diam_outer = along_fiber_plot.extract_radius_all(substrate.optimized_fibers) * 2
-        _x_max_diam = float(np.max(_diam_outer)) if len(_diam_outer) > 0 else None
-        if inner_fibers is not None:
-            _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2
-            if len(_diam_inner) > 0:
-                _x_max_diam = max(_x_max_diam, float(np.max(_diam_inner)))
-        along_fiber_plot.plot_diameter_GEV_distribution(substrate.optimized_fibers, component_label='outer', x_max=_x_max_diam)
-        if inner_fibers is not None:
-            along_fiber_plot.plot_along_axon_radius_variation(inner_fibers, colors=color, component_label='inner')
-            along_fiber_plot.plot_diameter_CV_distribution(component_label='inner')
-            along_fiber_plot.plot_diameter_GEV_distribution(inner_fibers, component_label='inner', x_max=_x_max_diam)
-        along_fiber_plot.save_effective_axon_diameter_stats_from_pickle(data_file_name)
-        # orientation_plot.plot_along_axon_OD(substrate.optimized_fibers, optimized=True, component_label='outer')
+        # along_fiber_plot.plot_along_axon_radius_variation(substrate.optimized_fibers, colors=color, component_label='outer')
+        # along_fiber_plot.plot_diameter_CV_distribution(component_label='outer')
+        # _diam_outer = along_fiber_plot.extract_radius_all(substrate.optimized_fibers) * 2
+        # _x_max_diam = float(np.max(_diam_outer)) if len(_diam_outer) > 0 else None
         # if inner_fibers is not None:
-            # orientation_plot.plot_along_axon_OD(inner_fibers, optimized=True, component_label='inner')
-        # Arc-length-based OD/FOD + Watson-kappa fit (Callaghan/ConFiG-style
-        # substrate validation). Saved with an "_arclength" suffix alongside
-        # the original OD/FOD plots for side-by-side comparison.
-        orientation_plot.plot_along_axon_OD_arclength(substrate.optimized_fibers, optimized=True, component_label='outer')
-        if inner_fibers is not None:
-            orientation_plot.plot_along_axon_OD_arclength(inner_fibers, optimized=True, component_label='inner')
+        #     _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2
+        #     if len(_diam_inner) > 0:
+        #         _x_max_diam = max(_x_max_diam, float(np.max(_diam_inner)))
+        # along_fiber_plot.plot_diameter_GEV_distribution(substrate.optimized_fibers, component_label='outer', x_max=_x_max_diam)
+        # if inner_fibers is not None:
+        #     along_fiber_plot.plot_along_axon_radius_variation(inner_fibers, colors=color, component_label='inner')
+        #     along_fiber_plot.plot_diameter_CV_distribution(component_label='inner')
+        #     along_fiber_plot.plot_diameter_GEV_distribution(inner_fibers, component_label='inner', x_max=_x_max_diam)
+        # along_fiber_plot.save_effective_axon_diameter_stats_from_pickle(data_file_name)
+        # # orientation_plot.plot_along_axon_OD(substrate.optimized_fibers, optimized=True, component_label='outer')
+        # # if inner_fibers is not None:
+        #     # orientation_plot.plot_along_axon_OD(inner_fibers, optimized=True, component_label='inner')
+        # # Arc-length-based OD/FOD + Watson-kappa fit (Callaghan/ConFiG-style
+        # # substrate validation). Saved with an "_arclength" suffix alongside
+        # # the original OD/FOD plots for side-by-side comparison.
+        # orientation_plot.plot_along_axon_OD_arclength(substrate.optimized_fibers, optimized=True, component_label='outer')
+        # if inner_fibers is not None:
+        #     orientation_plot.plot_along_axon_OD_arclength(inner_fibers, optimized=True, component_label='inner')
         
         print("====== Substrate generated in folder:"+ config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+ " ======")
         print("\n")
     else:
-        print("Exited unoptimized")
+        # Raise so the batch driver (or any caller) marks this job as failed
+        # instead of silently producing no output.
+        raise RuntimeError(
+            f"Substrate generation did not converge after {max_vf_refinements} VF refinement "
+            f"attempt(s). Last VF_2D={current_vf_2d:.4f}, target_3d_vf={target_3d_vf}, "
+            f"d={config_params.MEAN_DIAMETER}, K={int(config_params.ORIENTATION_SHAPE_PARAM)}, "
+            f"bead_alpha={config_params.BEAD_ALPHA_MEAN}."
+        )

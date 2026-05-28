@@ -4,7 +4,6 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-import argparse
 import pandas as pd
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -47,17 +46,13 @@ def calculateDanalytical_longtime(a, D0):
     return t_values, D_values
 
 
-def calculateDanalytical_multi_cylinder(primary_radii, D0, weights=None):
+def calculateDanalytical_multi_cylinder(primary_radii, D0):
     """Volume-weighted analytical D(t) for a multi-cylinder substrate.
 
-    By default each cylinder i contributes with weight proportional to its
-    cross-sectional area r_i^2 (volume-weighted, assuming equal cylinder
-    lengths):
+    Each cylinder i contributes with weight proportional to its cross-sectional
+    area r_i^2 (volume-weighted, assuming equal cylinder lengths):
 
         D(t) = sum_i w_i * D_i(t),   w_i = r_i^2 / sum_j r_j^2
-
-    Pass ``weights`` to override with realised per-cylinder spin fractions
-    N_i / N (Phase 3). Weights are normalised to sum to 1 internally.
 
     Uses the Burcaw/Stepišnik long-time solution per cylinder. Computation is
     fully vectorised over radii, time points, and Bessel roots.
@@ -66,13 +61,11 @@ def calculateDanalytical_multi_cylinder(primary_radii, D0, weights=None):
     ----------
     primary_radii : ndarray  shape (N,)  cylinder radii in μm
     D0 : float               free diffusivity in μm²/ms
-    weights : ndarray, optional, shape (N,)
-        Per-cylinder weights. If None, defaults to r_i² / Σ r_j².
 
     Returns
     -------
     t_values : ndarray  shape (T,)   time points in ms
-    D_weighted : ndarray shape (T,)  weighted D(t) in μm²/ms
+    D_weighted : ndarray shape (T,)  volume-weighted D(t) in μm²/ms
     """
     t_values = np.logspace(-4, 2, 100)           # (T,)
     beta_1k = jnp_zeros(1, 100)                  # (K,)
@@ -86,10 +79,7 @@ def calculateDanalytical_multi_cylinder(primary_radii, D0, weights=None):
     sum_term = np.sum(exp_term / (b**2 * (b**2 - 1)), axis=2)  # (N, T)
     D_all = term1 - (2.0 * r[:, :, 0] ** 2 / t[:, :, 0]) * sum_term  # (N, T)
 
-    if weights is None:
-        weights = primary_radii ** 2
-    else:
-        weights = np.asarray(weights, dtype=float)
+    weights = primary_radii**2
     weights = weights / np.sum(weights)
     D_weighted = np.sum(weights[:, np.newaxis] * D_all, axis=0)  # (T,)
 
@@ -255,27 +245,16 @@ def axon_gamma_dist_gen(n_axons, axon_area_fraction, kappa, theta_um,
 
 
 def build_edge_ghost_cylinders(centers_xy, radii, lx, ly, edge_distance):
-    """Return (centers, radii, n_primary) with primaries first, ghosts second.
-
-    The first ``n_primary`` entries are the original cylinders (in input order);
-    everything after that index is a periodic ghost copy of a primary that lies
-    within ``edge_distance`` of a box boundary. Putting primaries first lets the
-    caller seed spins only into primaries via contiguous indices [0, n_primary).
-    """
+    """Return primary + periodic ghost cylinders within edge_distance of each boundary."""
     x_min, x_max = -lx / 2.0, lx / 2.0
     y_min, y_max = -ly / 2.0, ly / 2.0
 
-    centers_arr = np.asarray(centers_xy, dtype=float)
-    radii_arr = np.asarray(radii, dtype=float)
-    n_primary = len(radii_arr)
+    expanded_centers = []
+    expanded_radii = []
 
-    primary_centers = [tuple(c) for c in centers_arr]
-    primary_radii_list = list(radii_arr)
-
-    ghost_centers = []
-    ghost_radii = []
-
-    for (cx, cy), radius in zip(centers_arr, radii_arr):
+    for (cx, cy), radius in zip(
+        np.asarray(centers_xy, dtype=float), np.asarray(radii, dtype=float)
+    ):
         x_shifts = [0.0]
         y_shifts = [0.0]
         if (cx - x_min) <= edge_distance:
@@ -289,14 +268,13 @@ def build_edge_ghost_cylinders(centers_xy, radii, lx, ly, edge_distance):
 
         for dx in x_shifts:
             for dy in y_shifts:
-                if dx == 0.0 and dy == 0.0:
-                    continue  # primary already added
-                ghost_centers.append((cx + dx, cy + dy))
-                ghost_radii.append(radius)
+                expanded_centers.append((cx + dx, cy + dy))
+                expanded_radii.append(radius)
 
-    all_centers = np.asarray(primary_centers + ghost_centers, dtype=float)
-    all_radii = np.asarray(primary_radii_list + ghost_radii, dtype=float)
-    return all_centers, all_radii, n_primary
+    return (
+        np.asarray(expanded_centers, dtype=float),
+        np.asarray(expanded_radii, dtype=float),
+    )
 
 
 def build_multi_cylinder_geometry(
@@ -304,10 +282,7 @@ def build_multi_cylinder_geometry(
 ):
     """Build a SimGeometry3D with z-aligned cylinders (no T2 weighting).
 
-    Cylinders are added in input order, so if the caller passes primaries first
-    then ghosts, structure indices [0, n_primary) correspond to primaries and
-    [n_primary, nstructures) correspond to ghosts. Each cylinder is represented
-    as a chain of overlapping spheres along z.
+    Each cylinder is represented as a chain of overlapping spheres along z.
     """
     T2 = 1e10   # effectively infinite T2 — no T2 weighting
     rho = 1.0
@@ -394,154 +369,21 @@ def _plot_substrate_geometry(centers_xy, radii, lx, ly, output_dir):
 
 
 # ---------------------------------------------------------------------------
-# Phase-1 diagnostic: realised seeding distribution
-# ---------------------------------------------------------------------------
-
-def _bin_spins_per_cylinder(spins_xy, centers_xy, radii):
-    """Return (counts_per_cyl, in_any_mask) using a point-in-disc test.
-
-    Cylinders are z-aligned, so (x, y) point-in-disc is sufficient.
-    Assumes no overlap between primaries (true for the calibration substrate).
-    """
-    n = spins_xy.shape[0]
-    counts = np.zeros(len(radii), dtype=np.int64)
-    in_any = np.zeros(n, dtype=bool)
-    for i, ((cx, cy), r) in enumerate(zip(centers_xy, radii)):
-        d2 = (spins_xy[:, 0] - cx) ** 2 + (spins_xy[:, 1] - cy) ** 2
-        mask = d2 < r * r
-        counts[i] = int(mask.sum())
-        in_any |= mask
-    return counts, in_any
-
-
-def diagnose_seeding_distribution(
-    sg3, primary_centers_xy, primary_radii,
-    ghost_centers_xy, ghost_radii,
-    n_primary, n_probe_spins, output_dir,
-):
-    """Seed a small batch of spins into primaries only and report the realised
-    per-cylinder population vs theoretical volume weights r_i² / Σ r_j².
-
-    Writes a CSV (realised_seed_weights.csv) for downstream use in Phase 3.
-    """
-    print("\n[Diagnostic] Probing realised seeding distribution "
-          f"({n_probe_spins} spins, primaries only)...")
-    probe = ds3.DiffSim3d(sg3, int(n_probe_spins))
-    probe.set_segments(nsegx=20, nsegy=20, nsegz=20)
-    probe.setup(structures=list(range(n_primary)))
-
-    # sim.spins shape: (3, nspin) — rows are x, y, z
-    spins_arr = np.asarray(probe.spins, dtype=np.float64)
-    n = int(n_probe_spins)
-    spins_xy = np.column_stack((spins_arr[0, :n], spins_arr[1, :n]))
-
-    counts_prim, in_prim = _bin_spins_per_cylinder(
-        spins_xy, primary_centers_xy, primary_radii,
-    )
-    if len(ghost_radii) > 0:
-        counts_ghost, in_ghost = _bin_spins_per_cylinder(
-            spins_xy, ghost_centers_xy, ghost_radii,
-        )
-    else:
-        counts_ghost = np.zeros(0, dtype=np.int64)
-        in_ghost = np.zeros(n, dtype=bool)
-
-    n_in_prim = int(in_prim.sum())
-    n_in_ghost = int(in_ghost.sum())
-    n_outside = int((~(in_prim | in_ghost)).sum())
-
-    theoretical = primary_radii ** 2 / np.sum(primary_radii ** 2)
-    realised = counts_prim / max(counts_prim.sum(), 1)
-
-    diff = realised - theoretical
-    rel_err = np.where(theoretical > 0, diff / theoretical, 0.0)
-
-    print(f"  Total probe spins:           {n}")
-    print(f"  Spins inside any primary:    {n_in_prim} ({n_in_prim / n:.4%})")
-    print(f"  Spins inside any ghost:      {n_in_ghost} ({n_in_ghost / n:.4%})")
-    print(f"  Spins outside any cylinder:  {n_outside} ({n_outside / n:.4%})")
-    print(f"  Per-primary weight statistics (realised vs theoretical r²/Σr²):")
-    print(f"    mean |Δw|             = {np.mean(np.abs(diff)):.3e}")
-    print(f"    max  |Δw|             = {np.max(np.abs(diff)):.3e}")
-    print(f"    mean |Δw|/w_theory    = {np.mean(np.abs(rel_err)):.3%}")
-    print(f"    median|Δw|/w_theory   = {np.median(np.abs(rel_err)):.3%}")
-
-    csv_path = os.path.join(output_dir, "realised_seed_weights.csv")
-    pd.DataFrame({
-        "primary_idx": np.arange(n_primary),
-        "radius_um": primary_radii,
-        "count": counts_prim,
-        "w_realised": realised,
-        "w_theoretical_r2": theoretical,
-        "abs_diff": np.abs(diff),
-        "rel_err": rel_err,
-    }).to_csv(csv_path, index=False)
-    print(f"  [Diagnostic] Saved per-cylinder seeding stats to {csv_path}")
-
-    # release probe resources
-    del probe
-
-
-def compute_realised_weights(sim, primary_centers_xy, primary_radii):
-    """Return realised per-primary spin fractions w_i = N_i / N.
-
-    Reads the initial spin positions from ``sim.spins`` (shape (3, nspins))
-    and bins by (x, y) point-in-disc test against each primary cylinder.
-    Returned weights are normalised so they sum to the fraction of spins
-    that landed inside any primary (= 1.0 when primaries-only seeding is
-    used, as in Phase 2).
-    """
-    spins_arr = np.asarray(sim.spins, dtype=np.float64)
-    n = spins_arr.shape[1]
-    spins_xy = np.column_stack((spins_arr[0], spins_arr[1]))
-    counts, _ = _bin_spins_per_cylinder(
-        spins_xy, primary_centers_xy, primary_radii,
-    )
-    return counts.astype(float) / max(n, 1)
-
-
-# ---------------------------------------------------------------------------
 # Numerical simulation
 # ---------------------------------------------------------------------------
 
-def calculateDnumerical(
-    sg3, D0, molecules, time_step, total_sim_time=100, run_id=0,
-    seed_structures=None,
-    primary_centers_xy=None, primary_radii=None,
-):
-    """Run DiffSim3d on a pre-built geometry; return radial D(t) and weights.
+def calculateDnumerical(sg3, D0, molecules, time_step, total_sim_time=100, run_id=0):
+    """Run DiffSim3d on a pre-built geometry; return radial D(t).
 
-    Seeds spins inside the structures listed in ``seed_structures`` (defaults
-    to all structures). For multi-cylinder substrates with periodic ghost
-    cylinders, pass ``seed_structures=list(range(n_primary))`` so spins are
-    placed only in primary cylinders — ghosts remain in geometry as walls so
-    PBC-wrapped spins still see the correct intra-axonal boundary.
-
-    If ``primary_centers_xy`` and ``primary_radii`` are provided, the
-    realised per-primary spin fractions are computed from the initial seed
-    positions and returned for Phase-3 per-run analytical referencing.
-
-    Returns
-    -------
-    difftime : ndarray
-    D_numerical : ndarray            radial D(t) = (Dx + Dy) / 2
-    realised_weights : ndarray or None  per-primary N_i / N (or None)
+    Seeds all spins inside all cylinder structures (intra-axonal only).
+    Returns radial (transverse) D(t) = (Dx + Dy) / 2.
     """
     nt = int(total_sim_time / time_step)
     numsteps = nt + 1
 
-    if seed_structures is None:
-        seed_structures = list(np.arange(0, sg3.nstructures))
-
     sim = ds3.DiffSim3d(sg3, int(molecules))
     sim.set_segments(nsegx=20, nsegy=20, nsegz=20)
-    sim.setup(structures=list(seed_structures))
-
-    realised_weights = None
-    if primary_centers_xy is not None and primary_radii is not None:
-        realised_weights = compute_realised_weights(
-            sim, primary_centers_xy, primary_radii,
-        )
+    sim.setup(structures=list(np.arange(0, sg3.nstructures)))
 
     Dxarray = gpuarray.zeros(numsteps, dtype=np.float32)
     Dyarray = gpuarray.zeros(numsteps, dtype=np.float32)
@@ -574,7 +416,7 @@ def calculateDnumerical(
     difftime = difftime[1:]
 
     D_numerical = (Dxstep + Dystep) / 2.0
-    return difftime, D_numerical, realised_weights
+    return difftime, D_numerical
 
 
 # ---------------------------------------------------------------------------
@@ -601,14 +443,9 @@ def calculate_mae(D_numerical, D_long_interp, difftime, time_threshold=0.05):
 def plot_numerical_vs_analytical_comparison(
     difftime, D_numerical, t_analytical, D_analytical,
     molecules, time_step, run_id, experiment_dir, time_threshold=0.05,
-    primary_radii=None, D0=2.0, weights=None,
+    primary_radii=None, D0=2.0,
 ):
-    """Save per-run D(t) comparison plot (simulated vs weighted analytical).
-
-    If ``weights`` is given, the green short-time and orange long-time
-    asymptotes use those weights too (consistent with the blue GPA curve).
-    Otherwise they fall back to theoretical r_i² / Σ r_j².
-    """
+    """Save per-run D(t) comparison plot (simulated vs volume-weighted analytical)."""
     fig, ax = plt.subplots(figsize=(10, 8))
 
     mask = difftime >= time_threshold
@@ -620,13 +457,9 @@ def plot_numerical_vs_analytical_comparison(
 
     # Volume-weighted short-time limit (green dashed)
     if primary_radii is not None:
-        if weights is None:
-            w = primary_radii ** 2
-        else:
-            w = np.asarray(weights, dtype=float)
-        w = w / np.sum(w)
+        weights = primary_radii**2 / np.sum(primary_radii**2)
         # Volume-weighted S/V coefficient: C = (4/(3*d*sqrt(pi))) * 2 * sum(w_i / r_i), d=2
-        C_vw = (4.0 / (3.0 * 2.0 * np.sqrt(np.pi))) * 2.0 * np.sum(w / primary_radii)
+        C_vw = (4.0 / (3.0 * 2.0 * np.sqrt(np.pi))) * 2.0 * np.sum(weights / primary_radii)
         t_cutoff = (1.0 / C_vw) ** 2 / D0
         t_short = np.logspace(-4, np.log10(0.95 * t_cutoff), 100)
         D_short = D0 * (1.0 - C_vw * np.sqrt(D0 * t_short))
@@ -644,7 +477,7 @@ def plot_numerical_vs_analytical_comparison(
 
     # Volume-weighted long-time asymptote D ~ <r²>_w / (4t) (orange dashed)
     if primary_radii is not None:
-        r2_vw = np.sum(w * primary_radii**2)
+        r2_vw = np.sum(weights * primary_radii**2)
         t_asymptotic = np.logspace(np.log10(0.3), 2, 100)
         D_asymptotic = r2_vw / (4.0 * t_asymptotic)
         ax.semilogx(
@@ -668,7 +501,7 @@ def plot_numerical_vs_analytical_comparison(
 def save_experiment_data(
     difftime, D_numerical, t_analytical, D_analytical,
     molecules, time_step, run_id, base_dir, mae, time_threshold=0.05,
-    primary_radii=None, D0=2.0, weights=None,
+    primary_radii=None, D0=2.0,
 ):
     """Save per-run comparison plot."""
     experiment_dir = os.path.join(
@@ -678,7 +511,7 @@ def save_experiment_data(
     plot_numerical_vs_analytical_comparison(
         difftime, D_numerical, t_analytical, D_analytical,
         molecules, time_step, run_id, experiment_dir, time_threshold,
-        primary_radii=primary_radii, D0=D0, weights=weights,
+        primary_radii=primary_radii, D0=D0,
     )
 
 
@@ -692,102 +525,6 @@ def save_summary_results(summary_results, base_dir, kappa, theta_um, time_thresh
     )
     df.to_csv(csv_path, index=False)
     print(f"\nSummary results saved to: {csv_path}")
-
-
-# ---------------------------------------------------------------------------
-# Checkpoint / resume helpers
-# ---------------------------------------------------------------------------
-
-RUNS_CSV_NAME = "runs.csv"
-RUNS_CSV_COLUMNS = [
-    "molecules", "time_step", "run_id",
-    "mae", "computation_time", "timestamp",
-]
-
-
-def make_or_resume_output_dir(resume_path=None):
-    """Return an output directory.
-
-    If ``resume_path`` is None, a fresh timestamped directory is created.
-    Otherwise the given directory is reused (relative paths are resolved
-    inside the standard figs/ folder).
-    """
-    base = "./tests/calibration/num_molecules_and_time_step_calibration/figs"
-    if resume_path is None:
-        path = os.path.join(
-            base,
-            "cylinder_validation_" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S"),
-        )
-        os.makedirs(path, exist_ok=True)
-        print(f"[checkpoint] Fresh output dir: {path}")
-        return path
-
-    path = resume_path if (os.path.isabs(resume_path) or os.path.isdir(resume_path)) \
-        else os.path.join(base, resume_path)
-    if not os.path.isdir(path):
-        raise FileNotFoundError(f"--resume directory not found: {path}")
-    print(f"[checkpoint] Resuming into: {path}")
-    return path
-
-
-def load_completed_runs(runs_csv_path):
-    """Return a set of (molecules, time_step, run_id) triples already recorded.
-
-    NaN-MAE rows are still considered completed (no auto-retry); delete those
-    rows from runs.csv to force a re-run.
-    """
-    if not os.path.isfile(runs_csv_path):
-        return set()
-    try:
-        df = pd.read_csv(runs_csv_path)
-    except Exception as e:
-        print(f"[checkpoint] Could not read existing {runs_csv_path}: {e}")
-        return set()
-    completed = set(
-        zip(
-            df["molecules"].astype(int),
-            df["time_step"].astype(float),
-            df["run_id"].astype(int),
-        )
-    )
-    print(f"[checkpoint] Loaded {len(completed)} completed runs from {runs_csv_path}")
-    return completed
-
-
-def append_run_record(runs_csv_path, record):
-    """Append one row to the per-run checkpoint CSV (writes header if missing)."""
-    write_header = not os.path.isfile(runs_csv_path)
-    pd.DataFrame([record], columns=RUNS_CSV_COLUMNS).to_csv(
-        runs_csv_path, mode="a", header=write_header, index=False,
-    )
-
-
-def aggregate_summary_from_runs(runs_csv_path, time_threshold):
-    """Aggregate per-run records into the summary-row format used by
-    ``create_analysis_plots`` / ``save_summary_results``.
-    """
-    if not os.path.isfile(runs_csv_path):
-        return []
-    df = pd.read_csv(runs_csv_path)
-    summary = []
-    for (mol, ts), grp in df.groupby(["molecules", "time_step"]):
-        valid = grp["mae"].dropna()
-        if valid.empty:
-            continue
-        ct = grp["computation_time"].dropna()
-        summary.append({
-            "molecules": int(mol),
-            "time_step": float(ts),
-            "time_threshold": time_threshold,
-            "mae": float(valid.mean()),
-            "std_mae": float(valid.std(ddof=0)),
-            "min_mae": float(valid.min()),
-            "max_mae": float(valid.max()),
-            "mean_computation_time": float(ct.mean()) if not ct.empty else float("nan"),
-            "std_computation_time": float(ct.std(ddof=0)) if not ct.empty else float("nan"),
-            "n_successful_runs": int(valid.shape[0]),
-        })
-    return summary
 
 
 def create_analysis_plots(
@@ -874,13 +611,8 @@ def create_analysis_plots(
 # Main study
 # ---------------------------------------------------------------------------
 
-def run_validation_study(resume_path=None):
-    """Run num_molecules × time_step calibration on a Gamma-distributed cylinder substrate.
-
-    If ``resume_path`` is given (path relative to figs/ or absolute), reuse
-    that output directory and skip any (molecules, time_step, run_id) triples
-    already recorded in ``runs.csv``.
-    """
+def run_validation_study():
+    """Run num_molecules × time_step calibration on a Gamma-distributed cylinder substrate."""
     st = time.time()
 
     # Physical parameters
@@ -896,53 +628,34 @@ def run_validation_study(resume_path=None):
     axon_area_fraction = 0.65
 
     # Calibration grid
-    # molecules_values = [int(1e6), int(5e5), int(1e5), int(5e4), int(1e4)]
-    # time_step_values = [0.0001, 0.0002, 0.0005, 0.005, 0.01]
-    # n_repeats = 5
-
     molecules_values = [int(1e6), int(5e5), int(1e5), int(5e4), int(1e4)]
-    time_step_values = [0.0001, 0.0002, 0.0005, 0.005, 0.01]
-    n_repeats = 1
+    time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.005, 0.01]
+    n_repeats = 5
 
-    # Create / resume output directory
-    config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH = make_or_resume_output_dir(
-        resume_path,
-    )
-    runs_csv_path = os.path.join(
-        config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, RUNS_CSV_NAME,
-    )
-    completed_runs = load_completed_runs(runs_csv_path)
+    # molecules_values = [int(1e5), int(1e4)]
+    # time_step_values = [0.002, 0.01]
+    # n_repeats = 2
 
-    # ── 1. Generate substrate (cached) ──────────────────────────────────────
-    substrate_path = os.path.join(
-        config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, "substrate.npz",
+    # Create output directory
+    config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH = (
+        "./tests/calibration/num_molecules_and_time_step_calibration/figs/"
+        "cylinder_validation_" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     )
-    if os.path.isfile(substrate_path):
-        print(f"\n[checkpoint] Loading cached substrate from {substrate_path}")
-        d = np.load(substrate_path)
-        x_centers = d["x_centers"]
-        y_centers = d["y_centers"]
-        primary_radii = d["primary_radii"]
-        lxy = float(d["lxy"])
-    else:
-        print("Generating Gamma-distributed cylinder substrate (L-BFGS packing)...")
-        x_centers, y_centers, primary_radii, lxy = axon_gamma_dist_gen(
-            n_axons=n_axons,
-            axon_area_fraction=axon_area_fraction,
-            kappa=kappa,
-            theta_um=theta_um,
-            rng_seed=42,
-        )
-        np.savez(
-            substrate_path,
-            x_centers=x_centers, y_centers=y_centers,
-            primary_radii=primary_radii, lxy=np.float64(lxy),
-        )
-        print(f"[checkpoint] Saved substrate to {substrate_path}")
+    os.makedirs(config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH, exist_ok=True)
+
+    # ── 1. Generate substrate (once) ────────────────────────────────────────
+    print("Generating Gamma-distributed cylinder substrate (L-BFGS packing)...")
+    x_centers, y_centers, primary_radii, lxy = axon_gamma_dist_gen(
+        n_axons=n_axons,
+        axon_area_fraction=axon_area_fraction,
+        kappa=kappa,
+        theta_um=theta_um,
+        rng_seed=42,
+    )
     lx, ly, lz = lxy, lxy, 20.0
     primary_centers_xy = np.column_stack((x_centers, y_centers))
 
-    centers_xy, radii, n_primary = build_edge_ghost_cylinders(
+    centers_xy, radii = build_edge_ghost_cylinders(
         centers_xy=primary_centers_xy,
         radii=primary_radii,
         lx=lx,
@@ -952,7 +665,6 @@ def run_validation_study(resume_path=None):
 
     print(f"  Primary cylinders placed: {len(primary_radii)}")
     print(f"  Total incl. edge ghosts:  {len(radii)}")
-    print(f"  n_primary index range:    [0, {n_primary})")
     print(f"  Box side:                 {lxy:.2f} μm")
     print(f"  Mean radius (primary):    {primary_radii.mean():.3f} μm "
           f"± {primary_radii.std():.3f} μm")
@@ -967,18 +679,20 @@ def run_validation_study(resume_path=None):
     # ── 2. Build SimGeometry3D (once) ───────────────────────────────────────
     print("\nBuilding SimGeometry3D (this may take a moment)...")
     sg3 = build_multi_cylinder_geometry(centers_xy, radii, lx, ly, lz, D0)
-    print(f"  nstructures: {sg3.nstructures}  (primaries=[0,{n_primary}), "
-          f"ghosts=[{n_primary},{sg3.nstructures}))")
+    print(f"  nstructures: {sg3.nstructures}")
 
-    # (Phase-1 200k-spin seeding-distribution probe disabled — realised weights
-    # are now read per-run inside calculateDnumerical via compute_realised_weights.)
-
-    # ── 3. Theoretical volume-weighted analytical D(t) (once, for reference) ──
-    print("\nComputing volume-weighted analytical D(t) (theoretical w_i=r_i²/Σr_j²)...")
+    # ── 3. Volume-weighted analytical D(t) (once) ───────────────────────────
+    print("\nComputing volume-weighted analytical D(t)...")
     t_analytical, D_analytical = calculateDanalytical_multi_cylinder(primary_radii, D0)
-    print("  Done. (Per-run analytical with REALISED weights is computed below.)")
+    D_interp = interp1d(
+        np.log10(t_analytical), D_analytical,
+        bounds_error=False,
+        fill_value=(D_analytical[0], D_analytical[-1]),
+    )
+    print("  Done.")
 
     # ── 4. Parameter sweep ──────────────────────────────────────────────────
+    summary_results = []
     total_combinations = len(molecules_values) * len(time_step_values)
     current_combination = 0
 
@@ -989,63 +703,50 @@ def run_validation_study(resume_path=None):
             print(f"Combination {current_combination}/{total_combinations}  "
                   f"| molecules={molecules}  time_step={time_step} ms")
 
-            for run_id in range(n_repeats):
-                key = (int(molecules), float(time_step), int(run_id))
-                if key in completed_runs:
-                    print(f"  Run {run_id + 1}/{n_repeats} — already recorded, skipping.")
-                    continue
+            mae_values = []
+            computation_times = []
 
+            for run_id in range(n_repeats):
                 print(f"  Run {run_id + 1}/{n_repeats}", end=" ... ", flush=True)
                 t0 = time.time()
-                mae = np.nan
-                elapsed = np.nan
                 try:
-                    difftime, D_numerical, realised_weights = calculateDnumerical(
+                    difftime, D_numerical = calculateDnumerical(
                         sg3, D0, molecules, time_step, total_sim_time, run_id,
-                        seed_structures=list(range(n_primary)),
-                        primary_centers_xy=primary_centers_xy,
-                        primary_radii=primary_radii,
                     )
                     elapsed = time.time() - t0
                     print(f"{elapsed:.1f} s")
 
-                    # Phase 3: per-run analytical using REALISED weights N_i/N
-                    t_ana_run, D_ana_run = calculateDanalytical_multi_cylinder(
-                        primary_radii, D0, weights=realised_weights,
-                    )
-                    D_interp_run = interp1d(
-                        np.log10(t_ana_run), D_ana_run,
-                        bounds_error=False,
-                        fill_value=(D_ana_run[0], D_ana_run[-1]),
-                    )
-
-                    mae = calculate_mae(D_numerical, D_interp_run, difftime, time_threshold)
+                    mae = calculate_mae(D_numerical, D_interp, difftime, time_threshold)
+                    mae_values.append(mae)
+                    computation_times.append(elapsed)
 
                     save_experiment_data(
-                        difftime, D_numerical, t_ana_run, D_ana_run,
+                        difftime, D_numerical, t_analytical, D_analytical,
                         molecules, time_step, run_id,
                         config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH,
                         mae, time_threshold,
                         primary_radii=primary_radii, D0=D0,
-                        weights=realised_weights,
                     )
                 except Exception as e:
-                    elapsed = time.time() - t0
                     print(f"ERROR: {e}")
+                    continue
 
-                # Persist this run immediately so a later crash does not lose it.
-                append_run_record(runs_csv_path, {
-                    "molecules": int(molecules),
-                    "time_step": float(time_step),
-                    "run_id": int(run_id),
-                    "mae": mae,
-                    "computation_time": elapsed,
-                    "timestamp": datetime.now().isoformat(timespec="seconds"),
-                })
-                completed_runs.add(key)
+            if mae_values:
+                valid_mae = [x for x in mae_values if not np.isnan(x)]
+                if valid_mae:
+                    summary_results.append({
+                        "molecules": molecules,
+                        "time_step": time_step,
+                        "time_threshold": time_threshold,
+                        "mae": np.mean(valid_mae),
+                        "std_mae": np.std(valid_mae),
+                        "min_mae": np.min(valid_mae),
+                        "max_mae": np.max(valid_mae),
+                        "mean_computation_time": np.mean(computation_times),
+                        "std_computation_time": np.std(computation_times),
+                        "n_successful_runs": len(valid_mae),
+                    })
 
-    # Aggregate from the persistent per-run CSV so resumed runs are included.
-    summary_results = aggregate_summary_from_runs(runs_csv_path, time_threshold)
     total_hours = (time.time() - st) / 3600.0
     save_summary_results(
         summary_results,
@@ -1060,17 +761,6 @@ def run_validation_study(resume_path=None):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Multi-cylinder MC-vs-analytical calibration with resume support.",
-    )
-    parser.add_argument(
-        "--resume", "-r", type=str, default=None,
-        help=("Reuse an existing output directory (name relative to figs/ or "
-              "absolute path). Already-recorded (molecules, time_step, run_id) "
-              "triples in runs.csv are skipped."),
-    )
-    args = parser.parse_args()
-
     print("=======Starting Analytical Validation Study=======")
-    run_validation_study(resume_path=args.resume)
+    run_validation_study()
     print("\nAnalytical validation study completed!")

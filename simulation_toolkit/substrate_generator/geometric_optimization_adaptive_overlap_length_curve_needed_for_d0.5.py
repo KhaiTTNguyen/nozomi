@@ -68,7 +68,7 @@ class GeometricOptimization(object):
         xyzr_fid = torch.hstack([detached_positions, torch_ra.unsqueeze(1), fiber_id.unsqueeze(1)])
         xa_, ya_, za_, ra_, mask_, fid_ = self.torch_optimizer_wrapPBC(xyzr_fid, mask_starts_ends, tol=config_params.BOX_LENGTH/5)
         pos_ = torch.stack([xa_, ya_, za_]).T
-        Lx, Ly, Lz, buff = config_params.BOX_LENGTH, config_params.BOX_LENGTH, config_params.BOX_LENGTH, torch.tensor([0.000], device=self.device) ## Adjusted 2026-05-25 self.space_buffer_repulse #torch.tensor(2,device=self.device) #torch.tensor([0.0005], device=self.device)
+        Lx, Ly, Lz, buff = config_params.BOX_LENGTH, config_params.BOX_LENGTH, config_params.BOX_LENGTH, torch.tensor([0.00000], device=self.device) ## Adjusted 2026-05-25 self.space_buffer_repulse #torch.tensor(2,device=self.device) #torch.tensor([0.0005], device=self.device)
         # Lx, Ly, Lz, buff = config_params.BOX_LENGTH, config_params.BOX_LENGTH, config_params.BOX_LENGTH, self.space_buffer_repulse/2 # Adjusted 2026-05-05
         collision_set = CD.detect_collision(pos_, ra_, fid_, Lx, Ly, Lz, buff)
         num_overlap = collision_set.shape[0]
@@ -110,7 +110,7 @@ class GeometricOptimization(object):
         num_overlap = 0
         from collections import deque
         m_cost, m_overlaps = deque(maxlen=10), deque(maxlen=10)
-        
+
         xa_, ya_, za_, ra_, fid_, original_fid_ = torch.tensor([]), torch.tensor([]), torch.tensor([]), torch.tensor([]), torch.tensor([]), torch.tensor([])
         for num_iter in range(0,num_iteration):         
             num_overlap, xa_, ya_, za_, ra_, fid_ = \
@@ -202,10 +202,6 @@ class GeometricOptimization(object):
         collision_depths = torch.clamp(rm + space_buffer - dm, min=0, max=None) # depth >= 0 
         overlap_cost =  torch.sum(torch.square(collision_depths/rm))
         return overlap_cost
-        # collision_depths = torch.clamp(rm + space_buffer - dm, min=0, max=None) # depth >= 0 
-        # pos_length = torch.tensor(math.sqrt(len(positions[0])), device=self.device)
-        # overlap_cost =  torch.sum(torch.square((collision_depths/rm))*radii_left*radii_right)/ pos_length # / number of spheres? or # of overlaps?
-        # return overlap_cost
 
     def length_cost_function(self, positions, mask_starts_ends,torch_wrapped_ra):
         mask_indices = torch.nonzero(mask_starts_ends).flatten()
@@ -326,4 +322,3 @@ class GeometricOptimization(object):
             print('Start end points NOT INTACT')
             raise
         return intactFlag
-    

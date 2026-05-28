@@ -16,3 +16,33 @@
 [2026-05-06 19:46:23][gpu2] START j00003 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=2 d=0.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_194301
 [2026-05-06 19:58:55][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
 [2026-05-06 19:58:57][gpu2] START j00001 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=0.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-07 04:38:43][gpu2] FAIL  j00001 in 31185.8s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-07 04:38:43][gpu2] START j00010 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=1 d=0.5 K=20 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-07 14:35:50][gpu2] FAIL  j00010 in 35827.0s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-07 14:35:50][gpu2] START j00016 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=3 d=0.5 K=10 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-08 07:37:43][gpu2] FAIL  j00016 in 61313.5s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-08 07:37:43][gpu2] START j00021 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=1.0 K=100 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-08 16:42:20][gpu2] FAIL  j00021 in 32677.0s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-08 16:42:20][gpu2] START j00026 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=1 d=1.0 K=20 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-09 04:30:34][gpu2] FAIL  j00026 in 42493.6s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-09 04:30:34][gpu2] START j00032 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=3 d=1.0 K=10 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-10 05:50:20][gpu2] FAIL  j00032 in 91185.4s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-10 05:50:20][gpu2] START j00039 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=2 d=1.5 K=100 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-10 15:35:18][gpu2] FAIL  j00039 in 35098.0s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-10 15:35:18][gpu2] START j00045 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=1.5 K=10 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-11 12:34:10][gpu2] FAIL  j00045 in 75532.1s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-11 12:34:10][gpu2] START j00051 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=2 d=2.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-12 20:10:27][gpu2] FAIL  j00051 in 113777.6s: TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+[2026-05-12 20:10:27][gpu2] START j00057 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=2.5 K=20 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
+[2026-05-24 17:27:44][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-05-24 17:27:46][gpu2] START j00004 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=3 d=3.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260524_172454
+[2026-05-25 08:08:52][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-05-25 08:08:54][gpu2] START j00003 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=2 d=3.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260524_172454
+[2026-05-25 08:10:11][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-05-25 08:10:13][gpu2] START j00001 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=3.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260524_172454
+[2026-05-25 08:14:21][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-05-25 08:14:22][gpu2] START j00002 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=1 d=3.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260524_172454
+[2026-05-25 14:19:17][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-05-25 14:19:19][gpu2] START j00002 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=1 d=3.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260524_172454
+[2026-05-25 14:36:31][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-05-25 14:36:33][gpu2] START j00003 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=2 d=3.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260524_172454

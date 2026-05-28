@@ -1,0 +1,25 @@
+{
+  "experiment_name": "auto_generated",  
+  "parameters": {
+      "orientation_shape_parameter": 200,
+      "box_length_init": 0,
+      "target_volume_fraction": 0.25,
+      "num_fibers": 500,
+      "mean_diameter":  4.5,
+      "sigma_diameter":  1.205,
+      "dist_shape": 0.1,
+      "space_buffer_starts_ends": 0.23,
+      "spheres_spacing": 0.5,
+      "space_buffer_repulse": 0.001,
+      "w_overlap":10,
+      "w_curve": 3, 
+      "w_length": 3,
+      "bead_spacing_mean": 5.70,
+      "bead_spacing_stdv": 2.88,
+      "bead_alpha_mean":  0.5,
+      "bead_alpha_stdv": 0.15,
+      "g_ratio": 0.7,
+      "inner_sphere_spacing_ratio": 0.5,
+      "repeats": 3
+  }
+}

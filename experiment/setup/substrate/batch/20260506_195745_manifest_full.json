@@ -53,13 +53,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "running",
+      "status": "failed",
       "gpu_id": 2,
       "output_folder": null,
       "start_time": "2026-05-06T19:58:57",
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "end_time": "2026-05-07T04:38:43",
+      "duration_sec": 31185.79,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00002",
@@ -93,13 +93,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "running",
+      "status": "failed",
       "gpu_id": 1,
       "output_folder": null,
       "start_time": "2026-05-06T19:58:57",
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "end_time": "2026-05-07T05:56:11",
+      "duration_sec": 35833.58,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00003",
@@ -133,13 +133,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "running",
+      "status": "failed",
       "gpu_id": 3,
       "output_folder": null,
       "start_time": "2026-05-06T19:58:57",
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "end_time": "2026-05-07T03:21:33",
+      "duration_sec": 26556.34,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00004",
@@ -173,13 +173,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "running",
+      "status": "failed",
       "gpu_id": 0,
       "output_folder": null,
       "start_time": "2026-05-06T19:58:57",
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "end_time": "2026-05-07T01:33:58",
+      "duration_sec": 20100.86,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00005",
@@ -213,13 +213,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "running",
+      "status": "failed",
       "gpu_id": 4,
       "output_folder": null,
       "start_time": "2026-05-06T19:58:57",
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "end_time": "2026-05-07T22:07:29",
+      "duration_sec": 94111.56,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00006",
@@ -253,13 +253,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "running",
+      "status": "failed",
       "gpu_id": 5,
       "output_folder": null,
       "start_time": "2026-05-06T19:58:57",
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "end_time": "2026-05-07T04:33:52",
+      "duration_sec": 30895.25,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00007",
@@ -293,13 +293,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 0,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T01:33:58",
+      "end_time": "2026-05-07T11:33:11",
+      "duration_sec": 35952.75,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00008",
@@ -333,13 +333,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T03:21:33",
+      "end_time": "2026-05-07T09:00:08",
+      "duration_sec": 20314.54,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00009",
@@ -373,13 +373,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 5,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T04:33:52",
+      "end_time": "2026-05-07T11:31:54",
+      "duration_sec": 25082.03,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00010",
@@ -413,13 +413,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 2,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T04:38:43",
+      "end_time": "2026-05-07T14:35:50",
+      "duration_sec": 35827.01,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00011",
@@ -453,13 +453,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 1,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T05:56:11",
+      "end_time": "2026-05-07T12:38:39",
+      "duration_sec": 24148.39,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00012",
@@ -493,13 +493,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T09:00:08",
+      "end_time": "2026-05-07T20:26:56",
+      "duration_sec": 41208.19,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00013",
@@ -533,13 +533,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 5,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T11:31:54",
+      "end_time": "2026-05-08T14:18:41",
+      "duration_sec": 96406.6,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00014",
@@ -573,13 +573,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 0,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T11:33:11",
+      "end_time": "2026-05-08T04:59:23",
+      "duration_sec": 62772.65,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00015",
@@ -613,13 +613,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 1,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T12:38:39",
+      "end_time": "2026-05-08T12:05:38",
+      "duration_sec": 84418.5,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00016",
@@ -653,13 +653,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 2,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T14:35:50",
+      "end_time": "2026-05-08T07:37:43",
+      "duration_sec": 61313.53,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00017",
@@ -693,13 +693,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T20:26:56",
+      "end_time": "2026-05-08T04:54:38",
+      "duration_sec": 30461.39,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00018",
@@ -733,13 +733,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 4,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-07T22:07:29",
+      "end_time": "2026-05-08T22:18:20",
+      "duration_sec": 87050.92,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00019",
@@ -773,13 +773,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T04:54:38",
+      "end_time": "2026-05-08T13:06:04",
+      "duration_sec": 29486.79,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00020",
@@ -813,13 +813,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 0,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T04:59:23",
+      "end_time": "2026-05-08T16:19:17",
+      "duration_sec": 40793.57,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00021",
@@ -853,13 +853,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 2,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T07:37:43",
+      "end_time": "2026-05-08T16:42:20",
+      "duration_sec": 32677.0,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00022",
@@ -893,13 +893,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 1,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T12:05:38",
+      "end_time": "2026-05-08T21:55:30",
+      "duration_sec": 35392.38,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00023",
@@ -933,13 +933,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T13:06:04",
+      "end_time": "2026-05-08T23:03:42",
+      "duration_sec": 35857.52,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00024",
@@ -973,13 +973,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 5,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T14:18:41",
+      "end_time": "2026-05-08T23:02:57",
+      "duration_sec": 31456.35,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00025",
@@ -1013,13 +1013,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 0,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T16:19:17",
+      "end_time": "2026-05-09T03:44:40",
+      "duration_sec": 41123.32,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00026",
@@ -1053,13 +1053,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 2,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T16:42:20",
+      "end_time": "2026-05-09T04:30:34",
+      "duration_sec": 42493.62,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00027",
@@ -1093,13 +1093,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 1,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T21:55:30",
+      "end_time": "2026-05-09T11:31:22",
+      "duration_sec": 48951.88,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00028",
@@ -1133,13 +1133,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 4,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T22:18:20",
+      "end_time": "2026-05-09T16:50:57",
+      "duration_sec": 66757.26,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00029",
@@ -1173,13 +1173,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 5,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T23:02:58",
+      "end_time": "2026-05-10T13:23:22",
+      "duration_sec": 138024.29,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00030",
@@ -1213,13 +1213,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-08T23:03:42",
+      "end_time": "2026-05-10T03:06:23",
+      "duration_sec": 100960.83,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00031",
@@ -1253,13 +1253,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 0,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-09T03:44:40",
+      "end_time": "2026-05-09T17:55:49",
+      "duration_sec": 51068.21,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00032",
@@ -1293,13 +1293,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 2,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-09T04:30:34",
+      "end_time": "2026-05-10T05:50:19",
+      "duration_sec": 91185.38,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00033",
@@ -1333,13 +1333,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 1,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-09T11:31:22",
+      "end_time": "2026-05-09T20:52:55",
+      "duration_sec": 33693.19,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00034",
@@ -1373,13 +1373,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 4,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-09T16:50:57",
+      "end_time": "2026-05-10T02:48:35",
+      "duration_sec": 35858.22,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00035",
@@ -1413,13 +1413,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 0,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-09T17:55:49",
+      "end_time": "2026-05-10T09:15:31",
+      "duration_sec": 55181.98,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00036",
@@ -1453,13 +1453,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 1,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-09T20:52:55",
+      "end_time": "2026-05-10T06:35:58",
+      "duration_sec": 34983.13,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00037",
@@ -1493,13 +1493,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 4,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-10T02:48:35",
+      "end_time": "2026-05-10T13:54:20",
+      "duration_sec": 39945.18,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00038",
@@ -1533,13 +1533,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-10T03:06:23",
+      "end_time": "2026-05-10T13:43:35",
+      "duration_sec": 38232.15,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00039",
@@ -1573,13 +1573,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 2,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-10T05:50:20",
+      "end_time": "2026-05-10T15:35:18",
+      "duration_sec": 35098.02,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00040",
@@ -1613,13 +1613,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 1,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-10T06:35:58",
+      "end_time": "2026-05-10T16:14:41",
+      "duration_sec": 34722.89,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00041",
@@ -1653,13 +1653,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 0,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-10T09:15:31",
+      "end_time": "2026-05-10T21:43:45",
+      "duration_sec": 44893.97,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00042",
@@ -1693,13 +1693,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 5,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-10T13:23:22",
+      "end_time": "2026-05-11T02:41:54",
+      "duration_sec": 47912.61,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00043",
@@ -1733,13 +1733,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-10T13:43:35",
+      "end_time": "2026-05-11T11:40:33",
+      "duration_sec": 79018.01,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00044",
@@ -1773,13 +1773,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 4,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-10T13:54:20",
+      "end_time": "2026-05-11T03:44:14",
+      "duration_sec": 49793.39,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00045",
@@ -1813,13 +1813,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 2,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-10T15:35:18",
+      "end_time": "2026-05-11T12:34:10",
+      "duration_sec": 75532.12,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00046",
@@ -1853,13 +1853,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 1,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-10T16:14:41",
+      "end_time": "2026-05-11T15:46:42",
+      "duration_sec": 84720.61,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00047",
@@ -1893,13 +1893,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 0,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-10T21:43:45",
+      "end_time": "2026-05-12T08:10:10",
+      "duration_sec": 123985.63,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00048",
@@ -1933,13 +1933,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 5,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-11T02:41:55",
+      "end_time": "2026-05-12T08:09:42",
+      "duration_sec": 106067.14,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00049",
@@ -1973,13 +1973,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 4,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-11T03:44:14",
+      "end_time": "2026-05-18T15:49:28",
+      "duration_sec": 648314.38,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00050",
@@ -2013,13 +2013,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-11T11:40:33",
+      "end_time": "2026-05-12T05:48:09",
+      "duration_sec": 65256.14,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00051",
@@ -2053,13 +2053,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 2,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-11T12:34:10",
+      "end_time": "2026-05-12T20:10:27",
+      "duration_sec": 113777.64,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00052",
@@ -2093,13 +2093,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 1,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-11T15:46:42",
+      "end_time": "2026-05-12T07:14:59",
+      "duration_sec": 55697.38,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00053",
@@ -2133,13 +2133,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-12T05:48:09",
+      "end_time": "2026-05-13T06:30:21",
+      "duration_sec": 88931.96,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00054",
@@ -2173,13 +2173,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 1,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-12T07:14:59",
+      "end_time": "2026-05-16T10:19:23",
+      "duration_sec": 356663.57,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00055",
@@ -2213,13 +2213,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 5,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-12T08:09:42",
+      "end_time": "2026-05-13T18:53:36",
+      "duration_sec": 125034.49,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00056",
@@ -2253,13 +2253,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 0,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-12T08:10:10",
+      "end_time": "2026-05-13T08:26:38",
+      "duration_sec": 87388.05,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00057",
@@ -2293,10 +2293,10 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "running",
+      "gpu_id": 2,
       "output_folder": null,
-      "start_time": null,
+      "start_time": "2026-05-12T20:10:27",
       "end_time": null,
       "duration_sec": null,
       "error": null
@@ -2333,13 +2333,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-13T06:30:21",
+      "end_time": "2026-05-14T19:04:04",
+      "duration_sec": 131622.53,
+      "error": "TypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 291, in substrate_main\n    _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/along_fiber_plot.py\", line 344, in extract_radius_all\n    fiber_list_xyz_r_fid = util.map_matrix_to_list_numpy(optimized_fibers)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/utils/common_utils.py\", line 95, in map_matrix_to_list_numpy\n    unique_values = torch.unique(spheres_xyz_r_fid[:, fid_col])\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_jit_internal.py\", line 503, in fn\n    return if_false(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 997, in _return_output\n    output, _, _ = _unique_impl(input, sorted, return_inverse, return_counts, dim)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/functional.py\", line 911, in _unique_impl\n    output, inverse_indices, counts = torch._unique2(\nTypeError: _unique2(): argument 'input' (position 1) must be Tensor, not numpy.ndarray\n"
     },
     {
       "job_id": "j00059",
@@ -2373,10 +2373,10 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "running",
+      "gpu_id": 0,
       "output_folder": null,
-      "start_time": null,
+      "start_time": "2026-05-13T08:26:38",
       "end_time": null,
       "duration_sec": null,
       "error": null
@@ -2413,13 +2413,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 5,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-13T18:53:36",
+      "end_time": "2026-05-14T20:19:04",
+      "duration_sec": 91527.59,
+      "error": "RuntimeError: Function 'PowBackward0' returned nan values in its 0th output.\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 210, in substrate_main\n    substrate = GeometricOptimization(device, meshing, config_params.SPHERE_SPACING,\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 28, in __init__\n    self.optimized_fibers = self.repulse_3d_with_optimizer(num_iteration=90)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 126, in repulse_3d_with_optimizer\n    self.optimizer.step(partial(closure, self.normalize_weights(self.w_overlap*600000,self.w_curve, self.w_length)))\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/optimizer.py\", line 484, in wrapper\n    out = func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 437, in step\n    loss, flat_grad, t, ls_func_evals = _strong_wolfe(\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 45, in _strong_wolfe\n    f_new, g_new = obj_func(x, t, d)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 435, in obj_func\n    return self._directional_evaluate(closure, x, t, d)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 289, in _directional_evaluate\n    loss = float(closure())\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 100, in closure\n    loss.backward(retain_graph=True)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_tensor.py\", line 521, in backward\n    torch.autograd.backward(\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/autograd/__init__.py\", line 289, in backward\n    _engine_run_backward(\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/autograd/graph.py\", line 769, in _engine_run_backward\n    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass\nRuntimeError: Function 'PowBackward0' returned nan values in its 0th output.\n"
     },
     {
       "job_id": "j00061",
@@ -2453,13 +2453,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-14T19:04:04",
+      "end_time": "2026-05-20T21:15:16",
+      "duration_sec": 526272.41,
+      "error": "RuntimeError: Function 'PowBackward0' returned nan values in its 0th output.\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 210, in substrate_main\n    substrate = GeometricOptimization(device, meshing, config_params.SPHERE_SPACING,\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 28, in __init__\n    self.optimized_fibers = self.repulse_3d_with_optimizer(num_iteration=90)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 126, in repulse_3d_with_optimizer\n    self.optimizer.step(partial(closure, self.normalize_weights(self.w_overlap*600000,self.w_curve, self.w_length)))\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/optimizer.py\", line 484, in wrapper\n    out = func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 437, in step\n    loss, flat_grad, t, ls_func_evals = _strong_wolfe(\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 144, in _strong_wolfe\n    f_new, g_new = obj_func(x, t, d)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 435, in obj_func\n    return self._directional_evaluate(closure, x, t, d)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 289, in _directional_evaluate\n    loss = float(closure())\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 100, in closure\n    loss.backward(retain_graph=True)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_tensor.py\", line 521, in backward\n    torch.autograd.backward(\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/autograd/__init__.py\", line 289, in backward\n    _engine_run_backward(\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/autograd/graph.py\", line 769, in _engine_run_backward\n    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass\nRuntimeError: Function 'PowBackward0' returned nan values in its 0th output.\n"
     },
     {
       "job_id": "j00062",
@@ -2493,10 +2493,10 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "running",
+      "gpu_id": 5,
       "output_folder": null,
-      "start_time": null,
+      "start_time": "2026-05-14T20:19:04",
       "end_time": null,
       "duration_sec": null,
       "error": null
@@ -2533,10 +2533,10 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "running",
+      "gpu_id": 1,
       "output_folder": null,
-      "start_time": null,
+      "start_time": "2026-05-16T10:19:23",
       "end_time": null,
       "duration_sec": null,
       "error": null
@@ -2573,13 +2573,13 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "failed",
+      "gpu_id": 4,
       "output_folder": null,
-      "start_time": null,
-      "end_time": null,
-      "duration_sec": null,
-      "error": null
+      "start_time": "2026-05-18T15:49:28",
+      "end_time": "2026-05-20T11:24:12",
+      "duration_sec": 156883.52,
+      "error": "RuntimeError: Function 'PowBackward0' returned nan values in its 0th output.\nTraceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/batch_substrate.py\", line 357, in _gpu_worker\n    substrate_main(params, exp_name, folder_suffix=f\"_rep{job['repeat_idx']}\")\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 210, in substrate_main\n    substrate = GeometricOptimization(device, meshing, config_params.SPHERE_SPACING,\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 28, in __init__\n    self.optimized_fibers = self.repulse_3d_with_optimizer(num_iteration=90)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 124, in repulse_3d_with_optimizer\n    self.optimizer.step(partial(closure, self.normalize_weights(self.w_overlap*1000000,self.w_curve, self.w_length)))\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/optimizer.py\", line 484, in wrapper\n    out = func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 437, in step\n    loss, flat_grad, t, ls_func_evals = _strong_wolfe(\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 144, in _strong_wolfe\n    f_new, g_new = obj_func(x, t, d)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 435, in obj_func\n    return self._directional_evaluate(closure, x, t, d)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 289, in _directional_evaluate\n    loss = float(closure())\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 100, in closure\n    loss.backward(retain_graph=True)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/_tensor.py\", line 521, in backward\n    torch.autograd.backward(\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/autograd/__init__.py\", line 289, in backward\n    _engine_run_backward(\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/autograd/graph.py\", line 769, in _engine_run_backward\n    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass\nRuntimeError: Function 'PowBackward0' returned nan values in its 0th output.\n"
     },
     {
       "job_id": "j00065",
@@ -2613,10 +2613,10 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "running",
+      "gpu_id": 4,
       "output_folder": null,
-      "start_time": null,
+      "start_time": "2026-05-20T11:24:12",
       "end_time": null,
       "duration_sec": null,
       "error": null
@@ -2653,10 +2653,10 @@
         "final_volume_fraction": 0.65,
         "target_volume_fraction": 0.65
       },
-      "status": "pending",
-      "gpu_id": null,
+      "status": "running",
+      "gpu_id": 3,
       "output_folder": null,
-      "start_time": null,
+      "start_time": "2026-05-20T21:15:16",
       "end_time": null,
       "duration_sec": null,
       "error": null

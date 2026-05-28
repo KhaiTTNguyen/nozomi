@@ -34,8 +34,8 @@ cd nozomi
 
 ./run-scripts/run-simulation.sh --substrates=./experiment/result/myelin-mock/myelin_small_200_verification --gpu=2 --sim_time=100  --nseg=20 --compartment=intra
 
-./run-scripts/run-simulation.sh --substrates=./experiment/result/arXiv_set1_healthy_20260506_072043/d0.5_K200_ODI_0.0032_bead_0.5_VF_0.65 --gpu=6 --sim_time=100  --nseg=20 --compartment=extra
-
+./run-scripts/run-simulation.sh --substrates=./experiment/aim2-prep/data/2026-03-22-bead03/bead0.3_d4.5_OD10_initVF0.42_500axons --gpu=0 --sim_time=100  --nseg=20 --compartment=intra
+# STARTED INTRA 2026-05-25 5:27pm
 ```
 
 ### Output: 

@@ -54,10 +54,10 @@ from typing import Any, Dict, List, Optional, Tuple
 
 # (mean_diameter, sigma_diameter)
 DIAMETERS: List[Tuple[float, float]] = [
-    (0.5, 0.1339),
-    (1.0, 0.2678),
-    (1.5, 0.4017),
-    (2.5, 0.6695),
+    # (0.5, 0.1339),
+    # (1.0, 0.2678),
+    # (1.5, 0.4017),
+    # (2.5, 0.6695),
     (3.5, 0.9373),
     (4.5, 1.2051),
 ]

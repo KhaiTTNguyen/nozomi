@@ -368,7 +368,7 @@ extern "C"
                      MIN(nLy-1,MAX(0,floor((y[spinIdx]+Ly/2)/dLy)))*nLx +
                      MIN(nLx-1,MAX(0,floor((x[spinIdx]+Lx/2)/dLx)));
 
-        // loop for multiple interactions (specular reflection at impermeable walls)
+        // loop for multiple interactions
         int niter = 0;
         while ((jump_remaining > tol) && (niter<100))
         {
@@ -409,8 +409,6 @@ extern "C"
             float isInsideAny = 0;
             float furthest_fstep_in = 0;
             float closest_fstep_out = someLargeNumber;
-            int   hit_sphere_in  = -1;   // sphere whose inner wall limits the step
-            int   hit_sphere_out = -1;   // sphere whose outer wall limits the step
 
             // loop thru all the spheres in the segment to check for interactions
             for (int n=0; n<nspheres_per_seg; n++)
@@ -437,10 +435,8 @@ extern "C"
                         r[current_sphere_idx],
                         jx,jy,jz);
 
-                    if (furthest_fstep_in < fstep_in) {
+                    if (furthest_fstep_in < fstep_in)
                         furthest_fstep_in = fstep_in;
-                        hit_sphere_in = current_sphere_idx;
-                    }
                 }
                 else if (sphSID[current_sphere_idx] < spinSID) 
                 {
@@ -453,58 +449,40 @@ extern "C"
                         r[current_sphere_idx],
                         jx,jy,jz);
 
-                    if (fstep_out < closest_fstep_out) {
+                    if (fstep_out < closest_fstep_out)
                         closest_fstep_out = fstep_out;
-                        hit_sphere_out = current_sphere_idx;
-                    }
                 }
             }
 
-            // Determine the limiting step and which sphere caused it.
-            // Compare against the wall limits only (not the pre-capped
-            // jump_current == jump_remaining) so we can decide whether this
-            // iteration ends in a wall bounce or a clean completion.
-            float limit_in  = isInsideAny ? furthest_fstep_in : someLargeNumber;
-            float limit_out = closest_fstep_out;
-            float wall_limit = MIN(limit_in, limit_out);
-            int   hit_sphere = -1;
-            if (wall_limit < jump_current) {
-                jump_current = wall_limit;
-                hit_sphere = (limit_in <= limit_out) ? hit_sphere_in : hit_sphere_out;
-            }
+            jump_current = MIN(jump_current,isInsideAny? furthest_fstep_in : someLargeNumber);
+            jump_current = MIN(jump_current,closest_fstep_out);
 
-            // advance walker to (possibly wall-limited) position
             x[spinIdx] += jump_current*jx;
             y[spinIdx] += jump_current*jy;
             z[spinIdx] += jump_current*jz;
 
-            // T2 decay for the distance travelled in this sub-step
-            sig[spinIdx] *= exp(-jump_current*dt/T2[spinSID]);
-
-            if (hit_sphere >= 0)
+            if (jump_current < jump_remaining)
             {
-                // specular reflection: flip the component of j along the
-                // outward surface normal at the hit point. Works for both
-                // outer-wall and inner-wall collisions because the reflection
-                // formula is symmetric in the sign of j.n.
-                float nx = x[spinIdx] - cx[hit_sphere];
-                float ny = y[spinIdx] - cy[hit_sphere];
-                float nz = z[spinIdx] - cz[hit_sphere];
-                float nrm = sqrt(nx*nx + ny*ny + nz*nz);
-                if (nrm > 0.0f) { nx /= nrm; ny /= nrm; nz /= nrm; }
-                float jdotn = jx*nx + jy*ny + jz*nz;
-                jx -= 2.0f*jdotn*nx;
-                jy -= 2.0f*jdotn*ny;
-                jz -= 2.0f*jdotn*nz;
+                // the direction is incoherent
+                // variance is linear with diffusion time, <x^2> = 2Dt
+                // therefore, st dev goes with the sqrt of diffusion time sqrt(t)
+                // scale jump_remaining appropriately
+                jump_remaining = sqrt(MAX(0,jump_remaining*jump_remaining - 
+                                            jump_current*jump_current));
 
-                // specular reflection preserves |j|, so variance accounting
-                // is linear (no sqrt): only the consumed fraction is gone.
-                jump_remaining -= jump_current;
+                sig[spinIdx] *= exp(-jump_current*jump_current*dt/T2[spinSID]);
+
+                // scatter at the boundary
+                jx = ds*curand_normal(&states[spinIdx]);
+                jy = ds*curand_normal(&states[spinIdx]);
+                jz = ds*curand_normal(&states[spinIdx]);
             }
-            else
+            else 
             {
-                // free flight to completion of this timestep
+                // not scattering, so the direction is coherent; 
+                // continue as normal
                 jump_remaining -= jump_current;
+                sig[spinIdx] *= exp(-jump_current*dt/T2[spinSID]);
             }
         }
 
@@ -543,201 +521,200 @@ extern "C"
         }
     }
 
-    // deprecated
-    // __global__ void randomWalk3d_phase(float dt,float *spheres,int *segmentList,
-    //                              float *spins,float *spins0, float* phase_accumulated, 
-    //                              float G, float G_area_at_this_time_step)
-    // {   
-    //     // index to the diffusing spin
-    //     const int spinIdx = blockIdx.x*blockDim.x + threadIdx.x;
+    __global__ void randomWalk3d_phase(float dt,float *spheres,int *segmentList,
+                                 float *spins,float *spins0, float* phase_accumulated, 
+                                 float G, float G_area_at_this_time_step)
+    {   
+        // index to the diffusing spin
+        const int spinIdx = blockIdx.x*blockDim.x + threadIdx.x;
 
-    //     // shortcuts for spin properties
-    //     float* x = &spins[0];
-    //     float* y = &spins[nspins];
-    //     float* z = &spins[2*nspins];
-    //     //float* sidx = &spins[3*nspins];
+        // shortcuts for spin properties
+        float* x = &spins[0];
+        float* y = &spins[nspins];
+        float* z = &spins[2*nspins];
+        //float* sidx = &spins[3*nspins];
 
-    //     // shortcuts for sphere properties
-    //     float* cx = &spheres[0];
-    //     float* cy = &spheres[nspheres];
-    //     float* cz = &spheres[2*nspheres];
-    //     float* r = &spheres[3*nspheres];
-    //     float* sphSID = &spheres[4*nspheres];
+        // shortcuts for sphere properties
+        float* cx = &spheres[0];
+        float* cy = &spheres[nspheres];
+        float* cz = &spheres[2*nspheres];
+        float* r = &spheres[3*nspheres];
+        float* sphSID = &spheres[4*nspheres];
 
-    //     float ds;
-    //     float jx;
-    //     float jy;
-    //     float jz;
-    //     float jump_current;
-    //     float jump_remaining = 1.0;
+        float ds;
+        float jx;
+        float jy;
+        float jz;
+        float jump_current;
+        float jump_remaining = 1.0;
 
-    //     // find the index to the current segment
-    //     int idxSeg = MIN(nLz-1,MAX(0,floor((z[spinIdx]+Lz/2)/dLz)))*nLx*nLy + 
-    //                  MIN(nLy-1,MAX(0,floor((y[spinIdx]+Ly/2)/dLy)))*nLx +
-    //                  MIN(nLx-1,MAX(0,floor((x[spinIdx]+Lx/2)/dLx)));
+        // find the index to the current segment
+        int idxSeg = MIN(nLz-1,MAX(0,floor((z[spinIdx]+Lz/2)/dLz)))*nLx*nLy + 
+                     MIN(nLy-1,MAX(0,floor((y[spinIdx]+Ly/2)/dLy)))*nLx +
+                     MIN(nLx-1,MAX(0,floor((x[spinIdx]+Lx/2)/dLx)));
 
-    //     // loop for multiple interactions
-    //     int niter = 0;
-    //     while ((jump_remaining > tol) && (niter<100))
-    //     {
-    //         niter++;
-    //         jump_current = jump_remaining;
+        // loop for multiple interactions
+        int niter = 0;
+        while ((jump_remaining > tol) && (niter<100))
+        {
+            niter++;
+            jump_current = jump_remaining;
 
-    //         // first, figure out what structure the spin is in
-    //         int spinSID = nstructures;
-    //         for (int n = 0; n<nspheres_per_seg; n++)
-    //         {
-    //             int current_sphere_idx = segmentList[idxSeg*nspheres_per_seg + n];
+            // first, figure out what structure the spin is in
+            int spinSID = nstructures;
+            for (int n = 0; n<nspheres_per_seg; n++)
+            {
+                int current_sphere_idx = segmentList[idxSeg*nspheres_per_seg + n];
 
-    //             if (sphSID[current_sphere_idx] < spinSID)
-    //             {
-    //                 // isInside is negative if the spin is inside the current sphere
-    //                 float isInside = isInsideSphere(
-    //                     x[spinIdx]-cx[current_sphere_idx],
-    //                     y[spinIdx]-cy[current_sphere_idx],
-    //                     z[spinIdx]-cz[current_sphere_idx],
-    //                     r[current_sphere_idx]);
+                if (sphSID[current_sphere_idx] < spinSID)
+                {
+                    // isInside is negative if the spin is inside the current sphere
+                    float isInside = isInsideSphere(
+                        x[spinIdx]-cx[current_sphere_idx],
+                        y[spinIdx]-cy[current_sphere_idx],
+                        z[spinIdx]-cz[current_sphere_idx],
+                        r[current_sphere_idx]);
 
-    //                 if (isInside < 0)
-    //                 { // this new sphere takes precedence
-    //                     spinSID = sphSID[current_sphere_idx];
-    //                 }
-    //             }
-    //         }
+                    if (isInside < 0)
+                    { // this new sphere takes precedence
+                        spinSID = sphSID[current_sphere_idx];
+                    }
+                }
+            }
 
-    //         if (niter == 1)
-    //         {
-    //             ds = sqrt(2*D[spinSID]*dt);
-    //             jx = ds*curand_normal(&states[spinIdx]);
-    //             jy = ds*curand_normal(&states[spinIdx]);
-    //             jz = ds*curand_normal(&states[spinIdx]);
-    //         }
+            if (niter == 1)
+            {
+                ds = sqrt(2*D[spinSID]*dt);
+                jx = ds*curand_normal(&states[spinIdx]);
+                jy = ds*curand_normal(&states[spinIdx]);
+                jz = ds*curand_normal(&states[spinIdx]);
+            }
 
-    //         float isInside;
-    //         float isInsideAny = 0;
-    //         float furthest_fstep_in = 0;
-    //         float closest_fstep_out = someLargeNumber;
+            float isInside;
+            float isInsideAny = 0;
+            float furthest_fstep_in = 0;
+            float closest_fstep_out = someLargeNumber;
 
-    //         // loop thru all the spheres in the segment to check for interactions
-    //         for (int n=0; n<nspheres_per_seg; n++)
-    //         {
-    //             int current_sphere_idx = segmentList[idxSeg*nspheres_per_seg + n];
+            // loop thru all the spheres in the segment to check for interactions
+            for (int n=0; n<nspheres_per_seg; n++)
+            {
+                int current_sphere_idx = segmentList[idxSeg*nspheres_per_seg + n];
 
-    //             if (sphSID[current_sphere_idx] > spinSID)
-    //                 continue;
+                if (sphSID[current_sphere_idx] > spinSID)
+                    continue;
                     
-    //             // isInside is negative if the spin is inside the current sphere
-    //             isInside = isInsideSphere(
-    //                     x[spinIdx]-cx[current_sphere_idx],
-    //                     y[spinIdx]-cy[current_sphere_idx],
-    //                     z[spinIdx]-cz[current_sphere_idx],
-    //                     r[current_sphere_idx]);
+                // isInside is negative if the spin is inside the current sphere
+                isInside = isInsideSphere(
+                        x[spinIdx]-cx[current_sphere_idx],
+                        y[spinIdx]-cy[current_sphere_idx],
+                        z[spinIdx]-cz[current_sphere_idx],
+                        r[current_sphere_idx]);
 
-    //             if (isInside < 0) // the spin is inside this sphere
-    //             {
-    //                 isInsideAny = 1;
-    //                 float fstep_in = findStepSizeToSphereInsideTol(
-    //                     x[spinIdx]-cx[current_sphere_idx],
-    //                     y[spinIdx]-cy[current_sphere_idx],
-    //                     z[spinIdx]-cz[current_sphere_idx],
-    //                     r[current_sphere_idx],
-    //                     jx,jy,jz);
+                if (isInside < 0) // the spin is inside this sphere
+                {
+                    isInsideAny = 1;
+                    float fstep_in = findStepSizeToSphereInsideTol(
+                        x[spinIdx]-cx[current_sphere_idx],
+                        y[spinIdx]-cy[current_sphere_idx],
+                        z[spinIdx]-cz[current_sphere_idx],
+                        r[current_sphere_idx],
+                        jx,jy,jz);
 
-    //                 if (furthest_fstep_in < fstep_in)
-    //                     furthest_fstep_in = fstep_in;
-    //             }
-    //             else if (sphSID[current_sphere_idx] < spinSID) 
-    //             {
-    //                 // the spin is outside this sphere
-    //                 // stay outside of this sphere
-    //                 float fstep_out = findStepSizeToSphereOutsideTol(
-    //                     x[spinIdx]-cx[current_sphere_idx],
-    //                     y[spinIdx]-cy[current_sphere_idx],
-    //                     z[spinIdx]-cz[current_sphere_idx],
-    //                     r[current_sphere_idx],
-    //                     jx,jy,jz);
+                    if (furthest_fstep_in < fstep_in)
+                        furthest_fstep_in = fstep_in;
+                }
+                else if (sphSID[current_sphere_idx] < spinSID) 
+                {
+                    // the spin is outside this sphere
+                    // stay outside of this sphere
+                    float fstep_out = findStepSizeToSphereOutsideTol(
+                        x[spinIdx]-cx[current_sphere_idx],
+                        y[spinIdx]-cy[current_sphere_idx],
+                        z[spinIdx]-cz[current_sphere_idx],
+                        r[current_sphere_idx],
+                        jx,jy,jz);
 
-    //                 if (fstep_out < closest_fstep_out)
-    //                     closest_fstep_out = fstep_out;
-    //             }
-    //         }
+                    if (fstep_out < closest_fstep_out)
+                        closest_fstep_out = fstep_out;
+                }
+            }
 
-    //         jump_current = MIN(jump_current,isInsideAny? furthest_fstep_in : someLargeNumber);
-    //         jump_current = MIN(jump_current,closest_fstep_out);
+            jump_current = MIN(jump_current,isInsideAny? furthest_fstep_in : someLargeNumber);
+            jump_current = MIN(jump_current,closest_fstep_out);
 
-    //         x[spinIdx] += jump_current*jx;
-    //         y[spinIdx] += jump_current*jy;
-    //         z[spinIdx] += jump_current*jz;
+            x[spinIdx] += jump_current*jx;
+            y[spinIdx] += jump_current*jy;
+            z[spinIdx] += jump_current*jz;
 
-    //         if (jump_current < jump_remaining)
-    //         {
-    //             // the direction is incoherent
-    //             // variance is linear with diffusion time, <x^2> = 2Dt
-    //             // therefore, st dev goes with the sqrt of diffusion time sqrt(t)
-    //             // scale jump_remaining appropriately
-    //             jump_remaining = sqrt(MAX(0,jump_remaining*jump_remaining - 
-    //                                         jump_current*jump_current));
+            if (jump_current < jump_remaining)
+            {
+                // the direction is incoherent
+                // variance is linear with diffusion time, <x^2> = 2Dt
+                // therefore, st dev goes with the sqrt of diffusion time sqrt(t)
+                // scale jump_remaining appropriately
+                jump_remaining = sqrt(MAX(0,jump_remaining*jump_remaining - 
+                                            jump_current*jump_current));
 
-    //             // sig[spinIdx] *= exp(-jump_current*jump_current*dt/T2[spinSID]);
+                // sig[spinIdx] *= exp(-jump_current*jump_current*dt/T2[spinSID]);
 
-    //             // scatter at the boundary
-    //             jx = ds*curand_normal(&states[spinIdx]);
-    //             jy = ds*curand_normal(&states[spinIdx]);
-    //             jz = ds*curand_normal(&states[spinIdx]);
-    //         }
-    //         else 
-    //         {
-    //             // not scattering, so the direction is coherent; 
-    //             // continue as normal
-    //             jump_remaining -= jump_current;
-    //             // sig[spinIdx] *= exp(-jump_current*dt/T2[spinSID]);
-    //         }
-    //     }
+                // scatter at the boundary
+                jx = ds*curand_normal(&states[spinIdx]);
+                jy = ds*curand_normal(&states[spinIdx]);
+                jz = ds*curand_normal(&states[spinIdx]);
+            }
+            else 
+            {
+                // not scattering, so the direction is coherent; 
+                // continue as normal
+                jump_remaining -= jump_current;
+                // sig[spinIdx] *= exp(-jump_current*dt/T2[spinSID]);
+            }
+        }
         
-    //     phase_accumulated[spinIdx] += x[spinIdx]*G;
-    //     phase_accumulated[spinIdx + nspins] += y[spinIdx]*G;
-    //     phase_accumulated[spinIdx + 2*nspins] += z[spinIdx]*G;
+        phase_accumulated[spinIdx] += x[spinIdx]*G;
+        phase_accumulated[spinIdx + nspins] += y[spinIdx]*G;
+        phase_accumulated[spinIdx + 2*nspins] += z[spinIdx]*G;
 
-    //     //enforce periodic boundary conditions in the arena
-    //     if (x[spinIdx] < -Lx/2)
-    //     {
-    //         x[spinIdx] += Lx;
-    //         spins0[spinIdx] += Lx;
-    //         phase_accumulated[spinIdx] += Lx*G_area_at_this_time_step;
-    //     }
-    //     else if (x[spinIdx] > Lx/2)
-    //     {
-    //         x[spinIdx] -= Lx;
-    //         spins0[spinIdx] -= Lx;
-    //         phase_accumulated[spinIdx] -= Lx*G_area_at_this_time_step;
-    //     }
+        //enforce periodic boundary conditions in the arena
+        if (x[spinIdx] < -Lx/2)
+        {
+            x[spinIdx] += Lx;
+            spins0[spinIdx] += Lx;
+            phase_accumulated[spinIdx] += Lx*G_area_at_this_time_step;
+        }
+        else if (x[spinIdx] > Lx/2)
+        {
+            x[spinIdx] -= Lx;
+            spins0[spinIdx] -= Lx;
+            phase_accumulated[spinIdx] -= Lx*G_area_at_this_time_step;
+        }
 
-    //     if (y[spinIdx] < -Ly/2)
-    //     {
-    //         y[spinIdx] += Ly;
-    //         spins0[nspins+spinIdx] += Ly;
-    //         phase_accumulated[spinIdx + nspins] += Ly*G_area_at_this_time_step;
-    //     }
-    //     else if (y[spinIdx] > Ly/2)
-    //     {
-    //         y[spinIdx] -= Ly;
-    //         spins0[nspins+spinIdx] -= Ly;
-    //         phase_accumulated[spinIdx + nspins] -= Ly*G_area_at_this_time_step;
-    //     }
+        if (y[spinIdx] < -Ly/2)
+        {
+            y[spinIdx] += Ly;
+            spins0[nspins+spinIdx] += Ly;
+            phase_accumulated[spinIdx + nspins] += Ly*G_area_at_this_time_step;
+        }
+        else if (y[spinIdx] > Ly/2)
+        {
+            y[spinIdx] -= Ly;
+            spins0[nspins+spinIdx] -= Ly;
+            phase_accumulated[spinIdx + nspins] -= Ly*G_area_at_this_time_step;
+        }
 
-    //     if (z[spinIdx] < -Lz/2)
-    //     {
-    //         z[spinIdx] += Lz;
-    //         spins0[2*nspins+spinIdx] += Lz;
-    //         phase_accumulated[spinIdx + 2*nspins] += Lz*G_area_at_this_time_step;
-    //     }
-    //     else if (z[spinIdx] > Lz/2)
-    //     {
-    //         z[spinIdx] -= Lz;
-    //         spins0[2*nspins+spinIdx] -= Lz;
-    //         phase_accumulated[spinIdx + 2*nspins] -= Lz*G_area_at_this_time_step;
-    //     }
-    // }
+        if (z[spinIdx] < -Lz/2)
+        {
+            z[spinIdx] += Lz;
+            spins0[2*nspins+spinIdx] += Lz;
+            phase_accumulated[spinIdx + 2*nspins] += Lz*G_area_at_this_time_step;
+        }
+        else if (z[spinIdx] > Lz/2)
+        {
+            z[spinIdx] -= Lz;
+            spins0[2*nspins+spinIdx] -= Lz;
+            phase_accumulated[spinIdx + 2*nspins] -= Lz*G_area_at_this_time_step;
+        }
+    }
 
     __global__ void randomWalk3d_phase_multidirr(float dt,float *spheres,int *segmentList,
                                  float *spins,float *spins0, float* phase_accumulated, 
@@ -819,10 +796,6 @@ extern "C"
             float isInsideAny = 0;
             float furthest_fstep_in = 0;
             float closest_fstep_out = someLargeNumber;
-            // Track which sphere limits the step so we can do specular
-            // reflection off its surface (normal = (p - c) / |p - c|).
-            int hit_sphere_idx_in  = -1;
-            int hit_sphere_idx_out = -1;
 
             // loop thru all the spheres in the segment to check for interactions
             for (int n=0; n<nspheres_per_seg; n++)
@@ -849,10 +822,8 @@ extern "C"
                         r[current_sphere_idx],
                         jx,jy,jz);
 
-                    if (furthest_fstep_in < fstep_in) {
+                    if (furthest_fstep_in < fstep_in)
                         furthest_fstep_in = fstep_in;
-                        hit_sphere_idx_in = current_sphere_idx;
-                    }
                 }
                 else if (sphSID[current_sphere_idx] < spinSID) 
                 {
@@ -865,25 +836,13 @@ extern "C"
                         r[current_sphere_idx],
                         jx,jy,jz);
 
-                    if (fstep_out < closest_fstep_out) {
+                    if (fstep_out < closest_fstep_out)
                         closest_fstep_out = fstep_out;
-                        hit_sphere_idx_out = current_sphere_idx;
-                    }
                 }
             }
 
-            // Determine which sphere actually limited this step, if any.
-            float jc_in  = isInsideAny ? furthest_fstep_in : someLargeNumber;
-            float jc_out = closest_fstep_out;
-            int hit_sphere_idx = -1;
-            if (jc_in < jump_current && jc_in <= jc_out) {
-                hit_sphere_idx = hit_sphere_idx_in;
-            } else if (jc_out < jump_current) {
-                hit_sphere_idx = hit_sphere_idx_out;
-            }
-
-            jump_current = MIN(jump_current, jc_in);
-            jump_current = MIN(jump_current, jc_out);
+            jump_current = MIN(jump_current,isInsideAny? furthest_fstep_in : someLargeNumber);
+            jump_current = MIN(jump_current,closest_fstep_out);
 
             x[spinIdx] += jump_current*jx;
             y[spinIdx] += jump_current*jy;
@@ -891,27 +850,19 @@ extern "C"
 
             if (jump_current < jump_remaining)
             {
-                // Specular reflection off the sphere normal at the collision
-                // point. This preserves step length (elastic collision against
-                // an impermeable wall), matching Camino / Disimpy / MC-DC.
-                jump_remaining -= jump_current;
-                if (hit_sphere_idx >= 0) {
-                    float nx = x[spinIdx] - cx[hit_sphere_idx];
-                    float ny = y[spinIdx] - cy[hit_sphere_idx];
-                    float nz = z[spinIdx] - cz[hit_sphere_idx];
-                    float inv = rsqrtf(nx*nx + ny*ny + nz*nz + 1e-20f);
-                    nx *= inv; ny *= inv; nz *= inv;
-                    float jdotn = jx*nx + jy*ny + jz*nz;
-                    jx -= 2.0f * jdotn * nx;
-                    jy -= 2.0f * jdotn * ny;
-                    jz -= 2.0f * jdotn * nz;
-                } else {
-                    // Defensive: no identified hit sphere -> fall back to
-                    // isotropic scatter so the walker does not get stuck.
-                    jx = ds*curand_normal(&states[spinIdx]);
-                    jy = ds*curand_normal(&states[spinIdx]);
-                    jz = ds*curand_normal(&states[spinIdx]);
-                }
+                // the direction is incoherent
+                // variance is linear with diffusion time, <x^2> = 2Dt
+                // therefore, st dev goes with the sqrt of diffusion time sqrt(t)
+                // scale jump_remaining appropriately
+                jump_remaining = sqrt(MAX(0,jump_remaining*jump_remaining - 
+                                            jump_current*jump_current));
+
+                // sig[spinIdx] *= exp(-jump_current*jump_current*dt/T2[spinSID]);
+
+                // scatter at the boundary
+                jx = ds*curand_normal(&states[spinIdx]);
+                jy = ds*curand_normal(&states[spinIdx]);
+                jz = ds*curand_normal(&states[spinIdx]);
             }
             else 
             {
@@ -936,27 +887,6 @@ extern "C"
         }
         
         //enforce periodic boundary conditions in the arena
-        
-        // G(t) here is scaled by gamma
-        // phase = ∫ G(t) * (wrapped_position(t)) * dt
-        // so when a spin crosses a periodic boundary, 
-        // we need to add/subtract the contribution of the area swept by the spin as 
-        // it crosses the boundary to the accumulated phase. 
-
-        // If a spin crosses periodic boundaries, stored position jumps by ±L (wrapped), 
-        // but the physical path is continuous (unwrapped).
-        // So wrapped position differs from unwrapped by an integer box shift:
-            
-        // wrapped_position = unwrapped_position + L
-        
-        // Plugging this into phase gives a missing term:
-
-        // phase = ∫ G(t) * (unwrapped_position(t) + L) * dt
-        //       = ∫ G(t) * unwrapped_position(t) * dt + L * ∫ G(t) * dt
-        //       = (original phase calculation) + L * G_area_at_this_time_step
-
-        // where G_area_at_this_time_step is the integral of G(t) over the time step during which the crossing occurs.
-        
         // X periodic boundaries
         if (x[spinIdx] < -Lx/2)
         {
