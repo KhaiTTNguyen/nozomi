@@ -13,9 +13,7 @@ fixed substrate, benchmarked against the van Gelderen analytic signal.
 
 ---
 
-## 1. Intra-axonal accuracy experiment
-
-### Purpose
+## Purpose
 
 For the intra-axonal compartment of a parallel-cylinder substrate, the
 perpendicular PGSE signal has a **closed-form analytic solution**
@@ -114,11 +112,17 @@ the resulting analytic signal is written into each benchmark log by
 | Nozomi    | `Structure3D` sphere stacks (200 spheres/cyl, edge ghosts)        | `init_location=intra`   | stdlib `random`, `np.random`, `sim.setup(initstates_int=seed)`  | PyCUDA             | $\langle \cos \phi_{\rm end} \rangle$ per b |
 | Camino    | native `-geometry cylinder -packing SQUARE` (100-cyl lattice, PBC)| `-initial intra`        | `-seed <int>`                                                   | Java (CPU)         | big-endian float stream                     |
 | Disimpy   | triangle mesh (`substrates.mesh`, lateral-only)                   | `init_pos="intra"`      | `simulation(seed=<int>)`                                        | Numba CUDA         | complex signal per measurement              |
-| MC/DC     | `cylinders_list` (z-oriented, scale = 1000 m→mm)                  | `ini_walkers_pos intra` | `seed <int>` line in `sim.conf`                                 | C++ pthread (CPU)  | text DWI file                               |
+| MC/DC     | `cylinders_list` (z-oriented, scale = 1000 m→mm)                  | `ini_walkers_pos intra` | `seed <int>` line in `sim.conf`                                 | C++ std::thread (CPU, 8 proc) | text DWI file                               |
 
 All four frameworks use native intra-compartment seeding keywords (no custom
 rejection sampling), so the seeded walker distributions match each engine's
 own internal geometry.
+
+MC/DC parallelizes its walker loop across `num_process` worker threads
+(`std::thread`). The benchmark sets `num_process = 8` (`BenchConfig.n_processes`),
+a typical laptop / workstation core count, so the reported MC/DC runtime is
+machine-representative and reproducible across machines. Override with
+`BENCH_N_PROCESS`. (Thread count affects runtime only, not the signal.)
 
 ### Outputs
 
@@ -133,37 +137,10 @@ The aggregator ([`aggregate.py`](aggregate.py)) writes:
 
 ---
 
-## 2. Scalability experiment
-
-Same cylinder physics, **varying substrate size** at constant volume fraction
-and axon diameter, to measure how each engine's runtime scales with substrate
-complexity.
-
-| parameter        | value |
-| ---------------- | ----- |
-| ICVF             | 0.65 |
-| cylinder radius  | 0.9 μm |
-| sep (→ from ICVF)| 1.979 μm |
-| substrate sides  | {25, 50, 100} μm → 13×13 (169), 25×25 (625), 51×51 (2601) cylinders |
-| b-values         | 0, 1000 s/mm² (b=0 for normalization) |
-| walkers          | 10 000 (per run) |
-| repeats          | 3 |
-
-Camino runs in `-geometry ply` mode here (explicit PLY mesh of all cylinders)
-so its geometry-lookup cost scales with $N$ like the other engines.
-
-### Process isolation
-
-[`run_scalability.py`](run_scalability.py) launches each framework in a fresh
-spawn-subprocess to keep Nozomi's PyCUDA context and Disimpy's Numba-CUDA
-context from colliding inside the same Python interpreter.
-
----
-
 ## Results directory layout
 
-Every invocation of `run_all.sh` (or `run_scalability.py` driven through it)
-writes into a **timestamped subfolder** so no sweep is ever overwritten:
+Every invocation of `run_all.sh` writes into a **timestamped subfolder** so no
+sweep is ever overwritten:
 
 ```
 tests/benchmark/results/
@@ -172,7 +149,6 @@ tests/benchmark/results/
 │   ├── disimpy/run_{00,01,02}.json
 │   ├── mcdc/run_{00,01,02}/...
 │   ├── nozomi/run_{00,01,02}.json
-│   ├── scalability/L025/<fw>/run_NN.json …
 │   ├── summary.json
 │   ├── signal_vs_b.png
 │   └── runtime.png
@@ -208,17 +184,8 @@ BENCH_TIME_STEP_S=1e-6 bash tests/benchmark/run_all.sh
 # Use the full (intra + extra) compartment instead of intra-only
 BENCH_COMPARTMENT=all bash tests/benchmark/run_all.sh
 
-# --- Scalability experiment (writes under the same timestamped folder) ---
-BENCH_RESULTS_DIR="$(readlink -f tests/benchmark/results/latest)" \
-PYTHONPATH=. python -m tests.benchmark.run_scalability \
-    --sides 25 50 100 --frameworks nozomi disimpy mcdc camino \
-    --repeats 3 --walkers 10000
-PYTHONPATH=. python -m tests.benchmark.aggregate_scalability
-
 # --- Re-aggregate an older sweep ---
 python -m tests.benchmark.aggregate \
-    --run-dir tests/benchmark/results/2026-04-23_152301
-python -m tests.benchmark.aggregate_scalability \
     --run-dir tests/benchmark/results/2026-04-23_152301
 ```
 
@@ -233,6 +200,7 @@ Omitting `--run-dir` defaults to `results/latest/` (the most recent sweep).
 | `BENCH_TIME_STEP_S`    | override `BenchConfig.time_step_s`                            |
 | `BENCH_GRADIENT_AXIS`  | `gx,gy,gz` override of `BenchConfig.gradient_axis`            |
 | `BENCH_COMPARTMENT`    | `intra` (default) \| `extra` \| `all` — walker seeding region |
+| `BENCH_N_PROCESS`      | MC/DC worker threads (default 8)                              |
 | `BENCH_RESULTS_DIR`    | explicit output folder (otherwise timestamped)                |
 | `CUDA_VISIBLE_DEVICES` / `GPU` | GPU index for Nozomi and Disimpy                      |
 
@@ -240,8 +208,9 @@ Omitting `--run-dir` defaults to `results/latest/` (the most recent sweep).
 
 ## Hardware
 
-AMD EPYC 7513 (128 threads), 503 GB RAM, 8 × RTX A5000 24 GB (Nozomi / Disimpy
-share any one GPU via `CUDA_VISIBLE_DEVICES`).
+AMD EPYC 7513 CPU, 503 GB RAM, 8 × RTX A5000 24 GB (Nozomi / Disimpy share any
+one GPU via `CUDA_VISIBLE_DEVICES`). MC/DC runs with 8 worker processes, a
+representative typical-machine core count.
 
 ## Installation notes
 
@@ -267,9 +236,7 @@ tests/benchmark/
 ├── run_disimpy.py              ← Disimpy runner (substrates.mesh + simulations.simulation)
 ├── run_mcdc.py                 ← MC/DC runner (MC-DC_Simulator --conf)
 ├── run_all.sh                  ← accuracy-sweep orchestrator (timestamps results)
-├── run_scalability.py          ← scalability sweep (subprocess-isolated)
 ├── aggregate.py                ← accuracy summary + signal_vs_b.png + runtime.png
-├── aggregate_scalability.py    ← scalability log-log runtime plot
 └── results/
     ├── <YYYY-MM-DD_HHMMSS>/    ← one per sweep
   │   ├── substrate_cache/     ← substrate used by this sweep

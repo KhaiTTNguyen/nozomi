@@ -79,6 +79,13 @@ class BenchConfig:
     time_step_s: float = 2.0e-6             # 2 us -> step sqrt(6 D dt) = 0.155 um ~ r/6
     seed_mode: str = "intra"                # default benchmark seeding compartment
 
+    # MC/DC walker-loop parallelism (std::thread, NOT OpenMP). num_process 0
+    # is coerced to 1 by MC/DC, so it MUST be set explicitly. Default = 8, a
+    # typical laptop / workstation core count so the reported runtime is
+    # machine-representative and reproducible across machines.
+    # Override with BENCH_N_PROCESS.
+    n_processes: int = int(os.environ.get("BENCH_N_PROCESS", 8))
+
     # --- Experiment ---
     n_repeats: int = 3
     base_seed: int = 12345                  # deterministic seed per repeat
@@ -114,6 +121,10 @@ if _env_axis:
 _env_dt = os.environ.get("BENCH_TIME_STEP_S")
 if _env_dt:
     CFG = dataclasses.replace(CFG, time_step_s=float(_env_dt))
+
+_env_ncyl = os.environ.get("BENCH_N_CYL_PER_SIDE")
+if _env_ncyl:
+    CFG = dataclasses.replace(CFG, n_cyl_per_side=int(_env_ncyl))
 
 
 def ensure_dirs() -> None:

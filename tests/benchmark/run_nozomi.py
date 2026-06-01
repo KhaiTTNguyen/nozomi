@@ -132,6 +132,7 @@ def run_once(repeat: int, cfg=CFG, n_seg: int = 200,
 
     # --- Simulate phase ---
     phase_sig = sim.simulate_multi_directions(gwave)[0, :]  # (nspins,)
+    # phase_sig = sim.simulate_multi_directions_benchmark(gwave)[0, :]  # (nspins,)
 
     # --- Map b-values to gmax and compute S(b) = <cos(g * phase)> ---
     b_base_ms_um2 = gwave.calculate_bvalue_from_wave()  # b for gmax=1 mT/m

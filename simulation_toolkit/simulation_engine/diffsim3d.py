@@ -46,8 +46,8 @@ class DiffSim3d:
         self.phase_d = gpuarray.zeros(self.ndiffdir * self.nspins, dtype=np.float32)
         
         self.randomWalk3d = self.mod.get_function("randomWalk3d")
-        # self.randomWalk3d_phase = self.mod.get_function("randomWalk3d_phase")
         self.randomWalk3d_phase_multi_dirr = self.mod.get_function("randomWalk3d_phase_multidirr")
+        self.randomWalk3d_phase_multi_dirr_benchmark = self.mod.get_function("randomWalk3d_phase_multidirr_benchmark")
         self.initstates = self.mod.get_function("initstates")
         self.compute_diffusion_coefficients_and_kurtosis = self.mod.get_function("computeDiffusionCoefficientsAndKurtosis")
 
@@ -205,22 +205,22 @@ class DiffSim3d:
                           self.spins_d,self.spins0_d,self.sig_d,
                           block=(self.nblock,1,1), grid=(self.ngrid,1))
     
-    # deprecated
-    #  def dwi_step(self, gwave_dt, G, G_area_at_each_time_step):
-    #     if not self.issetup:
-    #         self.setup()
-    
-    #     self.randomWalk3d_phase(np.float32(gwave_dt),self.spheres_d,self.segments_d,
-    #                       self.spins_d,self.spins0_d,
-    #                       self.phase_d, 
-    #                       np.float32(G), np.float32(G_area_at_each_time_step),  
-    #                       block=(self.nblock,1,1), grid=(self.ngrid,1))
-    
     def dwi_multidirections_step(self, gwave_dt, G, G_area_at_each_time_step):
         if not self.issetup:
             self.setup()
 
         self.randomWalk3d_phase_multi_dirr(np.float32(gwave_dt),self.spheres_d,self.segments_d,
+                          self.spins_d,self.spins0_d,
+                          self.phase_d, 
+                          np.float32(G), np.float32(G_area_at_each_time_step),
+                          self.diffdir, np.int32(self.ndiffdir), 
+                          block=(self.nblock,1,1), grid=(self.ngrid,1))
+    
+    def dwi_multidirections_step_benchmark(self, gwave_dt, G, G_area_at_each_time_step):
+        if not self.issetup:
+            self.setup()
+
+        self.randomWalk3d_phase_multi_dirr_benchmark(np.float32(gwave_dt),self.spheres_d,self.segments_d,
                           self.spins_d,self.spins0_d,
                           self.phase_d, 
                           np.float32(G), np.float32(G_area_at_each_time_step),
@@ -268,6 +268,27 @@ class DwiSim3d(DiffSim3d):
         
         for n,_ in enumerate(gwave.wave):
             self.dwi_multidirections_step(gwave.dt, 
+                          gwave.wave[n] * gwave.dt * gamma * mt_per_m_to_mt_per_um,
+                          G_area_at_each_time_step[n] * gamma * mt_per_m_to_mt_per_um)
+
+        # Get the result back from GPU
+        phase_accumulated = self.phase_d.get()
+        
+        # Reshape to match expected format (3, nspin)
+        return phase_accumulated.reshape(self.ndiffdir, self.nspins)
+    
+    def simulate_multi_directions_benchmark(self,gwave,structures=None,initstates=None):
+        '''
+        Simulates DWI signal in a simulation geometry
+        '''
+        mt_per_m_to_mt_per_um = 1e-6
+        G_area_at_each_time_step = integrate.cumulative_trapezoid(gwave.wave, dx=1.0, initial=0)*gwave.dt
+        # gamma = 2.675 * 10^8 rad/s/T = 2.675 * 10^8 * 1e-6 rad/ms/mT = 267.5 rad/ms/mT
+        # Gmax / gradient strength G here is unit corrected and scaled by 'dt' and 'gamma
+        # the unit for Gmax here is mT/m =  mT/m * ms * rad/ms/mT / 10^-6 --> /um
+        
+        for n,_ in enumerate(gwave.wave):
+            self.dwi_multidirections_step_benchmark(gwave.dt, 
                           gwave.wave[n] * gwave.dt * gamma * mt_per_m_to_mt_per_um,
                           G_area_at_each_time_step[n] * gamma * mt_per_m_to_mt_per_um)
 

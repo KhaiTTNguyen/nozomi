@@ -300,7 +300,7 @@ def build_edge_ghost_cylinders(centers_xy, radii, lx, ly, edge_distance):
 
 
 def build_multi_cylinder_geometry(
-    centers_xy, radii, lx, ly, lz, D0, n_segments=100, extension_segments=5
+    centers_xy, radii, lx, ly, lz, D0, n_segments=None, extension_segments=5
 ):
     """Build a SimGeometry3D with z-aligned cylinders (no T2 weighting).
 
@@ -308,14 +308,29 @@ def build_multi_cylinder_geometry(
     then ghosts, structure indices [0, n_primary) correspond to primaries and
     [n_primary, nstructures) correspond to ghosts. Each cylinder is represented
     as a chain of overlapping spheres along z.
+
+    n_segments : int or None
+        Number of sphere centres along z per cylinder. If None (default), each
+        cylinder's sphere spacing is set equal to its own radius (adjacent
+        spheres just touch), guaranteeing no gaps. Large cylinders get fewer
+        spheres; small cylinders get proportionally more. Pass an explicit int
+        to override for all cylinders.
     """
     T2 = 1e10   # effectively infinite T2 — no T2 weighting
     rho = 1.0
     sg3 = geom.SimGeometry3D(lx, ly, lz, D0, T2, rho)
 
-    base_z = np.linspace(-lz / 2.0, lz / 2.0, num=n_segments)
-
+    total_spheres = 0
     for (cx, cy), radius in zip(centers_xy, radii):
+        # Per-cylinder sphere count: spacing = radius guarantees the chain is
+        # watertight (each sphere just reaches its neighbour). Uniform n_segments
+        # wastes spheres on large cylinders and can leave gaps in small ones.
+        if n_segments is not None:
+            n_seg = n_segments
+        else:
+            n_seg = max(int(np.ceil(lz / (radius / 4.0))) + 1, 5)
+
+        base_z = np.linspace(-lz / 2.0, lz / 2.0, num=n_seg)
         sx = np.full_like(base_z, cx, dtype=float)
         sy = np.full_like(base_z, cy, dtype=float)
         sz = base_z.copy()
@@ -334,9 +349,12 @@ def build_multi_cylinder_geometry(
             (sr[-extension_segments:], sr, sr[:extension_segments])
         )
 
+        total_spheres += len(sz_ext)
         cylinder = geom.Structure3D(sx_ext, sy_ext, sz_ext, sr_ext, D0, T2, rho)
         sg3.add_structure(cylinder)
 
+    print(f"  [geometry] {len(radii)} cylinders, {total_spheres} total spheres "
+          f"(mean {total_spheres / len(radii):.1f} per cylinder)")
     return sg3
 
 
@@ -886,7 +904,7 @@ def run_validation_study(resume_path=None):
     # Physical parameters
     D0 = 2.0              # μm²/ms
     total_sim_time = 100  # ms
-    time_threshold = 0.05 # ms (lower bound for MAE window)
+    time_threshold = 0.35 # ms (lower bound for MAE window)
 
     # Gamma distribution for axon diameters: Ŵ(κ, θ), θ in μm
     # θ = 4.5×10⁻⁷ m = 0.45 μm  →  mean diameter = κ × θ = 1.8 μm
@@ -896,13 +914,13 @@ def run_validation_study(resume_path=None):
     axon_area_fraction = 0.65
 
     # Calibration grid
-    # molecules_values = [int(1e6), int(5e5), int(1e5), int(5e4), int(1e4)]
-    # time_step_values = [0.0001, 0.0002, 0.0005, 0.005, 0.01]
-    # n_repeats = 5
-
     molecules_values = [int(1e6), int(5e5), int(1e5), int(5e4), int(1e4)]
-    time_step_values = [0.0001, 0.0002, 0.0005, 0.005, 0.01]
-    n_repeats = 1
+    time_step_values = [0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01]
+    n_repeats = 5
+
+    # molecules_values = [int(5e5), int(1e4)]
+    # time_step_values = [0.0005, 0.005, 0.01]
+    # n_repeats = 5
 
     # Create / resume output directory
     config_params.NUM_MOL_TIMESTEP_CALIBRATION_FOLDER_PATH = make_or_resume_output_dir(

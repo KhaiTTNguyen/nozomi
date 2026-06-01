@@ -73,17 +73,24 @@ def _write_scheme(path: Path, cfg=CFG) -> None:
 
 def _write_conf(path: Path, cylinder_list: Path, scheme: Path,
                 dwi_out: Path, cfg=CFG, seed: int | None = None,
-                ini_walker_flag: str | None = None) -> None:
+                ini_walker_flag: str | None = None,
+                n_processes: int | None = None) -> None:
     """
     MC/DC master config. Voxel coordinates are in the MC/DC internal unit
     system (millimetres). If ``ini_walker_flag`` is 'intra' or 'extra',
     MC/DC seeds walkers exclusively in that compartment against its own
     cylinder geometry (no sampling mismatch). Otherwise walkers are seeded
     uniformly across the voxel.
+
+    ``n_processes`` sets MC/DC's std::thread walker-loop parallelism. MC/DC
+    coerces ``num_process 0`` to 1 (single-threaded), so we always write an
+    explicit positive count (default ``cfg.n_processes`` = all logical CPUs).
     """
     _, _, L_m, Lz_m = build_cylinder_list_m(cfg)
     half_L_mm = 1e3 * (L_m / 2.0)
     half_Lz_mm = 1e3 * (Lz_m / 2.0)
+    nproc = int(n_processes) if n_processes is not None else int(cfg.n_processes)
+    nproc = max(1, nproc)
 
     seed_line = f"seed {int(seed)}\n" if (seed is not None and seed > 0) else ""
     ini_line = (f"ini_walkers_pos {ini_walker_flag}\n"
@@ -105,13 +112,14 @@ cylinders_list {cylinder_list}
 {-half_L_mm:.9e} {-half_L_mm:.9e} {-half_Lz_mm:.9e}
 { half_L_mm:.9e} { half_L_mm:.9e} { half_Lz_mm:.9e}
 </voxels>
-num_process 0
+num_process {nproc}
 <END>
 """
     path.write_text(conf)
 
 
-def run_once(repeat: int, cfg=CFG, compartment: str = "intra") -> dict:
+def run_once(repeat: int, cfg=CFG, compartment: str = "intra",
+             n_processes: int | None = None) -> dict:
     t_start = time.time()
 
     work = RESULTS_DIR / "mcdc" / f"run_{repeat:02d}"
@@ -142,7 +150,7 @@ def run_once(repeat: int, cfg=CFG, compartment: str = "intra") -> dict:
     ini_flag = compartment if compartment in ("intra", "extra") else None
     _write_conf(conf_path, Path(cyl_rel), Path(scheme_rel),
                 out_prefix_rel, cfg, seed=seed,
-                ini_walker_flag=ini_flag)
+                ini_walker_flag=ini_flag, n_processes=n_processes)
 
     mcdc = Path(cfg.mcdc_bin)
     if not mcdc.exists():
@@ -185,6 +193,7 @@ def run_once(repeat: int, cfg=CFG, compartment: str = "intra") -> dict:
         "te_s": cfg.te_s,
         "seed": int(seed),
         "compartment": compartment,
+        "n_processes": int(n_processes) if n_processes is not None else int(cfg.n_processes),
     }
 
 
