@@ -71,7 +71,8 @@ echo "[bench] frameworks: ${FRAMEWORKS[*]}"
 python -m tests.benchmark.substrate
 
 # Print substrate + analytic intra signal summary so every sweep's log is
-# self-documenting.
+# self-documenting. The van Gelderen analytic line is only meaningful for the
+# intra-axonal compartment, so it is printed for that compartment only.
 python - <<PY
 from tests.benchmark.config import CFG
 from tests.benchmark.analytic import analytic_signals
@@ -81,8 +82,11 @@ print(f"[bench] substrate: R = {CFG.cylinder_radius_m*1e6:.2f} um (D = {CFG.cyli
 print(f"[bench] sequence: delta = {CFG.delta_s*1e3} ms, Delta = {CFG.Delta_s*1e3} ms, "
       f"TE = {CFG.te_s*1e3} ms, bvals = {list(CFG.bvals_s_mm2)} s/mm^2")
 print(f"[bench] MC: N = {CFG.n_walkers}, dt = {CFG.time_step_s*1e6:.2f} us, compartment = $COMPARTMENT")
-S = analytic_signals(CFG)
-print(f"[bench] van Gelderen analytic intra S = {[f'{s:.5f}' for s in S]}")
+if "$COMPARTMENT" == "intra":
+    S = analytic_signals(CFG)
+    print(f"[bench] van Gelderen analytic intra S = {[f'{s:.5f}' for s in S]}")
+else:
+    print(f"[bench] van Gelderen analytic not applicable for compartment '$COMPARTMENT' (skipped)")
 PY
 
 for fw in "${FRAMEWORKS[@]}"; do

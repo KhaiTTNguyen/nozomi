@@ -68,6 +68,24 @@ def _stack_signals(runs: list[dict]) -> np.ndarray:
     return np.vstack([np.asarray(r["signal"]) for r in runs])
 
 
+def _detect_compartment() -> str:
+    """Infer the seeding compartment from the per-run JSONs.
+
+    Runners record the compartment they seeded into: nozomi/disimpy/mcdc store
+    the ``compartment`` key, while camino stores its native ``initial`` flag
+    (where 'uniform' corresponds to the 'all' compartment). Returns one of
+    'intra' | 'extra' | 'all', defaulting to 'intra' when nothing is found.
+    """
+    for fw in FRAMEWORKS:
+        for r in _load_runs(fw):
+            comp = r.get("compartment")
+            if comp is None and "initial" in r:
+                comp = {"uniform": "all"}.get(r["initial"], r["initial"])
+            if comp in ("intra", "extra", "all"):
+                return comp
+    return "intra"
+
+
 def aggregate(cfg=CFG) -> dict:
     per_fw = {}
     for fw in FRAMEWORKS:
@@ -89,6 +107,7 @@ def aggregate(cfg=CFG) -> dict:
     summary = {
         "bvals_s_mm2": list(cfg.bvals_s_mm2),
         "config": _jsonable_cfg(cfg),
+        "compartment": _detect_compartment(),
         "per_framework": per_fw,
     }
     if "camino" in per_fw:
@@ -122,21 +141,27 @@ def _plot(summary: dict, out_path: Path, cfg=CFG) -> None:
         ref_mean = np.asarray(per_fw["camino"]["signal_mean"])
         ref_std = np.asarray(per_fw["camino"]["signal_std"])
 
-    # Analytic van Gelderen perpendicular signal at the same b-values.
-    analytic = np.array([
-        vangelderen_perp(
-            gmax_T_per_m_for_bvalue_s_mm2(float(b), cfg.delta_s, cfg.Delta_s),
-            cfg.cylinder_radius_m, cfg.D0_m2_s, cfg.delta_s, cfg.Delta_s,
-        )
-        for b in bvals
-    ])
+    # The van Gelderen analytic solution models confined intra-axonal diffusion
+    # only; it is not a valid reference for the extra-axonal compartment, so we
+    # plot it for the 'intra' compartment exclusively.
+    show_analytic = summary.get("compartment", "intra") == "intra"
+    if show_analytic:
+        # Analytic van Gelderen perpendicular signal at the same b-values.
+        analytic = np.array([
+            vangelderen_perp(
+                gmax_T_per_m_for_bvalue_s_mm2(float(b), cfg.delta_s, cfg.Delta_s),
+                cfg.cylinder_radius_m, cfg.D0_m2_s, cfg.delta_s, cfg.Delta_s,
+            )
+            for b in bvals
+        ])
 
     fig, axes = plt.subplots(2, 2, figsize=(12, 9))
     ax_sig, ax_log, ax_res, ax_bar = axes.flat
 
     # --- (a) S(b) vs b ---
-    ax_sig.plot(bvals, analytic, color="k", linestyle="--", linewidth=1.5,
-                marker="x", markersize=6, label="van Gelderen (analytic)", zorder=5)
+    if show_analytic:
+        ax_sig.plot(bvals, analytic, color="k", linestyle="--", linewidth=1.5,
+                    marker="x", markersize=6, label="van Gelderen (analytic)", zorder=5)
     for fw in fws:
         info = per_fw[fw]
         s = np.asarray(info["signal_mean"])
@@ -151,10 +176,11 @@ def _plot(summary: dict, out_path: Path, cfg=CFG) -> None:
 
     # --- (b) ln S(b) vs b (drop b = 0) ---
     mask = bvals > 0
-    a_safe = np.where(analytic > 1e-9, analytic, 1e-9)
-    ax_log.plot(bvals[mask], np.log(a_safe[mask]), color="k", linestyle="--",
-                linewidth=1.5, marker="x", markersize=6,
-                label="van Gelderen (analytic)", zorder=5)
+    if show_analytic:
+        a_safe = np.where(analytic > 1e-9, analytic, 1e-9)
+        ax_log.plot(bvals[mask], np.log(a_safe[mask]), color="k", linestyle="--",
+                    linewidth=1.5, marker="x", markersize=6,
+                    label="van Gelderen (analytic)", zorder=5)
     for fw in fws:
         info = per_fw[fw]
         s = np.asarray(info["signal_mean"])
@@ -221,7 +247,8 @@ def _plot(summary: dict, out_path: Path, cfg=CFG) -> None:
 
     fig.suptitle(
         "Monte-Carlo diffusion simulator benchmark "
-        f"(parallel cylinders, r = {cfg.cylinder_radius_m * 1e6:.2f} μm, "
+        f"({summary.get('compartment', 'intra')}-axonal, "
+        f"parallel cylinders, r = {cfg.cylinder_radius_m * 1e6:.2f} μm, "
         f"ICVF = {cfg.icvf:.2f})"
     )
     fig.tight_layout()
