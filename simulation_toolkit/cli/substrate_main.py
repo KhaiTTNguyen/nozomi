@@ -325,7 +325,11 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
         # orientation_plot.plot_along_axon_OD_arclength(substrate.optimized_fibers, optimized=True, component_label='outer')
         # if inner_fibers is not None:
         #     orientation_plot.plot_along_axon_OD_arclength(inner_fibers, optimized=True, component_label='inner')
-        
+
+        # Global (end-to-end) orientation statistics: writes the global OD
+        # histogram and the analytic Watson FOD glyph into figs/substrate_stats/ODI.
+        orientation_plot.plot_global_axon_OD(substrate.optimized_fibers, optimized=True)
+
         print("====== Substrate generated in folder:"+ config_params.SUBSTRATE_OUTPUT_FOLDER_PATH+ " ======")
         print("\n")
     else:

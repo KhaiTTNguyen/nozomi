@@ -249,7 +249,7 @@ def calculate_an( n):
     return sum(bn_terms), [n for n in range(0, n+1, 2)]
 
 
-def spherical_harmonics_fit_from_tangents(tangents, lmax):
+def spherical_harmonics_fit_from_tangents(tangents, lmax, sh_smooth=1.0):
     """Compute even-SH FOD coefficients directly from unit tangent vectors.
 
     Uses the closed-form projection:
@@ -261,12 +261,39 @@ def spherical_harmonics_fit_from_tangents(tangents, lmax):
     used (antipodal symmetry) and Y_lm(-n) == Y_lm(n) for even l, it does
     not matter whether tangents are pre-flipped to the upper hemisphere.
 
+    Ring-artifact suppression
+    -------------------------
+    The raw projection above is the SH representation of a *sum of delta
+    functions* (one spike per tangent). Truncating that infinite series at
+    ``lmax`` produces Gibbs ringing: damped oscillations around the peak
+    whose negative side-lobes and spurious equatorial bumps survive the
+    later non-negativity clip as a thin colored ring / pinched waist at the
+    glyph's centre.
+
+    To remove it we apodize each SH band by a Laplace-Beltrami heat-kernel
+    weight
+
+        w_l = exp(-sh_smooth * l(l+1) / (lmax(lmax+1)))
+
+    which is mathematically equivalent to convolving the delta-FOD with a
+    smooth zonal blob on the sphere (a band-limited kernel density estimate).
+    High-l bands — the ones carrying the ringing — are tapered while the
+    low-l lobe structure is preserved. The ``l(l+1)/(lmax(lmax+1))``
+    normalisation makes a given ``sh_smooth`` deliver comparable smoothing
+    across different ``lmax`` (``w_lmax = exp(-sh_smooth)``).
+
     Parameters
     ----------
     tangents : ndarray, shape (N, 3)
         Unit tangent vectors (Cartesian).
     lmax : int
         Maximum even SH degree.
+    sh_smooth : float, optional
+        Heat-kernel apodization strength (default 1.0). 0 disables smoothing
+        and reproduces the raw delta-projection glyph (maximal ringing).
+        Larger values (e.g. 1.5-3) further suppress ringing at the cost of a
+        broader glyph; useful for sharp FODs (high kappa) where ``lmax`` is
+        too low to represent the peak without oscillating.
 
     Returns
     -------
@@ -281,10 +308,14 @@ def spherical_harmonics_fit_from_tangents(tangents, lmax):
                          t[:, 2])                    # phi in scipy convention
     total_coeffs = sum(2 * l + 1 for l in degrees)
     coeffs = np.zeros(total_coeffs, dtype=complex)
+    # Laplace-Beltrami apodization normaliser so sh_smooth scales the same
+    # way regardless of lmax (w_lmax = exp(-sh_smooth)).
+    lb_norm = float(lmax * (lmax + 1)) if lmax > 0 else 1.0
     idx = 0
     for l in degrees:
+        w_l = np.exp(-sh_smooth * (l * (l + 1)) / lb_norm) if sh_smooth > 0 else 1.0
         for m in range(-l, l + 1):
-            coeffs[idx] = np.conj(sph_harm(m, l, azimuth, polar)).mean()
+            coeffs[idx] = w_l * np.conj(sph_harm(m, l, azimuth, polar)).mean()
             idx += 1
     return coeffs, 0.0
 
@@ -363,7 +394,7 @@ def _kappa_file_tag(fit):
 
 
 def plot_along_axon_OD_arclength(spheres_xyz_r_fid, optimized=True, ds=None,
-                                 lmax=8, component_label=None):
+                                 lmax=8, sh_smooth=1.0, component_label=None):
     """Arc-length variant of plot_along_axon_OD.
 
     - Resamples each fiber's centerline at uniform arc length before taking
@@ -381,6 +412,11 @@ def plot_along_axon_OD_arclength(spheres_xyz_r_fid, optimized=True, ds=None,
         values (e.g. 6-10) suppress Gibbs-style ringing at the equator that
         shows up as a pinched waist for broad FODs; high values sharpen
         glyphs for narrow FODs at the cost of equatorial ringing.
+    sh_smooth : float
+        Laplace-Beltrami heat-kernel apodization strength applied to the SH
+        bands to remove the residual equatorial ring / pinched-waist artifact
+        (see ``spherical_harmonics_fit_from_tangents``). 0 disables it; the
+        default 1.0 removes the ring while keeping the lobes sharp.
     """
     folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH + "/figs/substrate_stats/ODI"
     if not os.path.exists(folder_path):
@@ -408,9 +444,15 @@ def plot_along_axon_OD_arclength(spheres_xyz_r_fid, optimized=True, ds=None,
     # --- spherical-harmonics glyph via direct closed-form projection ---
     # Bypasses histogram discretisation, lat-lon area bias, and hemisphere
     # restriction — all sources of the equatorial ringing artifact.
-    coeffs, fit_error = spherical_harmonics_fit_from_tangents(tangents, lmax=lmax)
+    coeffs, fit_error = spherical_harmonics_fit_from_tangents(tangents, lmax=lmax,
+                                                              sh_smooth=sh_smooth)
     _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_path,
-                             fit, optimized=optimized, component_label=component_label)
+                             fit, optimized=optimized, component_label=component_label,
+                             sh_smooth=sh_smooth)
+
+    # --- analytic Watson model glyph (ring-free, lmax/smooth-independent) ---
+    _plot_3D_glyph_analytic_watson(fit, folder_path, optimized=optimized,
+                                   component_label=component_label)
 
     # --- achieved Watson-samples scatter (mirrors the prescribed
     #     Watson_samples_kappa_<K>.png style for direct comparison) ---
@@ -522,7 +564,8 @@ def _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_name,
                              fit, optimized,
                              method_tag="arclength",
                              method_label="arc-length",
-                             component_label=None):
+                             component_label=None,
+                             sh_smooth=1.0):
     theta = np.linspace(0, 2 * np.pi, 180)
     phi = np.linspace(0, np.pi, 180)
     xx = np.outer(np.cos(theta), np.sin(phi))
@@ -590,7 +633,90 @@ def _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_name,
     title = (f"Along axon FOD{component_title} ({method_label}, lmax={lmax}) - {stage} fibers"
              + _kappa_title_suffix(fit))
     plt.title(title, fontsize=14, pad=20)
-    fname = f"FOD_3D_glyph{component_tag}_{method_tag}_direct_lmax{lmax}_{_kappa_file_tag(fit)}"
+    fname = (f"FOD_3D_glyph{component_tag}_{method_tag}_direct_lmax{lmax}"
+             f"_smooth{sh_smooth:g}_{_kappa_file_tag(fit)}")
+    if not optimized:
+        fname += "_preoptimized"
+    plt.savefig(os.path.join(folder_path, fname + ".png"),
+                dpi=500, edgecolor='b', format='png')
+    plt.close(fig)
+
+
+def _plot_3D_glyph_analytic_watson(fit, folder_name, optimized,
+                                   method_tag="arclength",
+                                   method_label="arc-length",
+                                   component_label=None):
+    """Render the fitted Watson distribution as a closed-form 3D glyph.
+
+    Unlike the empirical glyph (``_plot_3D_glyph_arclength``), which is a
+    truncated spherical-harmonic reconstruction of the *measured* tangents,
+    this draws the analytic Watson PDF evaluated at the *fitted* concentration
+    ``kappa`` about the fitted mean direction ``mu``:
+
+        r(n) = exp(kappa * (n . mu)^2)
+
+    Because it is a smooth closed-form surface (no SH truncation), it can
+    never produce the Gibbs equatorial ring / pinched-waist artifact, and it
+    separates concentrations strongly (a thin needle for high kappa vs a fat
+    lobe for low kappa). The trade-off is that it visualises the fitted Watson
+    *model*, not the raw data FOD, so it cannot reveal non-Watson structure.
+    It is independent of ``lmax`` / ``sh_smooth``.
+    """
+    kappa = float(fit.get('kappa', np.nan))
+    mu = np.asarray(fit.get('mu', np.array([0.0, 0.0, 1.0])), dtype=float)
+    n = np.linalg.norm(mu)
+    if n > 0:
+        mu = mu / n
+    if not np.isfinite(kappa):
+        print("[_plot_3D_glyph_analytic_watson] kappa not finite; skipping.")
+        return
+
+    theta = np.linspace(0, 2 * np.pi, 180)
+    phi = np.linspace(0, np.pi, 180)
+    xx = np.outer(np.cos(theta), np.sin(phi))
+    yy = np.outer(np.sin(theta), np.sin(phi))
+    zz = np.outer(np.ones(np.size(theta)), np.cos(phi))
+
+    # cos(angle to mu) for every direction on the unit sphere.
+    cos_ang = xx * mu[0] + yy * mu[1] + zz * mu[2]
+    # Watson PDF shape (drop the normalising constant; we rescale to max=1).
+    # Subtract kappa before exp for numerical stability at large kappa
+    # (equivalent to dividing by the peak value exp(kappa)).
+    radii = np.exp(kappa * (cos_ang ** 2) - kappa)
+    Ymax = radii.max() if radii.max() > 0 else 1.0
+
+    x = radii * xx
+    y = radii * yy
+    z = radii * zz
+
+    folder_path = folder_name
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    # Direction coloring (same convention as the empirical glyph).
+    colors = np.zeros((xx.shape[0], xx.shape[1], 3))
+    colors[:, :, 0] = np.abs(xx)
+    colors[:, :, 1] = np.abs(yy)
+    colors[:, :, 2] = np.abs(zz)
+    ls = LightSource(60, 45)
+    rgb = ls.shade_rgb(colors, z, vert_exag=0.1, blend_mode='soft')
+    ax.plot_surface(x, y, z, rstride=1, cstride=1, facecolors=rgb,
+                    linewidth=0, antialiased=False, shade=False)
+    ax.set_xlim(-Ymax, Ymax)
+    ax.set_ylim(-Ymax, Ymax)
+    ax.set_zlim(-Ymax, Ymax)
+    ax.set_xlabel('X left-right', fontsize=15, labelpad=10)
+    ax.set_ylabel('Y anterior-posterior', fontsize=15, labelpad=10)
+    ax.set_zlabel('Z superior-inferior', fontsize=15, labelpad=10)
+
+    stage = "optimized" if optimized else "preoptimized"
+    component_title, component_tag = _component_suffix(component_label)
+    title = (f"Watson model FOD{component_title} ({method_label}) - {stage} fibers"
+             + _kappa_title_suffix(fit))
+    plt.title(title, fontsize=14, pad=20)
+    fname = f"FOD_3D_glyph{component_tag}_{method_tag}_watson_{_kappa_file_tag(fit)}"
     if not optimized:
         fname += "_preoptimized"
     plt.savefig(os.path.join(folder_path, fname + ".png"),
@@ -702,15 +828,17 @@ def _global_endpoint_tangents_and_fit(spheres_xyz_r_fid):
     return tangents, result
 
 
-def plot_global_axon_OD(spheres_xyz_r_fid, optimized=True, lmax=8):
-    """Global (end-to-end) variant of plot_along_axon_OD_arclength.
+def plot_global_axon_OD(spheres_xyz_r_fid, optimized=True):
+    """Global (end-to-end) orientation statistics for the substrate.
 
     - One unit vector per fiber: (endpoint - startpoint), normalised.
     - Fits a bipolar Watson distribution via scatter-matrix MLE on those
       global orientation vectors.
-    - Emits OD histogram, 3D FOD glyph (closed-form SH projection) and
-      achieved-samples scatter, all tagged with ``global`` in both the
-      title and the filename so they coexist with the arc-length outputs.
+    - Emits exactly two figures, both tagged ``global`` and carrying the
+      fitted kappa / ODI in their filenames:
+        * ``OD_histogram_global_*`` : smoothed orientation-density heatmap.
+        * ``FOD_3D_glyph_global_watson_*`` : closed-form analytic Watson
+          glyph (ring-free, separates concentrations strongly).
     """
     folder_path = config_params.SUBSTRATE_OUTPUT_FOLDER_PATH + "/figs/substrate_stats/ODI"
     if not os.path.exists(folder_path):
@@ -733,12 +861,7 @@ def plot_global_axon_OD(spheres_xyz_r_fid, optimized=True, lmax=8):
         tangents, fit, optimized=optimized, folder_name=folder_path,
         method_tag="global", method_label="global")
 
-    coeffs, fit_error = spherical_harmonics_fit_from_tangents(tangents, lmax=lmax)
-    _plot_3D_glyph_arclength(coeffs, fit_error, lmax, folder_path,
-                             fit, optimized=optimized,
-                             method_tag="global", method_label="global")
-
-    _plot_watson_samples_achieved(tangents, fit, folder_path,
-                                  optimized=optimized,
-                                  method_tag="global", method_label="global")
+    # --- analytic Watson model glyph (ring-free, lmax/smooth-independent) ---
+    _plot_3D_glyph_analytic_watson(fit, folder_path, optimized=optimized,
+                                   method_tag="global", method_label="global")
     return fit

@@ -1,0 +1,22 @@
+nohup: ignoring input
+Scalability sweep over num_fibers = [5000]
+Results -> /home/nguyt16@ds.vanderbilt.edu/nozomi/tests/scalability/results/runs
+
+=== N_fibers = 5000 ===
+  GPU free=25.1 GB / total=25.3 GB  -> per-process cap = 79% (20.0 GB)
+Building substrate with:         volume_fraction=0.57,        diameter_mean=1.68,        orientation_shape_parameter=200,         bead_alpha_mean=0.3,        num_fibers=5000
+Box_length 230.0
+------ Start packing 2D initialization ------
+Iteration  0  . Overlaps  9436
+Iteration  1  . Overlaps  1190
+Iteration  2  . Overlaps  4
+Iteration  3  . Overlaps  0
+Final num_overlap: 0
+------ Done packing 2D initialization ------
+Done saving data file
+----- Starting geometric optimization -----
+Iteration: 0 . Overlaps:  44946660
+Iteration: 1 . Overlaps:  25242762
+Iteration: 2 . Overlaps:  21710157
+Iteration: 3 . Overlaps:  19069661
+  OUT OF MEMORY at N=5000 (budget reached). Stopping sweep -> this is the feasibility ceiling.

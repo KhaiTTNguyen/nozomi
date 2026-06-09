@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "oom": false,
+  "num_fibers": 2000,
+  "target_volume_fraction": 0.57,
+  "mean_diameter": 1.68,
+  "wall_elapsed_s": 37691.5461769104,
+  "gen_elapsed_s": 37690.09,
+  "box_L_um": 147.0,
+  "n_spheres": 3225525,
+  "output_pickle": "/home/nguyt16@ds.vanderbilt.edu/nozomi/tests/scalability/results/substrates/scalability_N002000/d1.68_K200_ODI_0.0032_bead_0.3_VF_0.57/2026-06-03_16-19-53_d1.68_K200_ODI_0.0032_bead_0.3_2000fibers/data/array2000_fibers_boxL_147.0_2026-06-03_16-19-53_avf_0.71_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_37690.09_sec.pkl",
+  "output_bytes": 64510919,
+  "peak_gpu_alloc_bytes": 5778954752,
+  "peak_gpu_reserved_bytes": 6224347136,
+  "peak_host_rss_bytes": 8612347904,
+  "gpu_mem_fraction_cap": 0.7913150496819578,
+  "driver_wall_s": 37694.441840171814
+}

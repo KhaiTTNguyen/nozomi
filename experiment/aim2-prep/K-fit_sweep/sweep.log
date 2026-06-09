@@ -1,0 +1,272 @@
+nohup: ignoring input
+##### 12:08:33  root=2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers  lmax=10  smooth=0.2
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_85.0_2026-03-22_23-44_avf_0.71_d1.68_sig0.45wo10_wc3_wl3_K10_ODI_0.0635_17177.32_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+10.0         3.885        0.16039      7.927        0.07989      71813     
+##### 12:09:23  root=2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers  lmax=10  smooth=0.5
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_85.0_2026-03-22_23-44_avf_0.71_d1.68_sig0.45wo10_wc3_wl3_K10_ODI_0.0635_17177.32_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+10.0         3.885        0.16039      7.927        0.07989      71813     
+##### 12:10:13  root=2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers  lmax=10  smooth=1.0
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_85.0_2026-03-22_23-44_avf_0.71_d1.68_sig0.45wo10_wc3_wl3_K10_ODI_0.0635_17177.32_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+10.0         3.885        0.16039      7.927        0.07989      71813     
+##### 12:11:02  root=2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers  lmax=15  smooth=0.2
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_85.0_2026-03-22_23-44_avf_0.71_d1.68_sig0.45wo10_wc3_wl3_K10_ODI_0.0635_17177.32_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+10.0         3.885        0.16039      7.927        0.07989      71813     
+##### 12:12:07  root=2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers  lmax=15  smooth=0.5
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_85.0_2026-03-22_23-44_avf_0.71_d1.68_sig0.45wo10_wc3_wl3_K10_ODI_0.0635_17177.32_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+10.0         3.885        0.16039      7.927        0.07989      71813     
+##### 12:13:14  root=2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers  lmax=15  smooth=1.0
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_85.0_2026-03-22_23-44_avf_0.71_d1.68_sig0.45wo10_wc3_wl3_K10_ODI_0.0635_17177.32_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+10.0         3.885        0.16039      7.927        0.07989      71813     
+##### 12:14:20  root=2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers  lmax=20  smooth=0.2
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_85.0_2026-03-22_23-44_avf_0.71_d1.68_sig0.45wo10_wc3_wl3_K10_ODI_0.0635_17177.32_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+10.0         3.885        0.16039      7.927        0.07989      71813     
+##### 12:16:01  root=2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers  lmax=20  smooth=0.5
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_85.0_2026-03-22_23-44_avf_0.71_d1.68_sig0.45wo10_wc3_wl3_K10_ODI_0.0635_17177.32_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+10.0         3.885        0.16039      7.927        0.07989      71813     
+##### 12:17:42  root=2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers  lmax=20  smooth=1.0
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD10_initVF0.41_500axons/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_85.0_2026-03-22_23-44_avf_0.71_d1.68_sig0.45wo10_wc3_wl3_K10_ODI_0.0635_17177.32_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K10_ODI_0.0635_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+10.0         3.885        0.16039      7.927        0.07989      71813     
+##### 12:19:23  root=2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers  lmax=10  smooth=0.2
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_83.0_2026-03-22_23-44_avf_0.68_d1.68_sig0.45wo10_wc3_wl3_K20_ODI_0.0318_17670.84_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+20.0         5.513        0.11424      16.041       0.03964      64408     
+##### 12:20:10  root=2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers  lmax=10  smooth=0.5
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_83.0_2026-03-22_23-44_avf_0.68_d1.68_sig0.45wo10_wc3_wl3_K20_ODI_0.0318_17670.84_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+20.0         5.513        0.11424      16.041       0.03964      64408     
+##### 12:20:57  root=2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers  lmax=10  smooth=1.0
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_83.0_2026-03-22_23-44_avf_0.68_d1.68_sig0.45wo10_wc3_wl3_K20_ODI_0.0318_17670.84_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+20.0         5.513        0.11424      16.041       0.03964      64408     
+##### 12:21:44  root=2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers  lmax=15  smooth=0.2
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_83.0_2026-03-22_23-44_avf_0.68_d1.68_sig0.45wo10_wc3_wl3_K20_ODI_0.0318_17670.84_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+20.0         5.513        0.11424      16.041       0.03964      64408     
+##### 12:22:49  root=2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers  lmax=15  smooth=0.5
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_83.0_2026-03-22_23-44_avf_0.68_d1.68_sig0.45wo10_wc3_wl3_K20_ODI_0.0318_17670.84_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+20.0         5.513        0.11424      16.041       0.03964      64408     
+##### 12:23:52  root=2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers  lmax=15  smooth=1.0
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_83.0_2026-03-22_23-44_avf_0.68_d1.68_sig0.45wo10_wc3_wl3_K20_ODI_0.0318_17670.84_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+20.0         5.513        0.11424      16.041       0.03964      64408     
+##### 12:24:58  root=2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers  lmax=20  smooth=0.2
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_83.0_2026-03-22_23-44_avf_0.68_d1.68_sig0.45wo10_wc3_wl3_K20_ODI_0.0318_17670.84_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+20.0         5.513        0.11424      16.041       0.03964      64408     
+##### 12:26:39  root=2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers  lmax=20  smooth=0.5
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_83.0_2026-03-22_23-44_avf_0.68_d1.68_sig0.45wo10_wc3_wl3_K20_ODI_0.0318_17670.84_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+20.0         5.513        0.11424      16.041       0.03964      64408     
+##### 12:28:19  root=2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers  lmax=20  smooth=1.0
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD20_initVF0.435_500axons/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_83.0_2026-03-22_23-44_avf_0.68_d1.68_sig0.45wo10_wc3_wl3_K20_ODI_0.0318_17670.84_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K20_ODI_0.0318_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+20.0         5.513        0.11424      16.041       0.03964      64408     
+##### 12:29:59  root=2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers  lmax=10  smooth=0.2
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_80.0_2026-03-22_23-44_avf_0.69_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_17145.83_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+200.0        11.048       0.05747      131.858      0.00483      56640     
+##### 12:30:45  root=2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers  lmax=10  smooth=0.5
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_80.0_2026-03-22_23-44_avf_0.69_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_17145.83_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+200.0        11.048       0.05747      131.858      0.00483      56640     
+##### 12:31:31  root=2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers  lmax=10  smooth=1.0
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_80.0_2026-03-22_23-44_avf_0.69_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_17145.83_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+200.0        11.048       0.05747      131.858      0.00483      56640     
+##### 12:32:17  root=2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers  lmax=15  smooth=0.2
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_80.0_2026-03-22_23-44_avf_0.69_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_17145.83_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+200.0        11.048       0.05747      131.858      0.00483      56640     
+##### 12:33:18  root=2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers  lmax=15  smooth=0.5
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_80.0_2026-03-22_23-44_avf_0.69_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_17145.83_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+200.0        11.048       0.05747      131.858      0.00483      56640     
+##### 12:34:20  root=2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers  lmax=15  smooth=1.0
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_80.0_2026-03-22_23-44_avf_0.69_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_17145.83_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+200.0        11.048       0.05747      131.858      0.00483      56640     
+##### 12:35:23  root=2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers  lmax=20  smooth=0.2
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_80.0_2026-03-22_23-44_avf_0.69_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_17145.83_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+200.0        11.048       0.05747      131.858      0.00483      56640     
+##### 12:37:01  root=2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers  lmax=20  smooth=0.5
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_80.0_2026-03-22_23-44_avf_0.69_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_17145.83_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+200.0        11.048       0.05747      131.858      0.00483      56640     
+##### 12:38:41  root=2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers  lmax=20  smooth=1.0
+Scanning: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+Output root: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep
+
+=== Reprocessing: /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data/2026-03-22_bead_05/bead0.5_d1.68_OD200_initVF0.465_500axons/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+    pickle: array500_fibers_boxL_80.0_2026-03-22_23-44_avf_0.69_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_17145.83_sec.pkl
+    output -> /home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/K-fit_sweep/2026-03-22_23-44_d1.68_K200_ODI_0.0032_bead_0.5_500fibers
+
+K_designed   K_arclen     ODI_arclen   K_global     ODI_global   n_tan     
+200.0        11.048       0.05747      131.858      0.00483      56640     
+##### SWEEP DONE 12:40:20

@@ -157,11 +157,14 @@ def _run_one_K(K: float, out_root: Path, rng: np.random.Generator):
     config_params.SUBSTRATE_OUTPUT_FOLDER_PATH = str(K_folder)
     config_params.ORIENTATION_SHAPE_PARAM = float(K)
 
-    fit = orientation_plot.plot_along_axon_OD_arclength(
+    # Validate the SAME global Watson fit used in the production pipeline
+    # (plot_global_axon_OD). For straight axons the end-to-end vector equals
+    # the fiber direction, so the prescribed K is recovered directly.
+    fit = orientation_plot.plot_global_axon_OD(
         xyz_r_fid, optimized=True,
     )
     print(f"    K_designed={K}  K_fit={fit['kappa']:.3f}  "
-          f"ODI_fit={fit['ODI']:.5f}  n_tangents={fit['n_samples']}")
+          f"ODI_fit={fit['ODI']:.5f}  n_vectors={fit['n_samples']}")
     return {
         'K_designed': float(K),
         'K_fit': float(fit['kappa']),

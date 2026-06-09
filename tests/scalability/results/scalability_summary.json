@@ -1,0 +1,63 @@
+[
+  {
+    "ok": false,
+    "oom": true,
+    "num_fibers": 5000,
+    "error": "Traceback (most recent call last):\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/tests/scalability/run_scalability_gen.py\", line 167, in _worker\n    torch.cuda.init()\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/cli/substrate_main.py\", line 219, in substrate_main\n    substrate = GeometricOptimization(device, meshing, config_params.SPHERE_SPACING,\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 28, in __init__\n    self.optimized_fibers = self.repulse_3d_with_optimizer(num_iteration=90)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 159, in repulse_3d_with_optimizer\n    self.optimizer.step(partial(closure, self.normalize_weights(self.w_overlap,self.w_curve, self.w_length)))\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/optimizer.py\", line 484, in wrapper\n    out = func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 437, in step\n    loss, flat_grad, t, ls_func_evals = _strong_wolfe(\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 45, in _strong_wolfe\n    f_new, g_new = obj_func(x, t, d)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 435, in obj_func\n    return self._directional_evaluate(closure, x, t, d)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/optim/lbfgs.py\", line 289, in _directional_evaluate\n    loss = float(closure())\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 99, in closure\n    loss = objective_function(c_pos, c_mask, c_ra, c_fid, wo=wo,wc=wc,wl=wl)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 86, in objective_function\n    overlap_cost = self.overlap_cost_function(m_pos, c_mask, c_ra, wrapped_fiber_id)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/geometric_optimization.py\", line 188, in overlap_cost_function\n    collision_set = CD.detect_collision(positions, torch_wrapped_ra, fid_, Lx, Ly, Lz, detect_buff)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/sim_venv/lib/python3.8/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/helper/CollisionDetection.py\", line 8, in detect_collision\n    return collide_spheres_gpu(sphere_positions, sphere_radii, fiber_id, Lx, Ly, Lz, buff)\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/helper/CollisionDetection.py\", line 41, in collide_spheres_gpu\n    ret = torch.nonzero(intersect_block(block_positions,block_radii,block_fid, buff)) #\\\n  File \"/home/nguyt16@ds.vanderbilt.edu/nozomi/simulation_toolkit/substrate_generator/helper/CollisionDetection.py\", line 56, in intersect_block\n    dm = torch.linalg.norm(x.unsqueeze(1) - x.unsqueeze(0), dim=-1)\ntorch.OutOfMemoryError: CUDA out of memory. Tried to allocate 532.00 MiB. GPU 0 has a total capacity of 23.56 GiB of which 4.42 GiB is free. Process 3052852 has 202.00 MiB memory in use. Including non-PyTorch memory, this process has 18.92 GiB memory in use. Of the allocated memory 16.66 GiB is allocated by PyTorch, and 1.82 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)\n",
+    "driver_wall_s": 10313.773193597794
+  },
+  {
+    "ok": true,
+    "oom": false,
+    "num_fibers": 100,
+    "target_volume_fraction": 0.57,
+    "mean_diameter": 1.68,
+    "wall_elapsed_s": 2213.210401535034,
+    "gen_elapsed_s": 2213.13,
+    "box_L_um": 32.0,
+    "n_spheres": 37739,
+    "output_pickle": "/home/nguyt16@ds.vanderbilt.edu/nozomi/tests/scalability/results/substrates/scalability_N000100/d1.68_K200_ODI_0.0032_bead_0.3_VF_0.57/2026-06-03_16-09-27_d1.68_K200_ODI_0.0032_bead_0.3_100fibers/data/array100_fibers_boxL_32.0_2026-06-03_16-09-27_avf_0.66_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_2213.13_sec.pkl",
+    "output_bytes": 755199,
+    "peak_gpu_alloc_bytes": 75023360,
+    "peak_gpu_reserved_bytes": 88080384,
+    "peak_host_rss_bytes": 1724325888,
+    "gpu_mem_fraction_cap": 0.7913150496819578,
+    "driver_wall_s": 2216.118438720703
+  },
+  {
+    "ok": true,
+    "oom": false,
+    "num_fibers": 500,
+    "target_volume_fraction": 0.57,
+    "mean_diameter": 1.68,
+    "wall_elapsed_s": 9018.04801774025,
+    "gen_elapsed_s": 9017.8,
+    "box_L_um": 72.0,
+    "n_spheres": 412048,
+    "output_pickle": "/home/nguyt16@ds.vanderbilt.edu/nozomi/tests/scalability/results/substrates/scalability_N000500/d1.68_K200_ODI_0.0032_bead_0.3_VF_0.57/2026-06-03_16-46-23_d1.68_K200_ODI_0.0032_bead_0.3_500fibers/data/array500_fibers_boxL_72.0_2026-06-03_16-46-23_avf_0.69_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_9017.8_sec.pkl",
+    "output_bytes": 8241379,
+    "peak_gpu_alloc_bytes": 793220096,
+    "peak_gpu_reserved_bytes": 861929472,
+    "peak_host_rss_bytes": 3278147584,
+    "gpu_mem_fraction_cap": 0.7913150496819578,
+    "driver_wall_s": 9020.920158624649
+  },
+  {
+    "ok": true,
+    "oom": false,
+    "num_fibers": 2000,
+    "target_volume_fraction": 0.57,
+    "mean_diameter": 1.68,
+    "wall_elapsed_s": 37691.5461769104,
+    "gen_elapsed_s": 37690.09,
+    "box_L_um": 147.0,
+    "n_spheres": 3225525,
+    "output_pickle": "/home/nguyt16@ds.vanderbilt.edu/nozomi/tests/scalability/results/substrates/scalability_N002000/d1.68_K200_ODI_0.0032_bead_0.3_VF_0.57/2026-06-03_16-19-53_d1.68_K200_ODI_0.0032_bead_0.3_2000fibers/data/array2000_fibers_boxL_147.0_2026-06-03_16-19-53_avf_0.71_d1.68_sig0.45wo10_wc3_wl3_K200_ODI_0.0032_37690.09_sec.pkl",
+    "output_bytes": 64510919,
+    "peak_gpu_alloc_bytes": 5778954752,
+    "peak_gpu_reserved_bytes": 6224347136,
+    "peak_host_rss_bytes": 8612347904,
+    "gpu_mem_fraction_cap": 0.7913150496819578,
+    "driver_wall_s": 37694.441840171814
+  }
+]

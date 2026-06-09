@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-"""Re-generate OD / FOD plots and fit a Watson distribution (arc-length
-method, Callaghan/ConFiG-style) on previously generated substrates.
+"""Re-generate the global OD / FOD plots and fit a Watson distribution on
+previously generated substrates.
 
 Usage
 -----
     python -m simulation_toolkit.cli.reprocess_substrate_orientation \\
-        --root ./experiment/result/2026-03-22_bead_1.24 \\
-        [--ds 0.5]
+        --root ./experiment/result/2026-03-22_bead_1.24
     # or run directly:
     python simulation_toolkit/cli/reprocess_substrate_orientation.py \\
         --root ./experiment/result/2026-03-22_bead_1.24
@@ -19,11 +18,8 @@ a ``data/*.pkl`` file produced by substrate_main). The script:
       so existing plot utilities work,
     * parses the prescribed kappa from the folder name (``_K<int>_``) when
       available so it is embedded in the plot titles / filenames,
-    * calls ``plot_along_axon_OD_arclength`` -> writes new plots with an
-      ``_arclength_Kdes<D>_Kfit<F>`` suffix that do NOT overwrite the previous
-      ``OD_histogram.png`` / ``FOD_3D_glyph.png`` outputs, and also writes a
-      ``Watson_samples_achieved_arclength_*.png`` mirroring the prescribed
-      Watson_samples plot for direct comparison.
+    * calls ``plot_global_axon_OD`` -> writes the global OD histogram and the
+      analytic Watson FOD glyph (both tagged with the fitted kappa / ODI).
 """
 
 from __future__ import annotations
@@ -79,7 +75,7 @@ def _find_substrate_folders(root: Path):
         yield data_dir.parent, pkls[0]
 
 
-def _reprocess_one(substrate_folder: Path, pkl_path: str, ds=None, lmax=8):
+def _reprocess_one(substrate_folder: Path, pkl_path: str):
     print(f"\n=== Reprocessing: {substrate_folder}")
     print(f"    pickle: {os.path.basename(pkl_path)}")
 
@@ -94,18 +90,17 @@ def _reprocess_one(substrate_folder: Path, pkl_path: str, ds=None, lmax=8):
     if k_prescribed is not None:
         config_params.ORIENTATION_SHAPE_PARAM = k_prescribed
 
-    fit = orientation_plot.plot_along_axon_OD_arclength(
-        optimized_fibers, optimized=True, ds=ds, lmax=lmax)
+    # --- arc-length OD/FOD fit kept for reference but not emitted in the
+    #     production pipeline (the global Watson glyph is the chosen output).
+    # fit_arclength = orientation_plot.plot_along_axon_OD_arclength(
+    #     optimized_fibers, optimized=True)
 
     fit_global = orientation_plot.plot_global_axon_OD(
-        optimized_fibers, optimized=True, lmax=lmax)
+        optimized_fibers, optimized=True)
 
     return {
         'substrate_folder': str(substrate_folder),
         'kappa_prescribed': k_prescribed,
-        'kappa_fit': float(fit.get('kappa', np.nan)),
-        'ODI_fit': float(fit.get('ODI', np.nan)),
-        'n_tangent_samples': int(fit.get('n_samples', 0)),
         'kappa_fit_global': float(fit_global.get('kappa', np.nan)),
         'ODI_fit_global': float(fit_global.get('ODI', np.nan)),
         'n_global_samples': int(fit_global.get('n_samples', 0)),
@@ -114,19 +109,11 @@ def _reprocess_one(substrate_folder: Path, pkl_path: str, ds=None, lmax=8):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Recompute arc-length OD/FOD and Watson-kappa fit for "
+        description="Recompute the global OD/FOD and Watson-kappa fit for "
                     "previously generated substrates.")
     parser.add_argument("--root", required=True,
                         help="Folder containing substrate sub-folders "
                              "(e.g. ./experiment/result/2026-03-22_bead_1.24).")
-    parser.add_argument("--ds", type=float, default=None,
-                        help="Uniform arc-length step (same units as sphere "
-                             "coords, typically um). Default: per-fiber auto.")
-    parser.add_argument("--lmax", type=int, default=8,
-                        help="Max (even) SH degree for the FOD glyph fit. "
-                             "Lower values (6-10) suppress equatorial "
-                             "ringing that pinches broad FODs; higher "
-                             "values sharpen narrow FODs. Default: 8.")
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
@@ -135,8 +122,7 @@ def main():
     failures = []
     for substrate_folder, pkl_path in _find_substrate_folders(root):
         try:
-            rows.append(_reprocess_one(substrate_folder, pkl_path,
-                                       ds=args.ds, lmax=args.lmax))
+            rows.append(_reprocess_one(substrate_folder, pkl_path))
         except Exception as exc:
             print(f"    FAILED: {exc}")
             traceback.print_exc()
@@ -144,14 +130,13 @@ def main():
 
     if rows:
         # Short console summary (no files written).
-        print("\n{:<12} {:<12} {:<12} {:<12} {:<12} {:<10}".format(
-            "K_designed", "K_arclen", "ODI_arclen", "K_global", "ODI_global", "n_tan"))
+        print("\n{:<12} {:<12} {:<12} {:<10}".format(
+            "K_designed", "K_global", "ODI_global", "n_vec"))
         for r in rows:
-            print("{:<12} {:<12.3f} {:<12.5f} {:<12.3f} {:<12.5f} {:<10}".format(
+            print("{:<12} {:<12.3f} {:<12.5f} {:<10}".format(
                 str(r['kappa_prescribed']),
-                r['kappa_fit'], r['ODI_fit'],
                 r['kappa_fit_global'], r['ODI_fit_global'],
-                r['n_tangent_samples']))
+                r['n_global_samples']))
     else:
         print("No substrate pickles found.")
 

@@ -18,6 +18,41 @@ distribution via the orientation-tensor / scatter-matrix MLE:
           = root of  lam1 = (1/3) * M(3/2, 5/2, k) / M(1/2, 3/2, k)
 
 ODI follows the NODDI convention: ODI = (2/pi) * arctan(1/kappa).
+
+
+How kappa (K) and ODI are fitted (step by step)
+-----------------------------------------------
+1. Collect axial unit tangents ``t_i`` (``collect_arclength_tangents`` for the
+   arc-length method, or one end-to-end vector per fiber for the global
+   method). "Axial" means ``t_i`` and ``-t_i`` are equivalent.
+2. Build the 3x3 orientation scatter matrix ``T = (1/M) sum_i t_i t_i^T``
+   (``fit_watson_scatter``). T is symmetric positive semi-definite with
+   eigenvalues ``lam1 >= lam2 >= lam3`` that sum to 1.
+3. The principal eigenvector is the mean fiber direction ``mu``; the largest
+   eigenvalue ``lam1`` measures concentration (``lam1 = 1/3`` isotropic,
+   ``lam1 -> 1`` perfectly aligned).
+4. Solve the Watson MLE relation ``lam1 = (1/3) * M(3/2, 5/2, k) / M(1/2, 3/2, k)``
+   for ``kappa = k`` (``_kappa_from_lambda1``), where ``M`` is Kummer's
+   confluent hypergeometric function. A bracketed Brent root-find is used,
+   falling back to the large-kappa asymptote ``kappa ~ 1 / (2(1 - lam1))``.
+5. Convert to the NODDI dispersion index ``ODI = (2/pi) * arctan(1/kappa)``
+   in [0, 1]; small ODI = aligned, ODI -> 1 = isotropic.
+
+Validation
+----------
+This estimator MUST be sanity-checked with
+``tests/validation/orientation_fitting/test01_straight_axons_watson_fit.py``.
+That test builds **perfectly straight** axons whose directions are drawn from a
+Watson distribution with a prescribed ``K``. Because each axon is a single
+straight line, it has no local waviness, so:
+
+    * the arc-length fit and the global (end-to-end) fit should agree, and
+    * both should recover ``K_fit ~= K_designed`` (equivalently ``ODI_fit``
+      close to the designed ODI).
+
+Any substantial divergence between the arc-length and global fits, or from the
+designed K, on that straight-axon test indicates a regression in the fitting
+pipeline rather than a real substrate property.
 """
 
 from __future__ import annotations

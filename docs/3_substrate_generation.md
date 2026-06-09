@@ -108,7 +108,7 @@ source sim_venv/bin/activate
 ./run-scripts/run-geometry-gen.sh --gpu=2 --config=./experiment/setup/substrate/single_substrate/2026-05-26-bead0.5_myelin/d35-K200-beading0.5-substrate.json --output_folder_path=./experiment/result/2026-05-26_myelin_bead05_overlap_length_curve_cost_rollback
 
 # CMD prepped for d4.5 K200
-./run-scripts/run-geometry-gen.sh --gpu=7 --config=./experiment/setup/substrate/single_substrate/2026-05-26-bead0.5_myelin/d45-K20-beading0.5-substrate_auto_tune.json --output_folder_path=./experiment/result/set1_healthy_20260506_195745
+./run-scripts/run-geometry-gen.sh --gpu=1 --config=./experiment/setup/substrate/single_substrate/2026-05-26-bead2.5_myelin/d25-K10-beading2.5-substrate.json --output_folder_path=./experiment/result/set3_beading
 
 ```
 
@@ -130,9 +130,9 @@ Unless `--output_folder_path` is given, generated substrates are auto-saved to `
     │   ├── Along_axon_radius_variation_<date>.png                        # Along axon radius variation
     │   ├── CV_outer_diameter_<date>_CVmean_<CVmean>_CVstd_<CVstd>.png    # Coefficient of variation (CV) of radius across and along axons
     │   └── ODI/  
-    │       ├── <OD_histogram>.png                                         # Fiber orientation distribution (FOD) on unit sphere
-    │       ├── <FOD_3D_glyph>.png                                         # FOD as 3D spherical harmonics glyph
-    │       └── Watson_samples_kappa_<orientation_shape_parameter>.png     # Samples of fibers orientation from Watson distribution
+    │       ├── Watson_samples_kappa_<orientation_shape_parameter>.png                         # Prescribed Watson-distribution samples
+    │       ├── OD_histogram_global_Kdes_<Kdes>_Kfit_<Kfit>_ODIfit_<ODIfit>.png              # Achieved OD histogram (global fit)
+    │       └── FOD_3D_glyph_global_watson_Kdes_<Kdes>_Kfit_<Kfit>_ODIfit_<ODIfit>.png      # Analytic Watson FOD glyph (global fit)
     └── visual/                    
         └── <3D_substrate_view>.png                                        # 3D substrate view
 ```
@@ -166,12 +166,68 @@ Mathematical details included [here](https://github.com/KhaiTTNguyen/nozomi/blob
 * Beading design
 * Substrate optimization design
 
-To plot OD histogram and FOD 3D glyph
+### Reprocessing orientation: OD / FOD / Watson fit
+
+Orientation statistics can be (re)computed for already-generated substrates
+without re-running the geometry optimization. The script
+[`simulation_toolkit/cli/reprocess_substrate_orientation.py`](../simulation_toolkit/cli/reprocess_substrate_orientation.py)
+scans a folder for substrate `data/*.pkl` files, fits a Watson distribution to
+the achieved fiber orientations (global end-to-end vectors), and writes two
+plots into each substrate's `figs/substrate_stats/ODI/` folder:
+
+- `OD_histogram_global_Kdes_<Kdes>_Kfit_<Kfit>_ODIfit_<ODIfit>.png`
+- `FOD_3D_glyph_global_watson_Kdes_<Kdes>_Kfit_<Kfit>_ODIfit_<ODIfit>.png`
+
 ```bash
 cd /path/to/nozomi
 source sim_venv/bin/activate
-python simulation_toolkit/cli/reprocess_substrate_orientation.py \
-    --root experiment/result/2026-03-22_bead_03
 
-python -m simulation_toolkit.cli.reprocess_substrate_orientation --root ./experiment/result/2026-03-22_bead_1.24 --lmax 6
+python -m simulation_toolkit.cli.reprocess_substrate_orientation \
+--root experiment/aim2-prep/data/2026-03-22_bead_05
+```
+
+**Arguments**
+
+| Flag     | Default    | Meaning |
+|----------|------------|---------|
+| `--root` | (required) | Folder containing one or more substrate sub-folders (each with a `data/*.pkl`). Searched recursively. |
+
+**Fitting method — global:**
+
+One end-to-end unit vector per axon (`endpoint − startpoint`, normalised) is
+computed and pooled. This captures *global* bundle orientation dispersion
+independent of local axon waviness. The Watson MLE fit is applied to this
+vector pool to produce `Kfit` and `ODIfit`.
+
+For wavy/beaded axons the global ` Kfit` is higher (less dispersed) than a
+local arc-length fit would give; for straight axons they coincide.
+
+**Filename metrics:** `Kdes` = designed κ (parsed from the folder name
+`_K<int>_`), `Kfit` = fitted κ, `ODIfit` = fitted ODI = `(2/π)·arctan(1/Kfit)`.
+
+#### How κ (K) and ODI are fitted
+
+The fit is implemented in
+[`simulation_toolkit/utils/watson_fit.py`](../simulation_toolkit/utils/watson_fit.py)
+(`fit_watson_scatter`). Briefly:
+
+1. Pool the end-to-end unit tangents `t_i` (`t_i` and `−t_i` are equivalent).
+2. Build the orientation scatter matrix `T = (1/M) Σ_i t_i t_iᵀ`; its
+   eigenvalues `λ1 ≥ λ2 ≥ λ3` sum to 1 and the top eigenvector is the mean
+   direction `μ` (`λ1 = 1/3` isotropic, `λ1 → 1` perfectly aligned).
+3. Solve the Watson MLE relation `λ1 = (1/3)·M(3/2, 5/2, κ) / M(1/2, 3/2, κ)`
+   for `κ` (Kummer confluent hypergeometric `M`), with a large-κ asymptotic
+   fallback `κ ≈ 1 / (2(1 − λ1))`.
+4. Report `ODI = (2/π)·arctan(1/κ)` (NODDI convention), range 0–1.
+
+**Validate the fit** with
+[`tests/validation/orientation_fitting/test01_straight_axons_watson_fit.py`](../tests/validation/orientation_fitting/test01_straight_axons_watson_fit.py).
+It builds **perfectly straight** axons from a Watson distribution with a known
+`K`; because there is no local waviness the global fit should recover
+`K_fit ≈ K_designed`. Divergence on that test signals a regression in the
+fitting pipeline rather than a real substrate property.
+
+```bash
+source sim_venv/bin/activate
+python tests/validation/orientation_fitting/test01_straight_axons_watson_fit.py
 ```

@@ -42,14 +42,14 @@ def validate_parameters(params):
     if 'final_volume_fraction' in params:
         validation_rules['final_volume_fraction'] = {
             'value': params.get('final_volume_fraction'),
-            'min': 0.01,
+            'min': 0.001,
             'max': 0.98,
             'description': 'Final 3D volume fraction'
         }
     else:
         validation_rules['target_volume_fraction'] = {
             'value': params.get('target_volume_fraction'),
-            'min': 0.01,
+            'min': 0.001,
             'max': 0.98,
             'description': 'Volume fraction'
         }
@@ -94,18 +94,18 @@ def validate_parameters(params):
     target_volume_fraction = params.get('target_volume_fraction')
     if 'final_volume_fraction' not in params and mean_diameter is not None and target_volume_fraction is not None:
         if 0.5 <= mean_diameter <= 1.0:
-            if not (0.01 <= target_volume_fraction <= 0.98):
+            if not (0.001 <= target_volume_fraction <= 0.98):
                 errors.append(
                     "ERROR: Volume fraction (target_volume_fraction) is out of range for "
                     f"mean diameter {mean_diameter} um.\n"
-                    "       Acceptable range: 0.01 - 0.98 when mean_diameter is 0.5 - 1.0 um"
+                    "       Acceptable range: 0.001 - 0.98 when mean_diameter is 0.5 - 1.0 um"
                 )
         else:
-            if not (0.01 <= target_volume_fraction <= 0.7):
+            if not (0.001 <= target_volume_fraction <= 0.7):
                 errors.append(
                     "ERROR: Volume fraction (target_volume_fraction) is out of range for "
                     f"mean diameter {mean_diameter} um.\n"
-                    "       Acceptable range: 0.01 - 0.7 when mean_diameter is above 1.0 um"
+                    "       Acceptable range: 0.001 - 0.7 when mean_diameter is above 1.0 um"
                 )
     
     if errors:
@@ -119,8 +119,8 @@ def validate_parameters(params):
         print("-" * 40)
         for param_name, rules in validation_rules.items():
             print(f"  {rules['description']:25}: {rules['min']} - {rules['max']}")
-        print("  Volume fraction (special): 0.01 - 0.98 for mean_diameter 0.5 - 1.0 um")
-        print("                             0.01 - 0.7 for mean_diameter above 1.0 um")
+        print("  Volume fraction (special): 0.001 - 0.98 for mean_diameter 0.5 - 1.0 um")
+        print("                             0.001 - 0.7 for mean_diameter above 1.0 um")
         print("  Optional myelin g_ratio   : 0.01 - 0.99")
         print("  Optional inner spacing    : 0.01 - 2.0")
         

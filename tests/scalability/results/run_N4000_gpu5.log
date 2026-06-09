@@ -1,0 +1,103 @@
+nohup: ignoring input
+Scalability sweep over num_fibers = [4000]
+Results -> /home/nguyt16@ds.vanderbilt.edu/nozomi/tests/scalability/results/runs
+
+=== N_fibers = 4000 ===
+  GPU free=25.1 GB / total=25.3 GB  -> per-process cap = 79% (20.0 GB)
+Building substrate with:         volume_fraction=0.57,        diameter_mean=1.68,        orientation_shape_parameter=200,         bead_alpha_mean=0.3,        num_fibers=4000
+Box_length 207.0
+------ Start packing 2D initialization ------
+Iteration  0  . Overlaps  7457
+Iteration  1  . Overlaps  274
+Iteration  2  . Overlaps  0
+Final num_overlap: 0
+------ Done packing 2D initialization ------
+Done saving data file
+----- Starting geometric optimization -----
+Iteration: 0 . Overlaps:  31685474
+Iteration: 1 . Overlaps:  21312817
+Iteration: 2 . Overlaps:  17956361
+Iteration: 3 . Overlaps:  16078670
+Iteration: 4 . Overlaps:  14638892
+Iteration: 5 . Overlaps:  13542364
+Iteration: 6 . Overlaps:  12595109
+Iteration: 7 . Overlaps:  10862840
+Iteration: 8 . Overlaps:  9479975
+Iteration: 9 . Overlaps:  8539857
+Iteration: 10 . Overlaps:  7762185
+Iteration: 11 . Overlaps:  7232593
+Iteration: 12 . Overlaps:  6459063
+Iteration: 13 . Overlaps:  5838157
+Iteration: 14 . Overlaps:  5415078
+Iteration: 15 . Overlaps:  5072070
+Iteration: 16 . Overlaps:  4868980
+Iteration: 17 . Overlaps:  4446443
+Iteration: 18 . Overlaps:  4023487
+Iteration: 19 . Overlaps:  3776708
+Iteration: 20 . Overlaps:  3599415
+Iteration: 21 . Overlaps:  3470931
+Iteration: 22 . Overlaps:  2862159
+Iteration: 23 . Overlaps:  2396046
+Iteration: 24 . Overlaps:  2169554
+Iteration: 25 . Overlaps:  2064940
+Iteration: 26 . Overlaps:  1987978
+Iteration: 27 . Overlaps:  1467226
+Iteration: 28 . Overlaps:  1277319
+Iteration: 29 . Overlaps:  1222382
+Iteration: 30 . Overlaps:  1168599
+Iteration: 31 . Overlaps:  1126154
+Iteration: 32 . Overlaps:  676307
+Iteration: 33 . Overlaps:  613937
+Iteration: 34 . Overlaps:  581517
+Iteration: 35 . Overlaps:  574435
+Iteration: 36 . Overlaps:  559160
+Iteration: 37 . Overlaps:  308384
+Iteration: 38 . Overlaps:  291455
+Iteration: 39 . Overlaps:  285007
+Iteration: 40 . Overlaps:  276759
+Iteration: 41 . Overlaps:  264639
+Iteration: 42 . Overlaps:  93448
+Iteration: 43 . Overlaps:  87194
+Iteration: 44 . Overlaps:  89598
+Iteration: 45 . Overlaps:  94967
+Iteration: 46 . Overlaps:  81236
+Iteration: 47 . Overlaps:  10197
+Iteration: 48 . Overlaps:  9524
+Iteration: 49 . Overlaps:  11633
+Iteration: 50 . Overlaps:  10237
+Iteration: 51 . Overlaps:  9076
+Iteration: 52 . Overlaps:  2236
+Iteration: 53 . Overlaps:  2055
+Iteration: 54 . Overlaps:  2568
+Iteration: 55 . Overlaps:  2451
+Iteration: 56 . Overlaps:  2230
+Iteration: 57 . Overlaps:  783
+Iteration: 58 . Overlaps:  685
+Iteration: 59 . Overlaps:  999
+Iteration: 60 . Overlaps:  790
+Iteration: 61 . Overlaps:  687
+Iteration: 62 . Overlaps:  106
+Iteration: 63 . Overlaps:  77
+Iteration: 64 . Overlaps:  83
+Iteration: 65 . Overlaps:  102
+Iteration: 66 . Overlaps:  89
+Iteration: 67 . Overlaps:  18
+Iteration: 68 . Overlaps:  21
+Iteration: 69 . Overlaps:  22
+Iteration: 70 . Overlaps:  27
+Iteration: 71 . Overlaps:  13
+Iteration: 72 . Overlaps:  8
+Iteration: 73 . Overlaps:  4
+Iteration: 74 . Overlaps:  4
+Iteration: 75 . Overlaps:  6
+Iteration: 76 . Overlaps:  12
+Iteration: 77 . Overlaps:  0
+Done geometric optimization
+---Final volume fraction--- 0.706
+Done saving data file
+====== Substrate generated in folder:/home/nguyt16@ds.vanderbilt.edu/nozomi/tests/scalability/results/substrates/scalability_N004000/d1.68_K200_ODI_0.0032_bead_0.3_VF_0.57/2026-06-04_08-32-52_d1.68_K200_ODI_0.0032_bead_0.3_4000fibers ======
+
+
+  generating cross-section plot...
+[cross_section_plot] Saved → /home/nguyt16@ds.vanderbilt.edu/nozomi/tests/scalability/results/substrates/scalability_N004000/d1.68_K200_ODI_0.0032_bead_0.3_VF_0.57/2026-06-04_08-32-52_d1.68_K200_ODI_0.0032_bead_0.3_4000fibers/figs/visual/cross_section_z0.0_8000axons_2026-06-04_08-32-52_VF0.71.png
+  generating 3D fiber plot...
