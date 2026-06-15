@@ -711,10 +711,8 @@ def _plot_3D_glyph_analytic_watson(fit, folder_name, optimized,
     ax.set_ylabel('Y anterior-posterior', fontsize=15, labelpad=10)
     ax.set_zlabel('Z superior-inferior', fontsize=15, labelpad=10)
 
-    stage = "optimized" if optimized else "preoptimized"
     component_title, component_tag = _component_suffix(component_label)
-    title = (f"Watson model FOD{component_title} ({method_label}) - {stage} fibers"
-             + _kappa_title_suffix(fit))
+    title = _kappa_title_suffix(fit).lstrip("\n")
     plt.title(title, fontsize=14, pad=20)
     fname = f"FOD_3D_glyph{component_tag}_{method_tag}_watson_{_kappa_file_tag(fit)}"
     if not optimized:

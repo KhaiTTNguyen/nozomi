@@ -21,6 +21,7 @@ import json
 import os
 import re
 import sys
+import math
 import pickle
 from collections import defaultdict
 from pathlib import Path
@@ -308,10 +309,18 @@ def collect_deltardapp(data_root: str) -> dict:
 
 # Colour and marker map per OD value; fallback for unexpected OD values
 _OD_STYLES = {
-    10:  {'color': '#2166ac', 'marker': 'o', 'label': 'OD10  (κ=10, ODI≈0.064)'},
-    20:  {'color': '#f4a582', 'marker': 's', 'label': 'OD20  (κ=20, ODI≈0.032)'},
-    200: {'color': '#d6604d', 'marker': '^', 'label': 'OD200 (κ=200, ODI≈0.003)'},
+    10:  {'color': '#2166ac', 'marker': 'o', 'label': 'OD10  (κ=10, ODI≈0.064)',  'odi': '0.0635'},
+    20:  {'color': '#f4a582', 'marker': 's', 'label': 'OD20  (κ=20, ODI≈0.032)',  'odi': '0.0318'},
+    200: {'color': '#d6604d', 'marker': '^', 'label': 'OD200 (κ=200, ODI≈0.003)', 'odi': '0.0032'},
 }
+
+
+def _odi_label_for_od(od) -> str:
+    """Return the folder-precise ODI string for an OD value (fallback: ``OD<od>``)."""
+    style = _OD_STYLES.get(od)
+    if style is not None and 'odi' in style:
+        return style['odi']
+    return f'OD{od}'
 
 
 def plot_deltardapp(results: dict, output_path: Optional[str] = None):
@@ -368,13 +377,13 @@ def plot_deltardapp(results: dict, output_path: Optional[str] = None):
         ax.legend(fontsize=9, framealpha=0.9)
 
     axes[0].set_ylabel(
-        r'$\Delta RD^{app} = RD^{app}_{\mathrm{OGSE}} - RD^{app}_{\mathrm{PGSE}}$'
+        r'$\Delta D_{\perp} = D_{\perp,\mathrm{OGSE}} - D_{\perp,\mathrm{PGSE}}$'
         '\n(µm²/ms)',
         fontsize=12,
     )
     fig.suptitle(
         r'Wide-pulse apparent radial diffusion contrast: '
-        r'$\Delta RD^{app}$ vs mean axon diameter',
+        r'$\Delta D_{\perp}$ vs mean axon diameter',
         fontsize=13,
     )
     fig.tight_layout()
@@ -466,10 +475,10 @@ def plot_rdapp_component(results: dict, component: str, output_path: Optional[st
         ax.grid(True, which='minor', linestyle=':', alpha=0.25)
         ax.legend(fontsize=8, framealpha=0.9)
 
-    axes[0].set_ylabel(r'$RD^{app}_{\perp}$ (µm²/ms)', fontsize=12)
+    axes[0].set_ylabel(r'$D_{\perp}$ (µm²/ms)', fontsize=12)
     fig.suptitle(
         f'{component_label} compartment: ' +
-        r'$RD^{app}_{\mathrm{PGSE}}$ and $RD^{app}_{\mathrm{OGSE}}$ vs mean axon diameter',
+        r'$D_{\perp,\mathrm{PGSE}}$ and $D_{\perp,\mathrm{OGSE}}$ vs mean axon diameter',
         fontsize=13,
     )
     fig.tight_layout()
@@ -567,15 +576,15 @@ def plot_rdapp_total_by_od(results: dict, output_dir: str):
             ax.grid(True, which='minor', linestyle=':', alpha=0.25)
             ax.legend(fontsize=10, framealpha=0.9)
 
-        axes[0].set_ylabel(r'$RD^{app}_{\perp}$ (µm²/ms)', fontsize=12)
+        axes[0].set_ylabel(r'$D_{\perp}$ (µm²/ms)', fontsize=12)
         fig.suptitle(
             f"{style['label']} total compartment: " +
-            r'$RD^{app}_{\mathrm{PGSE}}$ and $RD^{app}_{\mathrm{OGSE}}$ vs mean axon diameter',
+            r'$D_{\perp,\mathrm{PGSE}}$ and $D_{\perp,\mathrm{OGSE}}$ vs mean axon diameter',
             fontsize=14,
         )
         fig.tight_layout()
 
-        out_path = os.path.join(output_dir, f'rdapp_total_{od}.png')
+        out_path = os.path.join(output_dir, f'Dperp_total_{od}.png')
         fig.savefig(out_path, dpi=300, bbox_inches='tight')
         plt.close(fig)
         print(f"Figure saved → {out_path}")
@@ -663,7 +672,7 @@ def plot_rdapp_total_by_od_combined(results: dict, output_dir: str):
                 ax.set_title(f'{scanner_label}\n{b_label}', fontsize=12)
             if col_idx == 0:
                 ax.set_ylabel(
-                    f"{style['label']}\n" + r'$RD^{app}_{\perp}$ (µm²/ms)',
+                    f"{style['label']}\n" + r'$D_{\perp}$ (µm²/ms)',
                     fontsize=11,
                 )
             if row_idx == n_od - 1:
@@ -676,13 +685,13 @@ def plot_rdapp_total_by_od_combined(results: dict, output_dir: str):
             ax.legend(fontsize=10, framealpha=0.9)
 
     fig.suptitle(
-        r'Total compartment: $RD^{app}_{\mathrm{PGSE}}$ and '
-        r'$RD^{app}_{\mathrm{OGSE}}$ by OD',
+        r'Total compartment: $D_{\perp,\mathrm{PGSE}}$ and '
+        r'$D_{\perp,\mathrm{OGSE}}$ by OD',
         fontsize=14,
     )
     fig.tight_layout()
 
-    out_path = os.path.join(output_dir, 'rdapp_total_all_ODI_combined.png')
+    out_path = os.path.join(output_dir, 'Dperp_total_all_ODI_combined.png')
     fig.savefig(out_path, dpi=300, bbox_inches='tight')
     plt.close(fig)
     print(f"Figure saved → {out_path}")
@@ -776,16 +785,16 @@ def plot_individual_pgse_ogse_pairs_by_od(
                     loc='upper left',
                 )
 
-        axes[0].set_ylabel(r'$RD^{app}_{\perp}$ (µm²/ms)', fontsize=12)
+        axes[0].set_ylabel(r'$D_{\perp}$ (µm²/ms)', fontsize=12)
         fig.suptitle(
             f"{style['label']} individual substrate pairs: "
-            r"$RD^{app}_{\mathrm{PGSE}}$ and $RD^{app}_{\mathrm{OGSE}}$",
+            r"$D_{\perp,\mathrm{PGSE}}$ and $D_{\perp,\mathrm{OGSE}}$",
             fontsize=13,
         )
         fig.tight_layout()
 
         fname_tag = f'_{tag}' if tag else ''
-        out_path = os.path.join(output_dir, f'rdapp_total_individual_pairs_OD{od}{fname_tag}.png')
+        out_path = os.path.join(output_dir, f'Dperp_total_individual_pairs_OD{od}{fname_tag}.png')
         fig.savefig(out_path, dpi=300, bbox_inches='tight')
         plt.close(fig)
         print(f"Figure saved → {out_path}")
@@ -868,18 +877,18 @@ def plot_individual_pgse_ogse_pairs_all_od_combined(
                 ax.set_title(f'{scanner_label}\n{b_label}', fontsize=12)
             if col_idx == 0:
                 ax.set_ylabel(
-                    f"{style['label']}\n" + r'$RD^{app}_{\perp}$ (µm²/ms)',
-                    fontsize=11,
+                    f"ODI={_odi_label_for_od(od)}\n" + r'$D_{\perp}$ (µm²/ms)',
+                    fontsize=13,
                 )
             if row_idx == n_od - 1:
-                ax.set_xlabel(xlabel, fontsize=12)
+                ax.set_xlabel(r'$\langle d \rangle_{\mathrm{eff}}$ (µm)', fontsize=14)
 
             ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
             ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.25))
             ax.grid(True, which='major', linestyle='--', alpha=0.5)
             ax.grid(True, which='minor', linestyle=':', alpha=0.25)
             handles, labels = ax.get_legend_handles_labels()
-            if handles:
+            if handles and col_idx == 0:
                 ordered_handles = []
                 ordered_labels = []
                 for target in ('OGSE', 'PGSE'):
@@ -890,20 +899,20 @@ def plot_individual_pgse_ogse_pairs_all_od_combined(
                 ax.legend(
                     ordered_handles,
                     ordered_labels,
-                    fontsize=14,
+                    fontsize=16,
                     framealpha=0.9,
                     loc='upper left',
                 )
 
     fig.suptitle(
         r'All OD values: individual substrate ' +
-        r'$RD^{app}_{\mathrm{PGSE}}$ and $RD^{app}_{\mathrm{OGSE}}$',
+        r'$D_{\perp,\mathrm{PGSE}}$ and $D_{\perp,\mathrm{OGSE}}$',
         fontsize=14,
     )
     fig.tight_layout()
 
     fname_tag = f'_{tag}' if tag else ''
-    out_path = os.path.join(output_dir, f'rdapp_total_individual_pairs_all_OD_combined{fname_tag}.png')
+    out_path = os.path.join(output_dir, f'Dperp_total_individual_pairs_all_OD_combined{fname_tag}.png')
     fig.savefig(out_path, dpi=300, bbox_inches='tight')
     plt.close(fig)
     print(f"Figure saved → {out_path}")
@@ -979,7 +988,7 @@ def plot_rdapp_components_stacked(results: dict, output_path: Optional[str] = No
             if row_idx == 0:
                 ax.set_title(f'{scanner_label}\n{b_label}', fontsize=12)
             if col_idx == 0:
-                ax.set_ylabel(f'{component_label}\n$RD^{{app}}_{{\\perp}}$ (µm²/ms)', fontsize=11)
+                ax.set_ylabel(f'{component_label}\n$D_{{\\perp}}$ (µm²/ms)', fontsize=11)
 
             ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
             ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.25))
@@ -991,8 +1000,8 @@ def plot_rdapp_components_stacked(results: dict, output_path: Optional[str] = No
         ax.set_xlabel('Mean axon diameter (µm)', fontsize=12)
 
     fig.suptitle(
-        r'Compartment-wise $RD^{app}_{\mathrm{PGSE}}$ and '
-        r'$RD^{app}_{\mathrm{OGSE}}$ vs mean axon diameter',
+        r'Compartment-wise $D_{\perp,\mathrm{PGSE}}$ and '
+        r'$D_{\perp,\mathrm{OGSE}}$ vs mean axon diameter',
         fontsize=14,
     )
     fig.tight_layout()
@@ -1017,6 +1026,8 @@ def plot_deltardapp_per_od(
         diameter_field: str = "diameter",
         xlabel: str = "Mean axon diameter (µm)",
         title_suffix: str = "",
+        shared_xaxis: bool = False,
+        xlim: Optional[tuple] = None,
 ):
     """
     One subplot per OD value, each showing:
@@ -1043,22 +1054,43 @@ def plot_deltardapp_per_od(
     if n_od == 1:
         axes = [axes]
 
+    # When sharing the x-axis, derive a single integer-tick range from this
+    # metric's data across all OD panels so every panel matches. An explicit
+    # ``xlim`` overrides the data-derived range.
+    shared_xlim = None
+    if xlim is not None:
+        shared_xlim = tuple(xlim)
+    elif shared_xaxis:
+        all_diam = [
+            float(item[diameter_field])
+            for pairs in (human_pairs, animal_pairs)
+            for entries in pairs.values()
+            for item in entries
+        ]
+        if all_diam:
+            x_lo = math.floor(min(all_diam) - 0.5)
+            x_hi = math.ceil(max(all_diam) + 0.5)
+            shared_xlim = (x_lo, x_hi)
+
+    fit_stats = {}
     for ax, od in zip(axes, od_values):
         style = _OD_STYLES.get(od, {'color': 'gray', 'marker': 'o',
                                      'label': f'OD{od}'})
         color = style['color']
+        odi_label = _odi_label_for_od(od)
 
         scenario_specs = [
-            ("human_b300", human_pairs.get(od, []), '-', 'Human b=300', 'D'),
-            ("animal_b800", animal_pairs.get(od, []), '--', 'Animal b=800', 'X'),
+            ("human_b300", human_pairs.get(od, []), '-', 'Human', 'D'),
+            ("animal_b800", animal_pairs.get(od, []), '--', 'Animal', 'X'),
         ]
 
-        ann_y = 0.96
-        for _, entries, line_style, scenario_label, scatter_marker in scenario_specs:
+        od_fits = {"ODI": odi_label}
+        scenario_handles = {}
+        for scenario_key, entries, line_style, scenario_label, scatter_marker in scenario_specs:
             if not entries:
                 continue
 
-            # Build per-substrate scattered delta values: ΔRDapp = OGSE - PGSE.
+            # Build per-substrate scattered delta values: ΔD⊥ = OGSE - PGSE.
             all_x = np.array([float(item[diameter_field]) for item in entries], dtype=float)
             all_y = np.array(
                 [float(item["ogse"]) - float(item["pgse"]) for item in entries],
@@ -1069,11 +1101,17 @@ def plot_deltardapp_per_od(
 
             slope, intercept, r_value, p_value, _ = linregress(all_x, all_y)
 
+            od_fits[scenario_label] = {
+                "alpha": float(slope),
+                "beta": float(intercept),
+                "r": float(r_value),
+            }
+
             ax.scatter(
                 all_x, all_y,
                 color=color, marker=scatter_marker,
                 s=40, alpha=0.55, zorder=3,
-                label=f'{scenario_label}: data (n={len(all_x)})',
+                label='_nolegend_',
             )
 
             x_fit = np.linspace(
@@ -1083,40 +1121,46 @@ def plot_deltardapp_per_od(
             )
             y_fit = slope * x_fit + intercept
             sign = '+' if intercept >= 0 else '-'
-            ax.plot(
+            (fit_line,) = ax.plot(
                 x_fit, y_fit,
                 color=color, linestyle=line_style, linewidth=1.6, zorder=3,
-                label=(
-                    f'{scenario_label} fit: '
-                    rf'$\beta{sign if sign=="+" else "-"}{abs(intercept):.4f}$'
-                ),
+                label=scenario_label,
             )
+            scenario_handles[scenario_label] = fit_line
 
-            ax.text(
-                0.05, ann_y,
-                f'{scenario_label}: ' + rf'$r={r_value:.4f}$' + ('*' if p_value < 0.05 else ''),
-                transform=ax.transAxes,
-                fontsize=10, va='top', ha='left',
-                bbox=dict(boxstyle='round,pad=0.25', fc='white', alpha=0.7),
-            )
-            ann_y -= 0.11
+        fit_stats[f'OD{od}'] = od_fits
 
-        ax.set_title(f'{style["label"]}', fontsize=12)
-        ax.set_xlabel(xlabel, fontsize=12)
+        ax.set_title(f'ODI={odi_label}', fontsize=16)
+        ax.set_xlabel(r'$\langle d \rangle_{\mathrm{eff}}$ (µm)', fontsize=15)
         if od == od_values[0]:
             ax.set_ylabel(
-                r'$\Delta RD^{app}$ (µm²/ms)',
-                fontsize=12,
+                r'$\Delta D_{\perp}$ (µm²/ms)',
+                fontsize=15,
             )
-        ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
-        ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.25))
+        if shared_xlim is not None:
+            ax.set_xlim(*shared_xlim)
+            ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
+            ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.5))
+        else:
+            ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
+            ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.25))
         ax.grid(True, which='major', linestyle='--', alpha=0.5)
         ax.grid(True, which='minor', linestyle=':', alpha=0.25)
-        ax.legend(fontsize=9, framealpha=0.9)
+        legend_order = [
+            scenario_handles[lbl]
+            for lbl in ('Animal', 'Human')
+            if lbl in scenario_handles
+        ]
+        if legend_order:
+            ax.legend(
+                handles=legend_order,
+                labels=[h.get_label() for h in legend_order],
+                fontsize=12, framealpha=0.9,
+            )
 
     suptitle = (
-        r'$\Delta RD^{app} = \alpha \cdot d + \beta$ — linear fit per OD '
-        r'(human $b=300$ and animal $b=800$)'
+        r'$\Delta D_{\perp} = \alpha \cdot \langle d \rangle_{\mathrm{eff}} + \beta$ '
+        r'— linear fit per OD (Human and Animal protocols)'
     )
     if title_suffix:
         suptitle += f'\n{title_suffix}'
@@ -1127,6 +1171,11 @@ def plot_deltardapp_per_od(
         os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
         fig.savefig(output_path, dpi=300, bbox_inches='tight')
         print(f"Figure saved → {output_path}")
+
+        stats_path = os.path.splitext(output_path)[0] + '_fit_stats.json'
+        with open(stats_path, 'w') as fh:
+            json.dump({"metric": title_suffix, "fits": fit_stats}, fh, indent=2)
+        print(f"Fit stats saved → {stats_path}")
     else:
         plt.show()
 
@@ -1169,11 +1218,11 @@ def main():
     plots_dir = os.path.normpath(
         os.path.join(os.path.abspath(args.data_root), '..', 'plots')
     )
-    output = args.output if args.output else os.path.join(plots_dir, 'deltardapp_vs_diameter.png')
+    output = args.output if args.output else os.path.join(plots_dir, 'deltaDperp_vs_diameter.png')
 
     output_by_odi_dir = os.path.join(
         _nozomi_root,
-        'experiment', 'visualization', 'plots', 'rdapp_by_ODI',
+        'experiment', 'visualization', 'plots', 'Dperp_by_ODI',
     )
 
     # ------------------------------------------------------------------
@@ -1182,10 +1231,10 @@ def main():
     # ------------------------------------------------------------------
     for _, diameter_field, xlabel, tag, long_label in DIAMETER_METRICS:
 
-        # ΔRDapp vs diameter — linear fit, per-OD subplots
+        # ΔD⊥ vs diameter — linear fit, per-OD subplots
         output_per_od = os.path.join(
             plots_dir,
-            f'deltardapp_per_od_linear_fit_{tag}.png',
+            f'deltaDperp_per_od_linear_fit_{tag}.png',
         )
         plot_deltardapp_per_od(
             results,

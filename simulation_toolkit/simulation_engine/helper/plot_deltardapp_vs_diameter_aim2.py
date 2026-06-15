@@ -75,6 +75,13 @@ _AIM2_SUBSTRATE_MEAN_RE = re.compile(
     r'Diameter_distribution_mean(?P<mean>[\d.]+)_std[\d.]+_.*\.png$'
 )
 
+# Explicit x-axis range (µm) for the d_eff_p3q2 per-OD plot, by bead label.
+# Bead groups not listed fall back to the data-derived auto range.
+_DEFF_XLIM_BY_BEAD = {
+    'bead_0.3': (2, 7),
+    'bead_0.5': (2, 8),
+}
+
 
 def _parse_param_group_folder(name: str):
     """Return (diameter_float, od_int) parsed from an Aim 2 param-group folder, else None."""
@@ -82,6 +89,21 @@ def _parse_param_group_folder(name: str):
     if m is None:
         return None
     return float(m.group('diam')), int(m.group('od'))
+
+
+def _bead_label_for_batch(batch_path: str):
+    """
+    Return an output-subfolder label of the form ``bead_<value>`` parsed from the
+    first matching parameter-group folder inside ``batch_path`` (e.g. ``bead_0.3``),
+    or None if no parameter-group folder matches the Aim 2 naming pattern.
+    """
+    if not os.path.isdir(batch_path):
+        return None
+    for param_group in sorted(os.listdir(batch_path)):
+        m = _AIM2_PARAM_GROUP_RE.match(param_group)
+        if m is not None:
+            return f"bead_{m.group('bead')}"
+    return None
 
 
 def _extract_substrate_mean_diameter_aim2(substrate_path: str):
@@ -114,10 +136,18 @@ def _extract_substrate_mean_diameter_aim2(substrate_path: str):
 # Data collection for the Aim 2 three-level layout
 # ------------------------------------------------------------------
 
-def collect_deltardapp_aim2(data_root: str) -> dict:
+def collect_deltardapp_aim2(data_root: str, only_batch: str = None) -> dict:
     """
     Walk an Aim 2 ``data`` folder (three nesting levels) and collect
     DeltaRDapp values for both scanner scenarios.
+
+    Parameters
+    ----------
+    data_root : str
+        Root data folder containing batch subfolders.
+    only_batch : str, optional
+        If given, only the batch subfolder with this exact name is processed
+        (used by the ``--per-batch`` workflow). When None, all batches are merged.
 
     Returns a dict with the same shape as the Aim 1 ``collect_deltardapp``,
     so the existing plotting functions can be reused unchanged.
@@ -182,6 +212,8 @@ def collect_deltardapp_aim2(data_root: str) -> dict:
     for batch in sorted(os.listdir(data_root)):
         batch_path = os.path.join(data_root, batch)
         if not os.path.isdir(batch_path):
+            continue
+        if only_batch is not None and batch != only_batch:
             continue
 
         for param_group in sorted(os.listdir(batch_path)):
@@ -284,55 +316,33 @@ def collect_deltardapp_aim2(data_root: str) -> dict:
 
 
 # ------------------------------------------------------------------
-# CLI
+# Plot generation for one collected results dict
 # ------------------------------------------------------------------
 
-def main():
-    parser = argparse.ArgumentParser(
-        description=(
-            'Plot ΔRDapp vs axon diameter from pre-computed rdapp_result.pkl files '
-            'for the Aim 2 three-level data layout.'
-        )
-    )
-    parser.add_argument(
-        'data_root',
-        help='Root data folder, e.g. experiment/aim2-prep/data',
-    )
-    parser.add_argument(
-        '--output', '-o',
-        default=None,
-        help='Output figure path (e.g. plots/deltardapp_vs_diameter.png). '
-             'If omitted, defaults to ``<data_root>/../plots/deltardapp_vs_diameter.png``.',
-    )
-    args = parser.parse_args()
+def _generate_plots(results: dict, output_path: str, make_summary: bool = True,
+                    deff_xlim=None):
+    """
+    Produce the full ΔD⊥ plot set for one collected ``results`` dict.
 
-    print(f"\nCollecting ΔRDapp (Aim 2 layout) from: {os.path.abspath(args.data_root)}\n")
-    results = collect_deltardapp_aim2(args.data_root)
+    Writes the top-level summary figure to ``output_path`` (when
+    ``make_summary`` is True) and the per-OD / per-metric figures (plus the
+    ``Dperp_by_ODI`` subfolder) into the same directory as ``output_path``.
 
-    if (not results["human_b300"]) and (not results["animal_b800"]):
-        print(
-            "No rdapp_result.pkl files found. Run "
-            "compute_rdapp_from_narrow_pulse_aim2.py first."
-        )
-        sys.exit(1)
-
-    # Default output: next to data_root in a plots subfolder
-    plots_dir = os.path.normpath(
-        os.path.join(os.path.abspath(args.data_root), '..', 'plots')
-    )
-    output = args.output if args.output else os.path.join(plots_dir, 'deltardapp_vs_diameter.png')
-
+    ``deff_xlim`` optionally overrides the x-axis range of the effective
+    diameter (``d_eff_p3q2``) per-OD plot, e.g. ``(2, 7)``.
+    """
     # Top-level summary plot (mean ± std across replicates)
-    plot_deltardapp(results, output_path=output)
+    if make_summary:
+        plot_deltardapp(results, output_path=output_path)
 
     # Per-OD plots are written into the same plots dir as the main summary
-    plots_dir = os.path.dirname(os.path.abspath(output))
-    output_by_odi_dir = os.path.join(plots_dir, 'rdapp_by_ODI')
+    plots_dir = os.path.dirname(os.path.abspath(output_path))
+    output_by_odi_dir = os.path.join(plots_dir, 'Dperp_by_ODI')
 
     for _, diameter_field, xlabel, tag, long_label in DIAMETER_METRICS:
         output_per_od = os.path.join(
             plots_dir,
-            f'deltardapp_per_od_linear_fit_{tag}.png',
+            f'deltaDperp_per_od_linear_fit_{tag}.png',
         )
         plot_deltardapp_per_od(
             results,
@@ -340,6 +350,8 @@ def main():
             diameter_field=diameter_field,
             xlabel=xlabel,
             title_suffix=long_label,
+            shared_xaxis=True,
+            xlim=deff_xlim if tag == 'd_eff_p3q2' else None,
         )
 
         plot_individual_pgse_ogse_pairs_by_od(
@@ -356,6 +368,88 @@ def main():
             xlabel=xlabel,
             tag=tag,
         )
+
+
+# ------------------------------------------------------------------
+# CLI
+# ------------------------------------------------------------------
+
+def main():
+    parser = argparse.ArgumentParser(
+        description=(
+            'Plot ΔD⊥ vs axon diameter from pre-computed rdapp_result.pkl files '
+            'for the Aim 2 three-level data layout.'
+        )
+    )
+    parser.add_argument(
+        'data_root',
+        help='Root data folder, e.g. experiment/aim2-prep/data',
+    )
+    parser.add_argument(
+        '--output', '-o',
+        default=None,
+        help='Output figure path (e.g. plots/deltaDperp_vs_diameter.png). '
+             'If omitted, defaults to ``<data_root>/../plots/deltaDperp_vs_diameter.png``. '
+             'Ignored when --per-batch is set.',
+    )
+    parser.add_argument(
+        '--per-batch',
+        action='store_true',
+        help='Produce a separate plot set per beading batch, written to '
+             '``<data_root>/../plots/<bead_label>/`` (e.g. plots/bead_0.3/).',
+    )
+    args = parser.parse_args()
+
+    data_root = os.path.abspath(args.data_root)
+
+    # Default plots dir: next to data_root in a plots subfolder
+    plots_dir = os.path.normpath(os.path.join(data_root, '..', 'plots'))
+
+    if args.per_batch:
+        any_plotted = False
+        for batch in sorted(os.listdir(data_root)):
+            batch_path = os.path.join(data_root, batch)
+            if not os.path.isdir(batch_path):
+                continue
+
+            bead_label = _bead_label_for_batch(batch_path)
+            if bead_label is None:
+                print(f"  [skip] no Aim 2 param-group folders in batch '{batch}'")
+                continue
+
+            print(f"\nCollecting ΔD⊥ (Aim 2 layout) for batch '{batch}' → {bead_label}\n")
+            results = collect_deltardapp_aim2(data_root, only_batch=batch)
+
+            if (not results["human_b300"]) and (not results["animal_b800"]):
+                print(f"  [skip] no rdapp_result.pkl files found in batch '{batch}'")
+                continue
+
+            batch_output = os.path.join(plots_dir, bead_label, 'deltaDperp_vs_diameter.png')
+            deff_xlim = _DEFF_XLIM_BY_BEAD.get(bead_label)
+            _generate_plots(results, batch_output, make_summary=False,
+                            deff_xlim=deff_xlim)
+            any_plotted = True
+
+        if not any_plotted:
+            print(
+                "No rdapp_result.pkl files found in any batch. Run "
+                "compute_rdapp_from_narrow_pulse_aim2.py first."
+            )
+            sys.exit(1)
+        return
+
+    print(f"\nCollecting ΔD⊥ (Aim 2 layout) from: {data_root}\n")
+    results = collect_deltardapp_aim2(data_root)
+
+    if (not results["human_b300"]) and (not results["animal_b800"]):
+        print(
+            "No rdapp_result.pkl files found. Run "
+            "compute_rdapp_from_narrow_pulse_aim2.py first."
+        )
+        sys.exit(1)
+
+    output = args.output if args.output else os.path.join(plots_dir, 'deltaDperp_vs_diameter.png')
+    _generate_plots(results, output)
 
 
 if __name__ == '__main__':
