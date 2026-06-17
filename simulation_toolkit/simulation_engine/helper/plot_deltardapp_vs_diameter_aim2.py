@@ -54,6 +54,8 @@ from simulation_toolkit.simulation_engine.helper.plot_deltardapp_vs_diameter imp
     plot_deltardapp_per_od,
     plot_individual_pgse_ogse_pairs_by_od,
     plot_individual_pgse_ogse_pairs_all_od_combined,
+    plot_pgse_ogse_pairs_combined_all,
+    plot_deltardapp_combined_all,
     plot_rdapp_components_stacked,
     plot_rdapp_component,
     plot_rdapp_total_by_od,
@@ -398,6 +400,12 @@ def main():
         help='Produce a separate plot set per beading batch, written to '
              '``<data_root>/../plots/<bead_label>/`` (e.g. plots/bead_0.3/).',
     )
+    parser.add_argument(
+        '--all-beads',
+        action='store_true',
+        help='Produce combined plots pooling ALL bead groups and ALL ODI '
+             '(d_eff_p3q2 only), written to ``<data_root>/../plots/all_beads/``.',
+    )
     args = parser.parse_args()
 
     data_root = os.path.abspath(args.data_root)
@@ -436,6 +444,41 @@ def main():
                 "compute_rdapp_from_narrow_pulse_aim2.py first."
             )
             sys.exit(1)
+        return
+
+    if args.all_beads:
+        print(f"\nCollecting ΔD⊥ (Aim 2 layout, all beads merged) from: {data_root}\n")
+        results = collect_deltardapp_aim2(data_root)
+
+        if (not results["human_b300"]) and (not results["animal_b800"]):
+            print(
+                "No rdapp_result.pkl files found. Run "
+                "compute_rdapp_from_narrow_pulse_aim2.py first."
+            )
+            sys.exit(1)
+
+        # d_eff_p3q2 metric only.
+        _, deff_field, _, _, deff_long = DIAMETER_METRICS[0]
+        deff_xlabel = r'$\langle d \rangle_{\mathrm{eff}}$ (µm)'
+        all_beads_dir = os.path.join(plots_dir, 'all_beads')
+
+        # Combined all-beads figures: protocol encoded by colour (Human/Animal),
+        # ODI encoded by marker shape.
+        plot_pgse_ogse_pairs_combined_all(
+            results,
+            output_path=os.path.join(all_beads_dir, 'Dperp_total_d_eff_p3q2.png'),
+            diameter_field=deff_field,
+            xlabel=deff_xlabel,
+            marker_scheme='protocol_color',
+        )
+        plot_deltardapp_combined_all(
+            results,
+            output_path=os.path.join(all_beads_dir, 'deltaDperp_vs_deff_p3q2.png'),
+            diameter_field=deff_field,
+            xlabel=deff_xlabel,
+            title_suffix=deff_long,
+            marker_scheme='protocol_color',
+        )
         return
 
     print(f"\nCollecting ΔD⊥ (Aim 2 layout) from: {data_root}\n")

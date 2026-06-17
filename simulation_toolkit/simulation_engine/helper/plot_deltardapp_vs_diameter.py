@@ -314,6 +314,14 @@ _OD_STYLES = {
     200: {'color': '#d6604d', 'marker': '^', 'label': 'OD200 (κ=200, ODI≈0.003)', 'odi': '0.0032'},
 }
 
+# Protocol (scanner) encodings used by the combined "all beads" plots.
+# Scheme A ('protocol_color'): colour encodes protocol, marker shape encodes ODI.
+# Scheme B ('protocol_shape'): marker shape encodes protocol, colour encodes ODI.
+_PROTOCOL_SHAPE = {'human_b300': 'o', 'animal_b800': '^'}
+_PROTOCOL_COLOR = {'human_b300': '#0072B2', 'animal_b800': '#D55E00'}
+_PROTOCOL_LABEL = {'human_b300': 'Human', 'animal_b800': 'Animal'}
+
+
 
 def _odi_label_for_od(od) -> str:
     """Return the folder-precise ODI string for an OD value (fallback: ``OD<od>``)."""
@@ -916,6 +924,267 @@ def plot_individual_pgse_ogse_pairs_all_od_combined(
     fig.savefig(out_path, dpi=300, bbox_inches='tight')
     plt.close(fig)
     print(f"Figure saved → {out_path}")
+
+
+def plot_pgse_ogse_pairs_combined_all(
+        results: dict,
+        output_path: str,
+        diameter_field: str = "diameter",
+        xlabel: str = r'$\langle d \rangle_{\mathrm{eff}}$ (µm)',
+        marker_scheme: str = "protocol_color",
+):
+    """
+    Two-panel figure (Human, Animal) pooling every substrate across all OD
+    values and all bead groups, showing raw D⊥ for PGSE (hollow) and OGSE
+    (filled).
+
+    ``marker_scheme`` controls how ODI/protocol are encoded (the protocol is
+    already split across the two panels):
+
+    - ``'protocol_color'`` (Scheme A): colour encodes protocol, marker shape
+      encodes ODI.
+    - ``'protocol_shape'`` (Scheme B): marker shape encodes protocol, colour
+      encodes ODI.
+    """
+    pairs = results.get("individual_pairs", {})
+    human_pairs_by_od = pairs.get("human_b300", {})
+    animal_pairs_by_od = pairs.get("animal_b800", {})
+    od_values = sorted(set(human_pairs_by_od.keys()) | set(animal_pairs_by_od.keys()))
+    if not od_values:
+        print("No individual PGSE/OGSE pairs found for combined all-beads figure.")
+        return
+
+    os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+    scenario_meta = [
+        ("human_b300", "Human protocol", r"$b=300$ s/mm$^2$"),
+        ("animal_b800", "Animal protocol", r"$b=800$ s/mm$^2$"),
+    ]
+
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5.4), sharey=True)
+
+    for ax, (scenario_key, scanner_label, b_label) in zip(axes, scenario_meta):
+        for od in od_values:
+            od_style = _OD_STYLES.get(od, {'color': 'gray', 'marker': 'x',
+                                           'label': f'OD{od}'})
+            entries = pairs.get(scenario_key, {}).get(od, [])
+            if not entries:
+                continue
+
+            if marker_scheme == "protocol_shape":
+                marker = _PROTOCOL_SHAPE.get(scenario_key, 'o')
+                color = od_style['color']
+            else:  # 'protocol_color'
+                marker = od_style['marker']
+                color = _PROTOCOL_COLOR.get(scenario_key, 'gray')
+
+            x = np.array([float(item[diameter_field]) for item in entries])
+            y_pgse = np.array([float(item["pgse"]) for item in entries])
+            y_ogse = np.array([float(item["ogse"]) for item in entries])
+
+            ax.scatter(
+                x, y_pgse,
+                s=36, marker=marker,
+                facecolor='white', edgecolor=color, linewidth=1.4,
+                label='_nolegend_', zorder=3,
+            )
+            ax.scatter(
+                x, y_ogse,
+                s=40, marker=marker,
+                color=color, edgecolor=color,
+                label='_nolegend_', zorder=3,
+            )
+
+        ax.set_title(f'{scanner_label}\n{b_label}', fontsize=13)
+        ax.set_xlabel(xlabel, fontsize=14)
+        ax.grid(True, which='major', linestyle='--', alpha=0.5)
+        ax.grid(True, which='minor', linestyle=':', alpha=0.25)
+
+    axes[0].set_ylabel(r'$D_{\perp}$ (µm²/ms)', fontsize=14)
+
+    # Two stacked legend blocks (no titles):
+    #   1. Acquisition: text-only rows describing the fill convention.
+    #   2. ODI key: marker shapes (hollow for the protocol_color scheme,
+    #      coloured for the protocol_shape scheme).
+    from matplotlib.lines import Line2D
+    acq_handles = [
+        Line2D([0], [0], linestyle='none', marker='none', label='filled - OGSE'),
+        Line2D([0], [0], linestyle='none', marker='none', label='hollow - PGSE'),
+    ]
+    if marker_scheme == "protocol_shape":
+        key_legend = [
+            Line2D([0], [0], marker='o', linestyle='none', markersize=9,
+                   color=_OD_STYLES[od]['color'], label=f'ODI={_odi_label_for_od(od)}')
+            for od in od_values if od in _OD_STYLES
+        ]
+    else:  # 'protocol_color'
+        key_legend = [
+            Line2D([0], [0], marker=_OD_STYLES[od]['marker'], linestyle='none',
+                   markersize=9, markerfacecolor='white', markeredgecolor='gray',
+                   color='gray', label=f'ODI={_odi_label_for_od(od)}')
+            for od in od_values if od in _OD_STYLES
+        ]
+    # Acquisition text on Human panel (upper right — unoccupied);
+    # ODI shape key on Animal panel (upper left).
+    axes[0].legend(
+        handles=acq_handles, fontsize=11, framealpha=0.9, loc='upper right',
+        handlelength=0, handletextpad=0,
+    )
+    axes[1].legend(
+        handles=key_legend,
+        fontsize=11, framealpha=0.9, loc='upper left',
+    )
+
+    fig.suptitle(
+        r'All beads & ODI: substrate $D_{\perp,\mathrm{PGSE}}$ and '
+        r'$D_{\perp,\mathrm{OGSE}}$ vs $\langle d \rangle_{\mathrm{eff}}$',
+        fontsize=14,
+    )
+    fig.tight_layout()
+
+    fig.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"Figure saved → {output_path}")
+
+
+def plot_deltardapp_combined_all(
+        results: dict,
+        output_path: str,
+        diameter_field: str = "diameter",
+        xlabel: str = r'$\langle d \rangle_{\mathrm{eff}}$ (µm)',
+        title_suffix: str = "",
+        marker_scheme: str = "protocol_color",
+        stats_path: Optional[str] = None,
+):
+    """
+    Single wide-axes figure pooling every substrate across all OD values and
+    all bead groups, showing ΔD⊥ = OGSE − PGSE vs the effective diameter as a
+    scatter (no fit line). Human and Animal protocols are differentiated by
+    marker according to ``marker_scheme``:
+
+    - ``'protocol_color'`` (Scheme A): colour encodes protocol (Human/Animal),
+      marker shape encodes ODI.
+    - ``'protocol_shape'`` (Scheme B): marker shape encodes protocol, colour
+      encodes ODI.
+
+    A per-protocol linear fit is still computed and written to a
+    ``*_fit_stats.json`` sidecar for provenance, but no line is drawn. By
+    default the sidecar path is derived from ``output_path``; pass
+    ``stats_path`` to control it, or ``stats_path=''`` to skip writing it.
+    """
+    pair_results = results.get("individual_pairs", {})
+    human_pairs = pair_results.get("human_b300", {})
+    animal_pairs = pair_results.get("animal_b800", {})
+    od_values = sorted(set(human_pairs.keys()) | set(animal_pairs.keys()))
+    if not od_values:
+        print("No individual PGSE/OGSE pairs found for combined all-beads ΔD⊥ figure.")
+        return
+
+    os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+
+    # ~3:1 aspect (x range is much broader than the ΔD⊥ y range).
+    fig, ax = plt.subplots(figsize=(15, 5))
+
+    scenario_specs = [
+        ("human_b300", human_pairs, 'Human'),
+        ("animal_b800", animal_pairs, 'Animal'),
+    ]
+
+    fit_stats = {}
+    for scenario_key, pairs_by_od, scenario_label in scenario_specs:
+        all_x = []
+        all_y = []
+        for od in od_values:
+            od_style = _OD_STYLES.get(od, {'color': 'gray', 'marker': 'x',
+                                           'label': f'OD{od}'})
+            entries = pairs_by_od.get(od, [])
+            if not entries:
+                continue
+            xs = [float(item[diameter_field]) for item in entries]
+            ys = [float(item["ogse"]) - float(item["pgse"]) for item in entries]
+            all_x.extend(xs)
+            all_y.extend(ys)
+
+            if marker_scheme == "protocol_shape":
+                marker = _PROTOCOL_SHAPE.get(scenario_key, 'o')
+                color = od_style['color']
+            else:  # 'protocol_color'
+                marker = od_style['marker']
+                color = _PROTOCOL_COLOR.get(scenario_key, 'gray')
+
+            ax.scatter(
+                xs, ys,
+                color=color, marker=marker,
+                s=38, alpha=0.55, zorder=3, label='_nolegend_',
+            )
+
+        if len(all_x) < 2:
+            continue
+
+        all_x = np.array(all_x)
+        all_y = np.array(all_y)
+        slope, intercept, r_value, _, _ = linregress(all_x, all_y)
+        fit_stats[scenario_label] = {
+            "alpha": float(slope),
+            "beta": float(intercept),
+            "r": float(r_value),
+            "n": int(all_x.size),
+        }
+
+    ax.set_xlabel(xlabel, fontsize=15)
+    ax.set_ylabel(r'$\Delta D_{\perp}$ (µm²/ms)', fontsize=15)
+    ax.grid(True, which='major', linestyle='--', alpha=0.5)
+    ax.grid(True, which='minor', linestyle=':', alpha=0.25)
+
+    # Legend depends on which dimension encodes the protocol.
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Patch
+    if marker_scheme == "protocol_shape":
+        protocol_handles = [
+            Line2D([0], [0], marker=_PROTOCOL_SHAPE[key], linestyle='none',
+                   markersize=10, color='gray', label=_PROTOCOL_LABEL[key])
+            for key, _, _ in scenario_specs
+        ]
+        odi_handles = [
+            Line2D([0], [0], marker='o', linestyle='none', markersize=9,
+                   color=_OD_STYLES[od]['color'], label=f'ODI={_odi_label_for_od(od)}')
+            for od in od_values if od in _OD_STYLES
+        ]
+    else:  # 'protocol_color'
+        protocol_handles = [
+            Patch(facecolor=_PROTOCOL_COLOR[key], edgecolor='none',
+                  label=_PROTOCOL_LABEL[key])
+            for key, _, _ in scenario_specs
+        ]
+        odi_handles = [
+            Line2D([0], [0], marker=_OD_STYLES[od]['marker'], linestyle='none',
+                   markersize=9, color='gray', alpha=0.55,
+                   label=f'ODI={_odi_label_for_od(od)}')
+            for od in od_values if od in _OD_STYLES
+        ]
+    ax.legend(
+        handles=protocol_handles[::-1] + odi_handles,
+        fontsize=12, framealpha=0.9, loc='upper left',
+    )
+
+    suptitle = (
+        r'All beads & ODI: $\Delta D_{\perp}$ vs '
+        r'$\langle d \rangle_{\mathrm{eff}}$ (Human and Animal protocols)'
+    )
+    if title_suffix:
+        suptitle += f'\n{title_suffix}'
+    fig.suptitle(suptitle, fontsize=13)
+    fig.tight_layout()
+
+    fig.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"Figure saved → {output_path}")
+
+    if stats_path is None:
+        stats_path = os.path.splitext(output_path)[0] + '_fit_stats.json'
+    if stats_path:
+        with open(stats_path, 'w') as fh:
+            json.dump({"metric": title_suffix, "fits": fit_stats}, fh, indent=2)
+        print(f"Fit stats saved → {stats_path}")
 
 
 def plot_rdapp_components_stacked(results: dict, output_path: Optional[str] = None):
