@@ -18,7 +18,8 @@ class Init2D(object):
     by removing overlaps between disks in 2D.
     """
     def __init__(self, device, date_time, orientation_shape_parameter=200, target_volume_fraction=0.6, 
-                 num_fibers=500, dist_shape=0, mean_diameter=1,sigma_radii=0.5,space_buffer=0.0, box_length_init=0):
+                 num_fibers=500, dist_shape=0, mean_diameter=1,sigma_radii=0.5,space_buffer=0.0, box_length_init=0,
+                 box_length_z=0):
         self.device=device
         self.volume_fraction = 0
         self.space_buffer = space_buffer
@@ -30,6 +31,9 @@ class Init2D(object):
         self.target_volume_fraction = target_volume_fraction    
         self.orientation_shape_parameter = orientation_shape_parameter
         self.box_length_init = torch.tensor(box_length_init)
+        # Decoupled z-height (Lz). 0 => fall back to the in-plane box (cubic legacy).
+        self.box_length_z_init = box_length_z
+        self.box_length_z = None
         self.radii, self.fiber_id, self.box_length, self.initial_positions, \
         self.mean_d_underlying, self.sigma_d_underlying\
         = self.initialize_circle_radius_GEV_and_positions_halfLx()
@@ -69,6 +73,15 @@ class Init2D(object):
             box_length=self.box_length_init
         print('Box_length', box_length.item())
 
+        # z-height (Lz) is decoupled from the in-plane box (Lx=Ly). Fall back to
+        # the in-plane box for legacy cubic behavior when no z-height is given.
+        if self.box_length_z_init and float(self.box_length_z_init) > 0:
+            box_length_z = torch.tensor(float(self.box_length_z_init))
+        else:
+            box_length_z = torch.tensor(float(box_length))
+        self.box_length_z = box_length_z
+        print('Box_length_z', box_length_z.item())
+
         '''init startpoints from radius'''
         start_points = torch.rand(radii_0.shape[0], 2)*box_length - box_length/2 # start points only, close to center, and shift FOV to halfLx
         
@@ -76,13 +89,15 @@ class Init2D(object):
         # Create a Watson distribution instance
         mu = np.array([0, 0, 1])  # Mean direction (z-axis)
         watson_distribution = wd.WatsonDistribution(mu, self.orientation_shape_parameter)
-        # Generate samples
-        direction_vectors  = torch.from_numpy(watson_distribution.sample(int(start_points.shape[0])))
+        # Generate samples; the dz floor drops near-in-plane fibers, bounding the
+        # helix arc-length blow-up (and huge x,y wraps) at low orientation K.
+        direction_vectors  = torch.from_numpy(watson_distribution.sample(int(start_points.shape[0]), dz_floor=config_params.ORIENTATION_DZ_FLOOR))
         # Visualize results
         watson_distribution.visualize_watson_samples(direction_vectors, mu, self.orientation_shape_parameter)
         
         dir_x, dir_y, dir_z = direction_vectors[:,0], direction_vectors[:,1], direction_vectors[:,2]
-        d_start_target = box_length*torch.sqrt(dir_x**2+dir_y**2)/dir_z
+        # Lateral endpoint drift is taken over the z-SPAN (Lz), not the in-plane box.
+        d_start_target = box_length_z*torch.sqrt(dir_x**2+dir_y**2)/dir_z
         
         target_points = torch.stack([d_start_target*dir_x/torch.sqrt(dir_x**2+dir_y**2)+start_points[:,0], 
                                     d_start_target*dir_y/torch.sqrt(dir_x**2+dir_y**2)+start_points[:,1]]).T
@@ -95,6 +110,7 @@ class Init2D(object):
 
         mean_d_underlying, sigma_d_underlying = diameter_np.mean()*2, diameter_np.std()*2
         config_params.BOX_LENGTH = box_length
+        config_params.BOX_LENGTH_Z = box_length_z
         return radii, fiber_id, box_length, circle_centers,\
             mean_d_underlying, sigma_d_underlying
 
@@ -213,8 +229,9 @@ class Init2D(object):
         
         xy_0 = self.initial_positions[::2] # paired start points
         xy_L = self.initial_positions[1::2] # paired end points
-        L = self.box_length.to(self.device)
-        z_0, z_L = torch.full((xy_0.shape[0], 1), -L/2, device=self.device), torch.full((xy_L.shape[0], 1), L/2, device=self.device)
+        # Fiber endpoints sit on the z-faces at +-Lz/2 (z-height), not the in-plane box.
+        Lz = float(self.box_length_z.item())
+        z_0, z_L = torch.full((xy_0.shape[0], 1), -Lz/2, device=self.device), torch.full((xy_L.shape[0], 1), Lz/2, device=self.device)
         
         circle_centers_0 = torch.cat([xy_0[:, :2], z_0, xy_0[:, 2:]], dim=1)
         circle_centers_L = torch.cat([xy_L[:, :2], z_L, xy_L[:, 2:]], dim=1)
@@ -298,9 +315,14 @@ class Init2D(object):
             ax.plot3D(fiber_x, fiber_y, fiber_z, color='r', lw='0.5')
             self.plot_spheres(ax=ax, fiber_matrix=fiber_matrix, color='g')
         # ------------------- plot box edges ----------------------         
-        ax.set_xlim(-self.box_length/2, self.box_length/2)
-        ax.set_ylim(-self.box_length/2, self.box_length/2)
-        ax.set_zlim(-self.box_length/2, self.box_length/2)
+        lx = float(self.box_length.item()) if hasattr(self.box_length, 'item') else float(self.box_length)
+        lz = float(self.box_length_z.item()) if hasattr(self.box_length_z, 'item') else float(self.box_length_z)
+        ax.set_xlim(-lx/2, lx/2)
+        ax.set_ylim(-lx/2, lx/2)
+        ax.set_zlim(-lz/2, lz/2)
+        # Render with the substrate's true proportions so a thin-z (anisotropic)
+        # box is not stretched into an isotropic cube.
+        ax.set_box_aspect((lx, lx, lz))
         ax.set_xlabel("x (µm)",fontsize=15, labelpad=10)
         ax.set_ylabel("y (µm)",fontsize=15, labelpad=10)
         ax.set_zlabel("z (µm)",fontsize=15, labelpad=10)

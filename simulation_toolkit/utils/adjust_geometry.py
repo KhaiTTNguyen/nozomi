@@ -37,6 +37,8 @@ def create_pad(end_fiber, start_fiber, Lz):
     sy = np.concatenate((swy[-left_count:],    sy, swy[0:right_count]    ), axis=0)
     sz = np.concatenate((swz[-left_count:]-Lz, sz, swz[0:right_count]+Lz ), axis=0)
     sr = np.concatenate((swr[-left_count:],    sr, swr[0:right_count]    ), axis=0)
-    fid = np.concatenate((fid[-left_count:],    fid, fid[0:right_count]    ), axis=0)
+    # Keep padding counts aligned with xyz/r by taking padded fid slices from
+    # the same partner fiber used for x/y/z/r padding.
+    fid = np.concatenate((swfid[-left_count:], fid, swfid[0:right_count]), axis=0)
     fbr_z_bnded[:,0], fbr_z_bnded[:,1], fbr_z_bnded[:,2], fbr_z_bnded[:,3], fbr_z_bnded[:,4] = sx, sy, sz, sr, fid
     return fbr_z_bnded

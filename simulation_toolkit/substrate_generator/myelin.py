@@ -21,21 +21,37 @@ def _sort_fiber_rows(fiber):
     return fiber[np.argsort(fiber[:, 2])]
 
 
-def _split_into_segments(spheres, box_length):
+def _split_into_segments(spheres, box_length_z):
     """Split the augmented outer array into per-fiber polyline segments.
 
-    Mirrors ``utils.common_utils.split_matrix_to_list``: every row whose z
-    equals +L/2 closes one segment (since the optimizer anchors fibre ends
-    at z = +/- L/2 and Init2D arranges rows so each fibre runs from z=-L/2
-    to z=+L/2 exactly once).
+    Mirrors ``utils.common_utils.split_matrix_to_list``: each polyline runs from
+    z=-Lz/2 to z=+Lz/2 exactly once (the optimizer anchors fibre ends at
+    z = +/- Lz/2), so a row at z=+Lz/2 that is the last row or is immediately
+    followed by a new polyline start (z=-Lz/2) closes one segment. A z=+Lz/2 row
+    that is *not* a terminus (an interior sphere that drifted to within tol of
+    +Lz/2 during optimization) is ignored so a single fibre is not falsely split.
+    ``box_length_z`` is the *z*-extent (Lz), which is decoupled from the in-plane
+    box (Lx=Ly) for anisotropic thin-z substrates, so the split threshold must
+    use Lz, not the in-plane box.
     """
-    if box_length is None or box_length <= 0 or len(spheres) == 0:
+    if box_length_z is None or box_length_z <= 0 or len(spheres) == 0:
         return [spheres] if len(spheres) > 0 else []
-    half = box_length / 2
+    half = box_length_z / 2
+    n = len(spheres)
     segments = []
     start_idx = 0
-    for i in range(len(spheres)):
-        if np.isclose(spheres[i, 2], half, atol=1e-4):
+    for i in range(n):
+        if not np.isclose(spheres[i, 2], half, atol=1e-4):
+            continue
+        # Only close the segment at a genuine polyline terminus: either the last
+        # row, or the next row starts a new polyline at z=-Lz/2. Endpoints are
+        # masked at exactly +/-Lz/2 by Init2D, but interior spheres move during
+        # optimization and can drift to within tol of +Lz/2; without this guard
+        # such a graze would falsely split one fiber into two segments sharing a
+        # fiber_id (its next row continues the same fiber, not at -Lz/2).
+        is_last = i == n - 1
+        next_is_start = (not is_last) and np.isclose(spheres[i + 1, 2], -half, atol=1e-4)
+        if is_last or next_is_start:
             segments.append(spheres[start_idx:i + 1])
             start_idx = i + 1
     if start_idx < len(spheres):
@@ -85,7 +101,7 @@ def _interpolate_polyline(points, radii, cumulative_length, sample_length):
     return point, float(radius)
 
 
-def generate_inner_fibers(outer_fibers, g_ratio=0.7, inner_sphere_spacing_ratio=0.5, box_length=None):
+def generate_inner_fibers(outer_fibers, g_ratio=0.7, inner_sphere_spacing_ratio=0.5, box_length=None, box_length_z=None):
     """
     Generate inner axonal membrane spheres from optimized outer membrane spheres.
 
@@ -112,6 +128,11 @@ def generate_inner_fibers(outer_fibers, g_ratio=0.7, inner_sphere_spacing_ratio=
 
     outer = _as_numpy(outer_fibers).astype(np.float32, copy=False)
     fid_col = _fiber_id_column(outer)
+    # z-extent (Lz) drives per-fiber segment splitting and endpoint checks. It
+    # is decoupled from the in-plane box (Lx=Ly) for anisotropic thin-z
+    # substrates; fall back to the in-plane box only for legacy isotropic calls.
+    if box_length_z is None:
+        box_length_z = box_length
     inner_rows = []
     next_sphere_id = 0
     canonical_outer_segments = []
@@ -123,7 +144,7 @@ def generate_inner_fibers(outer_fibers, g_ratio=0.7, inner_sphere_spacing_ratio=
     # +/- L. Working on whole segments avoids row-level mixing of canonical
     # and image points (which previously caused horizontal "beam" artefacts
     # whenever a fibre's interior x, y crossed a wall).
-    for segment in _split_into_segments(outer, box_length):
+    for segment in _split_into_segments(outer, box_length_z):
         if not _is_canonical_segment(segment, box_length):
             continue
         canonical_outer_segments.append(segment)
@@ -187,7 +208,7 @@ def generate_inner_fibers(outer_fibers, g_ratio=0.7, inner_sphere_spacing_ratio=
         return np.zeros((0, 6), dtype=np.float32)
     inner_array = np.asarray(inner_rows, dtype=np.float32)
 
-    _assert_endpoint_consistency(canonical_outer_segments, inner_array, box_length, fid_col)
+    _assert_endpoint_consistency(canonical_outer_segments, inner_array, box_length_z, fid_col)
 
     if box_length is not None and box_length > 0:
         # Mirror outer's PBC duplication map exactly. Recomputing it from
@@ -196,12 +217,12 @@ def generate_inner_fibers(outer_fibers, g_ratio=0.7, inner_sphere_spacing_ratio=
         # inner image segments on the 20-axon test. Cloning outer's per-fid
         # (axis, shift) map keeps inner and outer one-to-one.
         inner_array = _replicate_outer_pbc_images(
-            inner_array, outer, box_length, fid_col
+            inner_array, outer, box_length, box_length_z, fid_col
         )
     return inner_array
 
 
-def _replicate_outer_pbc_images(canonical_inner, augmented_outer, box_length, fid_col):
+def _replicate_outer_pbc_images(canonical_inner, augmented_outer, box_length, box_length_z, fid_col):
     """Duplicate canonical inner using the same per-fiber (axis, shift)
     pattern recorded in the augmented outer array.
 
@@ -214,9 +235,9 @@ def _replicate_outer_pbc_images(canonical_inner, augmented_outer, box_length, fi
         return canonical_inner
 
     half = box_length / 2
-    # Group outer segments by fid.
+    # Group outer segments by fid. Segment splitting is on the z-axis (Lz).
     outer_segments_by_fid = {}
-    for seg in _split_into_segments(augmented_outer, box_length):
+    for seg in _split_into_segments(augmented_outer, box_length_z):
         fid = float(seg[0, fid_col])
         outer_segments_by_fid.setdefault(fid, []).append(seg)
 
@@ -304,16 +325,16 @@ def _add_pbc_images(spheres, box_length, fid_col, tol=None):
     return augmented.astype(spheres.dtype, copy=False)
 
 
-def _assert_endpoint_consistency(canonical_outer_segments, inner, box_length, fid_col, tol=1e-4):
+def _assert_endpoint_consistency(canonical_outer_segments, inner, box_length_z, fid_col, tol=1e-4):
     """Sanity check: per canonical outer segment, the inner sub-array sharing
     the same fiber_id must have first/last sphere centers equal to the
-    segment's start/end anchors. When ``box_length`` is provided each anchor
-    must sit on |z| = L/2.
+    segment's start/end anchors. When ``box_length_z`` (Lz) is provided each
+    anchor must sit on |z| = Lz/2.
 
     ``inner`` is the canonical inner array (before PBC duplication), so its
     rows are grouped one-to-one with ``canonical_outer_segments`` by fiber_id.
     """
-    half = None if box_length is None else box_length / 2
+    half = None if box_length_z is None else box_length_z / 2
     for outer_segment in canonical_outer_segments:
         fiber_id = float(outer_segment[0, fid_col])
         inner_rows = _sort_fiber_rows(inner[inner[:, fid_col] == fiber_id])

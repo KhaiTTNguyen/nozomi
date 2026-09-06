@@ -39,7 +39,7 @@ def _reposition_apodized_waveform_blocks(waveform, first_start_ms, inter_block_g
 
 
 def _plot_used_ogse_waveforms(waveform_records, output_dir):
-    """Plot OGSE waveforms used in test06 as separate figures."""
+    """Plot OGSE waveforms used in test05 as separate figures."""
     for rec in waveform_records:
         fig, ax = plt.subplots(figsize=(10, 4.5))
         ax.plot(
@@ -51,14 +51,14 @@ def _plot_used_ogse_waveforms(waveform_records, output_dir):
         ax.set_xlabel("time (ms)")
         ax.set_ylabel("gradient (mT/m)")
         ax.set_title(
-            f"Test06 waveform: target {rec['f_target_hz']:.0f} Hz (actual {rec['f_actual_hz']:.0f} Hz)"
+            f"Test05 waveform: target {rec['f_target_hz']:.0f} Hz (actual {rec['f_actual_hz']:.0f} Hz)"
         )
         ax.grid(True, linestyle="--", alpha=0.5)
         plt.tight_layout()
         plt.savefig(
             os.path.join(
                 output_dir,
-                f"test_06_apodized_ogse_waveform_target_{rec['f_target_hz']:.0f}Hz_actual_{rec['f_actual_hz']:.0f}Hz.png",
+                f"test_05_apodized_ogse_waveform_target_{rec['f_target_hz']:.0f}Hz_actual_{rec['f_actual_hz']:.0f}Hz.png",
             ),
             dpi=150,
         )
@@ -206,7 +206,7 @@ def _plot_cylinder_grid_geometry_3d(output_dir, lx, ly, lz, nx, ny, spacing_um, 
     ax.set_ylabel("y (um)")
     ax.set_zlabel("z (um)")
     ax.set_title(
-        f"Test06 geometry: {nx}x{ny} cylinders (diameter={2.0 * radius_um:.2f} um, spacing={spacing_um:.2f} um)",
+        f"Test05 geometry: {nx}x{ny} cylinders (diameter={2.0 * radius_um:.2f} um, spacing={spacing_um:.2f} um)",
         pad=14,
     )
     ax.view_init(elev=26, azim=40)
@@ -218,7 +218,7 @@ def _plot_cylinder_grid_geometry_3d(output_dir, lx, ly, lz, nx, ny, spacing_um, 
 
     plt.tight_layout()
     plt.savefig(
-        os.path.join(output_dir, "test_06_cylinder_geometry_3d.png"),
+        os.path.join(output_dir, "test_05_cylinder_geometry_3d.png"),
         dpi=300,
         bbox_inches="tight",
     )
@@ -318,16 +318,16 @@ def _plot_final_spin_positions_3d_all(spins_xyz, lx, ly, lz, output_dir):
     ax.set_xlabel("x (um)")
     ax.set_ylabel("y (um)")
     ax.set_zlabel("z (um)")
-    ax.set_title("Test06: Final spin positions (3D, all spins) after apodized OGSE simulation")
+    ax.set_title("Test05: Final spin positions (3D, all spins) after apodized OGSE simulation")
     ax.view_init(elev=24, azim=42)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, "test_06_final_spin_positions_3d_all.png"), dpi=170)
+    plt.savefig(os.path.join(output_dir, "test_05_final_spin_positions_3d_all.png"), dpi=170)
     plt.close(fig)
 
 
 def test_radial_diffusion_signal_perpendicular_multi_cylinder_apodized_ogse_temporal_grid_5x5():
-    """Test06: apodized OGSE setup with a 5x5 cylinder grid geometry."""
+    """Test05: apodized OGSE setup with a 5x5 cylinder grid geometry."""
     diffusivity = 1.0  # um^2/ms
     diameter_um = 1.96
     radius_um = diameter_um / 2.0
@@ -397,7 +397,7 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_apodized_ogse_temp
     fig_signal, ax_signal = plt.subplots(figsize=(9, 6))
     fig_axial, ax_axial = plt.subplots(figsize=(9, 6))
     fig_radial_extended, ax_radial_extended = plt.subplots(figsize=(9, 6))
-    summary_lines = ["Test06 apodized OGSE Monte Carlo vs analytical signal summary", "=" * 61]
+    summary_lines = ["Test05 apodized OGSE Monte Carlo vs analytical signal summary", "=" * 61]
 
     for f_target_hz in frequency_targets_hz:
         sim.reset_simulation()
@@ -520,10 +520,10 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_apodized_ogse_temp
     ax_signal.grid(True, linestyle="--", alpha=0.5)
     ax_signal.set_xlim(0.0, 500.0)
     ax_signal.set_ylim(0.6, 1.0)
-    ax_signal.set_title("Test06 radial: Monte Carlo vs analytical proxy (0 to 500)")
+    ax_signal.set_title("Test05 radial: Monte Carlo vs analytical proxy (0 to 500)")
     ax_signal.legend(frameon=True, fontsize=9)
     fig_signal.tight_layout()
-    fig_signal.savefig(os.path.join(plot_dir, "test_06_apodized_ogse_radial_mc_vs_analytical_0_to_500.png"), dpi=150)
+    fig_signal.savefig(os.path.join(plot_dir, "test_05_apodized_ogse_radial_mc_vs_analytical_0_to_500.png"), dpi=150)
     plt.close(fig_signal)
 
     ax_axial.set_xlabel("b-value (s/mm^2)")
@@ -531,10 +531,10 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_apodized_ogse_temp
     ax_axial.grid(True, linestyle="--", alpha=0.5)
     ax_axial.set_xlim(0.0, 500.0)
     ax_axial.set_ylim(0.6, 1.0)
-    ax_axial.set_title("Test06 axial: Monte Carlo vs analytical OGSE signal (0 to 500)")
+    ax_axial.set_title("Test05 axial: Monte Carlo vs analytical OGSE signal (0 to 500)")
     ax_axial.legend(frameon=True, fontsize=9)
     fig_axial.tight_layout()
-    fig_axial.savefig(os.path.join(plot_dir, "test_06_apodized_ogse_axial_mc_vs_analytical_0_to_500.png"), dpi=150)
+    fig_axial.savefig(os.path.join(plot_dir, "test_05_apodized_ogse_axial_mc_vs_analytical_0_to_500.png"), dpi=150)
     plt.close(fig_axial)
 
     ax_radial_extended.set_xlabel("b-value (s/mm^2)")
@@ -542,17 +542,17 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_apodized_ogse_temp
     ax_radial_extended.grid(True, linestyle="--", alpha=0.5)
     ax_radial_extended.set_xlim(0.0, 3000.0)
     ax_radial_extended.set_ylim(0.0, 1.0)
-    ax_radial_extended.set_title("Test06 radial: Monte Carlo vs analytical proxy (0 to 3000)")
+    ax_radial_extended.set_title("Test05 radial: Monte Carlo vs analytical proxy (0 to 3000)")
     ax_radial_extended.legend(frameon=True, fontsize=9)
     fig_radial_extended.tight_layout()
     fig_radial_extended.savefig(
-        os.path.join(plot_dir, "test_06_apodized_ogse_radial_mc_vs_analytical_0_to_3000.png"),
+        os.path.join(plot_dir, "test_05_apodized_ogse_radial_mc_vs_analytical_0_to_3000.png"),
         dpi=150,
     )
     plt.close(fig_radial_extended)
 
     _plot_used_ogse_waveforms(waveform_records=waveform_records, output_dir=plot_dir)
-    with open(os.path.join(plot_dir, "test_06_metrics.txt"), "w", encoding="utf-8") as f:
+    with open(os.path.join(plot_dir, "test_05_metrics.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(summary_lines) + "\n")
 
     final_spins = sim.spins_d.get()

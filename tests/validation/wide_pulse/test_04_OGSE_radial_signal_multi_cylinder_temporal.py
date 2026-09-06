@@ -5,7 +5,6 @@ from pathlib import Path
 from datetime import datetime
 from scipy.special import jnp_zeros
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
 
 import pycuda.autoinit
 
@@ -65,56 +64,164 @@ def _plot_used_ogse_waveforms(waveform_records, output_dir):
         plt.close(fig)
 
 
-def _build_single_periodic_cylinder_geometry(
+def _build_grid_cylinder_geometry(
     lx,
     ly,
     lz,
-    center_xy,
-    radius,
     diffusivity,
     t2,
     rho,
+    nx=5,
+    ny=5,
+    diameter_um=1.96,
+    spacing_um=2.1,
     n_segments=200,
     extension_segments=30,
 ):
-    """Build a single z-aligned impermeable cylinder with periodic z extension."""
+    """Build a 5x5 grid of z-aligned cylinders."""
     sg3 = SimGeometry3D(lx, ly, lz, diffusivity, t2, rho)
 
+    radius = 0.5 * float(diameter_um)
+    x_coords = (np.arange(nx, dtype=float) - (nx - 1) / 2.0) * float(spacing_um)
+    y_coords = (np.arange(ny, dtype=float) - (ny - 1) / 2.0) * float(spacing_um)
+
     base_z = np.linspace(-lz / 2.0, lz / 2.0, num=n_segments)
-    cx, cy = center_xy
+    for cx in x_coords:
+        for cy in y_coords:
+            sx = np.full_like(base_z, cx, dtype=float)
+            sy = np.full_like(base_z, cy, dtype=float)
+            sz = base_z.copy()
+            sr = np.full_like(base_z, radius, dtype=float)
 
-    sx = np.full_like(base_z, cx, dtype=float)
-    sy = np.full_like(base_z, cy, dtype=float)
-    sz = base_z.copy()
-    sr = np.full_like(base_z, radius, dtype=float)
+            sz_ext = np.concatenate((sz[-extension_segments:] - lz, sz, sz[:extension_segments] + lz), axis=0)
+            sx_ext = np.concatenate((sx[-extension_segments:], sx, sx[:extension_segments]), axis=0)
+            sy_ext = np.concatenate((sy[-extension_segments:], sy, sy[:extension_segments]), axis=0)
+            sr_ext = np.concatenate((sr[-extension_segments:], sr, sr[:extension_segments]), axis=0)
 
-    sz_ext = np.concatenate((sz[-extension_segments:] - lz, sz, sz[:extension_segments] + lz), axis=0)
-    sx_ext = np.concatenate((sx[-extension_segments:], sx, sx[:extension_segments]), axis=0)
-    sy_ext = np.concatenate((sy[-extension_segments:], sy, sy[:extension_segments]), axis=0)
-    sr_ext = np.concatenate((sr[-extension_segments:], sr, sr[:extension_segments]), axis=0)
-
-    cylinder = Structure3D(sx_ext, sy_ext, sz_ext, sr_ext, diffusivity, t2, rho)
-    sg3.add_structure(cylinder)
+            cylinder = Structure3D(sx_ext, sy_ext, sz_ext, sr_ext, diffusivity, t2, rho)
+            sg3.add_structure(cylinder)
 
     return sg3
 
 
-def _cylinder_perp_diffusion_spectrum_hz(frequency_hz, radius_um, diffusivity, n_roots=120, beta=None):
-    """Approximate D_perp(omega) for an impermeable cylinder from modal poles.
+def _plot_cylinder_grid_geometry_3d(output_dir, lx, ly, lz, nx, ny, spacing_um, radius_um):
+    """Save a publication-style 3D rendering of the full cylinder grid geometry."""
+    x_coords = (np.arange(nx, dtype=float) - (nx - 1) / 2.0) * float(spacing_um)
+    y_coords = (np.arange(ny, dtype=float) - (ny - 1) / 2.0) * float(spacing_um)
 
-    This is a finite-mode diffusion-spectrum approximation where each mode has
-    relaxation rate lambda_k = D * (beta_k / R)^2 and beta_k are roots of J1'.
-    Coefficients are normalized so D(0)=0 and D(omega->inf)=D.
-    """
-    if beta is None:
-        beta = jnp_zeros(1, n_roots)
-    weights = 1.0 / (beta**2 * (beta**2 - 1.0))
-    weights = weights / np.sum(weights)
+    n_theta = 90
+    n_z = 80
+    n_r = 40
+    theta = np.linspace(0.0, 2.0 * np.pi, n_theta)
+    z_lin = np.linspace(-lz / 2.0, lz / 2.0, n_z)
+    theta_side, z_side = np.meshgrid(theta, z_lin)
+    r_lin = np.linspace(0.0, radius_um, n_r)
+    theta_cap, r_cap = np.meshgrid(theta, r_lin)
 
-    omega_rad_ms = 2.0 * np.pi * float(frequency_hz) / 1000.0
-    lambdas = diffusivity * (beta / radius_um) ** 2  # 1/ms
-    modal_terms = (omega_rad_ms**2) / (omega_rad_ms**2 + lambdas**2)
-    return diffusivity * np.sum(weights * modal_terms)
+    z_top = lz / 2.0
+    z_bottom = -lz / 2.0
+
+    fig = plt.figure(figsize=(9.2, 7.8), facecolor="white")
+    ax = fig.add_subplot(111, projection="3d")
+    ax.set_facecolor("white")
+
+    side_color = "#5DA5DA"
+    cap_color = "#2C7FB8"
+    edge_color = "#1D3557"
+
+    for cx in x_coords:
+        for cy in y_coords:
+            x_side = cx + radius_um * np.cos(theta_side)
+            y_side = cy + radius_um * np.sin(theta_side)
+
+            x_cap = cx + r_cap * np.cos(theta_cap)
+            y_cap = cy + r_cap * np.sin(theta_cap)
+            z_cap_top = np.full_like(x_cap, z_top)
+            z_cap_bottom = np.full_like(x_cap, z_bottom)
+
+            ax.plot_surface(
+                x_side,
+                y_side,
+                z_side,
+                rstride=1,
+                cstride=1,
+                color=side_color,
+                edgecolor="none",
+                linewidth=0.0,
+                antialiased=True,
+                alpha=0.96,
+                shade=True,
+            )
+            ax.plot_surface(
+                x_cap,
+                y_cap,
+                z_cap_top,
+                rstride=1,
+                cstride=1,
+                color=cap_color,
+                edgecolor="none",
+                linewidth=0.0,
+                antialiased=True,
+                alpha=0.98,
+                shade=True,
+            )
+            ax.plot_surface(
+                x_cap,
+                y_cap,
+                z_cap_bottom,
+                rstride=1,
+                cstride=1,
+                color=cap_color,
+                edgecolor="none",
+                linewidth=0.0,
+                antialiased=True,
+                alpha=0.98,
+                shade=True,
+            )
+
+            # Subtle top and bottom rims to improve perceived sharpness in print.
+            ax.plot(
+                cx + radius_um * np.cos(theta),
+                cy + radius_um * np.sin(theta),
+                np.full_like(theta, z_top),
+                color=edge_color,
+                linewidth=0.5,
+                alpha=0.65,
+            )
+            ax.plot(
+                cx + radius_um * np.cos(theta),
+                cy + radius_um * np.sin(theta),
+                np.full_like(theta, z_bottom),
+                color=edge_color,
+                linewidth=0.4,
+                alpha=0.45,
+            )
+
+    ax.set_xlim(-lx / 2.0, lx / 2.0)
+    ax.set_ylim(-ly / 2.0, ly / 2.0)
+    ax.set_zlim(-lz / 2.0, lz / 2.0)
+    ax.set_box_aspect((lx, ly, lz))
+    ax.set_xlabel("x (um)")
+    ax.set_ylabel("y (um)")
+    ax.set_zlabel("z (um)")
+    ax.set_title(
+        f"Test04 geometry: {nx}x{ny} cylinders (diameter={2.0 * radius_um:.2f} um, spacing={spacing_um:.2f} um)",
+        pad=14,
+    )
+    ax.view_init(elev=26, azim=40)
+    ax.grid(False)
+
+    # Keep axes clean and publication-friendly.
+    for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
+        axis.pane.set_alpha(0.0)
+
+    plt.tight_layout()
+    plt.savefig(
+        os.path.join(output_dir, "test_04_cylinder_geometry_3d.png"),
+        dpi=300,
+        bbox_inches="tight",
+    )
+    plt.close(fig)
 
 
 def _cosine_ogse_signal_eq11(
@@ -127,37 +234,27 @@ def _cosine_ogse_signal_eq11(
     n_roots=120,
     beta=None,
 ):
-    """Analytical OGSE signal using Eq. (10)+(11) style attenuation.
-
-    Implements E(2*tau)=exp(-beta(2*tau)) with the modal sum over cylinder
-    eigenmodes for cosine OGSE.
-    """
+    """Analytical OGSE signal using Eq. (10)+(11) style attenuation."""
     if beta is None:
         beta = jnp_zeros(1, n_roots)
 
     g_arr = np.asarray(gmax, dtype=float)
     gamma = 267.513  # rad/(ms*mT)
-    # Simulator gradient scaling is in mT/m, while Eq. (11) terms here use um-based
-    # geometry/diffusivity units. Convert to mT/um for a consistent gamma*g unit.
     g_mT_um = g_arr * 1e-6  # mT/m -> mT/um
 
     omega = 2.0 * np.pi * float(frequency_hz) / 1000.0  # rad/ms
     mu_n = np.asarray(beta, dtype=float)
-    # Eq. (6): B_n = 2*(R/mu_n)^2/(mu_n^2 - 1), lambda_n = (mu_n/R)^2
     b_n = 2.0 * (radius_um / mu_n) ** 2 / (mu_n**2 - 1.0)
     lambda_n = (mu_n / radius_um) ** 2  # 1/um^2
 
     lam_d = lambda_n * diffusivity
     lam2_d2 = (lambda_n**2) * (diffusivity**2)
-    
+
     if abs(omega) < 1e-14:
         trig_term = sigma_ms
     else:
         trig_term = sigma_ms / 2.0 + np.sin(2.0 * omega * sigma_ms) / (4.0 * omega)
 
-    # Numerically stable rewrite of exp(-a) * (1 - cosh(b)):
-    # exp(-a) - 0.5*exp(-(a-b)) - 0.5*exp(-(a+b))
-    # This avoids overflow from cosh for large modes.
     a = lam_d * tau_ms
     b = lam_d * sigma_ms
     exp_term = np.exp(-a) - 0.5 * np.exp(-(a - b)) - 0.5 * np.exp(-(a + b))
@@ -175,55 +272,7 @@ def _cosine_ogse_signal_eq11(
     modal_sum = np.sum(modal_contrib)
 
     beta_2tau = 2.0 * (gamma * g_mT_um) ** 2 * modal_sum
-    signal = np.exp(-beta_2tau)
-    return signal
-
-
-def _cylinder_perp_diffusion_spectrum_from_omega_rad_ms(omega_rad_ms, radius_um, diffusivity, n_roots=120, beta=None):
-    """Vectorized D_perp(omega) for an impermeable cylinder over angular frequencies."""
-    if beta is None:
-        beta = jnp_zeros(1, n_roots)
-    weights = 1.0 / (beta**2 * (beta**2 - 1.0))
-    weights = weights / np.sum(weights)
-
-    omega = np.asarray(omega_rad_ms, dtype=float)
-    lambdas = diffusivity * (beta / radius_um) ** 2  # 1/ms
-    modal_terms = (omega[:, None] ** 2) / (omega[:, None] ** 2 + lambdas[None, :] ** 2)
-    return diffusivity * np.sum(weights[None, :] * modal_terms, axis=1)
-
-
-def _effective_dapp_from_waveform_spectrum(waveform, radius_um, diffusivity, n_roots=120, beta=None):
-    """Compute waveform-weighted effective Dapp via the temporal spectrum.
-
-    This is a GPA-style frequency-domain reduction:
-    Dapp = sum(|Q(omega)|^2 * D(omega)) / sum(|Q(omega)|^2),
-    where Q(omega) is the Fourier transform of q(t)=int g(t)dt.
-    """
-    q_t = np.cumsum(waveform.wave) * waveform.dt
-    q_t = q_t - np.mean(q_t)
-
-    q_fft = np.fft.rfft(q_t)
-    freqs_hz = np.fft.rfftfreq(q_t.size, d=waveform.dt / 1000.0)
-
-    # Ignore DC component for weighting.
-    weights = np.abs(q_fft) ** 2
-    weights[0] = 0.0
-
-    valid = weights > 0
-    if not np.any(valid):
-        raise RuntimeError("Waveform spectrum has no non-zero frequency content for Dapp weighting.")
-
-    omega_rad_ms = 2.0 * np.pi * freqs_hz[valid] / 1000.0
-    d_omega = _cylinder_perp_diffusion_spectrum_from_omega_rad_ms(
-        omega_rad_ms=omega_rad_ms,
-        radius_um=radius_um,
-        diffusivity=diffusivity,
-        n_roots=n_roots,
-        beta=beta,
-    )
-    w = weights[valid]
-    dapp_eff = float(np.sum(w * d_omega) / np.sum(w))
-    return dapp_eff
+    return np.exp(-beta_2tau)
 
 
 def _normalize_spin_array(spins_xyz):
@@ -232,9 +281,6 @@ def _normalize_spin_array(spins_xyz):
     if spins_xyz.ndim != 2:
         raise ValueError("spins_xyz must be a 2D array.")
 
-    # Common cases:
-    # - (nspins, 3) -> keep as-is
-    # - (3, nspins) -> transpose
     if spins_xyz.shape[1] == 3:
         return spins_xyz
     if spins_xyz.shape[0] == 3:
@@ -246,6 +292,7 @@ def _normalize_spin_array(spins_xyz):
         return spins_xyz[:3, :].T
 
     raise ValueError("spins_xyz must contain x, y, z coordinates.")
+
 
 def _plot_final_spin_positions_3d_all(spins_xyz, lx, ly, lz, output_dir):
     """Save a 3D scatter of all final spin positions."""
@@ -278,37 +325,48 @@ def _plot_final_spin_positions_3d_all(spins_xyz, lx, ly, lz, output_dir):
     plt.close(fig)
 
 
-def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_temporal():
-    """Compare Monte Carlo and analytical OGSE signals for a single cylinder."""
-    diffusivity = 1.0  # um^2/ms (intra-axonal)
-    cylinder_radius_um = 0.98
+def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_temporal_grid_5x5():
+    """Test04: non-apodized OGSE setup with a 5x5 cylinder grid geometry."""
+    diffusivity = 1.0  # um^2/ms
+    diameter_um = 1.96
+    radius_um = diameter_um / 2.0
+    spacing_um = 2.1
 
-    # OGSE design: TE = gradient on-time + gradient on-time.
     frequency_targets_hz = [100.0, 250.0, 500.0, 1000.0]
     t_duration_ms = 20.0
     te_ms = 2.0 * t_duration_ms
     first_block_start_ms = 0.0
     inter_block_gap_ms = 0.0
-    if t_duration_ms <= 0:
-        raise ValueError("Invalid OGSE timing: T_duration must be positive.")
-    if (first_block_start_ms + 2.0 * t_duration_ms + inter_block_gap_ms) > te_ms + 1e-9:
-        raise ValueError("Invalid OGSE timing: start + 2*T_duration + gap must be <= TE.")
 
     output_folder = "./tests/validation/wide_pulse/test_figures"
     folder_date_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     plot_dir = os.path.join(output_folder, folder_date_time)
     os.makedirs(plot_dir, exist_ok=True)
 
-    sg3 = _build_single_periodic_cylinder_geometry(
-        lx=20.0,
-        ly=20.0,
-        lz=20.0,
-        center_xy=(0.0, 0.0),
-        radius=cylinder_radius_um,
+    lx, ly, lz = 20.0, 20.0, 20.0
+    sg3 = _build_grid_cylinder_geometry(
+        lx=lx,
+        ly=ly,
+        lz=lz,
         diffusivity=diffusivity,
         t2=200,
         rho=1.0,
+        nx=5,
+        ny=5,
+        diameter_um=diameter_um,
+        spacing_um=spacing_um,
     )
+    _plot_cylinder_grid_geometry_3d(
+        output_dir=plot_dir,
+        lx=lx,
+        ly=ly,
+        lz=lz,
+        nx=5,
+        ny=5,
+        spacing_um=spacing_um,
+        radius_um=radius_um,
+    )
+
     num_spins = 50000
     sim = DwiSim3d(sg3, num_spins)
     sim.set_diffusion_directions(
@@ -320,24 +378,21 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
             ]
         )
     )
-    sim.set_segments(nsegx=5, nsegy=5, nsegz=5)
+    sim.set_segments(nsegx=20, nsegy=20, nsegz=20)
     sim.setup(structures=list(np.arange(0, sg3.nstructures)))
 
-    # Precompute Bessel roots once for all OGSE cases.
     n_roots = 200
     beta_roots = jnp_zeros(1, n_roots)
 
-    # Base b-value grid: 11 points from 0 to 500 s/mm^2.
     bval_s_mm2 = np.linspace(0.0, 500.0, 11)
-    # Extended radial figure grid: 0-500 (11 points) plus 1000..3000 in 500 steps.
     bval_s_mm2_extended = np.concatenate(
         [
             bval_s_mm2,
             np.array([1000.0, 1500.0, 2000.0, 2500.0, 3000.0], dtype=float),
         ]
     )
-    waveform_records = []
 
+    waveform_records = []
     fig_signal, ax_signal = plt.subplots(figsize=(9, 6))
     fig_axial, ax_axial = plt.subplots(figsize=(9, 6))
     fig_radial_extended, ax_radial_extended = plt.subplots(figsize=(9, 6))
@@ -349,7 +404,6 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
         if n_cycles <= 0:
             raise ValueError("Computed n_cycles must be positive.")
 
-        # Keep T fixed while varying N to modulate frequency.
         waveform = CosineOGSEWaveform(
             N_cycles=n_cycles,
             T_duration=t_duration_ms,
@@ -357,9 +411,6 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
             gmax=1.0,
             time_step=0.01,
         )
-
-        # Enforce explicit timing requested for visualization: first block,
-        # optional gap, second block.
         _reposition_cosine_waveform_blocks(
             waveform=waveform,
             first_start_ms=first_block_start_ms,
@@ -397,42 +448,30 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
         for idx, g in enumerate(gmax_extended):
             sim_signal_extended[idx] = np.sum(np.cos(g * phase_sig_radial), axis=-1) / num_spins
 
-        tau_ms = sigma_ms # For this cosine OGSE, tau = T-duration = sigma_ms
+        tau_ms = sigma_ms
         ana_signal = _cosine_ogse_signal_eq11(
             gmax=gmax,
             frequency_hz=f_hz,
             sigma_ms=sigma_ms,
             tau_ms=tau_ms,
-            radius_um=cylinder_radius_um,
+            radius_um=radius_um,
             diffusivity=diffusivity,
             n_roots=n_roots,
+            beta=beta_roots,
         )
         ana_signal_extended = _cosine_ogse_signal_eq11(
             gmax=gmax_extended,
             frequency_hz=f_hz,
             sigma_ms=sigma_ms,
             tau_ms=tau_ms,
-            radius_um=cylinder_radius_um,
+            radius_um=radius_um,
             diffusivity=diffusivity,
             n_roots=n_roots,
+            beta=beta_roots,
         )
-        if not np.all(np.isfinite(ana_signal)):
-            raise ValueError(
-                "Analytical OGSE signal has NaN/Inf values; check Eq.11 parameterization and units."
-            )
-        if not np.all(np.isfinite(ana_signal_extended)):
-            raise ValueError(
-                "Extended analytical OGSE signal has NaN/Inf values; check Eq.11 parameterization and units."
-            )
         ana_signal_axial = np.exp(-bval_ms_um2 * diffusivity)
 
-        ax_signal.plot(
-            bval_s_mm2,
-            sim_signal,
-            "o",
-            markersize=6,
-            label=f"MC {f_target_hz:.0f} Hz",
-        )
+        ax_signal.plot(bval_s_mm2, sim_signal, "o", markersize=6, label=f"MC {f_target_hz:.0f} Hz")
         ax_signal.plot(
             bval_s_mm2,
             ana_signal,
@@ -440,13 +479,7 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
             label=f"Analytical {f_target_hz:.0f} Hz (actual {f_hz:.0f} Hz)",
         )
 
-        ax_axial.plot(
-            bval_s_mm2,
-            sim_signal_axial,
-            "o",
-            markersize=6,
-            label=f"MC {f_target_hz:.0f} Hz",
-        )
+        ax_axial.plot(bval_s_mm2, sim_signal_axial, "o", markersize=6, label=f"MC {f_target_hz:.0f} Hz")
         ax_axial.plot(
             bval_s_mm2,
             ana_signal_axial,
@@ -469,9 +502,9 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
         )
 
         residual = sim_signal - ana_signal
-        rmse = np.sqrt(np.mean(residual ** 2))
         residual_axial = sim_signal_axial - ana_signal_axial
-        rmse_axial = np.sqrt(np.mean(residual_axial ** 2))
+        rmse = np.sqrt(np.mean(residual**2))
+        rmse_axial = np.sqrt(np.mean(residual_axial**2))
 
         summary_lines.append(
             f"f target={f_target_hz:.1f} Hz, actual={f_hz:.3f} Hz, "
@@ -485,10 +518,10 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
     ax_signal.grid(True, linestyle="--", alpha=0.5)
     ax_signal.set_xlim(0.0, 500.0)
     ax_signal.set_ylim(0.6, 1.0)
-    ax_signal.set_title("Test04: Monte Carlo vs analytical OGSE signal across frequencies")
+    ax_signal.set_title("Test04 radial: Monte Carlo vs analytical OGSE signal (0 to 500)")
     ax_signal.legend(frameon=True, fontsize=9)
     fig_signal.tight_layout()
-    fig_signal.savefig(os.path.join(plot_dir, "test_04_ogse_mc_vs_analytical_0_to_500.png"), dpi=150)
+    fig_signal.savefig(os.path.join(plot_dir, "test_04_ogse_radial_mc_vs_analytical_0_to_500.png"), dpi=150)
     plt.close(fig_signal)
 
     ax_axial.set_xlabel("b-value (s/mm^2)")
@@ -496,7 +529,7 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
     ax_axial.grid(True, linestyle="--", alpha=0.5)
     ax_axial.set_xlim(0.0, 500.0)
     ax_axial.set_ylim(0.6, 1.0)
-    ax_axial.set_title("Test04 axial: Monte Carlo vs analytical OGSE signal across frequencies")
+    ax_axial.set_title("Test04 axial: Monte Carlo vs analytical OGSE signal (0 to 500)")
     ax_axial.legend(frameon=True, fontsize=9)
     fig_axial.tight_layout()
     fig_axial.savefig(os.path.join(plot_dir, "test_04_ogse_axial_mc_vs_analytical_0_to_500.png"), dpi=150)
@@ -523,9 +556,9 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
     final_spins = sim.spins_d.get()
     _plot_final_spin_positions_3d_all(
         spins_xyz=final_spins,
-        lx=20.0,
-        ly=20.0,
-        lz=20.0,
+        lx=lx,
+        ly=ly,
+        lz=lz,
         output_dir=plot_dir,
     )
 
@@ -533,4 +566,4 @@ def test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_tempor
 
 
 if __name__ == "__main__":
-    test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_temporal()
+    test_radial_diffusion_signal_perpendicular_multi_cylinder_cosine_ogse_temporal_grid_5x5()

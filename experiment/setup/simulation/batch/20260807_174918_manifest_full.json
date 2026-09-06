@@ -1,0 +1,3035 @@
+{
+  "created": "20260807_174918",
+  "kind": "full",
+  "source_substrate_manifest": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/setup/substrate/batch/20260727_140957_manifest_highdisp_K4-7.json",
+  "sim_params": {
+    "time_step": 0.002,
+    "num_spins": 500000,
+    "D0_intra": 2.25,
+    "D0_extra": 2.0,
+    "nseg": 20,
+    "sim_time": 100.0
+  },
+  "n_substrates_done": 58,
+  "n_substrates_skipped": 0,
+  "skipped_substrate_job_ids": [],
+  "n_jobs": 116,
+  "jobs": [
+    {
+      "job_id": "j00001",
+      "substrate_job_id": "j00004",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_0.5_VF_0.5/2026-07-27_14-33-47_d1.68_K4_ODI_0.156_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_173.0_2026-07-27_14-33-47_avf_0.22_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_6887.91_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_0.5_VF_0.5/2026-07-27_14-33-47_d1.68_K4_ODI_0.156_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_173.0_2026-07-27_14-33-47_avf_0.22_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_6887.91_sec_TABLEtime536.19sec_SIMtime1478.33sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T17:49:21",
+      "end_time": "2026-08-07T18:23:10",
+      "duration_sec": 2028.58,
+      "error": null
+    },
+    {
+      "job_id": "j00002",
+      "substrate_job_id": "j00004",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_0.5_VF_0.5/2026-07-27_14-33-47_d1.68_K4_ODI_0.156_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_173.0_2026-07-27_14-33-47_avf_0.22_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_6887.91_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_0.5_VF_0.5/2026-07-27_14-33-47_d1.68_K4_ODI_0.156_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_173.0_2026-07-27_14-33-47_avf_0.22_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_6887.91_sec_TABLEtime395.98sec_SIMtime1975.39sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T17:49:21",
+      "end_time": "2026-08-07T18:29:05",
+      "duration_sec": 2383.58,
+      "error": null
+    },
+    {
+      "job_id": "j00003",
+      "substrate_job_id": "j00012",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-28_19-15-49_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_173.0_2026-07-28_19-15-49_avf_0.5_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_7537.42_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-28_19-15-49_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_173.0_2026-07-28_19-15-49_avf_0.5_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_7537.42_sec_TABLEtime464.37sec_SIMtime1619.96sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T18:23:10",
+      "end_time": "2026-08-07T18:58:05",
+      "duration_sec": 2095.69,
+      "error": null
+    },
+    {
+      "job_id": "j00004",
+      "substrate_job_id": "j00012",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-28_19-15-49_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_173.0_2026-07-28_19-15-49_avf_0.5_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_7537.42_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-28_19-15-49_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_173.0_2026-07-28_19-15-49_avf_0.5_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_7537.42_sec_TABLEtime437.91sec_SIMtime2128.29sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T18:29:05",
+      "end_time": "2026-08-07T19:12:02",
+      "duration_sec": 2577.24,
+      "error": null
+    },
+    {
+      "job_id": "j00005",
+      "substrate_job_id": "j00014",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-29_06-15-24_d1.68_K7_ODI_0.0903_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_90.0_2026-07-29_06-15-24_avf_0.53_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_5777.76_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-29_06-15-24_d1.68_K7_ODI_0.0903_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_90.0_2026-07-29_06-15-24_avf_0.53_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_5777.76_sec_TABLEtime447.03sec_SIMtime1882.18sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T18:58:05",
+      "end_time": "2026-08-07T19:37:05",
+      "duration_sec": 2340.09,
+      "error": null
+    },
+    {
+      "job_id": "j00006",
+      "substrate_job_id": "j00014",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-29_06-15-24_d1.68_K7_ODI_0.0903_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_90.0_2026-07-29_06-15-24_avf_0.53_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_5777.76_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-29_06-15-24_d1.68_K7_ODI_0.0903_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_90.0_2026-07-29_06-15-24_avf_0.53_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_5777.76_sec_TABLEtime314.15sec_SIMtime2179.8sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T19:12:02",
+      "end_time": "2026-08-07T19:53:44",
+      "duration_sec": 2502.11,
+      "error": null
+    },
+    {
+      "job_id": "j00007",
+      "substrate_job_id": "j00016",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_09-47-05_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_103.0_2026-07-29_09-47-05_avf_0.48_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6988.36_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_09-47-05_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_103.0_2026-07-29_09-47-05_avf_0.48_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6988.36_sec_TABLEtime415.04sec_SIMtime1613.99sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T19:37:05",
+      "end_time": "2026-08-07T20:11:05",
+      "duration_sec": 2039.27,
+      "error": null
+    },
+    {
+      "job_id": "j00008",
+      "substrate_job_id": "j00016",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_09-47-05_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_103.0_2026-07-29_09-47-05_avf_0.48_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6988.36_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_09-47-05_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_103.0_2026-07-29_09-47-05_avf_0.48_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6988.36_sec_TABLEtime317.25sec_SIMtime1855.48sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T19:53:44",
+      "end_time": "2026-08-07T20:30:05",
+      "duration_sec": 2181.23,
+      "error": null
+    },
+    {
+      "job_id": "j00009",
+      "substrate_job_id": "j00017",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_11-40-50_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_101.0_2026-07-29_11-40-50_avf_0.54_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_5956.84_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_11-40-50_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_101.0_2026-07-29_11-40-50_avf_0.54_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_5956.84_sec_TABLEtime411.15sec_SIMtime1621.84sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T20:11:05",
+      "end_time": "2026-08-07T20:45:08",
+      "duration_sec": 2043.12,
+      "error": null
+    },
+    {
+      "job_id": "j00010",
+      "substrate_job_id": "j00017",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_11-40-50_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_101.0_2026-07-29_11-40-50_avf_0.54_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_5956.84_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_11-40-50_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_101.0_2026-07-29_11-40-50_avf_0.54_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_5956.84_sec_TABLEtime319.52sec_SIMtime1902.3sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T20:30:05",
+      "end_time": "2026-08-07T21:07:16",
+      "duration_sec": 2230.27,
+      "error": null
+    },
+    {
+      "job_id": "j00011",
+      "substrate_job_id": "j00018",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_12-29-58_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_105.0_2026-07-29_12-29-58_avf_0.46_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6444.31_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_12-29-58_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_105.0_2026-07-29_12-29-58_avf_0.46_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6444.31_sec_TABLEtime385.53sec_SIMtime1450.19sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T20:45:08",
+      "end_time": "2026-08-07T21:15:53",
+      "duration_sec": 1845.36,
+      "error": null
+    },
+    {
+      "job_id": "j00012",
+      "substrate_job_id": "j00018",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_12-29-58_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_105.0_2026-07-29_12-29-58_avf_0.46_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6444.31_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_12-29-58_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_105.0_2026-07-29_12-29-58_avf_0.46_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6444.31_sec_TABLEtime301.7sec_SIMtime1858.13sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T21:07:16",
+      "end_time": "2026-08-07T21:43:23",
+      "duration_sec": 2167.87,
+      "error": null
+    },
+    {
+      "job_id": "j00013",
+      "substrate_job_id": "j00019",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_15-52-31_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_122.0_2026-07-29_15-52-31_avf_0.49_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6943.9_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_15-52-31_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_122.0_2026-07-29_15-52-31_avf_0.49_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6943.9_sec_TABLEtime389.19sec_SIMtime1328.53sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T21:15:53",
+      "end_time": "2026-08-07T21:44:40",
+      "duration_sec": 1727.09,
+      "error": null
+    },
+    {
+      "job_id": "j00014",
+      "substrate_job_id": "j00019",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_15-52-31_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_122.0_2026-07-29_15-52-31_avf_0.49_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6943.9_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_15-52-31_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_122.0_2026-07-29_15-52-31_avf_0.49_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_6943.9_sec_TABLEtime312.6sec_SIMtime1887.33sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T21:43:23",
+      "end_time": "2026-08-07T22:20:12",
+      "duration_sec": 2208.14,
+      "error": null
+    },
+    {
+      "job_id": "j00015",
+      "substrate_job_id": "j00020",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_20-06-39_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_139.0_2026-07-29_20-06-39_avf_0.38_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7005.99_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_20-06-39_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_139.0_2026-07-29_20-06-39_avf_0.38_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7005.99_sec_TABLEtime359.96sec_SIMtime1351.01sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T21:44:40",
+      "end_time": "2026-08-07T22:13:20",
+      "duration_sec": 1719.91,
+      "error": null
+    },
+    {
+      "job_id": "j00016",
+      "substrate_job_id": "j00020",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_20-06-39_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_139.0_2026-07-29_20-06-39_avf_0.38_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7005.99_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_20-06-39_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_139.0_2026-07-29_20-06-39_avf_0.38_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7005.99_sec_TABLEtime286.62sec_SIMtime1796.8sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T22:13:20",
+      "end_time": "2026-08-07T22:48:12",
+      "duration_sec": 2091.48,
+      "error": null
+    },
+    {
+      "job_id": "j00017",
+      "substrate_job_id": "j00021",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_21-04-24_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_126.0_2026-07-29_21-04-24_avf_0.47_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_8024.33_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_21-04-24_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_126.0_2026-07-29_21-04-24_avf_0.47_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_8024.33_sec_TABLEtime365.22sec_SIMtime1596.48sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T22:20:12",
+      "end_time": "2026-08-07T22:53:02",
+      "duration_sec": 1970.77,
+      "error": null
+    },
+    {
+      "job_id": "j00018",
+      "substrate_job_id": "j00021",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_21-04-24_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_126.0_2026-07-29_21-04-24_avf_0.47_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_8024.33_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_21-04-24_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_126.0_2026-07-29_21-04-24_avf_0.47_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_8024.33_sec_TABLEtime302.87sec_SIMtime2109.16sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T22:48:12",
+      "end_time": "2026-08-07T23:28:32",
+      "duration_sec": 2420.45,
+      "error": null
+    },
+    {
+      "job_id": "j00019",
+      "substrate_job_id": "j00022",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-29_21-20-36_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep0/data/array500_fibers_boxL_165.0_2026-07-29_21-20-36_avf_0.46_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7935.24_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-29_21-20-36_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_165.0_2026-07-29_21-20-36_avf_0.46_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7935.24_sec_TABLEtime321.46sec_SIMtime1236.63sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T22:53:02",
+      "end_time": "2026-08-07T23:19:08",
+      "duration_sec": 1566.02,
+      "error": null
+    },
+    {
+      "job_id": "j00020",
+      "substrate_job_id": "j00022",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-29_21-20-36_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep0/data/array500_fibers_boxL_165.0_2026-07-29_21-20-36_avf_0.46_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7935.24_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-29_21-20-36_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_165.0_2026-07-29_21-20-36_avf_0.46_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7935.24_sec_TABLEtime278.94sec_SIMtime1927.48sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T23:19:08",
+      "end_time": "2026-08-07T23:56:02",
+      "duration_sec": 2214.12,
+      "error": null
+    },
+    {
+      "job_id": "j00021",
+      "substrate_job_id": "j00023",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-29_22-38-43_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_157.0_2026-07-29_22-38-43_avf_0.48_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7473.25_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-29_22-38-43_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_157.0_2026-07-29_22-38-43_avf_0.48_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7473.25_sec_TABLEtime323.49sec_SIMtime1226.57sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T23:28:32",
+      "end_time": "2026-08-07T23:54:30",
+      "duration_sec": 1558.1,
+      "error": null
+    },
+    {
+      "job_id": "j00022",
+      "substrate_job_id": "j00023",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-29_22-38-43_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_157.0_2026-07-29_22-38-43_avf_0.48_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7473.25_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-29_22-38-43_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_157.0_2026-07-29_22-38-43_avf_0.48_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7473.25_sec_TABLEtime280.28sec_SIMtime1763.99sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T23:54:30",
+      "end_time": "2026-08-08T00:28:42",
+      "duration_sec": 2052.14,
+      "error": null
+    },
+    {
+      "job_id": "j00023",
+      "substrate_job_id": "j00024",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-30_03-57-23_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_149.0_2026-07-30_03-57-23_avf_0.52_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7269.69_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-30_03-57-23_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_149.0_2026-07-30_03-57-23_avf_0.52_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7269.69_sec_TABLEtime331.12sec_SIMtime1884.36sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-07T23:56:02",
+      "end_time": "2026-08-08T00:33:06",
+      "duration_sec": 2223.81,
+      "error": null
+    },
+    {
+      "job_id": "j00024",
+      "substrate_job_id": "j00024",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-30_03-57-23_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_149.0_2026-07-30_03-57-23_avf_0.52_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7269.69_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-30_03-57-23_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_149.0_2026-07-30_03-57-23_avf_0.52_d1.68_sig0.45wo10_wc3_wl3_K7_ODI_0.0903_7269.69_sec_TABLEtime301.48sec_SIMtime2238.47sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T00:28:42",
+      "end_time": "2026-08-08T01:11:11",
+      "duration_sec": 2548.27,
+      "error": null
+    },
+    {
+      "job_id": "j00025",
+      "substrate_job_id": "j00031",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.5/2026-07-30_22-13-40_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_254.0_2026-07-30_22-13-40_avf_0.45_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7228.88_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.5/2026-07-30_22-13-40_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_254.0_2026-07-30_22-13-40_avf_0.45_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7228.88_sec_TABLEtime294.05sec_SIMtime1133.79sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T00:33:06",
+      "end_time": "2026-08-08T00:57:01",
+      "duration_sec": 1434.86,
+      "error": null
+    },
+    {
+      "job_id": "j00026",
+      "substrate_job_id": "j00031",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.5/2026-07-30_22-13-40_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_254.0_2026-07-30_22-13-40_avf_0.45_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7228.88_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.5/2026-07-30_22-13-40_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_254.0_2026-07-30_22-13-40_avf_0.45_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7228.88_sec_TABLEtime264.41sec_SIMtime1432.36sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T00:57:01",
+      "end_time": "2026-08-08T01:25:25",
+      "duration_sec": 1703.92,
+      "error": null
+    },
+    {
+      "job_id": "j00027",
+      "substrate_job_id": "j00032",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.5/2026-07-31_01-28-42_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_282.0_2026-07-31_01-28-42_avf_0.35_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_6371.27_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.5/2026-07-31_01-28-42_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_282.0_2026-07-31_01-28-42_avf_0.35_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_6371.27_sec_TABLEtime281.62sec_SIMtime883.48sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T01:11:11",
+      "end_time": "2026-08-08T01:30:43",
+      "duration_sec": 1171.96,
+      "error": null
+    },
+    {
+      "job_id": "j00028",
+      "substrate_job_id": "j00032",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.5/2026-07-31_01-28-42_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_282.0_2026-07-31_01-28-42_avf_0.35_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_6371.27_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.5/2026-07-31_01-28-42_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_282.0_2026-07-31_01-28-42_avf_0.35_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_6371.27_sec_TABLEtime238.88sec_SIMtime1305.98sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T01:25:25",
+      "end_time": "2026-08-08T01:51:17",
+      "duration_sec": 1551.54,
+      "error": null
+    },
+    {
+      "job_id": "j00029",
+      "substrate_job_id": "j00034",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_05-07-11_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep0/data/array500_fibers_boxL_393.0_2026-07-31_05-07-11_avf_0.31_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_6848.05_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_05-07-11_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_393.0_2026-07-31_05-07-11_avf_0.31_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_6848.05_sec_TABLEtime254.78sec_SIMtime954.81sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T01:30:43",
+      "end_time": "2026-08-08T01:50:58",
+      "duration_sec": 1215.86,
+      "error": null
+    },
+    {
+      "job_id": "j00030",
+      "substrate_job_id": "j00034",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_05-07-11_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep0/data/array500_fibers_boxL_393.0_2026-07-31_05-07-11_avf_0.31_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_6848.05_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_05-07-11_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_393.0_2026-07-31_05-07-11_avf_0.31_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_6848.05_sec_TABLEtime244.33sec_SIMtime1689.26sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T01:50:58",
+      "end_time": "2026-08-08T02:23:19",
+      "duration_sec": 1940.55,
+      "error": null
+    },
+    {
+      "job_id": "j00031",
+      "substrate_job_id": "j00035",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_05-24-05_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_310.0_2026-07-31_05-24-05_avf_0.46_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7683.96_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_05-24-05_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_310.0_2026-07-31_05-24-05_avf_0.46_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7683.96_sec_TABLEtime247.96sec_SIMtime1404.14sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T01:51:17",
+      "end_time": "2026-08-08T02:18:55",
+      "duration_sec": 1658.36,
+      "error": null
+    },
+    {
+      "job_id": "j00032",
+      "substrate_job_id": "j00035",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_05-24-05_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_310.0_2026-07-31_05-24-05_avf_0.46_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7683.96_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_05-24-05_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_310.0_2026-07-31_05-24-05_avf_0.46_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7683.96_sec_TABLEtime249.42sec_SIMtime1592.35sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T02:18:55",
+      "end_time": "2026-08-08T02:49:43",
+      "duration_sec": 1848.48,
+      "error": null
+    },
+    {
+      "job_id": "j00033",
+      "substrate_job_id": "j00036",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_12-12-21_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_303.0_2026-07-31_12-12-21_avf_0.51_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7992.28_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_12-12-21_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_303.0_2026-07-31_12-12-21_avf_0.51_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7992.28_sec_TABLEtime283.05sec_SIMtime1016.81sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T02:23:19",
+      "end_time": "2026-08-08T02:45:06",
+      "duration_sec": 1307.11,
+      "error": null
+    },
+    {
+      "job_id": "j00034",
+      "substrate_job_id": "j00036",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_12-12-21_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_303.0_2026-07-31_12-12-21_avf_0.51_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7992.28_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_12-12-21_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_303.0_2026-07-31_12-12-21_avf_0.51_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7992.28_sec_TABLEtime256.39sec_SIMtime1743.63sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T02:45:06",
+      "end_time": "2026-08-08T03:18:33",
+      "duration_sec": 2007.32,
+      "error": null
+    },
+    {
+      "job_id": "j00035",
+      "substrate_job_id": "j00037",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_18-39-32_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_147.0_2026-07-31_18-39-32_avf_0.5_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_9718.51_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_18-39-32_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_147.0_2026-07-31_18-39-32_avf_0.5_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_9718.51_sec_TABLEtime273.77sec_SIMtime909.26sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T02:49:43",
+      "end_time": "2026-08-08T03:09:34",
+      "duration_sec": 1190.07,
+      "error": null
+    },
+    {
+      "job_id": "j00036",
+      "substrate_job_id": "j00037",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_18-39-32_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_147.0_2026-07-31_18-39-32_avf_0.5_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_9718.51_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_18-39-32_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_147.0_2026-07-31_18-39-32_avf_0.5_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_9718.51_sec_TABLEtime192.6sec_SIMtime1171.66sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T03:09:34",
+      "end_time": "2026-08-08T03:32:24",
+      "duration_sec": 1369.97,
+      "error": null
+    },
+    {
+      "job_id": "j00037",
+      "substrate_job_id": "j00038",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_21-03-05_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_152.0_2026-07-31_21-03-05_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_11207.89_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_21-03-05_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_152.0_2026-07-31_21-03-05_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_11207.89_sec_TABLEtime260.8sec_SIMtime838.84sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T03:18:33",
+      "end_time": "2026-08-08T03:37:00",
+      "duration_sec": 1106.65,
+      "error": null
+    },
+    {
+      "job_id": "j00038",
+      "substrate_job_id": "j00038",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_21-03-05_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_152.0_2026-07-31_21-03-05_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_11207.89_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_21-03-05_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_152.0_2026-07-31_21-03-05_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_11207.89_sec_TABLEtime191.38sec_SIMtime989.12sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T03:32:24",
+      "end_time": "2026-08-08T03:52:10",
+      "duration_sec": 1186.11,
+      "error": null
+    },
+    {
+      "job_id": "j00039",
+      "substrate_job_id": "j00039",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_23-13-33_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep2/data/array500_fibers_boxL_146.0_2026-07-31_23-13-33_avf_0.52_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6519.89_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_23-13-33_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_146.0_2026-07-31_23-13-33_avf_0.52_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6519.89_sec_TABLEtime275.67sec_SIMtime907.44sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T03:37:00",
+      "end_time": "2026-08-08T03:56:51",
+      "duration_sec": 1190.4,
+      "error": null
+    },
+    {
+      "job_id": "j00040",
+      "substrate_job_id": "j00039",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_23-13-33_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep2/data/array500_fibers_boxL_146.0_2026-07-31_23-13-33_avf_0.52_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6519.89_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-07-31_23-13-33_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_146.0_2026-07-31_23-13-33_avf_0.52_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6519.89_sec_TABLEtime205.72sec_SIMtime1184.26sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T03:52:10",
+      "end_time": "2026-08-08T04:15:26",
+      "duration_sec": 1395.91,
+      "error": null
+    },
+    {
+      "job_id": "j00041",
+      "substrate_job_id": "j00040",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-31_23-31-45_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_171.0_2026-07-31_23-31-45_avf_0.52_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6401.47_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-31_23-31-45_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_171.0_2026-07-31_23-31-45_avf_0.52_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6401.47_sec_TABLEtime219.38sec_SIMtime1017.8sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T03:56:51",
+      "end_time": "2026-08-08T04:17:34",
+      "duration_sec": 1243.2,
+      "error": null
+    },
+    {
+      "job_id": "j00042",
+      "substrate_job_id": "j00040",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-31_23-31-45_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_171.0_2026-07-31_23-31-45_avf_0.52_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6401.47_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-31_23-31-45_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_171.0_2026-07-31_23-31-45_avf_0.52_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6401.47_sec_TABLEtime176.73sec_SIMtime1181.62sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T04:15:26",
+      "end_time": "2026-08-08T04:38:09",
+      "duration_sec": 1363.54,
+      "error": null
+    },
+    {
+      "job_id": "j00043",
+      "substrate_job_id": "j00041",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-01_00-12-05_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_176.0_2026-08-01_00-12-05_avf_0.47_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_5695.95_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-01_00-12-05_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_176.0_2026-08-01_00-12-05_avf_0.47_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_5695.95_sec_TABLEtime239.49sec_SIMtime810.23sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T04:17:34",
+      "end_time": "2026-08-08T04:35:10",
+      "duration_sec": 1055.95,
+      "error": null
+    },
+    {
+      "job_id": "j00044",
+      "substrate_job_id": "j00041",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-01_00-12-05_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_176.0_2026-08-01_00-12-05_avf_0.47_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_5695.95_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-01_00-12-05_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_176.0_2026-08-01_00-12-05_avf_0.47_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_5695.95_sec_TABLEtime188.04sec_SIMtime1113.27sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T04:35:10",
+      "end_time": "2026-08-08T04:56:57",
+      "duration_sec": 1306.9,
+      "error": null
+    },
+    {
+      "job_id": "j00045",
+      "substrate_job_id": "j00042",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-01_03-02-16_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_178.0_2026-08-01_03-02-16_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7140.61_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-01_03-02-16_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_178.0_2026-08-01_03-02-16_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7140.61_sec_TABLEtime250.26sec_SIMtime821.29sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T04:38:09",
+      "end_time": "2026-08-08T04:56:07",
+      "duration_sec": 1077.79,
+      "error": null
+    },
+    {
+      "job_id": "j00046",
+      "substrate_job_id": "j00042",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-01_03-02-16_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_178.0_2026-08-01_03-02-16_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7140.61_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-01_03-02-16_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_178.0_2026-08-01_03-02-16_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7140.61_sec_TABLEtime187.08sec_SIMtime1089.0sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T04:56:07",
+      "end_time": "2026-08-08T05:17:28",
+      "duration_sec": 1281.57,
+      "error": null
+    },
+    {
+      "job_id": "j00047",
+      "substrate_job_id": "j00043",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_03-25-44_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_210.0_2026-08-01_03-25-44_avf_0.51_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7535.76_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_03-25-44_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_210.0_2026-08-01_03-25-44_avf_0.51_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7535.76_sec_TABLEtime221.59sec_SIMtime762.98sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T04:56:57",
+      "end_time": "2026-08-08T05:13:27",
+      "duration_sec": 990.61,
+      "error": null
+    },
+    {
+      "job_id": "j00048",
+      "substrate_job_id": "j00043",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_03-25-44_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_210.0_2026-08-01_03-25-44_avf_0.51_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7535.76_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_03-25-44_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_210.0_2026-08-01_03-25-44_avf_0.51_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7535.76_sec_TABLEtime188.84sec_SIMtime1154.87sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T05:13:27",
+      "end_time": "2026-08-08T05:35:56",
+      "duration_sec": 1349.29,
+      "error": null
+    },
+    {
+      "job_id": "j00049",
+      "substrate_job_id": "j00044",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_03-58-19_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_220.0_2026-08-01_03-58-19_avf_0.53_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7524.7_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_03-58-19_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_220.0_2026-08-01_03-58-19_avf_0.53_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7524.7_sec_TABLEtime218.78sec_SIMtime786.75sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T05:17:28",
+      "end_time": "2026-08-08T05:34:20",
+      "duration_sec": 1011.4,
+      "error": null
+    },
+    {
+      "job_id": "j00050",
+      "substrate_job_id": "j00044",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_03-58-19_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_220.0_2026-08-01_03-58-19_avf_0.53_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7524.7_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_03-58-19_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_220.0_2026-08-01_03-58-19_avf_0.53_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7524.7_sec_TABLEtime185.41sec_SIMtime1346.78sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T05:34:20",
+      "end_time": "2026-08-08T05:59:57",
+      "duration_sec": 1537.62,
+      "error": null
+    },
+    {
+      "job_id": "j00051",
+      "substrate_job_id": "j00045",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_06-00-35_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_220.0_2026-08-01_06-00-35_avf_0.46_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7059.15_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_06-00-35_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_220.0_2026-08-01_06-00-35_avf_0.46_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7059.15_sec_TABLEtime225.44sec_SIMtime802.39sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T05:35:56",
+      "end_time": "2026-08-08T05:53:10",
+      "duration_sec": 1033.7,
+      "error": null
+    },
+    {
+      "job_id": "j00052",
+      "substrate_job_id": "j00045",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_06-00-35_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_220.0_2026-08-01_06-00-35_avf_0.46_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7059.15_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_06-00-35_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_220.0_2026-08-01_06-00-35_avf_0.46_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7059.15_sec_TABLEtime193.05sec_SIMtime1274.6sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T05:53:10",
+      "end_time": "2026-08-08T06:17:43",
+      "duration_sec": 1473.23,
+      "error": null
+    },
+    {
+      "job_id": "j00053",
+      "substrate_job_id": "j00046",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_08-04-36_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep0/data/array500_fibers_boxL_269.0_2026-08-01_08-04-36_avf_0.5_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6703.64_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_08-04-36_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_269.0_2026-08-01_08-04-36_avf_0.5_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6703.64_sec_TABLEtime184.41sec_SIMtime795.14sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T05:59:57",
+      "end_time": "2026-08-08T06:16:22",
+      "duration_sec": 984.43,
+      "error": null
+    },
+    {
+      "job_id": "j00054",
+      "substrate_job_id": "j00046",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_08-04-36_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep0/data/array500_fibers_boxL_269.0_2026-08-01_08-04-36_avf_0.5_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6703.64_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_08-04-36_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_269.0_2026-08-01_08-04-36_avf_0.5_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_6703.64_sec_TABLEtime171.26sec_SIMtime1536.8sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T06:16:22",
+      "end_time": "2026-08-08T06:44:55",
+      "duration_sec": 1713.18,
+      "error": null
+    },
+    {
+      "job_id": "j00055",
+      "substrate_job_id": "j00047",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_09-26-11_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_274.0_2026-08-01_09-26-11_avf_0.53_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7650.32_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_09-26-11_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_274.0_2026-08-01_09-26-11_avf_0.53_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7650.32_sec_TABLEtime179.71sec_SIMtime771.12sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T06:17:43",
+      "end_time": "2026-08-08T06:33:39",
+      "duration_sec": 955.58,
+      "error": null
+    },
+    {
+      "job_id": "j00056",
+      "substrate_job_id": "j00047",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_09-26-11_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_274.0_2026-08-01_09-26-11_avf_0.53_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7650.32_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_09-26-11_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_274.0_2026-08-01_09-26-11_avf_0.53_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7650.32_sec_TABLEtime167.28sec_SIMtime1323.61sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T06:33:39",
+      "end_time": "2026-08-08T06:58:35",
+      "duration_sec": 1496.12,
+      "error": null
+    },
+    {
+      "job_id": "j00057",
+      "substrate_job_id": "j00048",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_10-34-27_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_268.0_2026-08-01_10-34-27_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7804.13_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_10-34-27_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_268.0_2026-08-01_10-34-27_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7804.13_sec_TABLEtime226.13sec_SIMtime929.92sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T06:44:55",
+      "end_time": "2026-08-08T07:04:17",
+      "duration_sec": 1161.64,
+      "error": null
+    },
+    {
+      "job_id": "j00058",
+      "substrate_job_id": "j00048",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_10-34-27_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_268.0_2026-08-01_10-34-27_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7804.13_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_10-34-27_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_268.0_2026-08-01_10-34-27_avf_0.49_d2.58_sig0.69wo10_wc3_wl3_K7_ODI_0.0903_7804.13_sec_TABLEtime201.48sec_SIMtime1653.38sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T06:58:35",
+      "end_time": "2026-08-08T07:29:36",
+      "duration_sec": 1860.83,
+      "error": null
+    },
+    {
+      "job_id": "j00059",
+      "substrate_job_id": "j00049",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-01_15-14-41_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_287.0_2026-08-01_15-14-41_avf_0.36_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_8831.56_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-01_15-14-41_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_287.0_2026-08-01_15-14-41_avf_0.36_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_8831.56_sec_TABLEtime275.82sec_SIMtime915.82sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T07:04:17",
+      "end_time": "2026-08-08T07:24:15",
+      "duration_sec": 1198.4,
+      "error": null
+    },
+    {
+      "job_id": "j00060",
+      "substrate_job_id": "j00049",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-01_15-14-41_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_287.0_2026-08-01_15-14-41_avf_0.36_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_8831.56_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-01_15-14-41_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_287.0_2026-08-01_15-14-41_avf_0.36_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_8831.56_sec_TABLEtime193.98sec_SIMtime1071.37sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T07:24:15",
+      "end_time": "2026-08-08T07:45:26",
+      "duration_sec": 1270.97,
+      "error": null
+    },
+    {
+      "job_id": "j00061",
+      "substrate_job_id": "j00050",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-01_15-17-44_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_260.0_2026-08-01_15-17-44_avf_0.42_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_5149.1_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-01_15-17-44_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_260.0_2026-08-01_15-17-44_avf_0.42_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_5149.1_sec_TABLEtime261.04sec_SIMtime859.43sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T07:29:36",
+      "end_time": "2026-08-08T07:48:23",
+      "duration_sec": 1126.93,
+      "error": null
+    },
+    {
+      "job_id": "j00062",
+      "substrate_job_id": "j00050",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-01_15-17-44_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_260.0_2026-08-01_15-17-44_avf_0.42_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_5149.1_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-01_15-17-44_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_260.0_2026-08-01_15-17-44_avf_0.42_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_5149.1_sec_TABLEtime192.92sec_SIMtime1061.7sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T07:45:26",
+      "end_time": "2026-08-08T08:06:26",
+      "duration_sec": 1260.09,
+      "error": null
+    },
+    {
+      "job_id": "j00063",
+      "substrate_job_id": "j00053",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-02_02-16-20_d3.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_290.0_2026-08-02_02-16-20_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_6983.91_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-02_02-16-20_d3.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_290.0_2026-08-02_02-16-20_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_6983.91_sec_TABLEtime236.73sec_SIMtime785.21sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T07:48:23",
+      "end_time": "2026-08-08T08:05:31",
+      "duration_sec": 1027.9,
+      "error": null
+    },
+    {
+      "job_id": "j00064",
+      "substrate_job_id": "j00053",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-02_02-16-20_d3.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_290.0_2026-08-02_02-16-20_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_6983.91_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-02_02-16-20_d3.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_290.0_2026-08-02_02-16-20_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_6983.91_sec_TABLEtime191.6sec_SIMtime1208.75sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T08:05:31",
+      "end_time": "2026-08-08T08:28:57",
+      "duration_sec": 1405.77,
+      "error": null
+    },
+    {
+      "job_id": "j00065",
+      "substrate_job_id": "j00055",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-02_10-00-57_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_438.0_2026-08-02_10-00-57_avf_0.34_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7300.15_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-02_10-00-57_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_438.0_2026-08-02_10-00-57_avf_0.34_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7300.15_sec_TABLEtime184.61sec_SIMtime809.21sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T08:06:26",
+      "end_time": "2026-08-08T08:23:04",
+      "duration_sec": 998.2,
+      "error": null
+    },
+    {
+      "job_id": "j00066",
+      "substrate_job_id": "j00055",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-02_10-00-57_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_438.0_2026-08-02_10-00-57_avf_0.34_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7300.15_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-02_10-00-57_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_438.0_2026-08-02_10-00-57_avf_0.34_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7300.15_sec_TABLEtime160.93sec_SIMtime1336.01sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T08:23:04",
+      "end_time": "2026-08-08T08:48:06",
+      "duration_sec": 1501.72,
+      "error": null
+    },
+    {
+      "job_id": "j00067",
+      "substrate_job_id": "j00057",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-02_11-29-25_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_373.0_2026-08-02_11-29-25_avf_0.49_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7441.37_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-02_11-29-25_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_373.0_2026-08-02_11-29-25_avf_0.49_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7441.37_sec_TABLEtime211.02sec_SIMtime887.6sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T08:28:57",
+      "end_time": "2026-08-08T08:47:21",
+      "duration_sec": 1104.2,
+      "error": null
+    },
+    {
+      "job_id": "j00068",
+      "substrate_job_id": "j00057",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-02_11-29-25_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_373.0_2026-08-02_11-29-25_avf_0.49_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7441.37_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-02_11-29-25_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_373.0_2026-08-02_11-29-25_avf_0.49_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7441.37_sec_TABLEtime184.5sec_SIMtime1362.94sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T08:47:21",
+      "end_time": "2026-08-08T09:13:14",
+      "duration_sec": 1552.96,
+      "error": null
+    },
+    {
+      "job_id": "j00069",
+      "substrate_job_id": "j00061",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_03-20-46_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_217.0_2026-08-03_03-20-46_avf_0.51_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6023.34_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_03-20-46_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_217.0_2026-08-03_03-20-46_avf_0.51_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6023.34_sec_TABLEtime188.0sec_SIMtime664.52sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T08:48:06",
+      "end_time": "2026-08-08T09:02:24",
+      "duration_sec": 857.62,
+      "error": null
+    },
+    {
+      "job_id": "j00070",
+      "substrate_job_id": "j00061",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_03-20-46_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_217.0_2026-08-03_03-20-46_avf_0.51_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6023.34_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_03-20-46_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_217.0_2026-08-03_03-20-46_avf_0.51_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6023.34_sec_TABLEtime138.71sec_SIMtime886.51sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T09:02:24",
+      "end_time": "2026-08-08T09:19:33",
+      "duration_sec": 1029.43,
+      "error": null
+    },
+    {
+      "job_id": "j00071",
+      "substrate_job_id": "j00062",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_03-50-43_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_218.0_2026-08-03_03-50-43_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8402.54_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_03-50-43_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_218.0_2026-08-03_03-50-43_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8402.54_sec_TABLEtime181.86sec_SIMtime646.29sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T09:13:14",
+      "end_time": "2026-08-08T09:27:07",
+      "duration_sec": 833.05,
+      "error": null
+    },
+    {
+      "job_id": "j00072",
+      "substrate_job_id": "j00062",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_03-50-43_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_218.0_2026-08-03_03-50-43_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8402.54_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_03-50-43_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_218.0_2026-08-03_03-50-43_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8402.54_sec_TABLEtime136.64sec_SIMtime853.64sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T09:19:33",
+      "end_time": "2026-08-08T09:36:08",
+      "duration_sec": 994.6,
+      "error": null
+    },
+    {
+      "job_id": "j00073",
+      "substrate_job_id": "j00063",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_04-28-01_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2/data/array500_fibers_boxL_222.0_2026-08-03_04-28-01_avf_0.47_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6730.59_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_04-28-01_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_222.0_2026-08-03_04-28-01_avf_0.47_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6730.59_sec_TABLEtime199.54sec_SIMtime778.53sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T09:27:07",
+      "end_time": "2026-08-08T09:43:30",
+      "duration_sec": 983.33,
+      "error": null
+    },
+    {
+      "job_id": "j00074",
+      "substrate_job_id": "j00063",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_04-28-01_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2/data/array500_fibers_boxL_222.0_2026-08-03_04-28-01_avf_0.47_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6730.59_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_04-28-01_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_222.0_2026-08-03_04-28-01_avf_0.47_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6730.59_sec_TABLEtime150.39sec_SIMtime945.18sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T09:36:08",
+      "end_time": "2026-08-08T09:54:28",
+      "duration_sec": 1099.87,
+      "error": null
+    },
+    {
+      "job_id": "j00075",
+      "substrate_job_id": "j00064",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_07-33-13_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_256.0_2026-08-03_07-33-13_avf_0.52_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7199.24_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_07-33-13_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_256.0_2026-08-03_07-33-13_avf_0.52_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7199.24_sec_TABLEtime169.93sec_SIMtime658.36sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T09:43:30",
+      "end_time": "2026-08-08T09:57:23",
+      "duration_sec": 832.77,
+      "error": null
+    },
+    {
+      "job_id": "j00076",
+      "substrate_job_id": "j00064",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_07-33-13_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_256.0_2026-08-03_07-33-13_avf_0.52_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7199.24_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_07-33-13_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_256.0_2026-08-03_07-33-13_avf_0.52_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7199.24_sec_TABLEtime137.25sec_SIMtime931.67sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T09:54:28",
+      "end_time": "2026-08-08T10:12:21",
+      "duration_sec": 1073.04,
+      "error": null
+    },
+    {
+      "job_id": "j00077",
+      "substrate_job_id": "j00065",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_08-26-19_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_256.0_2026-08-03_08-26-19_avf_0.5_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6402.85_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_08-26-19_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_256.0_2026-08-03_08-26-19_avf_0.5_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6402.85_sec_TABLEtime175.72sec_SIMtime695.28sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T09:57:23",
+      "end_time": "2026-08-08T10:11:59",
+      "duration_sec": 876.0,
+      "error": null
+    },
+    {
+      "job_id": "j00078",
+      "substrate_job_id": "j00065",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_08-26-19_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_256.0_2026-08-03_08-26-19_avf_0.5_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6402.85_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_08-26-19_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_256.0_2026-08-03_08-26-19_avf_0.5_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6402.85_sec_TABLEtime139.41sec_SIMtime1049.01sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T10:11:59",
+      "end_time": "2026-08-08T10:31:52",
+      "duration_sec": 1192.84,
+      "error": null
+    },
+    {
+      "job_id": "j00079",
+      "substrate_job_id": "j00066",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_09-04-41_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_257.0_2026-08-03_09-04-41_avf_0.49_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6409.5_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_09-04-41_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_257.0_2026-08-03_09-04-41_avf_0.49_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6409.5_sec_TABLEtime173.25sec_SIMtime689.61sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T10:12:21",
+      "end_time": "2026-08-08T10:26:48",
+      "duration_sec": 867.72,
+      "error": null
+    },
+    {
+      "job_id": "j00080",
+      "substrate_job_id": "j00066",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_09-04-41_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_257.0_2026-08-03_09-04-41_avf_0.49_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6409.5_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_09-04-41_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_257.0_2026-08-03_09-04-41_avf_0.49_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6409.5_sec_TABLEtime140.0sec_SIMtime862.93sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T10:26:48",
+      "end_time": "2026-08-08T10:43:36",
+      "duration_sec": 1007.14,
+      "error": null
+    },
+    {
+      "job_id": "j00081",
+      "substrate_job_id": "j00067",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_10-35-15_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_396.0_2026-08-03_10-35-15_avf_0.31_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6579.8_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_10-35-15_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_396.0_2026-08-03_10-35-15_avf_0.31_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6579.8_sec_TABLEtime166.48sec_SIMtime786.21sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T10:31:52",
+      "end_time": "2026-08-08T10:47:49",
+      "duration_sec": 956.93,
+      "error": null
+    },
+    {
+      "job_id": "j00082",
+      "substrate_job_id": "j00067",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_10-35-15_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_396.0_2026-08-03_10-35-15_avf_0.31_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6579.8_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_10-35-15_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_396.0_2026-08-03_10-35-15_avf_0.31_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_6579.8_sec_TABLEtime135.73sec_SIMtime1078.73sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T10:43:36",
+      "end_time": "2026-08-08T11:03:54",
+      "duration_sec": 1218.79,
+      "error": null
+    },
+    {
+      "job_id": "j00083",
+      "substrate_job_id": "j00068",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_12-53-49_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_325.0_2026-08-03_12-53-49_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7940.51_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_12-53-49_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_325.0_2026-08-03_12-53-49_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7940.51_sec_TABLEtime158.92sec_SIMtime768.73sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T10:47:49",
+      "end_time": "2026-08-08T11:03:21",
+      "duration_sec": 931.99,
+      "error": null
+    },
+    {
+      "job_id": "j00084",
+      "substrate_job_id": "j00068",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_12-53-49_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_325.0_2026-08-03_12-53-49_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7940.51_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_12-53-49_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_325.0_2026-08-03_12-53-49_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7940.51_sec_TABLEtime140.11sec_SIMtime1134.03sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T11:03:21",
+      "end_time": "2026-08-08T11:24:39",
+      "duration_sec": 1278.47,
+      "error": null
+    },
+    {
+      "job_id": "j00085",
+      "substrate_job_id": "j00069",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_14-55-19_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_320.0_2026-08-03_14-55-19_avf_0.48_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7626.69_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_14-55-19_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_320.0_2026-08-03_14-55-19_avf_0.48_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7626.69_sec_TABLEtime158.64sec_SIMtime623.59sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T11:03:54",
+      "end_time": "2026-08-08T11:17:01",
+      "duration_sec": 786.44,
+      "error": null
+    },
+    {
+      "job_id": "j00086",
+      "substrate_job_id": "j00069",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_14-55-19_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_320.0_2026-08-03_14-55-19_avf_0.48_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7626.69_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_14-55-19_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_320.0_2026-08-03_14-55-19_avf_0.48_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_7626.69_sec_TABLEtime141.77sec_SIMtime1009.32sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T11:17:01",
+      "end_time": "2026-08-08T11:36:16",
+      "duration_sec": 1155.34,
+      "error": null
+    },
+    {
+      "job_id": "j00087",
+      "substrate_job_id": "j00070",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_15-14-23_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep0/data/array500_fibers_boxL_437.0_2026-08-03_15-14-23_avf_0.47_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8338.43_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_15-14-23_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_437.0_2026-08-03_15-14-23_avf_0.47_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8338.43_sec_TABLEtime163.6sec_SIMtime705.04sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T11:24:39",
+      "end_time": "2026-08-08T11:39:12",
+      "duration_sec": 872.8,
+      "error": null
+    },
+    {
+      "job_id": "j00088",
+      "substrate_job_id": "j00070",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_15-14-23_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep0/data/array500_fibers_boxL_437.0_2026-08-03_15-14-23_avf_0.47_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8338.43_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_15-14-23_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_437.0_2026-08-03_15-14-23_avf_0.47_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8338.43_sec_TABLEtime153.1sec_SIMtime1152.31sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T11:36:16",
+      "end_time": "2026-08-08T11:58:06",
+      "duration_sec": 1309.82,
+      "error": null
+    },
+    {
+      "job_id": "j00089",
+      "substrate_job_id": "j00071",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_17-31-44_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_408.0_2026-08-03_17-31-44_avf_0.51_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8346.46_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_17-31-44_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_408.0_2026-08-03_17-31-44_avf_0.51_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8346.46_sec_TABLEtime164.08sec_SIMtime607.22sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T11:39:12",
+      "end_time": "2026-08-08T11:52:08",
+      "duration_sec": 775.9,
+      "error": null
+    },
+    {
+      "job_id": "j00090",
+      "substrate_job_id": "j00071",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_17-31-44_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_408.0_2026-08-03_17-31-44_avf_0.51_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8346.46_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_17-31-44_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_408.0_2026-08-03_17-31-44_avf_0.51_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8346.46_sec_TABLEtime149.11sec_SIMtime1055.08sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T11:52:08",
+      "end_time": "2026-08-08T12:12:16",
+      "duration_sec": 1208.57,
+      "error": null
+    },
+    {
+      "job_id": "j00091",
+      "substrate_job_id": "j00072",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_22-29-50_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_411.0_2026-08-03_22-29-50_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8427.48_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_22-29-50_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_411.0_2026-08-03_22-29-50_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8427.48_sec_TABLEtime148.23sec_SIMtime721.49sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T11:58:06",
+      "end_time": "2026-08-08T12:12:40",
+      "duration_sec": 874.01,
+      "error": null
+    },
+    {
+      "job_id": "j00092",
+      "substrate_job_id": "j00072",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_22-29-50_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_411.0_2026-08-03_22-29-50_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8427.48_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_22-29-50_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_411.0_2026-08-03_22-29-50_avf_0.53_d3.5_sig0.9375wo10_wc3_wl3_K7_ODI_0.0903_8427.48_sec_TABLEtime139.06sec_SIMtime1215.29sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T12:12:16",
+      "end_time": "2026-08-08T12:34:55",
+      "duration_sec": 1358.64,
+      "error": null
+    },
+    {
+      "job_id": "j00093",
+      "substrate_job_id": "j00073",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-03_22-33-51_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_344.0_2026-08-03_22-33-51_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7463.63_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-03_22-33-51_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_344.0_2026-08-03_22-33-51_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7463.63_sec_TABLEtime180.9sec_SIMtime752.4sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T12:12:40",
+      "end_time": "2026-08-08T12:28:18",
+      "duration_sec": 937.8,
+      "error": null
+    },
+    {
+      "job_id": "j00094",
+      "substrate_job_id": "j00073",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-03_22-33-51_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_344.0_2026-08-03_22-33-51_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7463.63_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-03_22-33-51_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_344.0_2026-08-03_22-33-51_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7463.63_sec_TABLEtime137.33sec_SIMtime924.37sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T12:28:18",
+      "end_time": "2026-08-08T12:46:04",
+      "duration_sec": 1065.84,
+      "error": null
+    },
+    {
+      "job_id": "j00095",
+      "substrate_job_id": "j00074",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-04_00-02-16_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_337.0_2026-08-04_00-02-16_avf_0.47_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7331.23_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-04_00-02-16_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_337.0_2026-08-04_00-02-16_avf_0.47_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7331.23_sec_TABLEtime200.52sec_SIMtime656.13sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T12:34:55",
+      "end_time": "2026-08-08T12:49:17",
+      "duration_sec": 861.77,
+      "error": null
+    },
+    {
+      "job_id": "j00096",
+      "substrate_job_id": "j00074",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-04_00-02-16_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_337.0_2026-08-04_00-02-16_avf_0.47_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7331.23_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-04_00-02-16_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_337.0_2026-08-04_00-02-16_avf_0.47_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7331.23_sec_TABLEtime154.64sec_SIMtime874.91sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T12:46:04",
+      "end_time": "2026-08-08T13:03:18",
+      "duration_sec": 1034.03,
+      "error": null
+    },
+    {
+      "job_id": "j00097",
+      "substrate_job_id": "j00075",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-04_02-31-05_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep2/data/array500_fibers_boxL_330.0_2026-08-04_02-31-05_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7829.7_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-04_02-31-05_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_330.0_2026-08-04_02-31-05_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7829.7_sec_TABLEtime199.92sec_SIMtime711.07sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T12:49:17",
+      "end_time": "2026-08-08T13:04:33",
+      "duration_sec": 916.16,
+      "error": null
+    },
+    {
+      "job_id": "j00098",
+      "substrate_job_id": "j00075",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-04_02-31-05_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep2/data/array500_fibers_boxL_330.0_2026-08-04_02-31-05_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7829.7_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-04_02-31-05_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_330.0_2026-08-04_02-31-05_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7829.7_sec_TABLEtime152.85sec_SIMtime946.06sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T13:03:18",
+      "end_time": "2026-08-08T13:21:41",
+      "duration_sec": 1103.31,
+      "error": null
+    },
+    {
+      "job_id": "j00099",
+      "substrate_job_id": "j00076",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-04_05-53-44_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_445.0_2026-08-04_05-53-44_avf_0.4_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7719.53_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-04_05-53-44_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_445.0_2026-08-04_05-53-44_avf_0.4_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7719.53_sec_TABLEtime165.59sec_SIMtime703.94sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T13:04:33",
+      "end_time": "2026-08-08T13:19:07",
+      "duration_sec": 873.78,
+      "error": null
+    },
+    {
+      "job_id": "j00100",
+      "substrate_job_id": "j00076",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-04_05-53-44_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_445.0_2026-08-04_05-53-44_avf_0.4_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7719.53_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-04_05-53-44_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_445.0_2026-08-04_05-53-44_avf_0.4_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7719.53_sec_TABLEtime135.47sec_SIMtime1033.42sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T13:19:07",
+      "end_time": "2026-08-08T13:38:40",
+      "duration_sec": 1173.1,
+      "error": null
+    },
+    {
+      "job_id": "j00101",
+      "substrate_job_id": "j00077",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-04_07-51-29_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_413.0_2026-08-04_07-51-29_avf_0.49_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_8188.47_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-04_07-51-29_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_413.0_2026-08-04_07-51-29_avf_0.49_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_8188.47_sec_TABLEtime179.96sec_SIMtime617.22sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T13:21:41",
+      "end_time": "2026-08-08T13:35:03",
+      "duration_sec": 801.66,
+      "error": null
+    },
+    {
+      "job_id": "j00102",
+      "substrate_job_id": "j00077",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-04_07-51-29_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_413.0_2026-08-04_07-51-29_avf_0.49_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_8188.47_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-04_07-51-29_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_413.0_2026-08-04_07-51-29_avf_0.49_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_8188.47_sec_TABLEtime153.28sec_SIMtime1023.76sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T13:35:03",
+      "end_time": "2026-08-08T13:54:44",
+      "duration_sec": 1181.39,
+      "error": null
+    },
+    {
+      "job_id": "j00103",
+      "substrate_job_id": "j00081",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-04_17-21-21_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_522.0_2026-08-04_17-21-21_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7470.59_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-04_17-21-21_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_522.0_2026-08-04_17-21-21_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7470.59_sec_TABLEtime146.12sec_SIMtime745.06sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T13:38:40",
+      "end_time": "2026-08-08T13:53:35",
+      "duration_sec": 895.48,
+      "error": null
+    },
+    {
+      "job_id": "j00104",
+      "substrate_job_id": "j00081",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-04_17-21-21_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_522.0_2026-08-04_17-21-21_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7470.59_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-04_17-21-21_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_522.0_2026-08-04_17-21-21_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7470.59_sec_TABLEtime127.42sec_SIMtime1258.5sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T13:53:35",
+      "end_time": "2026-08-08T14:16:45",
+      "duration_sec": 1389.95,
+      "error": null
+    },
+    {
+      "job_id": "j00105",
+      "substrate_job_id": "j00083",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_1.24_VF_0.5/2026-08-06_17-18-54_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_634.0_2026-08-06_17-18-54_avf_0.52_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_9923.9_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_1.24_VF_0.5/2026-08-06_17-18-54_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_634.0_2026-08-06_17-18-54_avf_0.52_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_9923.9_sec_TABLEtime137.94sec_SIMtime642.5sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T13:54:44",
+      "end_time": "2026-08-08T14:07:49",
+      "duration_sec": 784.51,
+      "error": null
+    },
+    {
+      "job_id": "j00106",
+      "substrate_job_id": "j00083",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_1.24_VF_0.5/2026-08-06_17-18-54_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_634.0_2026-08-06_17-18-54_avf_0.52_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_9923.9_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_1.24_VF_0.5/2026-08-06_17-18-54_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_634.0_2026-08-06_17-18-54_avf_0.52_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_9923.9_sec_TABLEtime132.7sec_SIMtime1385.39sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T14:07:49",
+      "end_time": "2026-08-08T14:33:11",
+      "duration_sec": 1522.16,
+      "error": null
+    },
+    {
+      "job_id": "j00107",
+      "substrate_job_id": "j00085",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-05_04-29-24_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_313.0_2026-08-05_04-29-24_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7430.75_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-05_04-29-24_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_313.0_2026-08-05_04-29-24_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7430.75_sec_TABLEtime169.79sec_SIMtime677.32sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T14:16:45",
+      "end_time": "2026-08-08T14:30:57",
+      "duration_sec": 851.6,
+      "error": null
+    },
+    {
+      "job_id": "j00108",
+      "substrate_job_id": "j00085",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-05_04-29-24_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_313.0_2026-08-05_04-29-24_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7430.75_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-05_04-29-24_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_313.0_2026-08-05_04-29-24_avf_0.46_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7430.75_sec_TABLEtime125.6sec_SIMtime797.58sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T14:30:57",
+      "end_time": "2026-08-08T14:46:24",
+      "duration_sec": 927.1,
+      "error": null
+    },
+    {
+      "job_id": "j00109",
+      "substrate_job_id": "j00086",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_295.0_2026-08-06_17-18-55_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7326.48_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_295.0_2026-08-06_17-18-55_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7326.48_sec_TABLEtime152.45sec_SIMtime523.64sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T14:33:11",
+      "end_time": "2026-08-08T14:44:31",
+      "duration_sec": 680.12,
+      "error": null
+    },
+    {
+      "job_id": "j00110",
+      "substrate_job_id": "j00086",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1/data/array500_fibers_boxL_295.0_2026-08-06_17-18-55_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7326.48_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_295.0_2026-08-06_17-18-55_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7326.48_sec_TABLEtime114.89sec_SIMtime681.56sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T14:44:31",
+      "end_time": "2026-08-08T14:57:51",
+      "duration_sec": 800.05,
+      "error": null
+    },
+    {
+      "job_id": "j00111",
+      "substrate_job_id": "j00087",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2/data/array500_fibers_boxL_299.0_2026-08-06_17-18-55_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_8554.32_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_299.0_2026-08-06_17-18-55_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_8554.32_sec_TABLEtime157.16sec_SIMtime597.88sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T14:46:24",
+      "end_time": "2026-08-08T14:59:03",
+      "duration_sec": 759.18,
+      "error": null
+    },
+    {
+      "job_id": "j00112",
+      "substrate_job_id": "j00087",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2/data/array500_fibers_boxL_299.0_2026-08-06_17-18-55_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_8554.32_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_299.0_2026-08-06_17-18-55_avf_0.5_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_8554.32_sec_TABLEtime119.4sec_SIMtime752.68sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T14:57:51",
+      "end_time": "2026-08-08T15:12:27",
+      "duration_sec": 875.73,
+      "error": null
+    },
+    {
+      "job_id": "j00113",
+      "substrate_job_id": "j00088",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-06_23-46-09_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_354.0_2026-08-06_23-46-09_avf_0.49_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7321.63_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-06_23-46-09_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_354.0_2026-08-06_23-46-09_avf_0.49_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7321.63_sec_TABLEtime162.55sec_SIMtime685.34sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T14:59:03",
+      "end_time": "2026-08-08T15:13:15",
+      "duration_sec": 852.01,
+      "error": null
+    },
+    {
+      "job_id": "j00114",
+      "substrate_job_id": "j00088",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-06_23-46-09_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_354.0_2026-08-06_23-46-09_avf_0.49_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7321.63_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-06_23-46-09_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_354.0_2026-08-06_23-46-09_avf_0.49_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_7321.63_sec_TABLEtime133.02sec_SIMtime879.34sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T15:12:27",
+      "end_time": "2026-08-08T15:29:23",
+      "duration_sec": 1016.23,
+      "error": null
+    },
+    {
+      "job_id": "j00115",
+      "substrate_job_id": "j00090",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-07_03-39-41_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_348.0_2026-08-07_03-39-41_avf_0.48_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_8261.84_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-07_03-39-41_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_348.0_2026-08-07_03-39-41_avf_0.48_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_8261.84_sec_TABLEtime142.12sec_SIMtime610.05sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T15:13:15",
+      "end_time": "2026-08-08T15:25:51",
+      "duration_sec": 755.97,
+      "error": null
+    },
+    {
+      "job_id": "j00116",
+      "substrate_job_id": "j00090",
+      "sets": [
+        "highdisp"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-07_03-39-41_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_348.0_2026-08-07_03-39-41_avf_0.48_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_8261.84_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-07_03-39-41_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_348.0_2026-08-07_03-39-41_avf_0.48_d4.5_sig1.205wo10_wc3_wl3_K7_ODI_0.0903_8261.84_sec_TABLEtime115.03sec_SIMtime816.77sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-08T15:25:51",
+      "end_time": "2026-08-08T15:41:27",
+      "duration_sec": 935.44,
+      "error": null
+    }
+  ]
+}

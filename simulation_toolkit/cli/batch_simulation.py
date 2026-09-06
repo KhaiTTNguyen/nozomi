@@ -52,6 +52,7 @@ import glob
 import json
 import multiprocessing as mp
 import os
+import re
 import sys
 import time
 import traceback
@@ -195,6 +196,99 @@ def build_sim_manifest(substrate_manifest_path: Path,
         "n_substrates_done": len(done_subs),
         "n_substrates_skipped": len(skipped),
         "skipped_substrate_job_ids": skipped,
+        "n_jobs": len(jobs),
+        "jobs": jobs,
+    }
+
+
+_REP_RE = re.compile(r"_rep(\d+)$")
+
+
+def _iter_converged_substrate_pkls(roots: List[Path]):
+    """Yield substrate pickle paths for converged run folders under each root.
+
+    Expected layout: ``<root>/<combo>/<timestamped_run>/data/<substrate>.pkl``.
+    Run folders whose ``data/`` dir is empty (non-converged) yield nothing.
+    Results are sorted for deterministic ``job_id`` assignment.
+    """
+    for root in roots:
+        if not root.is_dir():
+            continue
+        for pkl in sorted(root.glob("*/*/data/*.pkl")):
+            yield pkl
+
+
+def _compartment_already_simulated(run_folder: Path, compartment: str) -> bool:
+    """True if ``<run_folder>/sim/ADCdata`` already holds a
+    ``diffcoeff_<compartment>_*.pkl`` output for this compartment."""
+    adc_dir = run_folder / "sim" / "ADCdata"
+    if not adc_dir.is_dir():
+        return False
+    return any(adc_dir.glob(f"diffcoeff_{compartment}_*.pkl"))
+
+
+def build_sim_manifest_from_dirs(substrate_dirs: List[Path],
+                                 sim_params_template: Dict[str, Any],
+                                 kind: str,
+                                 skip_existing_sim: bool = True,
+                                 per_set: bool = False) -> Dict[str, Any]:
+    """Build a sim manifest by scanning experiment output directories for
+    converged substrates (``data/*.pkl``) and enumerating intra+extra jobs.
+
+    Unlike :func:`build_sim_manifest`, this does not consult a substrate
+    manifest -- it discovers substrates directly on disk, which also picks up
+    substrates that are not present in any manifest (reruns, extra combos).
+    When ``skip_existing_sim`` is True, a compartment job is omitted if its
+    output (``sim/ADCdata/diffcoeff_<compartment>_*.pkl``) already exists.
+    """
+    jobs: List[Dict[str, Any]] = []
+    skipped_existing: List[str] = []
+    n_substrates = 0
+    job_counter = 0
+    for pkl in _iter_converged_substrate_pkls(substrate_dirs):
+        run_folder = pkl.parent.parent            # <run>/data/<x.pkl> -> <run>
+        root_name = run_folder.parent.parent.name  # <root>/<combo>/<run> -> <root>
+        # --per-set tags jobs by the immediate parent folder (e.g. set1/set2/set3)
+        # instead of the coarse scan-root name.
+        set_tag = run_folder.parent.name if per_set else root_name
+        m = _REP_RE.search(run_folder.name)
+        repeat_idx = int(m.group(1)) if m else 0
+        sub_id = run_folder.name
+        n_substrates += 1
+        for compartment in COMPARTMENTS:
+            if skip_existing_sim and _compartment_already_simulated(run_folder, compartment):
+                skipped_existing.append(f"{sub_id}:{compartment}")
+                continue
+            job_counter += 1
+            params = dict(sim_params_template)
+            params["compartment"] = compartment
+            jobs.append({
+                "job_id": f"j{job_counter:05d}",
+                "substrate_job_id": sub_id,
+                "sets": [set_tag],
+                "repeat_idx": repeat_idx,
+                "compartment": compartment,
+                "substrate_pkl": str(pkl.resolve()),
+                "params": params,
+                "status": "pending",
+                "gpu_id": None,
+                "output_pkl": None,
+                "start_time": None,
+                "end_time": None,
+                "duration_sec": None,
+                "error": None,
+            })
+
+    return {
+        "created": _now_stamp(),
+        "kind": kind,
+        "source_substrate_dirs": [str(Path(d).resolve()) for d in substrate_dirs],
+        "sim_params": {k: v for k, v in sim_params_template.items()
+                       if k != "compartment"},
+        "skip_existing_sim": bool(skip_existing_sim),
+        "n_substrates_found": n_substrates,
+        "n_jobs_skipped_existing": len(skipped_existing),
+        "skipped_existing": skipped_existing,
         "n_jobs": len(jobs),
         "jobs": jobs,
     }
@@ -564,6 +658,29 @@ def _cmd_build(args: argparse.Namespace) -> None:
               + (" ..." if len(data["skipped_substrate_job_ids"]) > 10 else ""))
 
 
+def _cmd_build_scan(args: argparse.Namespace) -> None:
+    sim_params = _build_sim_params_from_args(args)
+    roots = [Path(d) for d in args.substrate_dirs]
+    data = build_sim_manifest_from_dirs(
+        substrate_dirs=roots,
+        sim_params_template=sim_params,
+        kind="scan",
+        skip_existing_sim=not args.include_existing_sim,
+        per_set=args.per_set,
+    )
+    out = Path(args.out) if args.out else (
+        _default_manifest_dir() / f"{data['created']}_manifest_scan.json"
+    )
+    out.parent.mkdir(parents=True, exist_ok=True)
+    _atomic_write_json(out, data)
+    print(f"Wrote {out}")
+    for d in data["source_substrate_dirs"]:
+        print(f"  dir={d}")
+    print(f"  substrates_found={data['n_substrates_found']}  "
+          f"skipped_existing={data['n_jobs_skipped_existing']}  "
+          f"jobs={data['n_jobs']}")
+
+
 def _cmd_build_smoke(args: argparse.Namespace) -> None:
     sim_params = _build_sim_params_from_args(args)
     data = build_sim_manifest(
@@ -652,6 +769,39 @@ def main(argv: Optional[List[str]] = None) -> None:
                          help="Use only the first N done substrates "
                               "(default: all done substrates in source manifest).")
     p_smoke.set_defaults(func=_cmd_build_smoke)
+
+    p_scan = sub.add_parser(
+        "build-scan",
+        help="Build a sim manifest by scanning experiment output dirs for "
+             "converged substrates (data/*.pkl), skipping already-simulated "
+             "compartments.")
+    p_scan.add_argument("--substrate-dirs", type=str, nargs="+", required=True,
+                        help="One or more experiment output roots to scan "
+                             "(layout: <root>/<combo>/<run>/data/*.pkl).")
+    p_scan.add_argument("--sim-config", type=str, default=DEFAULT_SIM_CONFIG,
+                        help=f"Path to sim params JSON (default: {DEFAULT_SIM_CONFIG}).")
+    p_scan.add_argument("--sim-time", type=float, required=True,
+                        help="Total diffusion time (ms).")
+    p_scan.add_argument("--num-spins", type=int, default=None,
+                        help="Override num_spins from sim-config.")
+    p_scan.add_argument("--time-step", type=float, default=None,
+                        help="Override time_step from sim-config.")
+    p_scan.add_argument("--nseg", type=int, default=None,
+                        help="Override nseg from sim-config.")
+    p_scan.add_argument("--D0-intra", type=float, default=None,
+                        help="Override D0_intra from sim-config.")
+    p_scan.add_argument("--D0-extra", type=float, default=None,
+                        help="Override D0_extra from sim-config.")
+    p_scan.add_argument("--include-existing-sim", action="store_true",
+                        help="Do NOT skip compartments that already have a "
+                             "sim/ADCdata/diffcoeff_<compartment>_*.pkl output.")
+    p_scan.add_argument("--per-set", action="store_true",
+                        help="Tag each job with its immediate parent folder "
+                             "(e.g. set1/set2/set3) instead of the scan-root name.")
+    p_scan.add_argument("--out", type=str, default=None,
+                        help="Output manifest path "
+                             "(default: experiment/setup/simulation/batch/<date>_manifest_scan.json)")
+    p_scan.set_defaults(func=_cmd_build_scan)
 
     p_run = sub.add_parser("run", help="Run pending jobs from a sim manifest.")
     p_run.add_argument("--manifest", type=str, required=True,

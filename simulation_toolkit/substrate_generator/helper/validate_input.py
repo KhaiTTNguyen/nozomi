@@ -20,7 +20,8 @@ def validate_parameters(params):
         },
         'orientation_shape_parameter': {
             'value': params.get('orientation_shape_parameter'),
-            'min': 7,
+            # min<1 allows very-high-dispersion Watson kappa (e.g. ferret-brain 0.7).
+            'min': 0.05,
             'max': 200,
             'description': 'Orientation parameter'
         },

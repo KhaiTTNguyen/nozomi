@@ -46,3 +46,103 @@
 [2026-05-25 14:19:19][gpu2] START j00002 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=1 d=3.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260524_172454
 [2026-05-25 14:36:31][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
 [2026-05-25 14:36:33][gpu2] START j00003 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=2 d=3.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260524_172454
+[2026-07-14 22:14:34][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-07-14 22:14:35][gpu2] START j00001 sets=['highdisp_smoke'] rep=0 d=1.68 K=2 VF=None bead=(0.3,0.18) -> highdisp_smoke_20260714_221418
+[2026-07-14 22:45:07][gpu2] FAIL  j00001 in 1831.6s: AssertionError: Outer start of fiber_id=1.0 has z=-6.0, expected -17.5.
+[2026-07-14 22:45:09][gpu2] queue empty, exiting
+[2026-07-20 17:46:22][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-07-20 17:46:23][gpu2] START j00001 sets=['myelin_vf05'] rep=0 d=1.68 K=2 VF=0.5 bead=(0.3,0.18) -> myelin_vf05_20260720_174609
+[2026-07-22 00:14:34][gpu2] FAIL  j00001 in 109691.3s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.1704, target_3d_vf=0.5, d=1.68, K=2, bead_alpha=0.3.
+[2026-07-22 00:14:36][gpu2] queue empty, exiting
+[2026-07-27 14:33:45][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-07-27 14:33:47][gpu2] START j00006 sets=['highdisp'] rep=2 d=1.68 K=4 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-07-28 19:15:49][gpu2] FAIL  j00006 in 103322.2s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.1956, target_3d_vf=0.5, d=1.68, K=4, bead_alpha=0.5.
+[2026-07-28 19:15:49][gpu2] START j00012 sets=['highdisp'] rep=2 d=1.68 K=4 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-07-29 12:29:58][gpu2] DONE  j00012 in 62049.3s (rolling avg 62049.3s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-28_19-15-49_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2
+[2026-07-29 12:29:58][gpu2] START j00018 sets=['highdisp'] rep=2 d=1.68 K=7 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-07-29 21:04:24][gpu2] DONE  j00018 in 30865.3s (rolling avg 46457.3s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_12-29-58_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep2
+[2026-07-29 21:04:24][gpu2] START j00021 sets=['highdisp'] rep=2 d=1.68 K=7 VF=0.5 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-07-30 03:57:23][gpu2] DONE  j00021 in 24779.4s (rolling avg 39231.3s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-07-29_21-04-24_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep2
+[2026-07-30 03:57:23][gpu2] START j00024 sets=['highdisp'] rep=2 d=1.68 K=7 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-07-30 10:21:35][gpu2] DONE  j00024 in 23052.4s (rolling avg 35186.6s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-07-30_03-57-23_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep2
+[2026-07-30 10:21:35][gpu2] START j00028 sets=['highdisp'] rep=0 d=2.58 K=4 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-07-31 03:18:08][gpu2] FAIL  j00028 in 60993.0s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.1719, target_3d_vf=0.5, d=2.58, K=4, bead_alpha=0.5.
+[2026-07-31 03:18:08][gpu2] START j00033 sets=['highdisp'] rep=2 d=2.58 K=4 VF=0.5 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-07-31 23:31:45][gpu2] FAIL  j00033 in 72816.9s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0965, target_3d_vf=0.5, d=2.58, K=4, bead_alpha=0.83.
+[2026-07-31 23:31:45][gpu2] START j00040 sets=['highdisp'] rep=0 d=2.58 K=7 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-01 03:58:19][gpu2] DONE  j00040 in 15993.7s (rolling avg 31348.0s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-31_23-31-45_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep0
+[2026-08-01 03:58:19][gpu2] START j00044 sets=['highdisp'] rep=1 d=2.58 K=7 VF=0.5 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-08-01 09:26:11][gpu2] DONE  j00044 in 19671.6s (rolling avg 29402.0s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_03-58-19_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep1
+[2026-08-01 09:26:11][gpu2] START j00047 sets=['highdisp'] rep=1 d=2.58 K=7 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-01 16:17:24][gpu2] DONE  j00047 in 24673.3s (rolling avg 28726.4s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-01_09-26-11_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep1
+[2026-08-01 16:17:24][gpu2] START j00051 sets=['highdisp'] rep=2 d=3.5 K=4 VF=0.5 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-02 10:00:57][gpu2] FAIL  j00051 in 63813.0s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.1735, target_3d_vf=0.5, d=3.5, K=4, bead_alpha=0.3.
+[2026-08-02 10:00:57][gpu2] START j00055 sets=['highdisp'] rep=0 d=3.5 K=4 VF=0.5 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-08-03 04:28:01][gpu2] DONE  j00055 in 66424.1s (rolling avg 33438.6s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-02_10-00-57_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep0
+[2026-08-03 04:28:01][gpu2] START j00063 sets=['highdisp'] rep=2 d=3.5 K=7 VF=0.5 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-03 09:04:41][gpu2] DONE  j00063 in 16599.6s (rolling avg 31567.6s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-03_04-28-01_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2
+[2026-08-03 09:04:41][gpu2] START j00066 sets=['highdisp'] rep=2 d=3.5 K=7 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-03 14:55:18][gpu2] DONE  j00066 in 21037.7s (rolling avg 30514.6s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_09-04-41_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2
+[2026-08-03 14:55:18][gpu2] START j00069 sets=['highdisp'] rep=2 d=3.5 K=7 VF=0.5 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-08-04 00:02:15][gpu2] DONE  j00069 in 32817.0s (rolling avg 30724.0s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_14-55-19_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep2
+[2026-08-04 00:02:15][gpu2] START j00074 sets=['highdisp'] rep=1 d=4.5 K=4 VF=0.5 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-04 08:01:54][gpu2] DONE  j00074 in 28778.8s (rolling avg 30561.9s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-04_00-02-16_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep1
+[2026-08-04 08:01:54][gpu2] START j00078 sets=['highdisp'] rep=2 d=4.5 K=4 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-05 03:29:23][gpu2] FAIL  j00078 in 70049.2s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0844, target_3d_vf=0.5, d=4.5, K=4, bead_alpha=0.5.
+[2026-08-05 03:29:23][gpu2] START j00084 sets=['highdisp'] rep=2 d=4.5 K=4 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-06 17:18:53][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-08-06 17:18:54][gpu2] START j00087 sets=['highdisp'] rep=2 d=4.5 K=7 VF=0.5 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-07 00:11:11][gpu2] DONE  j00087 in 24736.4s (rolling avg 24736.4s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2
+[2026-08-07 00:11:11][gpu2] START j00089 sets=['highdisp'] rep=1 d=4.5 K=7 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-07 21:20:01][gpu2] DONE  j00089 in 76130.3s (rolling avg 50433.4s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-07_00-11-11_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep1
+[2026-08-07 21:20:01][gpu2] START j00095 sets=['highdisp'] rep=1 d=4.5 K=7 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-08 18:32:07][gpu2] DONE  j00095 in 76325.5s (rolling avg 59064.1s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-07_21-20-01_d4.5_K7_ODI_0.0903_bead_1.24_500fibers_rep1
+[2026-08-08 18:32:09][gpu2] queue empty, exiting
+[2026-08-11 20:12:01][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-08-11 20:12:03][gpu2] START j00002 sets=['highdisp'] rep=1 d=1.68 K=4 VF=0.5 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-12 20:37:55][gpu2] FAIL  j00002 in 87952.5s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.1837, target_3d_vf=0.5, d=1.68, K=4, bead_alpha=0.3.
+[2026-08-12 20:37:55][gpu2] START j00007 sets=['highdisp'] rep=0 d=1.68 K=4 VF=0.5 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-08-13 17:33:40][gpu2] DONE  j00007 in 75344.3s (rolling avg 75344.3s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_0.83_VF_0.5/2026-08-12_20-37-55_d1.68_K4_ODI_0.156_bead_0.83_500fibers_rep0
+[2026-08-13 17:33:40][gpu2] START j00015 sets=['highdisp'] rep=2 d=1.68 K=7 VF=0.5 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-14 10:15:18][gpu2] DONE  j00015 in 60098.5s (rolling avg 67721.4s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.3_VF_0.5/2026-08-13_17-33-40_d1.68_K7_ODI_0.0903_bead_0.3_500fibers_rep2
+[2026-08-14 10:15:18][gpu2] START j00028 sets=['highdisp'] rep=0 d=2.58 K=4 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-15 03:45:50][gpu2] FAIL  j00028 in 63031.9s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.1335, target_3d_vf=0.5, d=2.58, K=4, bead_alpha=0.5.
+[2026-08-15 03:45:50][gpu2] START j00051 sets=['highdisp'] rep=2 d=3.5 K=4 VF=0.5 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-15 08:21:35][gpu2] DONE  j00051 in 16545.3s (rolling avg 50662.7s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.3_VF_0.5/2026-08-15_03-45-50_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep2
+[2026-08-15 08:21:35][gpu2] START j00058 sets=['highdisp'] rep=0 d=3.5 K=4 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-16 04:52:01][gpu2] FAIL  j00058 in 73825.7s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0510, target_3d_vf=0.5, d=3.5, K=4, bead_alpha=1.24.
+[2026-08-16 04:52:01][gpu2] START j00082 sets=['highdisp'] rep=0 d=4.5 K=4 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-17 00:33:53][gpu2] FAIL  j00082 in 70912.2s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0310, target_3d_vf=0.5, d=4.5, K=4, bead_alpha=1.24.
+[2026-08-17 00:33:55][gpu2] queue empty, exiting
+[2026-08-18 10:19:07][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-08-18 10:19:09][gpu2] START j00004 sets=['highdisp'] rep=0 d=1.68 K=4 VF=0.4 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-19 12:57:54][gpu2] DONE  j00004 in 95925.3s (rolling avg 95925.3s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-18_10-19-09_d1.68_K4_ODI_0.156_bead_0.5_500fibers_rep0
+[2026-08-19 12:57:54][gpu2] START j00011 sets=['highdisp'] rep=1 d=1.68 K=4 VF=0.4 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-19 22:42:13][gpu2] DONE  j00011 in 35059.4s (rolling avg 65492.4s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-19_12-57-54_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep1
+[2026-08-19 22:42:13][gpu2] START j00016 sets=['highdisp'] rep=0 d=2.58 K=4 VF=0.4 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-20 19:29:57][gpu2] DONE  j00016 in 74863.9s (rolling avg 68616.2s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-19_22-42-14_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep0
+[2026-08-20 19:29:57][gpu2] START j00022 sets=['highdisp'] rep=0 d=3.5 K=4 VF=0.4 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-21 15:20:26][gpu2] FAIL  j00022 in 71428.6s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0365, target_3d_vf=0.4, d=3.5, K=4, bead_alpha=1.24.
+[2026-08-21 15:20:26][gpu2] START j00032 sets=['highdisp'] rep=1 d=4.5 K=4 VF=0.4 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-22 12:48:21][gpu2] FAIL  j00032 in 77275.5s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0336, target_3d_vf=0.4, d=4.5, K=4, bead_alpha=1.24.
+[2026-08-22 12:48:22][gpu2] START j00040 sets=['highdisp'] rep=0 d=3.5 K=2 VF=0.25 bead=(0.83,0.08) -> highdisp_20260727_140958
+[2026-08-22 19:40:21][gpu2] DONE  j00040 in 24719.0s (rolling avg 57641.9s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_12-48-22_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0
+[2026-08-22 19:40:21][gpu2] START j00044 sets=['highdisp'] rep=1 d=4.5 K=2 VF=0.25 bead=(0.83,0.08) -> highdisp_20260727_140958
+[2026-08-23 04:36:35][gpu2] DONE  j00044 in 32174.7s (rolling avg 52548.5s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_19-40-21_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1
+[2026-08-23 04:36:37][gpu2] queue empty, exiting
+[2026-08-24 12:07:49][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-08-24 12:07:50][gpu2] START j00001 sets=['highdisp'] rep=0 d=4.5 K=2 VF=0.3 bead=(0.83,0.08) -> highdisp_20260727_140958
+[2026-08-25 06:02:06][gpu2] FAIL  j00001 in 64455.8s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0365, target_3d_vf=0.3, d=4.5, K=2, bead_alpha=0.83.
+[2026-08-25 06:02:06][gpu2] START j00008 sets=['highdisp'] rep=0 d=2.58 K=4 VF=0.4 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-25 15:35:44][gpu2] DONE  j00008 in 34417.3s (rolling avg 34417.3s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-25_06-02-06_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep0
+[2026-08-25 15:35:44][gpu2] START j00014 sets=['highdisp'] rep=0 d=3.5 K=7 VF=0.5 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-08-26 06:52:51][gpu2] DONE  j00014 in 55027.3s (rolling avg 44722.3s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-25_15-35-44_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep0
+[2026-08-26 06:52:53][gpu2] queue empty, exiting
+[2026-08-26 13:28:02][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-08-26 13:28:04][gpu2] START j00002 sets=['highdisp'] rep=1 d=1.68 K=4 VF=0.4 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-28 21:17:50][gpu2] DONE  j00002 in 200986.1s (rolling avg 200986.1s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-26_13-28-04_d1.68_K4_ODI_0.156_bead_0.3_500fibers_rep1
+[2026-08-28 21:17:52][gpu2] queue empty, exiting
+[2026-08-31 14:31:53][gpu2] worker started, CUDA_VISIBLE_DEVICES=2
+[2026-08-31 14:31:55][gpu2] START j00001 sets=['ferret-brain'] rep=0 d=1.68 K=0.7 VF=0.2 bead=(0.5,0.15) -> ferret-brain
+[2026-08-31 21:06:26][gpu2] FAIL  j00001 in 23671.6s: AssertionError: Inner end of fiber_id=744.0 [-132.62004  -107.603714   22.5     ] does not match outer end [ 101.37996  -107.603714   22.5     ].
+[2026-08-31 21:06:28][gpu2] queue empty, exiting

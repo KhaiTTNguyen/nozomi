@@ -20,3 +20,105 @@
 [2026-05-20 11:24:12][gpu4] START j00065 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=3.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260506_195745
 [2026-05-24 17:27:44][gpu4] worker started, CUDA_VISIBLE_DEVICES=4
 [2026-05-24 17:27:45][gpu4] START j00001 sets=['set1_healthy', 'set2_axonloss', 'set3_beading'] rep=0 d=3.5 K=200 VF=0.65 bead=(0.5,0.048) -> set1_healthy_20260524_172454
+[2026-07-14 22:56:29][gpu4] worker started, CUDA_VISIBLE_DEVICES=4
+[2026-07-14 22:56:31][gpu4] START j00002 sets=['highdisp_smoke'] rep=0 d=1.68 K=7 VF=None bead=(1.24,0.15) -> highdisp_smoke_20260714_225606
+[2026-07-15 02:55:19][gpu4] DONE  j00002 in 14328.3s (rolling avg 14328.3s) -> experiment/aim2-prep/data-high-dispersion/highdisp_smoke_20260714_225606/d1.68_K7_ODI_0.0903_bead_1.24_VF_0.3/2026-07-14_22-56-31_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep0
+[2026-07-15 02:55:21][gpu4] queue empty, exiting
+[2026-07-27 14:33:45][gpu4] worker started, CUDA_VISIBLE_DEVICES=4
+[2026-07-27 14:33:47][gpu4] START j00007 sets=['highdisp'] rep=0 d=1.68 K=4 VF=0.5 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-07-28 16:55:12][gpu4] FAIL  j00007 in 94885.7s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.1147, target_3d_vf=0.5, d=1.68, K=4, bead_alpha=0.83.
+[2026-07-28 16:55:12][gpu4] START j00011 sets=['highdisp'] rep=1 d=1.68 K=4 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-07-29 11:40:50][gpu4] FAIL  j00011 in 67537.5s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0638, target_3d_vf=0.5, d=1.68, K=4, bead_alpha=1.24.
+[2026-07-29 11:40:50][gpu4] START j00017 sets=['highdisp'] rep=1 d=1.68 K=7 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-07-30 10:09:27][gpu4] DONE  j00017 in 80916.6s (rolling avg 80916.6s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-07-29_11-40-50_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep1
+[2026-07-30 10:09:27][gpu4] START j00027 sets=['highdisp'] rep=2 d=2.58 K=4 VF=0.5 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-07-31 05:07:11][gpu4] FAIL  j00027 in 68264.5s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.2006, target_3d_vf=0.5, d=2.58, K=4, bead_alpha=0.3.
+[2026-07-31 05:07:11][gpu4] START j00034 sets=['highdisp'] rep=0 d=2.58 K=4 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-01 03:25:44][gpu4] DONE  j00034 in 80312.8s (rolling avg 80614.7s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_1.24_VF_0.5/2026-07-31_05-07-11_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep0
+[2026-08-01 03:25:44][gpu4] START j00043 sets=['highdisp'] rep=0 d=2.58 K=7 VF=0.5 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-08-01 18:25:48][gpu4] DONE  j00043 in 54004.4s (rolling avg 71744.6s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-01_03-25-44_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep0
+[2026-08-01 18:25:48][gpu4] START j00052 sets=['highdisp'] rep=0 d=3.5 K=4 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-02 13:35:36][gpu4] FAIL  j00052 in 68987.7s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.1447, target_3d_vf=0.5, d=3.5, K=4, bead_alpha=0.5.
+[2026-08-02 13:35:36][gpu4] START j00058 sets=['highdisp'] rep=0 d=3.5 K=4 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-03 08:26:19][gpu4] FAIL  j00058 in 67843.1s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0408, target_3d_vf=0.5, d=3.5, K=4, bead_alpha=1.24.
+[2026-08-03 08:26:19][gpu4] START j00065 sets=['highdisp'] rep=1 d=3.5 K=7 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-03 12:53:49][gpu4] DONE  j00065 in 16049.8s (rolling avg 57820.9s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-03_08-26-19_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep1
+[2026-08-03 12:53:49][gpu4] START j00068 sets=['highdisp'] rep=1 d=3.5 K=7 VF=0.5 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-08-03 22:29:50][gpu4] DONE  j00068 in 34561.2s (rolling avg 53169.0s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_0.83_VF_0.5/2026-08-03_12-53-49_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep1
+[2026-08-03 22:29:50][gpu4] START j00072 sets=['highdisp'] rep=2 d=3.5 K=7 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-04 07:51:29][gpu4] DONE  j00072 in 33698.9s (rolling avg 49923.9s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K7_ODI_0.0903_bead_1.24_VF_0.5/2026-08-03_22-29-50_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep2
+[2026-08-04 07:51:29][gpu4] START j00077 sets=['highdisp'] rep=1 d=4.5 K=4 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-04 19:29:11][gpu4] DONE  j00077 in 41862.0s (rolling avg 48772.2s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.5/2026-08-04_07-51-29_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1
+[2026-08-04 19:29:11][gpu4] START j00082 sets=['highdisp'] rep=0 d=4.5 K=4 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-05 15:12:33][gpu4] FAIL  j00082 in 71001.8s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0400, target_3d_vf=0.5, d=4.5, K=4, bead_alpha=1.24.
+[2026-08-05 15:12:33][gpu4] START j00088 sets=['highdisp'] rep=0 d=4.5 K=7 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-06 17:18:53][gpu4] worker started, CUDA_VISIBLE_DEVICES=4
+[2026-08-06 17:18:54][gpu4] START j00083 sets=['highdisp'] rep=1 d=4.5 K=4 VF=0.5 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-07 03:39:40][gpu4] DONE  j00083 in 37246.2s (rolling avg 37246.2s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_1.24_VF_0.5/2026-08-06_17-18-54_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep1
+[2026-08-07 03:39:40][gpu4] START j00090 sets=['highdisp'] rep=2 d=4.5 K=7 VF=0.5 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-07 13:43:33][gpu4] DONE  j00090 in 36232.3s (rolling avg 36739.2s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K7_ODI_0.0903_bead_0.5_VF_0.5/2026-08-07_03-39-41_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2
+[2026-08-07 13:43:33][gpu4] START j00092 sets=['highdisp'] rep=1 d=4.5 K=7 VF=0.5 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-08-08 10:02:37][gpu4] FAIL  j00092 in 73144.1s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0901, target_3d_vf=0.5, d=4.5, K=7, bead_alpha=0.83.
+[2026-08-08 10:02:39][gpu4] queue empty, exiting
+[2026-08-08 15:26:10][gpu4] worker started, CUDA_VISIBLE_DEVICES=4
+[2026-08-08 15:26:11][gpu4] START j00006 sets=['highdisp'] rep=2 d=1.68 K=2 VF=0.3 bead=(0.5,0.15) -> highdisp_20260727_140958
+[2026-08-09 16:59:25][gpu4] FAIL  j00006 in 91994.3s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0971, target_3d_vf=0.3, d=1.68, K=2, bead_alpha=0.5.
+[2026-08-09 16:59:25][gpu4] START j00007 sets=['highdisp'] rep=0 d=1.68 K=2 VF=0.3 bead=(0.83,0.08) -> highdisp_20260727_140958
+[2026-08-10 10:39:58][gpu4] FAIL  j00007 in 63632.3s: RuntimeError: Substrate generation did not converge after 10 VF refinement attempt(s). Last VF_2D=0.0555, target_3d_vf=0.3, d=1.68, K=2, bead_alpha=0.83.
+[2026-08-10 10:39:58][gpu4] START j00021 sets=['highdisp'] rep=2 d=2.58 K=2 VF=0.3 bead=(0.83,0.08) -> highdisp_20260727_140958
+[2026-08-10 20:01:15][gpu4] DONE  j00021 in 33677.0s (rolling avg 33677.0s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d2.58_K2_ODI_0.2952_bead_0.83_VF_0.3/2026-08-10_10-39-58_d2.58_K2_ODI_0.2952_bead_0.83_500fibers_rep2
+[2026-08-10 20:01:15][gpu4] START j00023 sets=['highdisp'] rep=1 d=2.58 K=2 VF=0.3 bead=(1.24,0.15) -> highdisp_20260727_140958
+[2026-08-11 08:16:05][gpu4] DONE  j00023 in 44090.8s (rolling avg 38883.9s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d2.58_K2_ODI_0.2952_bead_1.24_VF_0.3/2026-08-10_20-01-15_d2.58_K2_ODI_0.2952_bead_1.24_500fibers_rep1
+[2026-08-11 08:16:05][gpu4] START j00026 sets=['highdisp'] rep=1 d=3.5 K=2 VF=0.3 bead=(0.3,0.18) -> highdisp_20260727_140958
+[2026-08-11 14:04:23][gpu4] DONE  j00026 in 20897.1s (rolling avg 32888.3s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.3_VF_0.3/2026-08-11_08-16-06_d3.5_K2_ODI_0.2952_bead_0.3_500fibers_rep1
+[2026-08-11 14:04:23][gpu4] START j00027 sets=['highdisp'] rep=2 d=3.5 K=2 VF=0.3 bead=(0.3,0.18) -> highdisp_20260727_140958
+[2026-08-11 21:10:05][gpu4] DONE  j00027 in 25542.6s (rolling avg 31051.9s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.3_VF_0.3/2026-08-11_14-04-23_d3.5_K2_ODI_0.2952_bead_0.3_500fibers_rep2
+[2026-08-11 21:10:05][gpu4] START j00029 sets=['highdisp'] rep=1 d=3.5 K=2 VF=0.3 bead=(0.5,0.15) -> highdisp_20260727_140958
+[2026-08-12 08:40:02][gpu4] DONE  j00029 in 41397.2s (rolling avg 33120.9s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.5_VF_0.3/2026-08-11_21-10-05_d3.5_K2_ODI_0.2952_bead_0.5_500fibers_rep1
+[2026-08-12 08:40:02][gpu4] START j00031 sets=['highdisp'] rep=0 d=3.5 K=2 VF=0.3 bead=(0.83,0.08) -> highdisp_20260727_140958
+[2026-08-13 04:45:40][gpu4] DONE  j00031 in 72338.0s (rolling avg 39657.1s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.3/2026-08-12_08-40-02_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0
+[2026-08-13 04:45:40][gpu4] START j00035 sets=['highdisp'] rep=1 d=3.5 K=2 VF=0.3 bead=(1.24,0.15) -> highdisp_20260727_140958
+[2026-08-13 15:55:14][gpu4] DONE  j00035 in 40173.7s (rolling avg 39730.9s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_1.24_VF_0.3/2026-08-13_04-45-40_d3.5_K2_ODI_0.2952_bead_1.24_500fibers_rep1
+[2026-08-13 15:55:14][gpu4] START j00039 sets=['highdisp'] rep=2 d=4.5 K=2 VF=0.3 bead=(0.3,0.18) -> highdisp_20260727_140958
+[2026-08-13 22:26:14][gpu4] DONE  j00039 in 23460.3s (rolling avg 37697.1s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.3_VF_0.3/2026-08-13_15-55-14_d4.5_K2_ODI_0.2952_bead_0.3_500fibers_rep2
+[2026-08-13 22:26:14][gpu4] START j00042 sets=['highdisp'] rep=2 d=4.5 K=2 VF=0.3 bead=(0.5,0.15) -> highdisp_20260727_140958
+[2026-08-14 14:44:34][gpu4] DONE  j00042 in 58699.3s (rolling avg 40030.7s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.5_VF_0.3/2026-08-13_22-26-14_d4.5_K2_ODI_0.2952_bead_0.5_500fibers_rep2
+[2026-08-14 14:44:34][gpu4] START j00044 sets=['highdisp'] rep=1 d=4.5 K=2 VF=0.3 bead=(0.83,0.08) -> highdisp_20260727_140958
+[2026-08-15 03:01:03][gpu4] DONE  j00044 in 44189.5s (rolling avg 40446.5s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.3/2026-08-14_14-44-34_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1
+[2026-08-15 03:01:03][gpu4] START j00047 sets=['highdisp'] rep=1 d=4.5 K=2 VF=0.3 bead=(1.24,0.15) -> highdisp_20260727_140958
+[2026-08-16 00:45:55][gpu4] DONE  j00047 in 78291.6s (rolling avg 43887.0s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_1.24_VF_0.3/2026-08-15_03-01-03_d4.5_K2_ODI_0.2952_bead_1.24_500fibers_rep1
+[2026-08-16 00:45:57][gpu4] queue empty, exiting
+[2026-08-18 10:19:07][gpu4] worker started, CUDA_VISIBLE_DEVICES=4
+[2026-08-18 10:19:09][gpu4] START j00003 sets=['highdisp'] rep=2 d=1.68 K=4 VF=0.4 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-19 15:58:32][gpu4] DONE  j00003 in 106763.7s (rolling avg 106763.7s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-18_10-19-09_d1.68_K4_ODI_0.156_bead_0.3_500fibers_rep2
+[2026-08-19 15:58:32][gpu4] START j00013 sets=['highdisp'] rep=0 d=2.58 K=4 VF=0.4 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-20 15:13:52][gpu4] DONE  j00013 in 83719.3s (rolling avg 95241.5s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-19_15-58-32_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep0
+[2026-08-20 15:13:52][gpu4] START j00020 sets=['highdisp'] rep=1 d=2.58 K=4 VF=0.4 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-08-20 23:45:58][gpu4] DONE  j00020 in 30726.6s (rolling avg 73736.6s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_15-13-52_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1
+[2026-08-20 23:45:58][gpu4] START j00025 sets=['highdisp'] rep=0 d=4.5 K=4 VF=0.4 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-21 08:21:05][gpu4] DONE  j00025 in 30907.1s (rolling avg 63029.2s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_23-45-58_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0
+[2026-08-21 08:21:05][gpu4] START j00029 sets=['highdisp'] rep=1 d=4.5 K=4 VF=0.4 bead=(0.83,0.08) -> highdisp_20260727_140957
+[2026-08-21 19:07:14][gpu4] DONE  j00029 in 38768.5s (rolling avg 58177.0s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_08-21-06_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep1
+[2026-08-21 19:07:14][gpu4] START j00035 sets=['highdisp'] rep=1 d=1.68 K=2 VF=0.25 bead=(0.5,0.15) -> highdisp_20260727_140958
+[2026-08-22 16:28:58][gpu4] DONE  j00035 in 76904.2s (rolling avg 61298.2s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_19-07-14_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep1
+[2026-08-22 16:28:58][gpu4] START j00041 sets=['highdisp'] rep=1 d=3.5 K=2 VF=0.25 bead=(0.83,0.08) -> highdisp_20260727_140958
+[2026-08-23 05:22:23][gpu4] DONE  j00041 in 46404.4s (rolling avg 59170.6s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_16-28-58_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1
+[2026-08-23 05:22:25][gpu4] queue empty, exiting
+[2026-08-24 12:07:49][gpu4] worker started, CUDA_VISIBLE_DEVICES=4
+[2026-08-24 12:07:51][gpu4] START j00006 sets=['highdisp'] rep=0 d=2.58 K=4 VF=0.4 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-24 18:46:38][gpu4] DONE  j00006 in 23926.8s (rolling avg 23926.8s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-24_12-07-51_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep0
+[2026-08-24 18:46:38][gpu4] START j00007 sets=['highdisp'] rep=1 d=2.58 K=4 VF=0.4 bead=(0.5,0.15) -> highdisp_20260727_140957
+[2026-08-25 07:37:28][gpu4] DONE  j00007 in 46250.1s (rolling avg 35088.4s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-24_18-46-38_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep1
+[2026-08-25 07:37:28][gpu4] START j00009 sets=['highdisp'] rep=0 d=3.5 K=4 VF=0.4 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-26 01:54:44][gpu4] DONE  j00009 in 65836.4s (rolling avg 45337.8s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-25_07-37-28_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep0
+[2026-08-26 01:54:46][gpu4] queue empty, exiting
+[2026-08-26 13:28:02][gpu4] worker started, CUDA_VISIBLE_DEVICES=4
+[2026-08-26 13:28:04][gpu4] START j00005 sets=['highdisp'] rep=0 d=2.58 K=4 VF=0.4 bead=(0.3,0.18) -> highdisp_20260727_140957
+[2026-08-27 12:35:18][gpu4] DONE  j00005 in 83233.8s (rolling avg 83233.8s) -> experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-26_13-28-04_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep0
+[2026-08-27 12:35:18][gpu4] START j00008 sets=['highdisp'] rep=1 d=4.5 K=4 VF=0.4 bead=(1.24,0.15) -> highdisp_20260727_140957
+[2026-08-30 00:37:30][gpu4] FAIL  j00008 in 216132.1s: RuntimeError: Substrate generation did not converge after 20 VF refinement attempt(s). Last VF_2D=0.0276, target_3d_vf=0.4, d=4.5, K=4, bead_alpha=1.24.
+[2026-08-30 00:37:32][gpu4] queue empty, exiting
+[2026-08-31 14:31:53][gpu4] worker started, CUDA_VISIBLE_DEVICES=4
+[2026-08-31 14:31:55][gpu4] START j00002 sets=['ferret-brain'] rep=0 d=1.68 K=1.3 VF=0.2 bead=(0.5,0.15) -> ferret-brain
+[2026-09-01 05:10:02][gpu4] DONE  j00002 in 52687.2s (rolling avg 52687.2s) -> experiment/aim2-prep/data-high-dispersion/ferret-brain/d1.68_K1.3_ODI_0.4174_bead_0.5_VF_0.2/2026-08-31_14-31-55_d1.68_K1.3_ODI_0.4174_bead_0.5_500fibers_rep0
+[2026-09-01 05:10:04][gpu4] queue empty, exiting

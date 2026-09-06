@@ -1,3 +1,4 @@
+# Legacy test06 residual coverage: sphere-based multi-direction diffusion validation.
 # import pycuda.autoinit
 # import pycuda.driver as drv
 # import pycuda.gpuarray as gpuarray

@@ -34,17 +34,19 @@ def _to_numpy(arr) -> np.ndarray:
     return np.asarray(arr, dtype=np.float32)
 
 
-def _split_chains(spheres: np.ndarray, box_length: float):
+def _split_chains(spheres: np.ndarray, z_extent: float):
     """Split a sphere array into contiguous fiber chains.
 
-    A chain boundary is detected when z drops by more than box_length/2,
-    which only happens at a PBC wrap (z: +L/2 → -L/2) and never within a
-    single chain.  This is robust to float32 endpoint imprecision.
+    A chain boundary is detected when z drops by more than z_extent/2, which
+    only happens at a PBC wrap (z: +Lz/2 → -Lz/2) and never within a single
+    chain (z is monotonically increasing along a fiber).  The threshold is
+    keyed to the z-height Lz -- NOT the in-plane box -- so thin-z anisotropic
+    substrates (Lz < Lx) still split correctly.
     All chains are returned, including PBC image chains shifted by ±L in x/y.
     """
     if spheres.shape[0] == 0:
         return []
-    half = box_length / 2.0
+    half = z_extent / 2.0
     chains = []
     start = 0
     for i in range(1, spheres.shape[0]):
@@ -77,9 +79,9 @@ def _chain_z_crossing(chain: np.ndarray, z_plane: float = 0.0):
     return None
 
 
-def _compute_crossings(spheres: np.ndarray, box_length: float, z_plane: float):
+def _compute_crossings(spheres: np.ndarray, z_extent: float, z_plane: float):
     """Return a list of (cx, cy, r, fiber_id) — one entry per chain crossing."""
-    chains = _split_chains(spheres, box_length)
+    chains = _split_chains(spheres, z_extent)
     results = []
     for chain in chains:
         pt = _chain_z_crossing(chain, z_plane)
@@ -97,6 +99,7 @@ def plot_cross_section_z_mid(
     outer_fibers,
     inner_fibers=None,
     box_length: float | None = None,
+    box_length_z: float | None = None,
     component_label: str | None = None,
     color=None,
     z_plane: float = 0.0,
@@ -127,9 +130,10 @@ def plot_cross_section_z_mid(
     inner_np = _to_numpy(inner_fibers) if inner_fibers is not None else None
 
     L = float(box_length) if box_length is not None else float(config_params.BOX_LENGTH)
+    Lz = float(box_length_z) if box_length_z is not None else float(config_params.BOX_LENGTH_Z)
     is_myelinated = inner_np is not None
 
-    outer_crossings = _compute_crossings(outer_np, L, z_plane)
+    outer_crossings = _compute_crossings(outer_np, Lz, z_plane)
     if not outer_crossings:
         print("[cross_section_plot] No outer fibers cross z_plane; skipping plot.")
         return
@@ -141,7 +145,7 @@ def plot_cross_section_z_mid(
     from collections import defaultdict
     inner_by_fid: dict[int, list] = defaultdict(list)
     if is_myelinated:
-        for cx, cy, r, fid in _compute_crossings(inner_np, L, z_plane):
+        for cx, cy, r, fid in _compute_crossings(inner_np, Lz, z_plane):
             inner_by_fid[fid].append((cx, cy, r))
 
     # ---- count unique axons for title/filename ----

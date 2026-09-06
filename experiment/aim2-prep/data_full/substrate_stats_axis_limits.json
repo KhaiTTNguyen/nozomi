@@ -1,0 +1,21 @@
+{
+    "generated_at": "2026-09-01_manual",
+    "root": "experiment/aim2-prep/data_full",
+    "note": "Manually fixed shared axis limits (not data-driven). Values beyond these ranges (rare outlier substrates) are clipped so every substrate is drawn on identical, readable axes.",
+    "CV_DIAMETER_XLIM": [
+        0.0,
+        0.8
+    ],
+    "CV_DIAMETER_YLIM": [
+        0.0,
+        12.0
+    ],
+    "DIAMETER_DIST_XLIM": [
+        0.0,
+        20.0
+    ],
+    "DIAMETER_DIST_YLIM": [
+        0.0,
+        1.0
+    ]
+}

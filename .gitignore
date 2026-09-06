@@ -6,9 +6,17 @@ test_venv
 *.pyc
 *.pkl
 *.png
+*.log
+*.csv
+*.docx
+*.pdf
+**/sim.conf
+**/agent.md
+
 */__pycache__/
 /experiment/result/
 experiment/visualization/data/
+/experiment/setup/substrate/batch/*
 **/data/
 **/result/
 **/figs/
@@ -27,3 +35,6 @@ tests/calibration/num_molecules_and_time_step_calibration/figs/
 # `bash tests/benchmark/run_all.sh`.
 tests/benchmark/results/
 tests/benchmark/substrate_cache/
+tests/validation/wide_pulse/development/
+
+experiment/aim2_prep/

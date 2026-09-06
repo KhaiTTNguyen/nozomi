@@ -28,8 +28,13 @@ class GeometricOptimization(object):
         self.optimized_fibers = self.repulse_3d_with_optimizer(num_iteration=90)
 
     def get_volume_fraction(self, fibers=None):
-        L, N = config_params.BOX_LENGTH,  config_params.NUM_NODES_FOR_IVF_CALCULATION 
-        avf_nodes = torch.rand(N, 3, device=self.device)*L - L/2
+        L, N = config_params.BOX_LENGTH,  config_params.NUM_NODES_FOR_IVF_CALCULATION
+        Lz = config_params.BOX_LENGTH_Z
+        Lf = float(L.item()) if torch.is_tensor(L) else float(L)
+        Lzf = float(Lz.item()) if torch.is_tensor(Lz) else float(Lz)
+        # Sample AVF nodes over the anisotropic box [Lx, Ly, Lz]; VF denom is Lx*Ly*Lz.
+        box_dims = torch.tensor([Lf, Lf, Lzf], device=self.device)
+        avf_nodes = torch.rand(N, 3, device=self.device)*box_dims - box_dims/2
         if fibers!=None :
             spheres_xyz_r_fid = fibers[:,0:6]
         else:
@@ -40,7 +45,7 @@ class GeometricOptimization(object):
         pbc_spheres_xyz = torch.hstack((x.unsqueeze(1),y.unsqueeze(1),z.unsqueeze(1)))
         
         # segment space, assign spheres to segment, assign nodes to segment, calc intersect.
-        num_nodes_in_spheres = CDN.detect_in_sphere(pbc_spheres_xyz, r, avf_nodes, L, fid)
+        num_nodes_in_spheres = CDN.detect_in_sphere(pbc_spheres_xyz, r, avf_nodes, Lf, fid, Lz=Lzf)
         avf = num_nodes_in_spheres / N
         print('---Final volume fraction---', np.round(avf.item(),3))
         return round(avf.item(),2)
@@ -68,8 +73,8 @@ class GeometricOptimization(object):
         xyzr_fid = torch.hstack([detached_positions, torch_ra.unsqueeze(1), fiber_id.unsqueeze(1)])
         xa_, ya_, za_, ra_, mask_, fid_ = self.torch_optimizer_wrapPBC(xyzr_fid, mask_starts_ends, tol=config_params.BOX_LENGTH/5)
         pos_ = torch.stack([xa_, ya_, za_]).T
-        Lx, Ly, Lz, buff = config_params.BOX_LENGTH, config_params.BOX_LENGTH, config_params.BOX_LENGTH, torch.tensor([0.000], device=self.device) ## Adjusted 2026-05-25 self.space_buffer_repulse #torch.tensor(2,device=self.device) #torch.tensor([0.0005], device=self.device)
-        # Lx, Ly, Lz, buff = config_params.BOX_LENGTH, config_params.BOX_LENGTH, config_params.BOX_LENGTH, self.space_buffer_repulse/2 # Adjusted 2026-05-05
+        Lx, Ly, Lz, buff = config_params.BOX_LENGTH, config_params.BOX_LENGTH, config_params.BOX_LENGTH_Z, torch.tensor([0.000], device=self.device) ## Adjusted 2026-05-25 self.space_buffer_repulse #torch.tensor(2,device=self.device) #torch.tensor([0.0005], device=self.device)
+        # Lx, Ly, Lz, buff = config_params.BOX_LENGTH, config_params.BOX_LENGTH, config_params.BOX_LENGTH_Z, self.space_buffer_repulse/2 # Adjusted 2026-05-05
         collision_set = CD.detect_collision(pos_, ra_, fid_, Lx, Ly, Lz, buff)
         num_overlap = collision_set.shape[0]
         return num_overlap, xa_, ya_, za_, ra_, fid_ 
@@ -184,7 +189,7 @@ class GeometricOptimization(object):
         return a/sum, b/sum, c/sum
 
     def overlap_cost_function(self, positions, mask_starts_ends, torch_wrapped_ra, fid_):
-        Lx, Ly, Lz, detect_buff = config_params.BOX_LENGTH, config_params.BOX_LENGTH, config_params.BOX_LENGTH, self.space_buffer_repulse
+        Lx, Ly, Lz, detect_buff = config_params.BOX_LENGTH, config_params.BOX_LENGTH, config_params.BOX_LENGTH_Z, self.space_buffer_repulse
         collision_set = CD.detect_collision(positions, torch_wrapped_ra, fid_, Lx, Ly, Lz, detect_buff)
         overlap_cost = self.get_steps_with_optimizer(positions, mask_starts_ends, torch_wrapped_ra, collision_set)
         return overlap_cost
@@ -318,8 +323,8 @@ class GeometricOptimization(object):
         fiber_list_xyz_r_fid = util.map_matrix_to_list_torch(pbc_spheres_xyz_r_fid)
         intactFlag = True
         for fiber in fiber_list_xyz_r_fid:
-            intactFlag = intactFlag and (torch.equal(fiber[0][2],-config_params.BOX_LENGTH.to(fiber.device)/2)) 
-            intactFlag = intactFlag and (torch.equal(fiber[-1][2], config_params.BOX_LENGTH.to(fiber.device)/2))
+            intactFlag = intactFlag and (torch.equal(fiber[0][2],-config_params.BOX_LENGTH_Z.to(fiber.device)/2)) 
+            intactFlag = intactFlag and (torch.equal(fiber[-1][2], config_params.BOX_LENGTH_Z.to(fiber.device)/2))
         if intactFlag:    
             print('Start end points INTACT')
         else:

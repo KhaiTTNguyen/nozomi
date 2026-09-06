@@ -13,5 +13,6 @@
   "peak_gpu_alloc_bytes": 16125872128,
   "peak_gpu_reserved_bytes": 19918749696,
   "peak_host_rss_bytes": 15829512192,
-  "gpu_mem_fraction_cap": 0.7913150496819578
+  "gpu_mem_fraction_cap": 0.7913150496819578,
+  "driver_wall_s": 1912843.6505746841
 }

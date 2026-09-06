@@ -198,3 +198,46 @@ def test_generate_inner_fibers_emits_pbc_image_duplicates_like_outer():
     # Radii and fiber_ids must be preserved across duplication.
     assert np.allclose(np.sort(duplicates[:, 3]), np.sort(canonical_inner[:, 3]))
     assert np.array_equal(np.unique(duplicates[:, 4]), np.unique(canonical_inner[:, 4]))
+
+
+def test_generate_inner_fibers_ignores_interior_graze_at_z_boundary():
+    """A single fiber must not be split into two segments when an interior
+    sphere drifts to within tolerance of +Lz/2 during optimization.
+
+    Endpoints are masked at exactly +/-Lz/2, but interior spheres move; on
+    anisotropic thin-z substrates an interior sphere near the end can land at
+    e.g. z=+Lz/2 + 6.7e-5. The segment splitter must only close at a genuine
+    terminus (last row, or next row starts a new polyline at z=-Lz/2), so the
+    fiber stays one canonical polyline and the endpoint-consistency check does
+    not compare mismatched segments (regression for the K=7 VF=0.6 failure).
+    """
+    box_length = 100.0
+    box_length_z = 45.0
+    half_z = box_length_z / 2
+    fid = 585.0
+    r = 0.84
+    # One fiber: start at -Lz/2, an interior sphere grazing just above +Lz/2,
+    # then the true masked end at exactly +Lz/2.
+    outer = np.array([
+        [5.0, 5.0, -half_z, r, fid],
+        [7.0, 4.0, 0.0, r, fid],
+        [9.0, 3.0, half_z + 6.7e-5, r, fid],  # interior graze near +Lz/2
+        [9.5, 2.9, half_z - 1e-3, r, fid],
+        [10.6, 2.8, half_z, r, fid],           # true masked end
+    ], dtype=np.float32)
+
+    inner = generate_inner_fibers(
+        outer,
+        g_ratio=0.7,
+        inner_sphere_spacing_ratio=0.5,
+        box_length=box_length,
+        box_length_z=box_length_z,
+    )
+
+    inner_rows = inner[inner[:, 4] == fid]
+    inner_rows = inner_rows[np.argsort(inner_rows[:, 5])]
+    # Endpoints must match the single fiber's true start/end (at +/-Lz/2).
+    assert np.allclose(inner_rows[0, :3], outer[0, :3], atol=1e-4)
+    assert np.allclose(inner_rows[-1, :3], outer[-1, :3], atol=1e-4)
+    assert np.isclose(inner_rows[0, 2], -half_z, atol=1e-4)
+    assert np.isclose(inner_rows[-1, 2], half_z, atol=1e-4)

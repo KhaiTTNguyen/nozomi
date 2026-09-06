@@ -138,7 +138,8 @@ def _extract_substrate_mean_diameter_aim2(substrate_path: str):
 # Data collection for the Aim 2 three-level layout
 # ------------------------------------------------------------------
 
-def collect_deltardapp_aim2(data_root: str, only_batch: str = None) -> dict:
+def collect_deltardapp_aim2(data_root: str, only_batch: str = None,
+                            human_ogse: str = "apodized") -> dict:
     """
     Walk an Aim 2 ``data`` folder (three nesting levels) and collect
     DeltaRDapp values for both scanner scenarios.
@@ -150,10 +151,23 @@ def collect_deltardapp_aim2(data_root: str, only_batch: str = None) -> dict:
     only_batch : str, optional
         If given, only the batch subfolder with this exact name is processed
         (used by the ``--per-batch`` workflow). When None, all batches are merged.
+    human_ogse : {"apodized", "trapezoidal"}
+        Which human OGSE variant to read. ``"trapezoidal"`` uses the slew-limited
+        trapezoidal-cosine keys (``RDapp_OGSE_trap*`` / ``DeltaRDapp_trap``);
+        ``"apodized"`` (default) uses the apodized keys. Human PGSE is the
+        slew-limited ``RDapp_PGSE`` in both cases; animal keys are unchanged.
 
     Returns a dict with the same shape as the Aim 1 ``collect_deltardapp``,
     so the existing plotting functions can be reused unchanged.
     """
+    if human_ogse not in ("apodized", "trapezoidal"):
+        raise ValueError(f"human_ogse must be 'apodized' or 'trapezoidal', got {human_ogse!r}")
+    _trap = human_ogse == "trapezoidal"
+    _human_delta_key = "DeltaRDapp_trap" if _trap else "DeltaRDapp"
+    _human_ogse_total = "RDapp_OGSE_trap" if _trap else "RDapp_OGSE"
+    _human_ogse_intra = "RDapp_OGSE_trap_intra" if _trap else "RDapp_OGSE_intra"
+    _human_ogse_extra = "RDapp_OGSE_trap_extra" if _trap else "RDapp_OGSE_extra"
+
     data_root = os.path.abspath(data_root)
     results = {
         "human_b300": defaultdict(lambda: defaultdict(list)),
@@ -198,15 +212,15 @@ def collect_deltardapp_aim2(data_root: str, only_batch: str = None) -> dict:
 
     component_key_map = {
         "total": {
-            "human_b300": {"PGSE": "RDapp_PGSE", "OGSE": "RDapp_OGSE"},
+            "human_b300": {"PGSE": "RDapp_PGSE", "OGSE": _human_ogse_total},
             "animal_b800": {"PGSE": "RDapp_PGSE_2", "OGSE": "RDapp_OGSE_2"},
         },
         "intra": {
-            "human_b300": {"PGSE": "RDapp_PGSE_intra", "OGSE": "RDapp_OGSE_intra"},
+            "human_b300": {"PGSE": "RDapp_PGSE_intra", "OGSE": _human_ogse_intra},
             "animal_b800": {"PGSE": "RDapp_PGSE_intra_2", "OGSE": "RDapp_OGSE_intra_2"},
         },
         "extra": {
-            "human_b300": {"PGSE": "RDapp_PGSE_extra", "OGSE": "RDapp_OGSE_extra"},
+            "human_b300": {"PGSE": "RDapp_PGSE_extra", "OGSE": _human_ogse_extra},
             "animal_b800": {"PGSE": "RDapp_PGSE_extra_2", "OGSE": "RDapp_OGSE_extra_2"},
         },
     }
@@ -261,10 +275,10 @@ def collect_deltardapp_aim2(data_root: str, only_batch: str = None) -> dict:
                         "d_app_internal":  substrate_mean_diam,
                     }
 
-                delta_human = r.get('DeltaRDapp', None)
+                delta_human = r.get(_human_delta_key, None)
                 delta_animal = r.get('DeltaRDapp_2', None)
                 human_pgse = r.get('RDapp_PGSE', None)
-                human_ogse = r.get('RDapp_OGSE', None)
+                human_ogse = r.get(_human_ogse_total, None)
                 animal_pgse = r.get('RDapp_PGSE_2', None)
                 animal_ogse = r.get('RDapp_OGSE_2', None)
 
@@ -373,6 +387,106 @@ def _generate_plots(results: dict, output_path: str, make_summary: bool = True,
 
 
 # ------------------------------------------------------------------
+# Protocol gradient-waveform rendering (for the all_beads folder)
+# ------------------------------------------------------------------
+
+def _render_protocol_waveforms(out_dir: str, human_ogse: str = "trapezoidal") -> None:
+    """
+    Render the human + animal gradient waveforms used for the all_beads figures
+    and save them into ``out_dir`` as physical G(t) = shape * Gmax.
+
+    Human = slew PGSE + (trapezoidal|apodized) OGSE at the human_80_100 preset;
+    Animal = ideal PGSE + apodized OGSE. Timings match the protocol configs in
+    compute_rdapp_from_narrow_pulse.py.
+    """
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        from simulation_toolkit.simulation_engine.waveform_design import design_waveform
+    except Exception as exc:
+        print(f"  [warn] Skipping protocol waveform plots: {exc}")
+        return
+
+    human_ogse_shape = "ogse-trapezoidal" if human_ogse == "trapezoidal" else "ogse-apodized"
+    designs = [
+        ("human_pgse_slew", "Human PGSE (slew-limited)",
+         dict(shape="pgse-slew", bvalue_s_mm2=300, te_ms=78, preset="human_80_100",
+              little_delta_ms=12, big_delta_ms=50, dt_ms=0.005)),
+        (f"human_ogse_{human_ogse}", f"Human OGSE ({human_ogse})",
+         dict(shape=human_ogse_shape, bvalue_s_mm2=300, te_ms=78, preset="human_80_100",
+              n_cycles=1, t_eff_ms=6.5, dt_ms=0.005)),
+        ("animal_pgse", "Animal PGSE (ideal)",
+         dict(shape="pgse", bvalue_s_mm2=800, te_ms=40, preset="animal_placeholder",
+              little_delta_ms=3, big_delta_ms=26, dt_ms=0.005)),
+        ("animal_ogse_apodized", "Animal OGSE (apodized)",
+         dict(shape="ogse-apodized", bvalue_s_mm2=800, te_ms=40, preset="animal_placeholder",
+              n_cycles=1, t_eff_ms=2.5, dt_ms=0.005)),
+    ]
+
+    os.makedirs(out_dir, exist_ok=True)
+    results = []
+    for name, label, kwargs in designs:
+        res = design_waveform(**kwargs)
+        if res.waveform is None:
+            print(f"  [warn] {label} could not be designed: {res.messages}")
+            continue
+        results.append((name, label, res))
+
+    if not results:
+        return
+
+    def _panel_title(label, res):
+        return (f"{label}\nb={res.bvalue_s_mm2_actual:.0f} s/mm², "
+                f"Gmax={res.gmax_mT_per_m:.1f} mT/m, TE={res.te_ms:.0f} ms")
+
+    # Column 0 = Human (matching TE=78), column 1 = Animal (matching TE=40);
+    # PGSE on top row, OGSE on bottom row. sharex per column aligns the TE.
+    grid_pos = {
+        "human_pgse_slew": (0, 0),
+        f"human_ogse_{human_ogse}": (1, 0),
+        "animal_pgse": (0, 1),
+        "animal_ogse_apodized": (1, 1),
+    }
+    fig, axes = plt.subplots(2, 2, figsize=(13, 7), sharex="col")
+    used = set()
+    for name, label, res in results:
+        r, c = grid_pos[name]
+        used.add((r, c))
+        ax = axes[r, c]
+        w = res.waveform
+        ax.plot(w.t, w.wave * res.gmax_mT_per_m, linewidth=1.5)
+        ax.axhline(0.0, color="black", linewidth=0.7, linestyle="--", alpha=0.5)
+        ax.set_title(_panel_title(label, res), fontsize=10)
+        ax.set_xlabel("Time (ms)")
+        ax.set_ylabel("G (mT/m)")
+        ax.grid(True, linestyle="--", alpha=0.35)
+    for r in range(2):
+        for c in range(2):
+            if (r, c) not in used:
+                axes[r, c].axis("off")
+    fig.suptitle("Protocol gradient waveforms  (left: Human,  right: Animal)", fontsize=13)
+    fig.tight_layout()
+    combined = os.path.join(out_dir, "protocol_waveforms.png")
+    fig.savefig(combined, dpi=250, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Protocol waveforms saved → {combined}")
+
+    for name, label, res in results:
+        w = res.waveform
+        f, a = plt.subplots(figsize=(9, 3.6))
+        a.plot(w.t, w.wave * res.gmax_mT_per_m, linewidth=1.6)
+        a.axhline(0.0, color="black", linewidth=0.7, linestyle="--", alpha=0.5)
+        a.set_title(_panel_title(label, res).replace("\n", "  |  "), fontsize=10)
+        a.set_xlabel("Time (ms)")
+        a.set_ylabel("G (mT/m)")
+        a.grid(True, linestyle="--", alpha=0.35)
+        f.tight_layout()
+        f.savefig(os.path.join(out_dir, f"waveform_{name}.png"), dpi=250, bbox_inches="tight")
+        plt.close(f)
+
+
+# ------------------------------------------------------------------
 # CLI
 # ------------------------------------------------------------------
 
@@ -406,6 +520,15 @@ def main():
         help='Produce combined plots pooling ALL bead groups and ALL ODI '
              '(d_eff_p3q2 only), written to ``<data_root>/../plots/all_beads/``.',
     )
+    parser.add_argument(
+        '--human-ogse',
+        choices=['apodized', 'trapezoidal'],
+        default='apodized',
+        help='Human OGSE variant: "apodized" (default) or "trapezoidal" '
+             '(slew-limited, uses RDapp_OGSE_trap / DeltaRDapp_trap). '
+             'Human PGSE is the slew-limited RDapp_PGSE in both cases; '
+             'animal keys are unchanged.',
+    )
     args = parser.parse_args()
 
     data_root = os.path.abspath(args.data_root)
@@ -426,7 +549,8 @@ def main():
                 continue
 
             print(f"\nCollecting ΔD⊥ (Aim 2 layout) for batch '{batch}' → {bead_label}\n")
-            results = collect_deltardapp_aim2(data_root, only_batch=batch)
+            results = collect_deltardapp_aim2(data_root, only_batch=batch,
+                                              human_ogse=args.human_ogse)
 
             if (not results["human_b300"]) and (not results["animal_b800"]):
                 print(f"  [skip] no rdapp_result.pkl files found in batch '{batch}'")
@@ -448,7 +572,7 @@ def main():
 
     if args.all_beads:
         print(f"\nCollecting ΔD⊥ (Aim 2 layout, all beads merged) from: {data_root}\n")
-        results = collect_deltardapp_aim2(data_root)
+        results = collect_deltardapp_aim2(data_root, human_ogse=args.human_ogse)
 
         if (not results["human_b300"]) and (not results["animal_b800"]):
             print(
@@ -479,10 +603,11 @@ def main():
             title_suffix=deff_long,
             marker_scheme='protocol_color',
         )
+        _render_protocol_waveforms(all_beads_dir, human_ogse=args.human_ogse)
         return
 
     print(f"\nCollecting ΔD⊥ (Aim 2 layout) from: {data_root}\n")
-    results = collect_deltardapp_aim2(data_root)
+    results = collect_deltardapp_aim2(data_root, human_ogse=args.human_ogse)
 
     if (not results["human_b300"]) and (not results["animal_b800"]):
         print(

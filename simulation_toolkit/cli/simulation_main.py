@@ -36,7 +36,9 @@ def simulation_main(params, substrate_file):
     # =========== Setup simulation ===========
     substrate = common_util.load_substrate_geometry(file_path)
     L = substrate.box_length
+    Lz = substrate.lz if substrate.lz is not None else L
     config_params.BOX_LENGTH = L
+    config_params.BOX_LENGTH_Z = Lz
     if compartment == 'intra' and substrate.is_myelinated:
         geometry_fibers = substrate.inner_fibers
         print(f"Using myelinated intra-axonal geometry: inner membrane spheres, g_ratio={substrate.g_ratio}")
@@ -53,8 +55,8 @@ def simulation_main(params, substrate_file):
         D = D0_extra # um^2/ms
     T2 = 100 # ms
     rho = 1 # fractional water density
-    sg3 = geom.SimGeometry3D(L,L,L,D,T2,rho)
-    fiber_xyzr_fid_list = ag.createBoundaryZ(fiberlist_xyz_r_fid, L)
+    sg3 = geom.SimGeometry3D(L,L,Lz,D,T2,rho)
+    fiber_xyzr_fid_list = ag.createBoundaryZ(fiberlist_xyz_r_fid, Lz)
 
     for fiber in fiber_xyzr_fid_list:
         sx, sy, sz, sr = fiber[:,0], fiber[:,1], fiber[:,2], fiber[:,3]

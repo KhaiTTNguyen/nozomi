@@ -1,0 +1,1796 @@
+{
+  "created": "20260824_120608",
+  "kind": "scan",
+  "source_substrate_dirs": [
+    "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957",
+    "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958"
+  ],
+  "sim_params": {
+    "time_step": 0.002,
+    "num_spins": 500000,
+    "D0_intra": 2.25,
+    "D0_extra": 2.0,
+    "nseg": 20,
+    "sim_time": 100.0
+  },
+  "skip_existing_sim": true,
+  "n_substrates_found": 161,
+  "n_jobs_skipped_existing": 264,
+  "skipped_existing": [
+    "2026-08-17_18-43-02_d1.68_K4_ODI_0.156_bead_0.3_500fibers_rep0:intra",
+    "2026-08-17_18-43-02_d1.68_K4_ODI_0.156_bead_0.3_500fibers_rep0:extra",
+    "2026-08-18_10-19-09_d1.68_K4_ODI_0.156_bead_0.3_500fibers_rep2:intra",
+    "2026-08-18_10-19-09_d1.68_K4_ODI_0.156_bead_0.3_500fibers_rep2:extra",
+    "2026-08-11_20-12-03_d1.68_K4_ODI_0.156_bead_0.3_500fibers_rep2:intra",
+    "2026-08-11_20-12-03_d1.68_K4_ODI_0.156_bead_0.3_500fibers_rep2:extra",
+    "2026-08-18_10-19-09_d1.68_K4_ODI_0.156_bead_0.5_500fibers_rep0:intra",
+    "2026-08-18_10-19-09_d1.68_K4_ODI_0.156_bead_0.5_500fibers_rep0:extra",
+    "2026-07-27_14-33-47_d1.68_K4_ODI_0.156_bead_0.5_500fibers_rep0:intra",
+    "2026-07-27_14-33-47_d1.68_K4_ODI_0.156_bead_0.5_500fibers_rep0:extra",
+    "2026-08-18_10-19-09_d1.68_K4_ODI_0.156_bead_0.83_500fibers_rep0:intra",
+    "2026-08-18_10-19-09_d1.68_K4_ODI_0.156_bead_0.83_500fibers_rep0:extra",
+    "2026-08-12_20-37-55_d1.68_K4_ODI_0.156_bead_0.83_500fibers_rep0:intra",
+    "2026-08-12_20-37-55_d1.68_K4_ODI_0.156_bead_0.83_500fibers_rep0:extra",
+    "2026-08-12_21-47-14_d1.68_K4_ODI_0.156_bead_0.83_500fibers_rep2:intra",
+    "2026-08-12_21-47-14_d1.68_K4_ODI_0.156_bead_0.83_500fibers_rep2:extra",
+    "2026-08-19_10-39-47_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep0:intra",
+    "2026-08-19_10-39-47_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep0:extra",
+    "2026-08-19_12-57-54_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep1:intra",
+    "2026-08-19_12-57-54_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep1:extra",
+    "2026-07-28_19-15-49_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2:intra",
+    "2026-07-28_19-15-49_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2:extra",
+    "2026-08-13_01-11-31_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep1:intra",
+    "2026-08-13_01-11-31_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep1:extra",
+    "2026-07-29_06-15-24_d1.68_K7_ODI_0.0903_bead_0.3_500fibers_rep1:intra",
+    "2026-07-29_06-15-24_d1.68_K7_ODI_0.0903_bead_0.3_500fibers_rep1:extra",
+    "2026-08-13_15-25-16_d1.68_K7_ODI_0.0903_bead_0.3_500fibers_rep0:intra",
+    "2026-08-13_15-25-16_d1.68_K7_ODI_0.0903_bead_0.3_500fibers_rep0:extra",
+    "2026-08-13_17-33-40_d1.68_K7_ODI_0.0903_bead_0.3_500fibers_rep2:intra",
+    "2026-08-13_17-33-40_d1.68_K7_ODI_0.0903_bead_0.3_500fibers_rep2:extra",
+    "2026-07-29_09-47-05_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep0:intra",
+    "2026-07-29_09-47-05_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep0:extra",
+    "2026-07-29_11-40-50_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep1:intra",
+    "2026-07-29_11-40-50_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep1:extra",
+    "2026-07-29_12-29-58_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep2:intra",
+    "2026-07-29_12-29-58_d1.68_K7_ODI_0.0903_bead_0.5_500fibers_rep2:extra",
+    "2026-07-29_15-52-31_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep0:intra",
+    "2026-07-29_15-52-31_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep0:extra",
+    "2026-07-29_20-06-39_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep1:intra",
+    "2026-07-29_20-06-39_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep1:extra",
+    "2026-07-29_21-04-24_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep2:intra",
+    "2026-07-29_21-04-24_d1.68_K7_ODI_0.0903_bead_0.83_500fibers_rep2:extra",
+    "2026-07-29_21-20-36_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep0:intra",
+    "2026-07-29_21-20-36_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep0:extra",
+    "2026-07-29_22-38-43_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep1:intra",
+    "2026-07-29_22-38-43_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep1:extra",
+    "2026-07-30_03-57-23_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep2:intra",
+    "2026-07-30_03-57-23_d1.68_K7_ODI_0.0903_bead_1.24_500fibers_rep2:extra",
+    "2026-08-20_03-01-26_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep1:intra",
+    "2026-08-20_03-01-26_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep1:extra",
+    "2026-08-14_12-13-28_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep2:intra",
+    "2026-08-14_12-13-28_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep2:extra",
+    "2026-07-30_22-13-40_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0:intra",
+    "2026-07-30_22-13-40_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0:extra",
+    "2026-07-31_01-28-42_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1:intra",
+    "2026-07-31_01-28-42_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1:extra",
+    "2026-07-31_05-07-11_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep0:intra",
+    "2026-07-31_05-07-11_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep0:extra",
+    "2026-07-31_05-24-05_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep1:intra",
+    "2026-07-31_05-24-05_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep1:extra",
+    "2026-07-31_12-12-21_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep2:intra",
+    "2026-07-31_12-12-21_d2.58_K4_ODI_0.156_bead_1.24_500fibers_rep2:extra",
+    "2026-07-31_18-39-32_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep0:intra",
+    "2026-07-31_18-39-32_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep0:extra",
+    "2026-07-31_21-03-05_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep1:intra",
+    "2026-07-31_21-03-05_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep1:extra",
+    "2026-07-31_23-13-33_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep2:intra",
+    "2026-07-31_23-13-33_d2.58_K7_ODI_0.0903_bead_0.3_500fibers_rep2:extra",
+    "2026-07-31_23-31-45_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep0:intra",
+    "2026-07-31_23-31-45_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep0:extra",
+    "2026-08-01_00-12-05_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep1:intra",
+    "2026-08-01_00-12-05_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep1:extra",
+    "2026-08-01_03-02-16_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep2:intra",
+    "2026-08-01_03-02-16_d2.58_K7_ODI_0.0903_bead_0.5_500fibers_rep2:extra",
+    "2026-08-01_03-25-44_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep0:intra",
+    "2026-08-01_03-25-44_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep0:extra",
+    "2026-08-01_03-58-19_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep1:intra",
+    "2026-08-01_03-58-19_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep1:extra",
+    "2026-08-01_06-00-35_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep2:intra",
+    "2026-08-01_06-00-35_d2.58_K7_ODI_0.0903_bead_0.83_500fibers_rep2:extra",
+    "2026-08-01_08-04-36_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep0:intra",
+    "2026-08-01_08-04-36_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep0:extra",
+    "2026-08-01_09-26-11_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep1:intra",
+    "2026-08-01_09-26-11_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep1:extra",
+    "2026-08-01_10-34-27_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep2:intra",
+    "2026-08-01_10-34-27_d2.58_K7_ODI_0.0903_bead_1.24_500fibers_rep2:extra",
+    "2026-08-01_15-14-41_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep0:intra",
+    "2026-08-01_15-14-41_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep0:extra",
+    "2026-08-01_15-17-44_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep1:intra",
+    "2026-08-01_15-17-44_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep1:extra",
+    "2026-08-15_03-45-50_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep2:intra",
+    "2026-08-15_03-45-50_d3.5_K4_ODI_0.156_bead_0.3_500fibers_rep2:extra",
+    "2026-08-02_02-16-20_d3.5_K4_ODI_0.156_bead_0.5_500fibers_rep1:intra",
+    "2026-08-02_02-16-20_d3.5_K4_ODI_0.156_bead_0.5_500fibers_rep1:extra",
+    "2026-08-15_05-06-52_d3.5_K4_ODI_0.156_bead_0.5_500fibers_rep0:intra",
+    "2026-08-15_05-06-52_d3.5_K4_ODI_0.156_bead_0.5_500fibers_rep0:extra",
+    "2026-08-15_05-36-32_d3.5_K4_ODI_0.156_bead_0.5_500fibers_rep2:intra",
+    "2026-08-15_05-36-32_d3.5_K4_ODI_0.156_bead_0.5_500fibers_rep2:extra",
+    "2026-08-02_10-00-57_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep0:intra",
+    "2026-08-02_10-00-57_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep0:extra",
+    "2026-08-02_11-29-25_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep2:intra",
+    "2026-08-02_11-29-25_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep2:extra",
+    "2026-08-15_07-32-47_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep1:intra",
+    "2026-08-15_07-32-47_d3.5_K4_ODI_0.156_bead_0.83_500fibers_rep1:extra",
+    "2026-08-15_10-05-23_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep1:intra",
+    "2026-08-15_10-05-23_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep1:extra",
+    "2026-08-03_03-20-46_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0:intra",
+    "2026-08-03_03-20-46_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0:extra",
+    "2026-08-03_03-50-43_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1:intra",
+    "2026-08-03_03-50-43_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1:extra",
+    "2026-08-03_04-28-01_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2:intra",
+    "2026-08-03_04-28-01_d3.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2:extra",
+    "2026-08-03_07-33-13_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0:intra",
+    "2026-08-03_07-33-13_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0:extra",
+    "2026-08-03_08-26-19_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep1:intra",
+    "2026-08-03_08-26-19_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep1:extra",
+    "2026-08-03_09-04-41_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2:intra",
+    "2026-08-03_09-04-41_d3.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2:extra",
+    "2026-08-03_10-35-15_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep0:intra",
+    "2026-08-03_10-35-15_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep0:extra",
+    "2026-08-03_12-53-49_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep1:intra",
+    "2026-08-03_12-53-49_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep1:extra",
+    "2026-08-03_14-55-19_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep2:intra",
+    "2026-08-03_14-55-19_d3.5_K7_ODI_0.0903_bead_0.83_500fibers_rep2:extra",
+    "2026-08-03_15-14-23_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep0:intra",
+    "2026-08-03_15-14-23_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep0:extra",
+    "2026-08-03_17-31-44_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep1:intra",
+    "2026-08-03_17-31-44_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep1:extra",
+    "2026-08-03_22-29-50_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep2:intra",
+    "2026-08-03_22-29-50_d3.5_K7_ODI_0.0903_bead_1.24_500fibers_rep2:extra",
+    "2026-08-03_22-33-51_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep0:intra",
+    "2026-08-03_22-33-51_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep0:extra",
+    "2026-08-04_00-02-16_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep1:intra",
+    "2026-08-04_00-02-16_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep1:extra",
+    "2026-08-04_02-31-05_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep2:intra",
+    "2026-08-04_02-31-05_d4.5_K4_ODI_0.156_bead_0.3_500fibers_rep2:extra",
+    "2026-08-04_05-53-44_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0:intra",
+    "2026-08-04_05-53-44_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0:extra",
+    "2026-08-04_07-51-29_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1:intra",
+    "2026-08-04_07-51-29_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1:extra",
+    "2026-08-04_10-08-02_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep1:intra",
+    "2026-08-04_10-08-02_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep1:extra",
+    "2026-08-04_17-21-21_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2:intra",
+    "2026-08-04_17-21-21_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2:extra",
+    "2026-08-16_03-12-48_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep1:intra",
+    "2026-08-16_03-12-48_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep1:extra",
+    "2026-08-06_17-18-54_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep1:intra",
+    "2026-08-06_17-18-54_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep1:extra",
+    "2026-08-05_04-29-24_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0:intra",
+    "2026-08-05_04-29-24_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep0:extra",
+    "2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1:intra",
+    "2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep1:extra",
+    "2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2:intra",
+    "2026-08-06_17-18-55_d4.5_K7_ODI_0.0903_bead_0.3_500fibers_rep2:extra",
+    "2026-08-06_23-46-09_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0:intra",
+    "2026-08-06_23-46-09_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep0:extra",
+    "2026-08-07_00-11-11_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep1:intra",
+    "2026-08-07_00-11-11_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep1:extra",
+    "2026-08-07_03-39-41_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2:intra",
+    "2026-08-07_03-39-41_d4.5_K7_ODI_0.0903_bead_0.5_500fibers_rep2:extra",
+    "2026-08-07_12-29-36_d4.5_K7_ODI_0.0903_bead_0.83_500fibers_rep0:intra",
+    "2026-08-07_12-29-36_d4.5_K7_ODI_0.0903_bead_0.83_500fibers_rep0:extra",
+    "2026-08-07_15-02-37_d4.5_K7_ODI_0.0903_bead_0.83_500fibers_rep2:intra",
+    "2026-08-07_15-02-37_d4.5_K7_ODI_0.0903_bead_0.83_500fibers_rep2:extra",
+    "2026-08-16_10-50-29_d4.5_K7_ODI_0.0903_bead_0.83_500fibers_rep1:intra",
+    "2026-08-16_10-50-29_d4.5_K7_ODI_0.0903_bead_0.83_500fibers_rep1:extra",
+    "2026-08-07_16-34-52_d4.5_K7_ODI_0.0903_bead_1.24_500fibers_rep0:intra",
+    "2026-08-07_16-34-52_d4.5_K7_ODI_0.0903_bead_1.24_500fibers_rep0:extra",
+    "2026-08-07_21-20-01_d4.5_K7_ODI_0.0903_bead_1.24_500fibers_rep1:intra",
+    "2026-08-07_21-20-01_d4.5_K7_ODI_0.0903_bead_1.24_500fibers_rep1:extra",
+    "2026-08-16_18-24-31_d4.5_K7_ODI_0.0903_bead_1.24_500fibers_rep2:intra",
+    "2026-08-16_18-24-31_d4.5_K7_ODI_0.0903_bead_1.24_500fibers_rep2:extra",
+    "2026-07-27_17-08-28_d1.68_K2_ODI_0.2952_bead_0.3_500fibers_rep1:intra",
+    "2026-07-27_17-08-28_d1.68_K2_ODI_0.2952_bead_0.3_500fibers_rep1:extra",
+    "2026-07-28_13-10-40_d1.68_K2_ODI_0.2952_bead_0.3_500fibers_rep2:intra",
+    "2026-07-28_13-10-40_d1.68_K2_ODI_0.2952_bead_0.3_500fibers_rep2:extra",
+    "2026-08-08_15-26-11_d1.68_K2_ODI_0.2952_bead_0.3_500fibers_rep0:intra",
+    "2026-08-08_15-26-11_d1.68_K2_ODI_0.2952_bead_0.3_500fibers_rep0:extra",
+    "2026-07-28_21-45-01_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep0:intra",
+    "2026-07-28_21-45-01_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep0:extra",
+    "2026-08-08_15-26-11_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep1:intra",
+    "2026-08-08_15-26-11_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep1:extra",
+    "2026-07-30_13-40-32_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep1:intra",
+    "2026-07-30_13-40-32_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep1:extra",
+    "2026-07-31_07-37-36_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep2:intra",
+    "2026-07-31_07-37-36_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep2:extra",
+    "2026-07-31_16-18-00_d1.68_K2_ODI_0.2952_bead_1.24_500fibers_rep0:intra",
+    "2026-07-31_16-18-00_d1.68_K2_ODI_0.2952_bead_1.24_500fibers_rep0:extra",
+    "2026-08-01_04-56-27_d1.68_K2_ODI_0.2952_bead_1.24_500fibers_rep1:intra",
+    "2026-08-01_04-56-27_d1.68_K2_ODI_0.2952_bead_1.24_500fibers_rep1:extra",
+    "2026-08-01_12-32-04_d1.68_K2_ODI_0.2952_bead_1.24_500fibers_rep2:intra",
+    "2026-08-01_12-32-04_d1.68_K2_ODI_0.2952_bead_1.24_500fibers_rep2:extra",
+    "2026-08-01_22-19-25_d2.58_K2_ODI_0.2952_bead_0.3_500fibers_rep0:intra",
+    "2026-08-01_22-19-25_d2.58_K2_ODI_0.2952_bead_0.3_500fibers_rep0:extra",
+    "2026-08-02_15-17-34_d2.58_K2_ODI_0.2952_bead_0.3_500fibers_rep2:intra",
+    "2026-08-02_15-17-34_d2.58_K2_ODI_0.2952_bead_0.3_500fibers_rep2:extra",
+    "2026-08-09_19-14-15_d2.58_K2_ODI_0.2952_bead_0.3_500fibers_rep1:intra",
+    "2026-08-09_19-14-15_d2.58_K2_ODI_0.2952_bead_0.3_500fibers_rep1:extra",
+    "2026-08-02_23-44-22_d2.58_K2_ODI_0.2952_bead_0.5_500fibers_rep0:intra",
+    "2026-08-02_23-44-22_d2.58_K2_ODI_0.2952_bead_0.5_500fibers_rep0:extra",
+    "2026-08-03_10-59-04_d2.58_K2_ODI_0.2952_bead_0.5_500fibers_rep2:intra",
+    "2026-08-03_10-59-04_d2.58_K2_ODI_0.2952_bead_0.5_500fibers_rep2:extra",
+    "2026-08-10_03-11-40_d2.58_K2_ODI_0.2952_bead_0.5_500fibers_rep1:intra",
+    "2026-08-10_03-11-40_d2.58_K2_ODI_0.2952_bead_0.5_500fibers_rep1:extra",
+    "2026-08-03_22-21-58_d2.58_K2_ODI_0.2952_bead_0.83_500fibers_rep0:intra",
+    "2026-08-03_22-21-58_d2.58_K2_ODI_0.2952_bead_0.83_500fibers_rep0:extra",
+    "2026-08-04_06-02-08_d2.58_K2_ODI_0.2952_bead_0.83_500fibers_rep1:intra",
+    "2026-08-04_06-02-08_d2.58_K2_ODI_0.2952_bead_0.83_500fibers_rep1:extra",
+    "2026-08-04_10-20-14_d2.58_K2_ODI_0.2952_bead_0.83_500fibers_rep2:intra",
+    "2026-08-04_10-20-14_d2.58_K2_ODI_0.2952_bead_0.83_500fibers_rep2:extra",
+    "2026-08-10_06-41-08_d2.58_K2_ODI_0.2952_bead_0.83_500fibers_rep1:intra",
+    "2026-08-10_06-41-08_d2.58_K2_ODI_0.2952_bead_0.83_500fibers_rep1:extra",
+    "2026-08-10_10-39-58_d2.58_K2_ODI_0.2952_bead_0.83_500fibers_rep2:intra",
+    "2026-08-10_10-39-58_d2.58_K2_ODI_0.2952_bead_0.83_500fibers_rep2:extra",
+    "2026-08-10_18-54-08_d2.58_K2_ODI_0.2952_bead_1.24_500fibers_rep0:intra",
+    "2026-08-10_18-54-08_d2.58_K2_ODI_0.2952_bead_1.24_500fibers_rep0:extra",
+    "2026-08-10_20-01-15_d2.58_K2_ODI_0.2952_bead_1.24_500fibers_rep1:intra",
+    "2026-08-10_20-01-15_d2.58_K2_ODI_0.2952_bead_1.24_500fibers_rep1:extra",
+    "2026-08-11_06-16-21_d2.58_K2_ODI_0.2952_bead_1.24_500fibers_rep2:intra",
+    "2026-08-11_06-16-21_d2.58_K2_ODI_0.2952_bead_1.24_500fibers_rep2:extra",
+    "2026-08-11_07-36-38_d3.5_K2_ODI_0.2952_bead_0.3_500fibers_rep0:intra",
+    "2026-08-11_07-36-38_d3.5_K2_ODI_0.2952_bead_0.3_500fibers_rep0:extra",
+    "2026-08-11_08-16-06_d3.5_K2_ODI_0.2952_bead_0.3_500fibers_rep1:intra",
+    "2026-08-11_08-16-06_d3.5_K2_ODI_0.2952_bead_0.3_500fibers_rep1:extra",
+    "2026-08-11_14-04-23_d3.5_K2_ODI_0.2952_bead_0.3_500fibers_rep2:intra",
+    "2026-08-11_14-04-23_d3.5_K2_ODI_0.2952_bead_0.3_500fibers_rep2:extra",
+    "2026-08-11_18-27-16_d3.5_K2_ODI_0.2952_bead_0.5_500fibers_rep0:intra",
+    "2026-08-11_18-27-16_d3.5_K2_ODI_0.2952_bead_0.5_500fibers_rep0:extra",
+    "2026-08-11_21-10-05_d3.5_K2_ODI_0.2952_bead_0.5_500fibers_rep1:intra",
+    "2026-08-11_21-10-05_d3.5_K2_ODI_0.2952_bead_0.5_500fibers_rep1:extra",
+    "2026-08-12_04-13-04_d3.5_K2_ODI_0.2952_bead_0.5_500fibers_rep2:intra",
+    "2026-08-12_04-13-04_d3.5_K2_ODI_0.2952_bead_0.5_500fibers_rep2:extra",
+    "2026-08-12_08-40-02_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0:intra",
+    "2026-08-12_08-40-02_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0:extra",
+    "2026-08-12_11-21-02_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1:intra",
+    "2026-08-12_11-21-02_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1:extra",
+    "2026-08-12_18-41-59_d3.5_K2_ODI_0.2952_bead_1.24_500fibers_rep0:intra",
+    "2026-08-12_18-41-59_d3.5_K2_ODI_0.2952_bead_1.24_500fibers_rep0:extra",
+    "2026-08-13_04-45-40_d3.5_K2_ODI_0.2952_bead_1.24_500fibers_rep1:intra",
+    "2026-08-13_04-45-40_d3.5_K2_ODI_0.2952_bead_1.24_500fibers_rep1:extra",
+    "2026-08-13_05-13-42_d3.5_K2_ODI_0.2952_bead_1.24_500fibers_rep2:intra",
+    "2026-08-13_05-13-42_d3.5_K2_ODI_0.2952_bead_1.24_500fibers_rep2:extra",
+    "2026-08-13_07-55-58_d4.5_K2_ODI_0.2952_bead_0.3_500fibers_rep0:intra",
+    "2026-08-13_07-55-58_d4.5_K2_ODI_0.2952_bead_0.3_500fibers_rep0:extra",
+    "2026-08-13_14-05-57_d4.5_K2_ODI_0.2952_bead_0.3_500fibers_rep1:intra",
+    "2026-08-13_14-05-57_d4.5_K2_ODI_0.2952_bead_0.3_500fibers_rep1:extra",
+    "2026-08-13_15-55-14_d4.5_K2_ODI_0.2952_bead_0.3_500fibers_rep2:intra",
+    "2026-08-13_15-55-14_d4.5_K2_ODI_0.2952_bead_0.3_500fibers_rep2:extra",
+    "2026-08-13_17-20-29_d4.5_K2_ODI_0.2952_bead_0.5_500fibers_rep0:intra",
+    "2026-08-13_17-20-29_d4.5_K2_ODI_0.2952_bead_0.5_500fibers_rep0:extra",
+    "2026-08-13_21-43-40_d4.5_K2_ODI_0.2952_bead_0.5_500fibers_rep1:intra",
+    "2026-08-13_21-43-40_d4.5_K2_ODI_0.2952_bead_0.5_500fibers_rep1:extra",
+    "2026-08-13_22-26-14_d4.5_K2_ODI_0.2952_bead_0.5_500fibers_rep2:intra",
+    "2026-08-13_22-26-14_d4.5_K2_ODI_0.2952_bead_0.5_500fibers_rep2:extra",
+    "2026-08-14_06-26-13_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0:intra",
+    "2026-08-14_06-26-13_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0:extra",
+    "2026-08-14_14-44-34_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1:intra",
+    "2026-08-14_14-44-34_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1:extra",
+    "2026-08-14_17-38-29_d4.5_K2_ODI_0.2952_bead_1.24_500fibers_rep0:intra",
+    "2026-08-14_17-38-29_d4.5_K2_ODI_0.2952_bead_1.24_500fibers_rep0:extra",
+    "2026-08-15_03-01-03_d4.5_K2_ODI_0.2952_bead_1.24_500fibers_rep1:intra",
+    "2026-08-15_03-01-03_d4.5_K2_ODI_0.2952_bead_1.24_500fibers_rep1:extra",
+    "2026-08-15_07-30-32_d4.5_K2_ODI_0.2952_bead_1.24_500fibers_rep2:intra",
+    "2026-08-15_07-30-32_d4.5_K2_ODI_0.2952_bead_1.24_500fibers_rep2:extra"
+  ],
+  "n_jobs": 58,
+  "jobs": [
+    {
+      "job_id": "j00001",
+      "substrate_job_id": "2026-08-19_15-29-23_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-19_15-29-23_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_193.0_2026-08-19_15-29-23_avf_0.4_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_9777.48_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-19_15-29-23_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_193.0_2026-08-19_15-29-23_avf_0.4_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_9777.48_sec_TABLEtime478.22sec_SIMtime1614.43sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T12:06:11",
+      "end_time": "2026-08-24T12:41:17",
+      "duration_sec": 2105.1,
+      "error": null
+    },
+    {
+      "job_id": "j00002",
+      "substrate_job_id": "2026-08-19_15-29-23_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-19_15-29-23_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_193.0_2026-08-19_15-29-23_avf_0.4_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_9777.48_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d1.68_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-19_15-29-23_d1.68_K4_ODI_0.156_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_193.0_2026-08-19_15-29-23_avf_0.4_d1.68_sig0.45wo10_wc3_wl3_K4_ODI_0.156_9777.48_sec_TABLEtime459.58sec_SIMtime2221.1sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T12:06:12",
+      "end_time": "2026-08-24T12:51:05",
+      "duration_sec": 2693.23,
+      "error": null
+    },
+    {
+      "job_id": "j00003",
+      "substrate_job_id": "2026-08-19_15-58-32_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-19_15-58-32_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_176.0_2026-08-19_15-58-32_avf_0.43_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7363.57_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-19_15-58-32_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_176.0_2026-08-19_15-58-32_avf_0.43_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7363.57_sec_TABLEtime351.52sec_SIMtime1218.98sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T12:41:17",
+      "end_time": "2026-08-24T13:07:36",
+      "duration_sec": 1579.02,
+      "error": null
+    },
+    {
+      "job_id": "j00004",
+      "substrate_job_id": "2026-08-19_15-58-32_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-19_15-58-32_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep0/data/array500_fibers_boxL_176.0_2026-08-19_15-58-32_avf_0.43_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7363.57_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-19_15-58-32_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_176.0_2026-08-19_15-58-32_avf_0.43_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7363.57_sec_TABLEtime259.69sec_SIMtime1430.63sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T12:51:05",
+      "end_time": "2026-08-24T13:19:22",
+      "duration_sec": 1697.45,
+      "error": null
+    },
+    {
+      "job_id": "j00005",
+      "substrate_job_id": "2026-08-19_21-57-24_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-19_21-57-24_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep2/data/array500_fibers_boxL_245.0_2026-08-19_21-57-24_avf_0.22_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_5795.03_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-19_21-57-24_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_245.0_2026-08-19_21-57-24_avf_0.22_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_5795.03_sec_TABLEtime367.81sec_SIMtime975.33sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T13:07:36",
+      "end_time": "2026-08-24T13:30:07",
+      "duration_sec": 1351.33,
+      "error": null
+    },
+    {
+      "job_id": "j00006",
+      "substrate_job_id": "2026-08-19_21-57-24_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-19_21-57-24_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep2/data/array500_fibers_boxL_245.0_2026-08-19_21-57-24_avf_0.22_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_5795.03_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.3_VF_0.4/2026-08-19_21-57-24_d2.58_K4_ODI_0.156_bead_0.3_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_245.0_2026-08-19_21-57-24_avf_0.22_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_5795.03_sec_TABLEtime245.54sec_SIMtime1261.86sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T13:19:22",
+      "end_time": "2026-08-24T13:44:37",
+      "duration_sec": 1514.48,
+      "error": null
+    },
+    {
+      "job_id": "j00007",
+      "substrate_job_id": "2026-08-19_22-42-14_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-19_22-42-14_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_222.0_2026-08-19_22-42-14_avf_0.38_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_8970.16_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-19_22-42-14_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_222.0_2026-08-19_22-42-14_avf_0.38_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_8970.16_sec_TABLEtime316.29sec_SIMtime981.95sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T13:30:07",
+      "end_time": "2026-08-24T13:51:53",
+      "duration_sec": 1306.08,
+      "error": null
+    },
+    {
+      "job_id": "j00008",
+      "substrate_job_id": "2026-08-19_22-42-14_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-19_22-42-14_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_222.0_2026-08-19_22-42-14_avf_0.38_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_8970.16_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-19_22-42-14_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_222.0_2026-08-19_22-42-14_avf_0.38_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_8970.16_sec_TABLEtime246.09sec_SIMtime1500.65sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T13:44:37",
+      "end_time": "2026-08-24T14:13:50",
+      "duration_sec": 1753.66,
+      "error": null
+    },
+    {
+      "job_id": "j00009",
+      "substrate_job_id": "2026-08-20_11-27-55_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_11-27-55_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_256.0_2026-08-20_11-27-55_avf_0.27_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_5990.59_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_11-27-55_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_256.0_2026-08-20_11-27-55_avf_0.27_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_5990.59_sec_TABLEtime289.28sec_SIMtime932.25sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T13:51:53",
+      "end_time": "2026-08-24T14:12:22",
+      "duration_sec": 1228.49,
+      "error": null
+    },
+    {
+      "job_id": "j00010",
+      "substrate_job_id": "2026-08-20_11-27-55_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_11-27-55_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_256.0_2026-08-20_11-27-55_avf_0.27_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_5990.59_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_11-27-55_d2.58_K4_ODI_0.156_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_256.0_2026-08-20_11-27-55_avf_0.27_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_5990.59_sec_TABLEtime223.26sec_SIMtime1360.29sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T14:12:22",
+      "end_time": "2026-08-24T14:38:51",
+      "duration_sec": 1589.87,
+      "error": null
+    },
+    {
+      "job_id": "j00011",
+      "substrate_job_id": "2026-08-20_13-17-36_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_13-17-36_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_261.0_2026-08-20_13-17-36_avf_0.41_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7196.62_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_13-17-36_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_261.0_2026-08-20_13-17-36_avf_0.41_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7196.62_sec_TABLEtime316.4sec_SIMtime1104.2sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T14:13:50",
+      "end_time": "2026-08-24T14:37:39",
+      "duration_sec": 1428.36,
+      "error": null
+    },
+    {
+      "job_id": "j00012",
+      "substrate_job_id": "2026-08-20_13-17-36_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_13-17-36_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_261.0_2026-08-20_13-17-36_avf_0.41_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7196.62_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_13-17-36_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_261.0_2026-08-20_13-17-36_avf_0.41_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7196.62_sec_TABLEtime278.24sec_SIMtime1635.46sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T14:37:39",
+      "end_time": "2026-08-24T15:09:40",
+      "duration_sec": 1921.42,
+      "error": null
+    },
+    {
+      "job_id": "j00013",
+      "substrate_job_id": "2026-08-20_15-13-52_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_15-13-52_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_254.0_2026-08-20_15-13-52_avf_0.43_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_10118.64_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_15-13-52_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_254.0_2026-08-20_15-13-52_avf_0.43_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_10118.64_sec_TABLEtime286.34sec_SIMtime1018.92sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T14:38:51",
+      "end_time": "2026-08-24T15:00:44",
+      "duration_sec": 1312.16,
+      "error": null
+    },
+    {
+      "job_id": "j00014",
+      "substrate_job_id": "2026-08-20_15-13-52_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_15-13-52_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_254.0_2026-08-20_15-13-52_avf_0.43_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_10118.64_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_15-13-52_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_254.0_2026-08-20_15-13-52_avf_0.43_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_10118.64_sec_TABLEtime249.73sec_SIMtime1464.95sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T15:00:44",
+      "end_time": "2026-08-24T15:29:25",
+      "duration_sec": 1721.8,
+      "error": null
+    },
+    {
+      "job_id": "j00015",
+      "substrate_job_id": "2026-08-20_15-42-46_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_15-42-46_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_270.0_2026-08-20_15-42-46_avf_0.41_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7563.96_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_15-42-46_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_270.0_2026-08-20_15-42-46_avf_0.41_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7563.96_sec_TABLEtime304.02sec_SIMtime1293.73sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T15:09:40",
+      "end_time": "2026-08-24T15:36:25",
+      "duration_sec": 1605.19,
+      "error": null
+    },
+    {
+      "job_id": "j00016",
+      "substrate_job_id": "2026-08-20_15-42-46_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_15-42-46_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_270.0_2026-08-20_15-42-46_avf_0.41_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7563.96_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d2.58_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-20_15-42-46_d2.58_K4_ODI_0.156_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_270.0_2026-08-20_15-42-46_avf_0.41_d2.58_sig0.69wo10_wc3_wl3_K4_ODI_0.156_7563.96_sec_TABLEtime286.25sec_SIMtime2084.7sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T15:29:25",
+      "end_time": "2026-08-24T16:09:04",
+      "duration_sec": 2378.42,
+      "error": null
+    },
+    {
+      "job_id": "j00017",
+      "substrate_job_id": "2026-08-20_20-35-42_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-20_20-35-42_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_499.0_2026-08-20_20-35-42_avf_0.42_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7866.16_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-20_20-35-42_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_499.0_2026-08-20_20-35-42_avf_0.42_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7866.16_sec_TABLEtime187.47sec_SIMtime732.6sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T15:36:25",
+      "end_time": "2026-08-24T15:51:50",
+      "duration_sec": 924.91,
+      "error": null
+    },
+    {
+      "job_id": "j00018",
+      "substrate_job_id": "2026-08-20_20-35-42_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-20_20-35-42_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep1/data/array500_fibers_boxL_499.0_2026-08-20_20-35-42_avf_0.42_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7866.16_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-20_20-35-42_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_499.0_2026-08-20_20-35-42_avf_0.42_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7866.16_sec_TABLEtime172.4sec_SIMtime1525.83sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T15:51:50",
+      "end_time": "2026-08-24T16:20:14",
+      "duration_sec": 1703.5,
+      "error": null
+    },
+    {
+      "job_id": "j00019",
+      "substrate_job_id": "2026-08-20_21-56-41_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-20_21-56-41_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_564.0_2026-08-20_21-56-41_avf_0.37_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7748.16_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-20_21-56-41_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_564.0_2026-08-20_21-56-41_avf_0.37_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7748.16_sec_TABLEtime171.73sec_SIMtime799.2sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T16:09:04",
+      "end_time": "2026-08-24T16:25:19",
+      "duration_sec": 975.18,
+      "error": null
+    },
+    {
+      "job_id": "j00020",
+      "substrate_job_id": "2026-08-20_21-56-41_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-20_21-56-41_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_564.0_2026-08-20_21-56-41_avf_0.37_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7748.16_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d3.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-20_21-56-41_d3.5_K4_ODI_0.156_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_564.0_2026-08-20_21-56-41_avf_0.37_d3.5_sig0.9375wo10_wc3_wl3_K4_ODI_0.156_7748.16_sec_TABLEtime163.42sec_SIMtime1492.0sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T16:20:14",
+      "end_time": "2026-08-24T16:47:54",
+      "duration_sec": 1660.31,
+      "error": null
+    },
+    {
+      "job_id": "j00021",
+      "substrate_job_id": "2026-08-20_23-45-58_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_23-45-58_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_438.0_2026-08-20_23-45-58_avf_0.41_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_6932.88_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_23-45-58_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_438.0_2026-08-20_23-45-58_avf_0.41_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_6932.88_sec_TABLEtime167.87sec_SIMtime615.95sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T16:25:19",
+      "end_time": "2026-08-24T16:38:27",
+      "duration_sec": 788.24,
+      "error": null
+    },
+    {
+      "job_id": "j00022",
+      "substrate_job_id": "2026-08-20_23-45-58_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_23-45-58_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_438.0_2026-08-20_23-45-58_avf_0.41_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_6932.88_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_23-45-58_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_438.0_2026-08-20_23-45-58_avf_0.41_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_6932.88_sec_TABLEtime136.44sec_SIMtime886.96sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T16:38:27",
+      "end_time": "2026-08-24T16:55:35",
+      "duration_sec": 1027.58,
+      "error": null
+    },
+    {
+      "job_id": "j00023",
+      "substrate_job_id": "2026-08-20_23-49-46_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_23-49-46_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_435.0_2026-08-20_23-49-46_avf_0.4_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_10474.54_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_23-49-46_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_435.0_2026-08-20_23-49-46_avf_0.4_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_10474.54_sec_TABLEtime170.24sec_SIMtime719.81sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T16:47:54",
+      "end_time": "2026-08-24T17:02:49",
+      "duration_sec": 894.48,
+      "error": null
+    },
+    {
+      "job_id": "j00024",
+      "substrate_job_id": "2026-08-20_23-49-46_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_23-49-46_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_435.0_2026-08-20_23-49-46_avf_0.4_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_10474.54_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-20_23-49-46_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_435.0_2026-08-20_23-49-46_avf_0.4_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_10474.54_sec_TABLEtime134.62sec_SIMtime1054.99sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T16:55:35",
+      "end_time": "2026-08-24T17:15:29",
+      "duration_sec": 1193.78,
+      "error": null
+    },
+    {
+      "job_id": "j00025",
+      "substrate_job_id": "2026-08-21_05-50-17_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-21_05-50-17_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_432.0_2026-08-21_05-50-17_avf_0.39_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7676.13_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-21_05-50-17_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_432.0_2026-08-21_05-50-17_avf_0.39_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7676.13_sec_TABLEtime183.3sec_SIMtime822.56sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T17:02:49",
+      "end_time": "2026-08-24T17:19:39",
+      "duration_sec": 1010.51,
+      "error": null
+    },
+    {
+      "job_id": "j00026",
+      "substrate_job_id": "2026-08-21_05-50-17_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-21_05-50-17_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_432.0_2026-08-21_05-50-17_avf_0.39_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7676.13_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.5_VF_0.4/2026-08-21_05-50-17_d4.5_K4_ODI_0.156_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_432.0_2026-08-21_05-50-17_avf_0.39_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7676.13_sec_TABLEtime143.97sec_SIMtime962.73sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T17:15:29",
+      "end_time": "2026-08-24T17:34:00",
+      "duration_sec": 1111.31,
+      "error": null
+    },
+    {
+      "job_id": "j00027",
+      "substrate_job_id": "2026-08-21_07-03-08_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_07-03-08_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_546.0_2026-08-21_07-03-08_avf_0.43_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7285.57_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_07-03-08_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_546.0_2026-08-21_07-03-08_avf_0.43_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7285.57_sec_TABLEtime152.18sec_SIMtime831.7sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T17:19:39",
+      "end_time": "2026-08-24T17:36:07",
+      "duration_sec": 987.88,
+      "error": null
+    },
+    {
+      "job_id": "j00028",
+      "substrate_job_id": "2026-08-21_07-03-08_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_07-03-08_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_546.0_2026-08-21_07-03-08_avf_0.43_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7285.57_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_07-03-08_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_546.0_2026-08-21_07-03-08_avf_0.43_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7285.57_sec_TABLEtime138.35sec_SIMtime1359.47sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T17:34:00",
+      "end_time": "2026-08-24T17:59:02",
+      "duration_sec": 1501.91,
+      "error": null
+    },
+    {
+      "job_id": "j00029",
+      "substrate_job_id": "2026-08-21_08-21-06_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_08-21-06_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_567.0_2026-08-21_08-21-06_avf_0.43_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7291.45_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_08-21-06_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_567.0_2026-08-21_08-21-06_avf_0.43_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7291.45_sec_TABLEtime164.61sec_SIMtime635.93sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T17:36:07",
+      "end_time": "2026-08-24T17:49:32",
+      "duration_sec": 804.71,
+      "error": null
+    },
+    {
+      "job_id": "j00030",
+      "substrate_job_id": "2026-08-21_08-21-06_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_08-21-06_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_567.0_2026-08-21_08-21-06_avf_0.43_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7291.45_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_08-21-06_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_567.0_2026-08-21_08-21-06_avf_0.43_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7291.45_sec_TABLEtime145.3sec_SIMtime1156.7sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T17:49:32",
+      "end_time": "2026-08-24T18:11:18",
+      "duration_sec": 1306.42,
+      "error": null
+    },
+    {
+      "job_id": "j00031",
+      "substrate_job_id": "2026-08-21_11-09-19_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_11-09-19_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_622.0_2026-08-21_11-09-19_avf_0.37_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7847.45_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_11-09-19_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_622.0_2026-08-21_11-09-19_avf_0.37_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7847.45_sec_TABLEtime162.69sec_SIMtime850.47sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T17:59:02",
+      "end_time": "2026-08-24T18:15:59",
+      "duration_sec": 1017.28,
+      "error": null
+    },
+    {
+      "job_id": "j00032",
+      "substrate_job_id": "2026-08-21_11-09-19_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_11-09-19_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_622.0_2026-08-21_11-09-19_avf_0.37_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7847.45_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_0.83_VF_0.4/2026-08-21_11-09-19_d4.5_K4_ODI_0.156_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_622.0_2026-08-21_11-09-19_avf_0.37_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_7847.45_sec_TABLEtime146.87sec_SIMtime1557.07sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T18:11:18",
+      "end_time": "2026-08-24T18:39:47",
+      "duration_sec": 1708.33,
+      "error": null
+    },
+    {
+      "job_id": "j00033",
+      "substrate_job_id": "2026-08-21_16-11-28_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-21_16-11-28_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_682.0_2026-08-21_16-11-28_avf_0.41_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_8062.74_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-21_16-11-28_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_682.0_2026-08-21_16-11-28_avf_0.41_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_8062.74_sec_TABLEtime147.23sec_SIMtime690.22sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T18:15:59",
+      "end_time": "2026-08-24T18:30:00",
+      "duration_sec": 841.4,
+      "error": null
+    },
+    {
+      "job_id": "j00034",
+      "substrate_job_id": "2026-08-21_16-11-28_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140957"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-21_16-11-28_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep2/data/array500_fibers_boxL_682.0_2026-08-21_16-11-28_avf_0.41_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_8062.74_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140957/d4.5_K4_ODI_0.156_bead_1.24_VF_0.4/2026-08-21_16-11-28_d4.5_K4_ODI_0.156_bead_1.24_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_682.0_2026-08-21_16-11-28_avf_0.41_d4.5_sig1.205wo10_wc3_wl3_K4_ODI_0.156_8062.74_sec_TABLEtime134.48sec_SIMtime1365.19sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T18:30:00",
+      "end_time": "2026-08-24T18:55:04",
+      "duration_sec": 1503.88,
+      "error": null
+    },
+    {
+      "job_id": "j00035",
+      "substrate_job_id": "2026-08-21_16-21-37_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_16-21-37_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_204.0_2026-08-21_16-21-37_avf_0.23_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6834.35_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_16-21-37_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_204.0_2026-08-21_16-21-37_avf_0.23_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6834.35_sec_TABLEtime797.44sec_SIMtime2501.14sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T18:39:47",
+      "end_time": "2026-08-24T19:35:03",
+      "duration_sec": 3316.63,
+      "error": null
+    },
+    {
+      "job_id": "j00036",
+      "substrate_job_id": "2026-08-21_16-21-37_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_16-21-37_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep0/data/array500_fibers_boxL_204.0_2026-08-21_16-21-37_avf_0.23_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6834.35_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_16-21-37_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_204.0_2026-08-21_16-21-37_avf_0.23_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6834.35_sec_TABLEtime611.45sec_SIMtime2186.12sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T18:55:04",
+      "end_time": "2026-08-24T19:41:58",
+      "duration_sec": 2813.56,
+      "error": null
+    },
+    {
+      "job_id": "j00037",
+      "substrate_job_id": "2026-08-21_19-07-14_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_19-07-14_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_201.0_2026-08-21_19-07-14_avf_0.23_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6199.47_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_19-07-14_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_201.0_2026-08-21_19-07-14_avf_0.23_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6199.47_sec_TABLEtime840.25sec_SIMtime3743.24sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T19:35:03",
+      "end_time": "2026-08-24T20:51:45",
+      "duration_sec": 4601.37,
+      "error": null
+    },
+    {
+      "job_id": "j00038",
+      "substrate_job_id": "2026-08-21_19-07-14_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_19-07-14_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep1/data/array500_fibers_boxL_201.0_2026-08-21_19-07-14_avf_0.23_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6199.47_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_19-07-14_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_201.0_2026-08-21_19-07-14_avf_0.23_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6199.47_sec_TABLEtime648.21sec_SIMtime2422.34sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T19:41:58",
+      "end_time": "2026-08-24T20:33:25",
+      "duration_sec": 3086.65,
+      "error": null
+    },
+    {
+      "job_id": "j00039",
+      "substrate_job_id": "2026-08-21_23-16-35_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_23-16-35_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_189.0_2026-08-21_23-16-35_avf_0.24_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_7525.5_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_23-16-35_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_189.0_2026-08-21_23-16-35_avf_0.24_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_7525.5_sec_TABLEtime980.4sec_SIMtime6307.73sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T20:33:25",
+      "end_time": "2026-08-24T22:35:14",
+      "duration_sec": 7309.79,
+      "error": null
+    },
+    {
+      "job_id": "j00040",
+      "substrate_job_id": "2026-08-21_23-16-35_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_23-16-35_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep2/data/array500_fibers_boxL_189.0_2026-08-21_23-16-35_avf_0.24_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_7525.5_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.5_VF_0.25/2026-08-21_23-16-35_d1.68_K2_ODI_0.2952_bead_0.5_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_189.0_2026-08-21_23-16-35_avf_0.24_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_7525.5_sec_TABLEtime715.29sec_SIMtime4650.04sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T20:51:45",
+      "end_time": "2026-08-24T22:21:28",
+      "duration_sec": 5383.39,
+      "error": null
+    },
+    {
+      "job_id": "j00041",
+      "substrate_job_id": "2026-08-22_03-09-18_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_03-09-18_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_234.0_2026-08-22_03-09-18_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6764.29_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_03-09-18_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_234.0_2026-08-22_03-09-18_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6764.29_sec_TABLEtime812.39sec_SIMtime4486.36sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T22:21:28",
+      "end_time": "2026-08-24T23:50:05",
+      "duration_sec": 5316.8,
+      "error": null
+    },
+    {
+      "job_id": "j00042",
+      "substrate_job_id": "2026-08-22_03-09-18_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_03-09-18_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_234.0_2026-08-22_03-09-18_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6764.29_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_03-09-18_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_234.0_2026-08-22_03-09-18_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6764.29_sec_TABLEtime675.14sec_SIMtime3377.19sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T22:35:14",
+      "end_time": "2026-08-24T23:43:03",
+      "duration_sec": 4068.37,
+      "error": null
+    },
+    {
+      "job_id": "j00043",
+      "substrate_job_id": "2026-08-22_07-13-00_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_07-13-00_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_206.0_2026-08-22_07-13-00_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6750.93_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_07-13-00_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_206.0_2026-08-22_07-13-00_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6750.93_sec_TABLEtime764.29sec_SIMtime3928.3sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T23:43:03",
+      "end_time": "2026-08-25T01:01:32",
+      "duration_sec": 4708.97,
+      "error": null
+    },
+    {
+      "job_id": "j00044",
+      "substrate_job_id": "2026-08-22_07-13-00_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_07-13-00_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_206.0_2026-08-22_07-13-00_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6750.93_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_07-13-00_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_206.0_2026-08-22_07-13-00_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_6750.93_sec_TABLEtime621.82sec_SIMtime2847.34sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-24T23:50:05",
+      "end_time": "2026-08-25T00:48:09",
+      "duration_sec": 3484.52,
+      "error": null
+    },
+    {
+      "job_id": "j00045",
+      "substrate_job_id": "2026-08-22_09-11-24_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_09-11-24_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_230.0_2026-08-22_09-11-24_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_5046.69_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_09-11-24_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_230.0_2026-08-22_09-11-24_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_5046.69_sec_TABLEtime800.87sec_SIMtime2728.33sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T00:48:09",
+      "end_time": "2026-08-25T01:47:16",
+      "duration_sec": 3546.52,
+      "error": null
+    },
+    {
+      "job_id": "j00046",
+      "substrate_job_id": "2026-08-22_09-11-24_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_09-11-24_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_230.0_2026-08-22_09-11-24_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_5046.69_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d1.68_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_09-11-24_d1.68_K2_ODI_0.2952_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_230.0_2026-08-22_09-11-24_avf_0.26_d1.68_sig0.45wo10_wc3_wl3_K2_ODI_0.2952_5046.69_sec_TABLEtime629.78sec_SIMtime2275.05sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T01:01:32",
+      "end_time": "2026-08-25T01:50:12",
+      "duration_sec": 2920.24,
+      "error": null
+    },
+    {
+      "job_id": "j00047",
+      "substrate_job_id": "2026-08-22_12-48-22_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_12-48-22_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_562.0_2026-08-22_12-48-22_avf_0.26_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7698.64_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_12-48-22_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_562.0_2026-08-22_12-48-22_avf_0.26_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7698.64_sec_TABLEtime260.5sec_SIMtime1148.01sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T01:47:16",
+      "end_time": "2026-08-25T02:10:50",
+      "duration_sec": 1414.51,
+      "error": null
+    },
+    {
+      "job_id": "j00048",
+      "substrate_job_id": "2026-08-22_12-48-22_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_12-48-22_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_562.0_2026-08-22_12-48-22_avf_0.26_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7698.64_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_12-48-22_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_562.0_2026-08-22_12-48-22_avf_0.26_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7698.64_sec_TABLEtime234.33sec_SIMtime1844.32sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T01:50:12",
+      "end_time": "2026-08-25T02:24:58",
+      "duration_sec": 2085.54,
+      "error": null
+    },
+    {
+      "job_id": "j00049",
+      "substrate_job_id": "2026-08-22_16-28-58_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_16-28-58_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_589.0_2026-08-22_16-28-58_avf_0.27_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7135.35_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_16-28-58_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_589.0_2026-08-22_16-28-58_avf_0.27_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7135.35_sec_TABLEtime286.09sec_SIMtime928.12sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T02:10:50",
+      "end_time": "2026-08-25T02:31:11",
+      "duration_sec": 1220.84,
+      "error": null
+    },
+    {
+      "job_id": "j00050",
+      "substrate_job_id": "2026-08-22_16-28-58_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_16-28-58_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_589.0_2026-08-22_16-28-58_avf_0.27_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7135.35_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_16-28-58_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_589.0_2026-08-22_16-28-58_avf_0.27_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7135.35_sec_TABLEtime252.58sec_SIMtime1596.11sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T02:24:58",
+      "end_time": "2026-08-25T02:55:53",
+      "duration_sec": 1855.68,
+      "error": null
+    },
+    {
+      "job_id": "j00051",
+      "substrate_job_id": "2026-08-22_18-20-45_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_18-20-45_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_605.0_2026-08-22_18-20-45_avf_0.24_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7813.57_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_18-20-45_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_605.0_2026-08-22_18-20-45_avf_0.24_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7813.57_sec_TABLEtime265.3sec_SIMtime1094.46sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T02:31:11",
+      "end_time": "2026-08-25T02:53:57",
+      "duration_sec": 1365.95,
+      "error": null
+    },
+    {
+      "job_id": "j00052",
+      "substrate_job_id": "2026-08-22_18-20-45_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_18-20-45_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_605.0_2026-08-22_18-20-45_avf_0.24_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7813.57_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d3.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_18-20-45_d3.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_605.0_2026-08-22_18-20-45_avf_0.24_d3.5_sig0.9375wo10_wc3_wl3_K2_ODI_0.2952_7813.57_sec_TABLEtime242.36sec_SIMtime1451.13sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T02:53:57",
+      "end_time": "2026-08-25T03:22:18",
+      "duration_sec": 1700.53,
+      "error": null
+    },
+    {
+      "job_id": "j00053",
+      "substrate_job_id": "2026-08-22_19-34-25_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 0,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_19-34-25_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_885.0_2026-08-22_19-34-25_avf_0.25_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_7068.43_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_19-34-25_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_885.0_2026-08-22_19-34-25_avf_0.25_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_7068.43_sec_TABLEtime195.79sec_SIMtime705.41sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T02:55:53",
+      "end_time": "2026-08-25T03:10:59",
+      "duration_sec": 905.68,
+      "error": null
+    },
+    {
+      "job_id": "j00054",
+      "substrate_job_id": "2026-08-22_19-34-25_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 0,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_19-34-25_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0/data/array500_fibers_boxL_885.0_2026-08-22_19-34-25_avf_0.25_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_7068.43_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_19-34-25_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep0/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_885.0_2026-08-22_19-34-25_avf_0.25_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_7068.43_sec_TABLEtime168.8sec_SIMtime1551.57sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T03:10:59",
+      "end_time": "2026-08-25T03:39:44",
+      "duration_sec": 1725.48,
+      "error": null
+    },
+    {
+      "job_id": "j00055",
+      "substrate_job_id": "2026-08-22_19-40-21_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 1,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_19-40-21_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_883.0_2026-08-22_19-40-21_avf_0.23_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_8126.03_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_19-40-21_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_883.0_2026-08-22_19-40-21_avf_0.23_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_8126.03_sec_TABLEtime200.13sec_SIMtime802.21sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T03:22:18",
+      "end_time": "2026-08-25T03:39:04",
+      "duration_sec": 1006.79,
+      "error": null
+    },
+    {
+      "job_id": "j00056",
+      "substrate_job_id": "2026-08-22_19-40-21_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 1,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_19-40-21_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1/data/array500_fibers_boxL_883.0_2026-08-22_19-40-21_avf_0.23_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_8126.03_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 6,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-22_19-40-21_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep1/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_883.0_2026-08-22_19-40-21_avf_0.23_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_8126.03_sec_TABLEtime173.8sec_SIMtime1478.41sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T03:39:04",
+      "end_time": "2026-08-25T04:06:42",
+      "duration_sec": 1657.55,
+      "error": null
+    },
+    {
+      "job_id": "j00057",
+      "substrate_job_id": "2026-08-23_00-32-13_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 2,
+      "compartment": "intra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-23_00-32-13_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_913.0_2026-08-23_00-32-13_avf_0.19_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_6963.08_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "intra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-23_00-32-13_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_intra_20segments_500000spins_array500_fibers_boxL_913.0_2026-08-23_00-32-13_avf_0.19_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_6963.08_sec_TABLEtime221.72sec_SIMtime816.83sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T03:39:44",
+      "end_time": "2026-08-25T03:57:08",
+      "duration_sec": 1043.51,
+      "error": null
+    },
+    {
+      "job_id": "j00058",
+      "substrate_job_id": "2026-08-23_00-32-13_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2",
+      "sets": [
+        "highdisp_20260727_140958"
+      ],
+      "repeat_idx": 2,
+      "compartment": "extra",
+      "substrate_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-23_00-32-13_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2/data/array500_fibers_boxL_913.0_2026-08-23_00-32-13_avf_0.19_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_6963.08_sec.pkl",
+      "params": {
+        "time_step": 0.002,
+        "num_spins": 500000,
+        "D0_intra": 2.25,
+        "D0_extra": 2.0,
+        "nseg": 20,
+        "sim_time": 100.0,
+        "compartment": "extra"
+      },
+      "status": "done",
+      "gpu_id": 7,
+      "output_pkl": "/home/nguyt16@ds.vanderbilt.edu/nozomi/experiment/aim2-prep/data-high-dispersion/highdisp_20260727_140958/d4.5_K2_ODI_0.2952_bead_0.83_VF_0.25/2026-08-23_00-32-13_d4.5_K2_ODI_0.2952_bead_0.83_500fibers_rep2/sim/ADCdata/diffcoeff_extra_20segments_500000spins_array500_fibers_boxL_913.0_2026-08-23_00-32-13_avf_0.19_d4.5_sig1.205wo10_wc3_wl3_K2_ODI_0.2952_6963.08_sec_TABLEtime179.14sec_SIMtime1881.96sec_timestep0.002ms.pkl",
+      "start_time": "2026-08-25T03:57:08",
+      "end_time": "2026-08-25T04:31:34",
+      "duration_sec": 2066.32,
+      "error": null
+    }
+  ]
+}

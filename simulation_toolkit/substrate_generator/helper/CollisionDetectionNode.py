@@ -2,18 +2,22 @@ import torch
 import torch.multiprocessing as mp
 
 @torch.no_grad()
-def detect_in_sphere(pbc_spheres_xyz, r, avf_nodes, L, fid):
-    return detect_in_sphere_gpu(pbc_spheres_xyz, r, avf_nodes, L, fiber_id=fid)
+def detect_in_sphere(pbc_spheres_xyz, r, avf_nodes, L, fid, Lz=None):
+    return detect_in_sphere_gpu(pbc_spheres_xyz, r, avf_nodes, L, fiber_id=fid, Lz=Lz)
 
-def detect_in_sphere_gpu(pbc_spheres_xyz, r, avf_nodes, L, fiber_id):
+def detect_in_sphere_gpu(pbc_spheres_xyz, r, avf_nodes, L, fiber_id, Lz=None):
     '''in_sphere_mask NxM matrix'''
     device = pbc_spheres_xyz.device
+    # In-plane box is L (Lx=Ly); Lz may differ (thin-z box). Default cubic.
+    if Lz is None:
+        Lz = L
     # Partition the 3D cube into smaller blocks
     block_size = torch.tensor([10.0], device=device)  # Adjust this value to control the block size (relative to box length so, 5/10)
-    grid_size = torch.ceil(torch.tensor([1.0, 1.0, 1.0], device=device) * torch.tensor([L, L, L], device=device) / block_size).long()
+    grid_size = torch.ceil(torch.tensor([1.0, 1.0, 1.0], device=device) * torch.tensor([L, L, Lz], device=device) / block_size).long()
+    grid_size = torch.clamp(grid_size, min=1)
     # -------------- Assign spheres to blocks --------------
-    block_assignments  , max_sph_per_seg = set_segments(pbc_spheres_xyz, r, L, grid_size[0], grid_size[1], grid_size[2])
-    block_assignments_n = set_segments_nodes(avf_nodes, L, grid_size[0], grid_size[1], grid_size[2])
+    block_assignments  , max_sph_per_seg = set_segments(pbc_spheres_xyz, r, L, grid_size[0], grid_size[1], grid_size[2], Lz=Lz)
+    block_assignments_n = set_segments_nodes(avf_nodes, L, grid_size[0], grid_size[1], grid_size[2], Lz=Lz)
     
     num_nodes_in_spheres = torch.tensor(0, device=device)
     nsegx, nsegy, nsegz = grid_size[0],grid_size[1],grid_size[2]
@@ -44,8 +48,10 @@ def intersect_block(x, x_n, rx):
     del rm, dm
     return in_sphere_mask
 
-def set_segments_nodes(pos, L, nsegx, nsegy, nsegz):
-    Lx, Ly, Lz = L,L,L
+def set_segments_nodes(pos, L, nsegx, nsegy, nsegz, Lz=None):
+    Lx, Ly = L, L
+    if Lz is None:
+        Lz = L
     '''return segments = Mx1 vector storing sph ids for each segment. 
     M = k*max_sphere_per_seg, where 'k' is the number of segments. '''
     jump_tol = 0. # um
@@ -76,8 +82,10 @@ def set_segments_nodes(pos, L, nsegx, nsegy, nsegz):
                 segments_dict[seg_idx.item()] = torch.nonzero(in_segment < 0).flatten()
     return segments_dict
 #---------------------------------------------------
-def set_segments(pos, r, L, nsegx, nsegy, nsegz):
-    Lx, Ly, Lz = L,L,L
+def set_segments(pos, r, L, nsegx, nsegy, nsegz, Lz=None):
+    Lx, Ly = L, L
+    if Lz is None:
+        Lz = L
     '''return segments = Mx1 vector storing sph ids for each segment. 
     M = k*max_sphere_per_seg, where 'k' is the number of segments. '''
     jump_tol = 0

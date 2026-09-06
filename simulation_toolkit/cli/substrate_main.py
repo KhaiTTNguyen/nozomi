@@ -17,6 +17,15 @@ from simulation_toolkit.utils import orientation_plot
 from simulation_toolkit.utils import cross_section_plot
 
 
+def _diffusion_length_box(D0=2.5, t=100.0):
+    """Minimum box side (um) to satisfy the 2-sigma diffusion-length rule.
+
+    sigma = sqrt(2*D0*t); box >= 2*sigma, rounded up. Defaults: free-water
+    D0=2.5 um^2/ms over t=100 ms -> 45 um.
+    """
+    return float(np.ceil(2.0 * np.sqrt(2.0 * D0 * t)))
+
+
 def estimate_initial_vf(target_3d_vf, kappa, mean_diameter,
                         bead_alpha_mean, bead_alpha_stdv,
                         bead_spacing_mean, bead_spacing_stdv,
@@ -43,7 +52,7 @@ def estimate_initial_vf(target_3d_vf, kappa, mean_diameter,
     # --- A_path: helix arc length amplification ---
     mu_dir = np.array([0, 0, 1])
     watson = wd.WatsonDistribution(mu_dir, kappa)
-    directions = watson.sample(num_watson_samples)
+    directions = watson.sample(num_watson_samples, dz_floor=config_params.ORIENTATION_DZ_FLOOR)
     dx, dy, dz = directions[:, 0], directions[:, 1], directions[:, 2]
 
     # Lateral displacement ratios (normalized by Lz)
@@ -109,6 +118,15 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
     config_params.ORIENTATION_SHAPE_PARAM = params['orientation_shape_parameter']
     config_params.BOX_LENGTH = params['box_length_init']
 
+    # --- z-height (Lz): thin, decoupled from the in-plane box (Lx=Ly) ---
+    _box_length_z_init = params.get('box_length_z_init', 0)
+    if _box_length_z_init and _box_length_z_init > 0:
+        config_params.BOX_LENGTH_Z = float(_box_length_z_init)
+    else:
+        # Diffusion-length rule: Lz >= 2*sigma_z, sigma_z = sqrt(2*D0*t).
+        config_params.BOX_LENGTH_Z = _diffusion_length_box()
+    print(f"Box z-height Lz = {config_params.BOX_LENGTH_Z} um")
+
     # Determine 2D initial volume fraction
     target_3d_vf = params.get('final_volume_fraction', None)
     if target_3d_vf is not None:
@@ -150,9 +168,25 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     config_params.EXP_DATE_TIME = util.get_date_time()        
     config_params.ODI_INDEX = np.round(2/np.pi * np.arctan(1/config_params.ORIENTATION_SHAPE_PARAM), 4)
+
+    # Ensure the auto-derived in-plane box (Lx=Ly) meets the same diffusion-length
+    # floor as Lz by scaling the fiber count up. box_length ~ sqrt(N), so this is a
+    # deterministic pre-estimate; the in-loop guard enforces it exactly afterwards.
+    min_inplane_box = _diffusion_length_box()
+    if params['box_length_init'] == 0:
+        _r_eff = config_params.MEAN_DIAMETER/2 + config_params.SPACE_BUFFER_STARTS_ENDS/2
+        for _ in range(4):
+            _est_area = 2 * config_params.NUM_FIBERS * np.pi * _r_eff**2
+            _est_box = np.sqrt(_est_area / max(config_params.VOLUME_FRACTION, 1e-6))
+            if _est_box >= min_inplane_box:
+                break
+            _n_new = int(np.ceil(config_params.NUM_FIBERS * (min_inplane_box/_est_box)**2 * 1.05))
+            print(f"Auto-increasing N {config_params.NUM_FIBERS} -> {_n_new} so in-plane box >= {min_inplane_box:.0f} um (est {_est_box:.1f} um).")
+            config_params.NUM_FIBERS = _n_new
+
     vf_label = target_3d_vf if target_3d_vf is not None else config_params.VOLUME_FRACTION
     combo_folder = ('d'+str(config_params.MEAN_DIAMETER)+
-                    '_K'+str(int(config_params.ORIENTATION_SHAPE_PARAM))+
+                    '_K'+f"{config_params.ORIENTATION_SHAPE_PARAM:g}"+
                     '_ODI_'+str(config_params.ODI_INDEX)+
                     '_bead_'+str(config_params.BEAD_ALPHA_MEAN)+
                     '_VF_'+str(vf_label))
@@ -160,7 +194,7 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
                                                        combo_folder, \
                                                        str(config_params.EXP_DATE_TIME)+\
                                                         '_d'+str(config_params.MEAN_DIAMETER)+\
-                                                        '_K'+str(int(config_params.ORIENTATION_SHAPE_PARAM))+\
+                                                        '_K'+f"{config_params.ORIENTATION_SHAPE_PARAM:g}"+\
                                                     '_ODI_'+str(config_params.ODI_INDEX)+\
                                                     '_bead_'+str(config_params.BEAD_ALPHA_MEAN)+'_'+\
                                                         str(config_params.NUM_FIBERS) +'fibers'+str(folder_suffix))
@@ -177,7 +211,7 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
     # (infeasible) VF_2D when the optimizer never reaches 0 overlaps.
     vf_tolerance = 0.04
     vf_backoff_factor = 0.9
-    max_vf_refinements = 6 if target_3d_vf is not None else 4
+    max_vf_refinements = int(params.get('max_vf_refinements', 10))
     current_vf_2d = config_params.VOLUME_FRACTION
     prev_vf_2d = current_vf_2d
 
@@ -188,16 +222,26 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
         config_params.VOLUME_FRACTION = current_vf_2d
         st = time.time()
         # -------- 2D initialization of axon start/end points --------
-        initialization2D = Init2D(  device=device,
-                                    date_time=config_params.EXP_DATE_TIME,
-                                    orientation_shape_parameter=config_params.ORIENTATION_SHAPE_PARAM,
-                                    target_volume_fraction=config_params.VOLUME_FRACTION,
-                                    num_fibers=config_params.NUM_FIBERS,
-                                    dist_shape=config_params.DISTRIBUTION_SHAPE,
-                                    mean_diameter=config_params.MEAN_DIAMETER,
-                                    sigma_radii=config_params.SIGMA_DIAMETER,
-                                    space_buffer=config_params.SPACE_BUFFER_STARTS_ENDS,
-                                    box_length_init=config_params.BOX_LENGTH)
+        # Build 2D init; if the auto-derived in-plane box (Lx=Ly) falls below the
+        # diffusion-length floor, increase N and regenerate (cap 3 retries).
+        for _box_try in range(4):
+            initialization2D = Init2D(  device=device,
+                                        date_time=config_params.EXP_DATE_TIME,
+                                        orientation_shape_parameter=config_params.ORIENTATION_SHAPE_PARAM,
+                                        target_volume_fraction=config_params.VOLUME_FRACTION,
+                                        num_fibers=config_params.NUM_FIBERS,
+                                        dist_shape=config_params.DISTRIBUTION_SHAPE,
+                                        mean_diameter=config_params.MEAN_DIAMETER,
+                                        sigma_radii=config_params.SIGMA_DIAMETER,
+                                        space_buffer=config_params.SPACE_BUFFER_STARTS_ENDS,
+                                        box_length_init=config_params.BOX_LENGTH,
+                                        box_length_z=config_params.BOX_LENGTH_Z)
+            _box_xy = float(initialization2D.box_length.cpu().item())
+            if params['box_length_init'] != 0 or _box_xy >= min_inplane_box or _box_try == 3:
+                break
+            _n_new = int(np.ceil(config_params.NUM_FIBERS * (min_inplane_box/_box_xy)**2 * 1.05))
+            print(f"In-plane box {_box_xy:.1f} < {min_inplane_box:.0f} um; auto-increasing N {config_params.NUM_FIBERS} -> {_n_new} and regenerating.")
+            config_params.NUM_FIBERS = _n_new
 
         data_folder = os.path.join(config_params.SUBSTRATE_OUTPUT_FOLDER_PATH,'data')
         if not os.path.exists(data_folder):
@@ -254,7 +298,7 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
         file_name_root = 'array'+str(config_params.NUM_FIBERS) +'_fibers_boxL_'+str(config_params.BOX_LENGTH.item())+'_'+str(config_params.EXP_DATE_TIME) + \
                         '_avf_'+str(config_params.VOLUME_FRACTION)+\
                         '_d'+str(config_params.MEAN_DIAMETER)+'_sig'+str(config_params.SIGMA_DIAMETER)+\
-                            'wo'+str(config_params.W_OVERLAP)+'_wc'+str(config_params.W_CURVE)+'_wl'+str(config_params.W_LENGTH)+'_K'+str(int(config_params.ORIENTATION_SHAPE_PARAM))+\
+                            'wo'+str(config_params.W_OVERLAP)+'_wc'+str(config_params.W_CURVE)+'_wl'+str(config_params.W_LENGTH)+'_K'+f"{config_params.ORIENTATION_SHAPE_PARAM:g}"+\
                             '_ODI_'+str(config_params.ODI_INDEX)+'_'+\
                                 str(round(elapsed_time,2))+'_sec'+'.pkl'
         
@@ -264,6 +308,12 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
 
         # # save data with Pickle format
         data_file_name = os.path.join(data_folder, file_name_root)
+        # z-height (thin box) and realized fiber count (== unique fiber ids, the
+        # ground truth after any auto-N bump) recorded with the substrate.
+        _lz = float(config_params.BOX_LENGTH_Z)
+        _fid_col = util.fiber_id_column(substrate.optimized_fibers)
+        _num_fibers = int(torch.unique(substrate.optimized_fibers[:, _fid_col]).numel())
+        print(f"Final fiber count (realized) = {_num_fibers}; Lx=Ly={initialization2D.box_length.cpu().item()} um, Lz={_lz} um")
         inner_fibers = None
         if g_ratio is not None:
             inner_fibers = generate_inner_fibers(
@@ -271,6 +321,7 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
                 g_ratio=g_ratio,
                 inner_sphere_spacing_ratio=inner_sphere_spacing_ratio,
                 box_length=initialization2D.box_length.cpu().item(),
+                box_length_z=_lz,
             )
             util.save_myelinated_substrate_to_pickle(
                 data_file_name,
@@ -279,11 +330,14 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
                 initialization2D.box_length.cpu().item(),
                 g_ratio,
                 inner_sphere_spacing_ratio,
+                lz=_lz,
+                num_fibers=_num_fibers,
             )
             print(f"Generated myelin geometry: outer_spheres={substrate.optimized_fibers.shape[0]}, inner_spheres={inner_fibers.shape[0]}, g_ratio={g_ratio}")
         else:
             util.save_data_array_to_pickle(data_file_name, substrate.optimized_fibers.cpu(), 
-                                    initialization2D.box_length.cpu().item()) 
+                                    initialization2D.box_length.cpu().item(),
+                                    lz=_lz, num_fibers=_num_fibers) 
         # Plot
         fiber_list = util.map_matrix_to_list_numpy(substrate.optimized_fibers)
         color = cm.rainbow(np.linspace(0.0, 1.0, len(fiber_list)))
@@ -293,6 +347,7 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
             outer_fibers=substrate.optimized_fibers,
             inner_fibers=inner_fibers,
             box_length=initialization2D.box_length.cpu().item(),
+            box_length_z=initialization2D.box_length_z.cpu().item(),
             color=color,
         )
         '''Choose FOV to plot, can include 3D animation GIF'''
@@ -302,19 +357,26 @@ def substrate_main(params, experiment_folder, folder_suffix=""):
         #     fiber_3D_plot.plot_fibers(inner_fibers, overlap_indices=None, color=color, optimized=True, POV='horizontal_90', component_label='inner')
         # fiber_3D_plot.plot_fibers(substrate.optimized_fibers, overlap_indices=None, color=color, animation_input=False, optimized=True)
 
-        # along_fiber_plot.plot_along_axon_radius_variation(substrate.optimized_fibers, colors=color, component_label='outer')
-        # along_fiber_plot.plot_diameter_CV_distribution(component_label='outer')
-        # _diam_outer = along_fiber_plot.extract_radius_all(substrate.optimized_fibers) * 2
-        # _x_max_diam = float(np.max(_diam_outer)) if len(_diam_outer) > 0 else None
-        # if inner_fibers is not None:
-        #     _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2
-        #     if len(_diam_inner) > 0:
-        #         _x_max_diam = max(_x_max_diam, float(np.max(_diam_inner)))
-        # along_fiber_plot.plot_diameter_GEV_distribution(substrate.optimized_fibers, component_label='outer', x_max=_x_max_diam)
-        # if inner_fibers is not None:
-        #     along_fiber_plot.plot_along_axon_radius_variation(inner_fibers, colors=color, component_label='inner')
-        #     along_fiber_plot.plot_diameter_CV_distribution(component_label='inner')
-        #     along_fiber_plot.plot_diameter_GEV_distribution(inner_fibers, component_label='inner', x_max=_x_max_diam)
+        # Shared axis limits (data-driven) so this substrate's CV / diameter
+        # histograms match the rest of the batch when a limits JSON is provided.
+        along_fiber_plot.load_shared_axis_limits(
+            getattr(config_params, "SUBSTRATE_STATS_AXIS_LIMITS_FILE", None))
+
+        along_fiber_plot.plot_along_axon_radius_variation(substrate.optimized_fibers, colors=color, component_label='outer')
+        along_fiber_plot.plot_diameter_CV_distribution(component_label='outer')
+        _diam_outer = along_fiber_plot.extract_radius_all(substrate.optimized_fibers) * 2
+        _x_max_diam = float(np.max(_diam_outer)) if len(_diam_outer) > 0 else None
+        if inner_fibers is not None:
+            _diam_inner = along_fiber_plot.extract_radius_all(inner_fibers) * 2
+            if len(_diam_inner) > 0:
+                _x_max_diam = max(_x_max_diam, float(np.max(_diam_inner)))
+        along_fiber_plot.plot_diameter_GEV_distribution(substrate.optimized_fibers, component_label='outer', x_max=_x_max_diam)
+        if inner_fibers is not None:
+            along_fiber_plot.plot_along_axon_radius_variation(inner_fibers, colors=color, component_label='inner')
+            along_fiber_plot.plot_diameter_CV_distribution(component_label='inner')
+            along_fiber_plot.plot_diameter_GEV_distribution(inner_fibers, component_label='inner', x_max=_x_max_diam)
+        # Effective-diameter stats JSON is expensive (fine-grid slicing); it is
+        # backfilled separately via simulation_engine.helper.reprocess_diameter_stats.
         # along_fiber_plot.save_effective_axon_diameter_stats_from_pickle(data_file_name)
         # # orientation_plot.plot_along_axon_OD(substrate.optimized_fibers, optimized=True, component_label='outer')
         # # if inner_fibers is not None:

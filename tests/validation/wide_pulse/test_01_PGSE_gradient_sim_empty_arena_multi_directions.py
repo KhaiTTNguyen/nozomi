@@ -178,5 +178,3 @@ def test_free_gradient_diffusion_empty_arena_multi_directions_PGSE():
         spin_plot_file_name = os.path.join(output_folder, folder_date_time, spin_plot_file_name)
         plt.savefig(spin_plot_file_name)
         #-------------------------------------------
-        
-test_free_gradient_diffusion_empty_arena_multi_directions_PGSE()

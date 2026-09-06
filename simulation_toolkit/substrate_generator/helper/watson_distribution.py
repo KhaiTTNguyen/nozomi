@@ -63,13 +63,19 @@ class WatsonDistribution:
         
         return pdf_values.squeeze()
     
-    def sample(self, n_samples=1000):
+    def sample(self, n_samples=1000, dz_floor=0.0):
         """
         Sample from Watson distribution using rejection sampling.
         
         Parameters:
         n_samples : int
             Number of samples to generate
+        dz_floor : float
+            Minimum |z-component| for accepted directions. Samples with
+            ``z <= dz_floor`` are rejected, truncating the distribution away
+            from the in-plane pole. Defaults to 0.0 (upper hemisphere only,
+            original behavior). Used to bound helix arc-length blow-up at low
+            concentration ``kappa``.
             
         Returns:
         samples : array, shape (n_samples, 3)
@@ -87,8 +93,8 @@ class WatsonDistribution:
             n_candidates = min(n_samples - n_generated, n_samples // 10 + 100)
             candidates = self._sample_uniform_sphere(n_candidates)
             
-            # Only consider candidates in upper hemisphere (Z > 0)
-            upper_hemisphere_mask = candidates[:, 2] > 0
+            # Only consider candidates in upper hemisphere (Z > dz_floor)
+            upper_hemisphere_mask = candidates[:, 2] > dz_floor
             candidates = candidates[upper_hemisphere_mask]
             
             if len(candidates) == 0:

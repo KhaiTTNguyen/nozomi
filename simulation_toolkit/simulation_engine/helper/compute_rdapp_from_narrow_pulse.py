@@ -50,6 +50,7 @@ from simulation_toolkit.simulation_engine.helper.sim_util import (
     build_gradient_waveform,
     wide_pulse_gradient_integration,
 )
+from simulation_toolkit.simulation_engine.waveform_design import design_waveform
 
 # ------------------------------------------------------------------
 # Gradient configurations
@@ -95,6 +96,52 @@ _OGSE_CONFIG_2 = {
 # Waveform time step used when building G(t)
 _WAVE_DT_MS = 0.01   # ms  (10 µs)
 
+# ---- Human protocol hardware-consistent designs (b-value-driven) -------------
+# Human PGSE is now slew-limited; human OGSE adds a trapezoidal-cosine variant
+# alongside the apodized one. Both use the 80 mT/m / 100 mT/m/ms scanner preset.
+_HUMAN_PRESET = "human_80_100"
+_PGSE_SLEW_DESIGN = {
+    "shape": "pgse-slew",
+    "bvalue_s_mm2": 300.0,
+    "te_ms": 78.0,
+    "preset": _HUMAN_PRESET,
+    "little_delta_ms": 12.0,
+    "big_delta_ms": 50.0,
+    "dt_ms": _WAVE_DT_MS,
+}
+_OGSE_TRAP_DESIGN = {
+    "shape": "ogse-trapezoidal",
+    "bvalue_s_mm2": 300.0,
+    "te_ms": 78.0,
+    "preset": _HUMAN_PRESET,
+    "n_cycles": 1,
+    "t_eff_ms": 6.5,
+    "dt_ms": _WAVE_DT_MS,
+}
+
+# ---- Animal protocol hardware-consistent designs (15.2T Bruker Biospec) -------
+# Animal PGSE is now slew-limited; animal OGSE stays apodized-cosine, both
+# designed/validated against the 1000 mT/m / 5000 mT/m/ms preclinical preset.
+_ANIMAL_PRESET = "animal_15p2T"
+_PGSE_SLEW_DESIGN_2 = {
+    "shape": "pgse-slew",
+    "bvalue_s_mm2": 800.0,
+    "te_ms": 40.0,
+    "preset": _ANIMAL_PRESET,
+    "little_delta_ms": 3.0,
+    "big_delta_ms": 26.0,
+    "dt_ms": _WAVE_DT_MS,
+}
+_OGSE_APOD_DESIGN_2 = {
+    "shape": "ogse-apodized",
+    "bvalue_s_mm2": 800.0,
+    "te_ms": 40.0,
+    "preset": _ANIMAL_PRESET,
+    "n_cycles": 1,
+    "t_eff_ms": 2.5,
+    "dt_ms": _WAVE_DT_MS,
+}
+
 # Save one PGSE/OGSE waveform figure per substrate alongside rdapp_result.pkl.
 _SAVE_WAVEFORM_PLOT = True
 
@@ -126,6 +173,22 @@ def _load_adc_pkl(pkl_path: str):
         )
     Dx, Dy, Dz, t = data[:, 0], data[:, 1], data[:, 2], data[:, 3]
     return Dx, Dy, Dz, t
+
+
+def _substrate_g_ratio(substrate_dir):
+    """Return (g_ratio, is_myelinated) from the substrate's data/array*.pkl,
+    or (None, False) if unmyelinated / unavailable."""
+    try:
+        import glob as _glob
+        from simulation_toolkit.utils.common_utils import load_substrate_geometry
+        pkls = sorted(_glob.glob(os.path.join(substrate_dir, "data", "array*.pkl")))
+        if not pkls:
+            return None, False
+        s = load_substrate_geometry(pkls[-1])
+        return s.g_ratio, bool(s.is_myelinated)
+    except Exception as exc:
+        print(f"  [warn] could not read g_ratio: {exc}")
+        return None, False
 
 
 def _pick_file(candidates, label):
@@ -175,15 +238,15 @@ def _save_protocol_waveform_plot(
     substrate_dir: str,
     human_pgse,
     human_ogse,
+    human_ogse_trap,
     animal_pgse,
     animal_ogse,
 ) -> str:
     """
-        Save a 4-panel figure with one waveform per panel.
+    Save a figure of the physical gradient waveforms G(t) = Gmax * shape.
 
-        Layout:
-            Left column  = Human scanner (PGSE top, OGSE bottom)
-            Right column = Animal scanner (PGSE top, OGSE bottom)
+    Top row = human protocol (slew PGSE, apodized OGSE, trapezoidal OGSE);
+    bottom row = animal protocol (PGSE, apodized OGSE).
 
     Returns the saved file path, or an empty string if plotting is unavailable.
     """
@@ -197,43 +260,30 @@ def _save_protocol_waveform_plot(
     os.makedirs(rdapp_dir, exist_ok=True)
     out_path = os.path.join(rdapp_dir, 'pgse_ogse_waveforms.png')
 
-    fig, axes = plt.subplots(2, 2, figsize=(12, 7), sharex=False, sharey=True)
-
     panels = [
-        (
-            axes[0, 0],
-            "Human PGSE (b=300 s/mm², TE=78 ms)",
-            human_pgse,
-            "PGSE",
-        ),
-        (
-            axes[1, 0],
-            "Human OGSE (b=300 s/mm², TE=78 ms)",
-            human_ogse,
-            "OGSE",
-        ),
-        (
-            axes[0, 1],
-            "Animal PGSE (b=800 s/mm², TE=40 ms)",
-            animal_pgse,
-            "PGSE",
-        ),
-        (
-            axes[1, 1],
-            "Animal OGSE (b=800 s/mm², TE=40 ms)",
-            animal_ogse,
-            "OGSE",
-        ),
+        (0, "Human PGSE slew (b=300, TE=78)", human_pgse),
+        (1, "Human OGSE apodized (b=300, TE=78)", human_ogse),
+        (2, "Human OGSE trapezoidal (b=300, TE=78)", human_ogse_trap),
+        (3, "Animal PGSE (b=800, TE=40)", animal_pgse),
+        (4, "Animal OGSE apodized (b=800, TE=40)", animal_ogse),
     ]
+    ncols = 3
+    nrows = 2
+    fig, axes = plt.subplots(nrows, ncols, figsize=(6 * ncols, 3.4 * nrows), sharex=False, sharey=False)
+    axes = axes.flatten()
 
-    for ax, title, wave_obj, _ in panels:
-        ax.plot(wave_obj.t, wave_obj.wave, linewidth=1.7)
-        ax.set_title(title, fontsize=11)
-        ax.set_ylabel('G (mT/m)', fontsize=10)
+    for idx, title, wave_obj in panels:
+        ax = axes[idx]
+        gmax = float(getattr(wave_obj, 'gmax_mT_per_m', 1.0))
+        ax.plot(wave_obj.t, wave_obj.wave * gmax, linewidth=1.5)
+        ax.axhline(0.0, color='black', linewidth=0.7, linestyle='--', alpha=0.5)
+        ax.set_title(f"{title}  |  Gmax={gmax:.1f} mT/m", fontsize=9)
+        ax.set_xlabel('Time (ms)', fontsize=9)
+        ax.set_ylabel('G (mT/m)', fontsize=9)
         ax.grid(True, linestyle='--', alpha=0.35)
 
-    axes[1, 0].set_xlabel('Time (ms)', fontsize=10)
-    axes[1, 1].set_xlabel('Time (ms)', fontsize=10)
+    for ax in axes[len(panels):]:
+        ax.axis('off')
 
     fig.suptitle(
         f"PGSE/OGSE gradient waveforms: {os.path.basename(substrate_dir)}",
@@ -271,9 +321,22 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
     print(f"  intra  : {os.path.basename(intra_path)}")
     print(f"  extra  : {os.path.basename(extra_path)}")
 
-    # ---- Extract VF ----
+    # ---- Extract VF (OUTER axon volume fraction) ----
     VF = _extract_avf(os.path.basename(intra_path))
     print(f"  VF     : {VF:.4f}")
+
+    # ---- Myelin-aware water fractions (for the voxel-total signal) ----
+    # AVF is the OUTER volume fraction; intra water fills the INNER (g^2*AVF),
+    # extra water is (1-AVF); the water-free myelin annulus is excluded, and the
+    # total is normalized by the water fraction f_in+f_ex.
+    g_ratio, is_myel = _substrate_g_ratio(substrate_dir)
+    if is_myel and g_ratio is not None:
+        f_in = (float(g_ratio) ** 2) * VF
+    else:
+        f_in = VF
+    f_ex = 1.0 - VF
+    f_water = f_in + f_ex
+    print(f"  fractions: f_in={f_in:.4f} f_ex={f_ex:.4f} g_ratio={g_ratio}")
 
     # ---- Load data ----
     Dxi, Dyi, Dzi, t_intra = _load_adc_pkl(intra_path)
@@ -289,7 +352,7 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
     # ---- Radial diffusion ----
     RD_intra = (Dxi + Dyi) / 2.0
     RD_extra = (Dxe + Dye) / 2.0
-    RD_total = VF * RD_intra + (1.0 - VF) * RD_extra
+    RD_total = (f_in * RD_intra + f_ex * RD_extra) / f_water
 
     # ------------------------------------------------------------------
     # Helper: build waveform once, then run GPA per compartment
@@ -311,8 +374,22 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
             gradient_dt_ms=gwave.dt,
         )
 
-    def _run_protocol(cfg, label):
-        gwave = _build_waveform(cfg, label)
+    def _build_designed(design_kwargs, label):
+        # Hardware-consistent human waveform via the b-value-driven design pipeline.
+        res = design_waveform(**design_kwargs)
+        gwave = res.waveform
+        if gwave is None:
+            raise RuntimeError(f"{label} design infeasible: {res.messages}")
+        if not res.feasible:
+            print(f"  [warn] {label} exceeds hardware limit: {res.messages}")
+        gwave.bvalue_s_mm2 = res.bvalue_s_mm2_actual
+        gwave.bvalue_ms_um2 = res.bvalue_s_mm2_actual * 1e-3
+        gwave.gmax_mT_per_m = res.gmax_mT_per_m
+        print(f"  {label:<12s}  b={gwave.bvalue_s_mm2:6.1f} s/mm²"
+              f"  Gmax={gwave.gmax_mT_per_m:7.2f} mT/m  TE={float(design_kwargs['te_ms']):.0f}ms")
+        return gwave
+
+    def _run_with_gwave(gwave, label):
         rdapp_intra = _integrate_component(gwave, RD_intra)
         rdapp_extra = _integrate_component(gwave, RD_extra)
         rdapp_total = _integrate_component(gwave, RD_total)
@@ -328,29 +405,55 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
             "gwave": gwave,
         }
 
-    # ---- Protocol 1: b=300 s/mm², TE=78 ms ----
+    def _run_protocol(cfg, label):
+        return _run_with_gwave(_build_waveform(cfg, label), label)
+
+    def _run_designed(design_kwargs, label):
+        return _run_with_gwave(_build_designed(design_kwargs, label), label)
+
+    # ---- Protocol 1: human, b=300 s/mm², TE=78 ms ----
+    # Primary human PGSE is slew-limited (human_80_100). The ideal PGSE and
+    # apodized OGSE are retained for reference; a trapezoidal OGSE is added.
     print("  --- Protocol 1: b=300 s/mm², TE=78 ms ---")
-    pgse_res = _run_protocol(_PGSE_CONFIG, "PGSE")
+    pgse_ideal_res = _run_protocol(_PGSE_CONFIG, "PGSE_ideal")
+    pgse_res = _run_designed(_PGSE_SLEW_DESIGN, "PGSE_slew")
     ogse_res = _run_protocol(_OGSE_CONFIG, "OGSE")
+    ogse_trap_res = _run_designed(_OGSE_TRAP_DESIGN, "OGSE_trap")
 
     RDapp_PGSE = pgse_res["total"]
-    RDapp_OGSE = ogse_res["total"]
     RDapp_PGSE_intra = pgse_res["intra"]
-    RDapp_OGSE_intra = ogse_res["intra"]
     RDapp_PGSE_extra = pgse_res["extra"]
+
+    RDapp_PGSE_ideal = pgse_ideal_res["total"]
+    RDapp_PGSE_ideal_intra = pgse_ideal_res["intra"]
+    RDapp_PGSE_ideal_extra = pgse_ideal_res["extra"]
+
+    RDapp_OGSE = ogse_res["total"]
+    RDapp_OGSE_intra = ogse_res["intra"]
     RDapp_OGSE_extra = ogse_res["extra"]
 
+    RDapp_OGSE_trap = ogse_trap_res["total"]
+    RDapp_OGSE_trap_intra = ogse_trap_res["intra"]
+    RDapp_OGSE_trap_extra = ogse_trap_res["extra"]
+
+    # Apparent radial-diffusion contrast against the slew-limited PGSE baseline.
     DeltaRDapp = RDapp_OGSE - RDapp_PGSE
     DeltaRDapp_intra = RDapp_OGSE_intra - RDapp_PGSE_intra
     DeltaRDapp_extra = RDapp_OGSE_extra - RDapp_PGSE_extra
-    print(f"  {'':12s}  ΔRDapp_total = {DeltaRDapp:.6f} µm²/ms")
-    print(f"  {'':12s}  ΔRDapp_intra = {DeltaRDapp_intra:.6f} µm²/ms")
-    print(f"  {'':12s}  ΔRDapp_extra = {DeltaRDapp_extra:.6f} µm²/ms")
 
-    # ---- Protocol 2: b=800 s/mm², TE=40 ms ----
+    DeltaRDapp_trap = RDapp_OGSE_trap - RDapp_PGSE
+    DeltaRDapp_trap_intra = RDapp_OGSE_trap_intra - RDapp_PGSE_intra
+    DeltaRDapp_trap_extra = RDapp_OGSE_trap_extra - RDapp_PGSE_extra
+    print(f"  {'':12s}  ΔRDapp_total(apod) = {DeltaRDapp:.6f} µm²/ms")
+    print(f"  {'':12s}  ΔRDapp_total(trap) = {DeltaRDapp_trap:.6f} µm²/ms")
+
+    # ---- Protocol 2: animal, b=800 s/mm², TE=40 ms ----
+    # Primary animal PGSE is slew-limited (animal_15p2T); animal OGSE stays
+    # apodized-cosine (validated against the same preset). Ideal PGSE retained.
     print("  --- Protocol 2: b=800 s/mm², TE=40 ms ---")
-    pgse_res_2 = _run_protocol(_PGSE_CONFIG_2, "PGSE_2")
-    ogse_res_2 = _run_protocol(_OGSE_CONFIG_2, "OGSE_2")
+    pgse_ideal_res_2 = _run_protocol(_PGSE_CONFIG_2, "PGSE_2_ideal")
+    pgse_res_2 = _run_designed(_PGSE_SLEW_DESIGN_2, "PGSE_2_slew")
+    ogse_res_2 = _run_designed(_OGSE_APOD_DESIGN_2, "OGSE_2_apod")
 
     RDapp_PGSE_2 = pgse_res_2["total"]
     RDapp_OGSE_2 = ogse_res_2["total"]
@@ -359,6 +462,11 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
     RDapp_PGSE_extra_2 = pgse_res_2["extra"]
     RDapp_OGSE_extra_2 = ogse_res_2["extra"]
 
+    RDapp_PGSE_ideal_2 = pgse_ideal_res_2["total"]
+    RDapp_PGSE_ideal_intra_2 = pgse_ideal_res_2["intra"]
+    RDapp_PGSE_ideal_extra_2 = pgse_ideal_res_2["extra"]
+
+    # Animal contrast against the slew-limited PGSE baseline.
     DeltaRDapp_2 = RDapp_OGSE_2 - RDapp_PGSE_2
     DeltaRDapp_intra_2 = RDapp_OGSE_intra_2 - RDapp_PGSE_intra_2
     DeltaRDapp_extra_2 = RDapp_OGSE_extra_2 - RDapp_PGSE_extra_2
@@ -367,8 +475,11 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
     print(f"  {'':12s}  ΔRDapp_extra = {DeltaRDapp_extra_2:.6f} µm²/ms")
 
     gw_pgse = pgse_res["gwave"]
+    gw_pgse_ideal = pgse_ideal_res["gwave"]
     gw_ogse = ogse_res["gwave"]
+    gw_ogse_trap = ogse_trap_res["gwave"]
     gw_pgse2 = pgse_res_2["gwave"]
+    gw_pgse2_ideal = pgse_ideal_res_2["gwave"]
     gw_ogse2 = ogse_res_2["gwave"]
     waveform_plot_path = ""
     if _SAVE_WAVEFORM_PLOT:
@@ -376,6 +487,7 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
             substrate_dir=substrate_dir,
             human_pgse=gw_pgse,
             human_ogse=gw_ogse,
+            human_ogse_trap=gw_ogse_trap,
             animal_pgse=gw_pgse2,
             animal_ogse=gw_ogse2,
         )
@@ -389,30 +501,50 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
         'RD_intra': RD_intra,
         'RD_extra': RD_extra,
         'RD_total': RD_total,
-        # --- Protocol 1 ---
-        'PGSE_config':          _PGSE_CONFIG,
+        # --- Protocol 1 (human, b=300, TE=78) ---
+        # Primary PGSE is slew-limited; ideal PGSE + trapezoidal OGSE retained.
+        'PGSE_config':          _PGSE_SLEW_DESIGN,
         'PGSE_bvalue_s_mm2':    gw_pgse.bvalue_s_mm2,
         'PGSE_bvalue_ms_um2':   gw_pgse.bvalue_ms_um2,
         'PGSE_gmax_mT_per_m':   gw_pgse.gmax_mT_per_m,
+        'PGSE_ideal_config':        _PGSE_CONFIG,
+        'PGSE_ideal_bvalue_s_mm2':  gw_pgse_ideal.bvalue_s_mm2,
+        'PGSE_ideal_gmax_mT_per_m': gw_pgse_ideal.gmax_mT_per_m,
         'OGSE_config':          _OGSE_CONFIG,
         'OGSE_bvalue_s_mm2':    gw_ogse.bvalue_s_mm2,
         'OGSE_bvalue_ms_um2':   gw_ogse.bvalue_ms_um2,
         'OGSE_gmax_mT_per_m':   gw_ogse.gmax_mT_per_m,
+        'OGSE_trap_config':        _OGSE_TRAP_DESIGN,
+        'OGSE_trap_bvalue_s_mm2':  gw_ogse_trap.bvalue_s_mm2,
+        'OGSE_trap_gmax_mT_per_m': gw_ogse_trap.gmax_mT_per_m,
         'RDapp_PGSE':           RDapp_PGSE,
         'RDapp_OGSE':           RDapp_OGSE,
         'RDapp_PGSE_intra':     RDapp_PGSE_intra,
         'RDapp_OGSE_intra':     RDapp_OGSE_intra,
         'RDapp_PGSE_extra':     RDapp_PGSE_extra,
         'RDapp_OGSE_extra':     RDapp_OGSE_extra,
+        'RDapp_PGSE_ideal':        RDapp_PGSE_ideal,
+        'RDapp_PGSE_ideal_intra':  RDapp_PGSE_ideal_intra,
+        'RDapp_PGSE_ideal_extra':  RDapp_PGSE_ideal_extra,
+        'RDapp_OGSE_trap':         RDapp_OGSE_trap,
+        'RDapp_OGSE_trap_intra':   RDapp_OGSE_trap_intra,
+        'RDapp_OGSE_trap_extra':   RDapp_OGSE_trap_extra,
         'DeltaRDapp':           DeltaRDapp,
         'DeltaRDapp_intra':     DeltaRDapp_intra,
         'DeltaRDapp_extra':     DeltaRDapp_extra,
-        # --- Protocol 2 ---
-        'PGSE_config_2':        _PGSE_CONFIG_2,
+        'DeltaRDapp_trap':         DeltaRDapp_trap,
+        'DeltaRDapp_trap_intra':   DeltaRDapp_trap_intra,
+        'DeltaRDapp_trap_extra':   DeltaRDapp_trap_extra,
+        # --- Protocol 2 (animal, b=800, TE=40) ---
+        # Primary PGSE is slew-limited; ideal PGSE retained. OGSE is apodized.
+        'PGSE_config_2':        _PGSE_SLEW_DESIGN_2,
         'PGSE_bvalue_s_mm2_2':  gw_pgse2.bvalue_s_mm2,
         'PGSE_bvalue_ms_um2_2': gw_pgse2.bvalue_ms_um2,
         'PGSE_gmax_mT_per_m_2': gw_pgse2.gmax_mT_per_m,
-        'OGSE_config_2':        _OGSE_CONFIG_2,
+        'PGSE_ideal_config_2':        _PGSE_CONFIG_2,
+        'PGSE_ideal_bvalue_s_mm2_2':  gw_pgse2_ideal.bvalue_s_mm2,
+        'PGSE_ideal_gmax_mT_per_m_2': gw_pgse2_ideal.gmax_mT_per_m,
+        'OGSE_config_2':        _OGSE_APOD_DESIGN_2,
         'OGSE_bvalue_s_mm2_2':  gw_ogse2.bvalue_s_mm2,
         'OGSE_bvalue_ms_um2_2': gw_ogse2.bvalue_ms_um2,
         'OGSE_gmax_mT_per_m_2': gw_ogse2.gmax_mT_per_m,
@@ -422,6 +554,9 @@ def compute_rdapp_for_substrate(substrate_dir: str) -> dict:
         'RDapp_OGSE_intra_2':   RDapp_OGSE_intra_2,
         'RDapp_PGSE_extra_2':   RDapp_PGSE_extra_2,
         'RDapp_OGSE_extra_2':   RDapp_OGSE_extra_2,
+        'RDapp_PGSE_ideal_2':        RDapp_PGSE_ideal_2,
+        'RDapp_PGSE_ideal_intra_2':  RDapp_PGSE_ideal_intra_2,
+        'RDapp_PGSE_ideal_extra_2':  RDapp_PGSE_ideal_extra_2,
         'DeltaRDapp_2':         DeltaRDapp_2,
         'DeltaRDapp_intra_2':   DeltaRDapp_intra_2,
         'DeltaRDapp_extra_2':   DeltaRDapp_extra_2,

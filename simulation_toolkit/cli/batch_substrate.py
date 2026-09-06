@@ -85,6 +85,7 @@ REPEATS_PER_COMBO = 4
 #   d1-K20-bead0.83-substrate.json)
 FIXED_PARAMS: Dict[str, Any] = {
     "box_length_init": 0,
+    "box_length_z_init": 0,  # 0 => auto (thin-z rule: Lz=2*sqrt(2*D0*t), D0=2.5,t=100 -> 45 um)
     "num_fibers": 500,
     "dist_shape": 0.1,
     "space_buffer_starts_ends": 0.23,

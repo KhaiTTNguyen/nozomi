@@ -89,35 +89,61 @@ def _already_processed(substrate_path: str) -> bool:
     )
 
 
-def process_data_root(data_root: str, skip_existing: bool = False, slice_step_radius_fraction=None):
+def _process_one_substrate(task):
+    """Worker entry: process a single substrate. Returns (status, id, info)."""
+    substrate_path, pkl_path, skip_existing, slice_step_radius_fraction = task
+    substrate_id = os.path.basename(substrate_path)
+    if skip_existing and _already_processed(substrate_path):
+        return ("skipped", substrate_id, None)
+    output_folder = os.path.join(substrate_path, 'figs', 'substrate_stats')
+    # Timestamp label derived from the substrate folder name (first 16 chars).
+    config_params.EXP_DATE_TIME = substrate_id[:16] if len(substrate_id) >= 16 else substrate_id
+    try:
+        saved = save_effective_axon_diameter_stats_from_pickle(
+            pkl_path,
+            output_folder=output_folder,
+            slice_step_radius_fraction=slice_step_radius_fraction,
+        )
+        return ("processed", substrate_id, list(saved.keys()))
+    except Exception as exc:
+        return ("failed", substrate_id, str(exc))
+
+
+def process_data_root(data_root: str, skip_existing: bool = False, slice_step_radius_fraction=None,
+                      jobs: int = 1, shard=None):
+    tasks = [
+        (substrate_path, pkl_path, skip_existing, slice_step_radius_fraction)
+        for substrate_path, pkl_path in _find_substrate_pkls(data_root)
+    ]
+    # shard=(i, n): keep only tasks whose position satisfies idx % n == i, so
+    # several instances can split disjoint substrates without overlapping work.
+    if shard is not None:
+        i, n = shard
+        tasks = [t for idx, t in enumerate(tasks) if idx % n == i]
     processed, skipped, failed = 0, 0, 0
 
-    for substrate_path, pkl_path in _find_substrate_pkls(data_root):
-        substrate_id = os.path.basename(substrate_path)
-
-        if skip_existing and _already_processed(substrate_path):
-            print(f"  [skip-existing] {substrate_id}")
+    def _tally(result):
+        nonlocal processed, skipped, failed
+        status, sid, info = result
+        if status == "skipped":
+            print(f"  [skip-existing] {sid}")
             skipped += 1
-            continue
-
-        output_folder = os.path.join(substrate_path, 'figs', 'substrate_stats')
-        # Derive a timestamp label from the substrate folder name (first 16 chars)
-        config_params.EXP_DATE_TIME = substrate_id[:16] if len(substrate_id) >= 16 else substrate_id
-
-        print(f"  Processing {substrate_id}")
-        print(f"    pkl: {os.path.relpath(pkl_path, _NOZOMI_ROOT)}")
-        try:
-            saved = save_effective_axon_diameter_stats_from_pickle(
-                pkl_path,
-                output_folder=output_folder,
-                slice_step_radius_fraction=slice_step_radius_fraction,
-            )
-            for label, path in saved.items():
-                print(f"    [{label}] → {os.path.relpath(path, _NOZOMI_ROOT)}")
+        elif status == "processed":
+            print(f"  [done] {sid}  ({', '.join(info)})")
             processed += 1
-        except Exception as exc:
-            print(f"    [ERROR] {exc}")
+        else:
+            print(f"  [ERROR] {sid}: {info}")
             failed += 1
+
+    if jobs and jobs > 1:
+        import multiprocessing as mp
+        ctx = mp.get_context("spawn")
+        with ctx.Pool(processes=jobs) as pool:
+            for result in pool.imap_unordered(_process_one_substrate, tasks):
+                _tally(result)
+    else:
+        for task in tasks:
+            _tally(_process_one_substrate(task))
 
     return processed, skipped, failed
 
@@ -155,7 +181,28 @@ def main():
         action='store_true',
         help='Skip substrates that already have a JSON stats file.',
     )
+    parser.add_argument(
+        '--jobs', '-j',
+        type=int,
+        default=1,
+        help='Number of parallel worker processes (default: 1). Each substrate '
+             'is independent; use a value up to available cores.',
+    )
+    parser.add_argument(
+        '--shard',
+        type=str,
+        default=None,
+        help='Process only a disjoint subset "I/N" (e.g. 0/3) so multiple '
+             'instances can split the work without overlap.',
+    )
     args = parser.parse_args()
+
+    shard = None
+    if args.shard:
+        i_str, n_str = args.shard.split('/')
+        shard = (int(i_str), int(n_str))
+        if not (0 <= shard[0] < shard[1]):
+            parser.error(f"--shard I/N requires 0 <= I < N (got {args.shard})")
 
     fraction = args.slice_step_radius_fraction if args.slice_step_radius_fraction > 0 else None
     total_processed = total_skipped = total_failed = 0
@@ -167,8 +214,11 @@ def main():
             print(f"Slice step: {fraction*100:.0f}% of mean sphere radius (dynamic)")
         else:
             print(f"Slice step: {args.slice_step_um} µm (fixed)")
+        print(f"Parallel workers: {args.jobs}" + (f"   shard: {args.shard}" if shard else ""))
         print(f"{'='*70}")
-        p, s, f = process_data_root(root, skip_existing=args.skip_existing, slice_step_radius_fraction=fraction)
+        p, s, f = process_data_root(root, skip_existing=args.skip_existing,
+                                    slice_step_radius_fraction=fraction, jobs=args.jobs,
+                                    shard=shard)
         total_processed += p
         total_skipped += s
         total_failed += f

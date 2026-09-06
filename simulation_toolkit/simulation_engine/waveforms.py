@@ -199,6 +199,79 @@ class PGDiffWaveform(DiffGradWaveform):
                 & (self.t < (self.te/2 + self.big_delta/2 + self.little_delta/2))
         self.wave[second_lobe] = -1
 
+
+class TrapezoidalPGSEWaveform(DiffGradWaveform):
+    '''
+    Slew-limited (trapezoidal-lobe) PGSE diffusion waveform.
+
+    Each diffusion lobe is a symmetric trapezoid: ramp up (trise), flat plateau,
+    ramp down (trise). ``little_delta`` (delta) is the total lobe on-time
+    (2*trise + plateau) and ``big_delta`` (Delta) is the lobe-center to
+    lobe-center separation. Setting ``trise=0`` recovers the ideal rectangular
+    PGSE of :class:`PGDiffWaveform`.
+    '''
+    def __init__(self, big_delta, little_delta, te, trise, gmax=1.0, time_step=dt0):
+        self.big_delta = float(big_delta)
+        self.little_delta = float(little_delta)
+        self.te = float(te)
+        self.trise = float(trise)
+        self.gmax = float(gmax)
+        self.dt = float(time_step)
+
+        if self.little_delta <= 0:
+            raise ValueError("little_delta must be positive.")
+        if self.trise < 0:
+            raise ValueError("trise must be non-negative.")
+        self.plateau = self.little_delta - 2.0 * self.trise
+        if self.plateau < -1e-9:
+            raise ValueError(
+                f"little_delta={self.little_delta} ms is too short for two ramps "
+                f"of trise={self.trise} ms (requires little_delta >= 2*trise)."
+            )
+        self.plateau = max(self.plateau, 0.0)
+
+        lobe_end = self.te / 2.0 + self.big_delta / 2.0 + self.little_delta / 2.0
+        if lobe_end > self.te + 1e-9:
+            raise ValueError(
+                f"te={self.te} ms is too short for big_delta={self.big_delta} ms "
+                f"and little_delta={self.little_delta} ms."
+            )
+
+        self.generate_waveform()
+
+    def generate_waveform(self):
+        self.t = np.arange(0.0, self.te + self.dt, self.dt)
+        self.wave = np.zeros_like(self.t)
+        c1 = self.te / 2.0 - self.big_delta / 2.0
+        c2 = self.te / 2.0 + self.big_delta / 2.0
+        self._add_trapezoid_lobe(c1, +1.0)
+        self._add_trapezoid_lobe(c2, -1.0)
+
+    def _add_trapezoid_lobe(self, center, polarity):
+        half = self.little_delta / 2.0
+        t0 = center - half            # ramp-up start
+        t1 = t0 + self.trise          # plateau start
+        t2 = t1 + self.plateau        # ramp-down start
+        t3 = t2 + self.trise          # lobe end
+        amp = polarity * self.gmax
+        if self.trise > 0:
+            up = (self.t >= t0) & (self.t < t1)
+            self.wave[up] = amp * (self.t[up] - t0) / self.trise
+            down = (self.t >= t2) & (self.t < t3)
+            self.wave[down] = amp * (t3 - self.t[down]) / self.trise
+        flat = (self.t >= t1) & (self.t < t2)
+        self.wave[flat] = amp
+
+    def get_waveform_info(self):
+        return {
+            'big_delta_ms': self.big_delta,
+            'little_delta_ms': self.little_delta,
+            'trise_ms': self.trise,
+            'plateau_ms': self.plateau,
+            'total_echo_time_ms': self.te,
+        }
+
+
 class ApodizedCosineOGSEWaveform(DiffGradWaveform):
     '''
     Class to generate apodized cosine modulated oscillating gradient waveform

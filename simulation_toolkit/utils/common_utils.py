@@ -15,6 +15,12 @@ class LoadedSubstrate:
     is_myelinated: bool = False
     g_ratio: Optional[float] = None
     inner_sphere_spacing_ratio: Optional[float] = None
+    # Anisotropic box dimensions. lx=ly is the in-plane box (== box_length),
+    # lz is the (possibly thin) z-height. Fall back to cubic (all == box_length).
+    lx: Optional[float] = None
+    ly: Optional[float] = None
+    lz: Optional[float] = None
+    num_fibers: Optional[int] = None
 
 def get_date_time():        
     return str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
@@ -54,32 +60,63 @@ def load_substrate_geometry(file_name):
         inner_fibers = loaded_data.get("inner_fibers")
         if inner_fibers is not None:
             inner_fibers = _geometry_to_numpy(inner_fibers).astype(np.float32, copy=False)
+        box_length = float(loaded_data["box_length"])
+        lx = float(loaded_data.get("lx", box_length))
+        ly = float(loaded_data.get("ly", box_length))
+        lz = float(loaded_data.get("lz", box_length))
+        num_fibers = loaded_data.get("num_fibers")
         return LoadedSubstrate(
-            box_length=float(loaded_data["box_length"]),
+            box_length=box_length,
             outer_fibers=outer_fibers,
             inner_fibers=inner_fibers,
             is_myelinated=inner_fibers is not None,
             g_ratio=loaded_data.get("g_ratio"),
             inner_sphere_spacing_ratio=loaded_data.get("inner_sphere_spacing_ratio"),
+            lx=lx, ly=ly, lz=lz,
+            num_fibers=int(num_fibers) if num_fibers is not None else None,
         )
 
+    # Legacy cubic pickle: [optimized_fibers, L] with no box dims / count.
     optimized_fibers, L = loaded_data
+    outer_fibers = _geometry_to_numpy(optimized_fibers).astype(np.float32, copy=False)
+    num_fibers = int(np.unique(outer_fibers[:, fiber_id_column(outer_fibers)]).size) \
+        if outer_fibers.size else None
     return LoadedSubstrate(
         box_length=float(L),
-        outer_fibers=_geometry_to_numpy(optimized_fibers).astype(np.float32, copy=False),
+        outer_fibers=outer_fibers,
+        lx=float(L), ly=float(L), lz=float(L),
+        num_fibers=num_fibers,
     )
 
-def save_data_array_to_pickle(file_name, optimized_fibers, L):
+def save_data_array_to_pickle(file_name, optimized_fibers, L, lz=None, num_fibers=None):
+    # Legacy cubic path (lz/num_fibers omitted) keeps the old [fibers, L] list so
+    # existing tooling and intermediate saves (e.g. init2d.pkl) are unchanged.
+    if lz is None and num_fibers is None:
+        payload = [optimized_fibers, L]
+    else:
+        payload = {
+            "version": 3,
+            "box_length": float(L),
+            "lx": float(L),
+            "ly": float(L),
+            "lz": float(lz if lz is not None else L),
+            "num_fibers": int(num_fibers) if num_fibers is not None else None,
+            "outer_fibers": _geometry_to_numpy(optimized_fibers).astype(np.float32, copy=False),
+        }
     with open(file_name, 'wb') as f:
-        pickle.dump([optimized_fibers, L], f, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(payload, f, protocol=pickle.HIGHEST_PROTOCOL)
     print('Done saving data file')
     return
 
 
-def save_myelinated_substrate_to_pickle(file_name, outer_fibers, inner_fibers, L, g_ratio, inner_sphere_spacing_ratio):
+def save_myelinated_substrate_to_pickle(file_name, outer_fibers, inner_fibers, L, g_ratio, inner_sphere_spacing_ratio, lz=None, num_fibers=None):
     payload = {
-        "version": 2,
+        "version": 3,
         "box_length": float(L),
+        "lx": float(L),
+        "ly": float(L),
+        "lz": float(lz if lz is not None else L),
+        "num_fibers": int(num_fibers) if num_fibers is not None else None,
         "outer_fibers": _geometry_to_numpy(outer_fibers).astype(np.float32, copy=False),
         "inner_fibers": _geometry_to_numpy(inner_fibers).astype(np.float32, copy=False),
         "g_ratio": float(g_ratio),
@@ -108,18 +145,26 @@ def map_matrix_to_list_torch(spheres_xyz_r_fid):
 
 def split_matrix_to_list(A):
     # Initialize the list to hold the submatrices
-    listA = []     
+    listA = []
     # Initialize the start index
     start_idx = 0
-    # Loop through the rows and identify the split points
-    for i in range(0, len(A)):
-        if A[i, 2] == params.BOX_LENGTH/2 :
-            # Add the submatrix to the list
-            listA.append(A[start_idx:i+1])
-            # Update the start index
-            start_idx = i+1   
+    # Loop through rows and split only at true z-termini. Using exact equality
+    # is brittle after optimization because interior spheres can drift near +Lz/2.
+    z_end = params.BOX_LENGTH_Z if getattr(params, 'BOX_LENGTH_Z', 0) else params.BOX_LENGTH
+    half = z_end / 2
+    n = len(A)
+    for i in range(n):
+        if not np.isclose(A[i, 2], half, atol=1e-4):
+            continue
+        is_last = i == n - 1
+        next_is_start = (not is_last) and np.isclose(A[i + 1, 2], -half, atol=1e-4)
+        if is_last or next_is_start:
+            listA.append(A[start_idx:i + 1])
+            start_idx = i + 1
+    if start_idx < n:
+        listA.append(A[start_idx:])
     # Convert each submatrix to numpy array
-    listA = [np.array(submatrix) for submatrix in listA]
+    listA = [np.array(submatrix) for submatrix in listA if len(submatrix) > 0]
     return listA
 
 def build_experiment_name_from_params(params):

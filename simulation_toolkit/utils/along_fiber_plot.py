@@ -16,17 +16,90 @@ def _component_title(component_label):
     return component_label.capitalize()
 
 
-def _split_stored_axon_segments(fibers, box_length, tol=1e-4):
+# Fallback axis ranges used when no data-driven shared limits are configured on
+# config_params. cli.reprocess_substrate_stats scans the whole dataset and sets
+# the config globals so every substrate is drawn on identical axes.
+_CV_DIAMETER_XLIM_DEFAULT = (0.0, 0.8)
+_CV_DIAMETER_YLIM_DEFAULT = (0.0, 12.0)
+_DIAMETER_DIST_XLIM_DEFAULT = (0.0, 20.0)
+_DIAMETER_DIST_YLIM_DEFAULT = (0.0, 1.0)
+
+
+def _resolve_limit(value, default):
+    """Return a validated (min, max) tuple from a config global, else default."""
+    if value is None:
+        return default
+    try:
+        lo, hi = float(value[0]), float(value[1])
+        if hi > lo:
+            return (lo, hi)
+    except (TypeError, ValueError, IndexError):
+        pass
+    return default
+
+
+def compute_cv_values(optimized_fibers):
+    """Per-axon CV of radius, matching plot_along_axon_radius_variation.
+
+    Iterates every stored chain (PBC image chains included, no dedup) so the
+    returned array equals config_params.CV_RADII used by the CV histogram.
+    """
+    fiber_list = util.map_matrix_to_list_numpy(optimized_fibers)
+    cv = np.empty(0)
+    for fiber in fiber_list:
+        cv = np.concatenate(
+            (cv, get_cv_of_diameter_or_radius_along_each_axon(fiber[:, 3])))
+    return cv
+
+
+_AXIS_LIMIT_KEYS = (
+    "CV_DIAMETER_XLIM", "CV_DIAMETER_YLIM",
+    "DIAMETER_DIST_XLIM", "DIAMETER_DIST_YLIM",
+)
+
+
+def load_shared_axis_limits(json_path):
+    """Load a shared-axis-limits JSON and set the config_params globals.
+
+    Returns the loaded dict, or None when the file is missing/unreadable so
+    callers transparently fall back to the per-plot default ranges.
+    """
+    if not json_path or not os.path.exists(json_path):
+        return None
+    try:
+        with open(json_path) as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return None
+    for key in _AXIS_LIMIT_KEYS:
+        val = data.get(key)
+        if val is not None:
+            setattr(config_params, key, (float(val[0]), float(val[1])))
+    return data
+
+
+def save_shared_axis_limits(json_path, limits):
+    """Write the shared-axis-limits dict to ``json_path`` (creating parents)."""
+    os.makedirs(os.path.dirname(os.path.abspath(json_path)), exist_ok=True)
+    with open(json_path, "w") as f:
+        json.dump(limits, f, indent=4)
+    return json_path
+
+
+def _split_stored_axon_segments(fibers, box_length_z, tol=1e-4):
     """Split a stored substrate array into axon-chain segments.
 
-    The substrate writer stores each chain from z=-L/2 to z=+L/2, and PBC
+    The substrate writer stores each chain from z=-Lz/2 to z=+Lz/2, and PBC
     image chains are stored as additional chains. We intentionally keep all
     stored chains here; no canonical filtering is applied.
+
+    ``box_length_z`` is the z-extent (Lz); for thin-z anisotropic substrates it
+    differs from the in-plane box length, so the split threshold must use Lz.
     """
     fibers = _geometry_to_numpy(fibers)
     if fibers.shape[0] == 0:
         return []
-    half = box_length / 2
+    half = box_length_z / 2
     segments = []
     start_idx = 0
     for idx in range(fibers.shape[0]):
@@ -51,11 +124,13 @@ def _geometry_to_numpy(fibers):
 def collect_stored_axons_from_substrate_pickle(substrate_file):
     """Load a substrate pickle and return all stored axon-chain segments."""
     substrate = util.load_substrate_geometry(substrate_file)
+    # Chains terminate at z = +/- Lz/2; thin-z substrates have Lz != box_length.
+    lz = substrate.lz if substrate.lz is not None else substrate.box_length
     components = {
-        "outer": _split_stored_axon_segments(substrate.outer_fibers, substrate.box_length),
+        "outer": _split_stored_axon_segments(substrate.outer_fibers, lz),
     }
     if substrate.inner_fibers is not None:
-        components["inner"] = _split_stored_axon_segments(substrate.inner_fibers, substrate.box_length)
+        components["inner"] = _split_stored_axon_segments(substrate.inner_fibers, lz)
 
     return {
         "substrate_file": substrate_file,
@@ -292,9 +367,12 @@ def plot_diameter_GEV_distribution(optimized_fibers, component_label="outer", x_
     if len(diameter) == 0:
         print(f"Warning: plot_diameter_GEV_distribution: no radius data for component '{component_label}'; skipping.")
         return
+    xlim = _resolve_limit(getattr(config_params, "DIAMETER_DIST_XLIM", None), _DIAMETER_DIST_XLIM_DEFAULT)
+    ylim = _resolve_limit(getattr(config_params, "DIAMETER_DIST_YLIM", None), _DIAMETER_DIST_YLIM_DEFAULT)
     fig = plt.figure()
     nbins=20
-    plt.hist(diameter, bins=nbins, density=True, align='mid', label='Substrate diameter')
+    # Fixed hist range so bin widths (and hence densities) match across substrates.
+    plt.hist(diameter, bins=nbins, range=xlim, density=True, align='mid', label='Substrate diameter')
     
     x = np.linspace(min(diameter), max(diameter), 10000)
     
@@ -326,10 +404,9 @@ def plot_diameter_GEV_distribution(optimized_fibers, component_label="outer", x_
     plt.tick_params(axis='both', which='major', labelsize=13)
     plt.xlabel(f'{component_title} Diameter (µm)', fontsize=15, labelpad=5)
     plt.ylabel('Density', fontsize=15, labelpad=5)
-    if x_max is not None:
-        plt.xlim(0, x_max)
-    else:
-        plt.axis('tight')
+    # Shared/fixed axes (x_max kept for backward-compat; shared limits take precedence).
+    plt.xlim(*xlim)
+    plt.ylim(*ylim)
     plt.legend()
     # Adjust spacing between subplots
     plt.subplots_adjust(wspace=0.5)
@@ -414,17 +491,19 @@ def get_cv_of_diameter_or_radius_along_each_axon( radii):
 
 def plot_diameter_CV_distribution(component_label="outer"):
     component_tag = _component_file_tag(component_label)
+    xlim = _resolve_limit(getattr(config_params, "CV_DIAMETER_XLIM", None), _CV_DIAMETER_XLIM_DEFAULT)
+    ylim = _resolve_limit(getattr(config_params, "CV_DIAMETER_YLIM", None), _CV_DIAMETER_YLIM_DEFAULT)
     fig = plt.figure(figsize=(6, 6))
-    # Plot the histogram
-    plt.hist(config_params.CV_RADII, bins=55, density=True)
+    # Plot the histogram (fixed range so densities match across substrates)
+    plt.hist(config_params.CV_RADII, bins=55, range=xlim, density=True)
 
     # Adding titles and labels
     plt.title(f'Distribution of CV for {component_label} diameter', fontsize=17, pad=20)
     plt.xlabel(f'CV ({component_label} diameter)', fontsize=15, labelpad=3)
     plt.ylabel('Density', fontsize=15, labelpad=5)
     plt.tick_params(axis='both', which='major', labelsize=13)
-    plt.xlim(0, 1.0)
-    plt.ylim(0, 14)
+    plt.xlim(*xlim)
+    plt.ylim(*ylim)
     # Calculate the mean + std for the label, ensure it's not directly config_params.CV_OUTER_MEAN which is already defined for the first line
     mean_plus_std_val = config_params.CV_OUTER_MEAN + config_params.CV_OUTER_STDV
     mean_minus_std_val = config_params.CV_OUTER_MEAN - config_params.CV_OUTER_STDV

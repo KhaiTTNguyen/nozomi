@@ -7,14 +7,20 @@ from mpl_toolkits.mplot3d import Axes3D
 import simulation_toolkit.utils.common_utils as util
 import simulation_toolkit.toolkit_params as config_params
 
+def _to_float(value):
+    """Coerce a config box length (torch tensor or python scalar) to float."""
+    if hasattr(value, 'detach'):
+        return float(value.detach().cpu().numpy())
+    return float(value)
+
 def plot_box(ax):
     box_vertices, box_x, box_y, box_z = prepare_edges_for_box()
     ax.plot3D(box_x, box_y, box_z, color='b', lw='1.')
 
 def prepare_edges_for_box():
-    bx = config_params.BOX_LENGTH.cpu().numpy()
-    by = config_params.BOX_LENGTH.cpu().numpy()
-    bz = config_params.BOX_LENGTH.cpu().numpy()
+    bx = _to_float(config_params.BOX_LENGTH)
+    by = _to_float(config_params.BOX_LENGTH)
+    bz = _to_float(config_params.BOX_LENGTH_Z)
     
     box_x = np.array([(0,bx,bx,0 ,0 ,bx,bx,0)]) - bx/2
     box_y = np.array([(0,0 ,by,by,0 ,0 ,by,by)]) - by/2
@@ -87,9 +93,15 @@ def _configure_axes(ax, POV):
 
 def _finish_plot(fig, ax):
     plot_box(ax)
-    ax.set_xlim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
-    ax.set_ylim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
-    ax.set_zlim(-config_params.BOX_LENGTH/2, config_params.BOX_LENGTH/2)
+    lx = _to_float(config_params.BOX_LENGTH)
+    ly = _to_float(config_params.BOX_LENGTH)
+    lz = _to_float(config_params.BOX_LENGTH_Z)
+    ax.set_xlim(-lx/2, lx/2)
+    ax.set_ylim(-ly/2, ly/2)
+    ax.set_zlim(-lz/2, lz/2)
+    # Render the 3D bounding box with the substrate's true proportions so an
+    # anisotropic (thin-z) box is not stretched into an isotropic cube.
+    ax.set_box_aspect((lx, ly, lz))
     ax.tick_params(axis='both', which='major', labelsize=13)
 
 

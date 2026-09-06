@@ -173,5 +173,3 @@ def test_free_diffusion_empty_arena_multi_directions_OGSE():
         spin_plot_file_name = os.path.join(output_folder, folder_date_time, spin_plot_file_name)
         plt.savefig(spin_plot_file_name)
         #-------------------------------------------
-        
-test_free_diffusion_empty_arena_multi_directions_OGSE()
